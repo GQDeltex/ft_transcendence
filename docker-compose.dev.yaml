@@ -1,5 +1,28 @@
 version: '3.8'
 
-sevices:
-  database:
+services:
+    database:
+        image: postgres:14
+        environment:
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD} # Set in .env file
+        volumes:
+            - db_data:/var/lib/postgresql/data
+    backend:
+        image: node:18
+        volumes:
+            - ${PWD}/backend:/app
+        working_dir: /app
+        ports:
+            - 3000:3000
+        command: npm run start:dev
+    frontend:
+        image: node:18
+        volumes:
+            - ${PWD}/frontend:/app
+        working_dir: /app
+        ports:
+            - 5000:5000
+        command: npm run dev
 
+volumes:
+    db_data:
