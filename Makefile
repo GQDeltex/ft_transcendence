@@ -1,8 +1,8 @@
 DC := $(shell which docker-compose)
 
 
-PROD := ./docker-compose.yaml
-DEV := ./docker-compose.dev.yaml
+PROD := ./docker-compose.prod.yaml
+DEV := ./docker-compose.yaml
 
 all: prod
 
@@ -11,6 +11,7 @@ prod: $(PROD)
 
 dev: $(DEV)
 	$(DC) -f $(DEV) up --build --remove-orphans -d
+	$(DC) -f $(DEV) logs --tail 100 -f
 
 clean:
 	$(DC) -f $(DEV) stop
