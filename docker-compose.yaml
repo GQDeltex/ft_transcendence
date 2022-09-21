@@ -5,6 +5,7 @@ services:
         image: postgres:14
         environment:
             POSTGRES_PASSWORD: ${DATABASE_PASSWORD} # Set in .env file
+            POSTGRES_DB: ${DATABASE_DBNAME} # Set in .env file
         volumes:
             - db_data:/var/lib/postgresql/data
     backend:
