@@ -25,7 +25,7 @@ clean: stop
 	-$(DC) -f $(PROD) down
 
 fclean: clean
-	docker system prune -af
+	docker system prune -af --volumes
 
 redev: fclean dev
 
