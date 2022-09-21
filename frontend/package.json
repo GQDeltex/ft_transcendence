@@ -8,7 +8,9 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
-    "lint": "eslint \"{src,test}/**/*.ts\" \"{src,test}/**/*.vue\" --fix"
+    "lint": "eslint \"{src,test}/**/*.ts\" \"{src,test}/**/*.vue\" --fix",
+    "format-check": "prettier --check \"src/**/*.ts\" \"src/**/*.vue\"",
+    "lint-check": "eslint \"{src,test}/**/*.ts\" \"{src,test}/**/*.vue\""
   },
   "dependencies": {
     "vue": "^3.2.38",
