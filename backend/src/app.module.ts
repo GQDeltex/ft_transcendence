@@ -1,3 +1,4 @@
+import entities from './typeorm';
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 //import { CustomersModule } from './customers/customers.module';
@@ -16,7 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [],
+        entities: entities,
         synchronize: true,
       }),
       inject: [ConfigService],
