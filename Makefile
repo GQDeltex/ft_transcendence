@@ -10,7 +10,7 @@ BACK_NAME	:=	backend
 all: prod
 
 prod: $(PROD)
-	$(DC) -f $(PROD) up -d
+	$(DC) -f $(PROD) up --build --remove-orphans -d
 
 dev: $(DEV)
 	$(DC) -f $(DEV) up --build --remove-orphans -d

@@ -1,12 +1,15 @@
-#frontend
+#backend
 FROM node:18
-
-COPY . /app
 
 WORKDIR /app
 
-RUN npm install --production
+COPY package.json package-lock.json /app
+RUN npm install
 
-EXPOSE 5000
+COPY . /app
 
-CMD [""]
+RUN npm run build
+
+FROM nginx
+
+COPY --from=0 /app/dist /usr/share/nginx/html
