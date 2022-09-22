@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+    database:
+        image: postgres:14
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASSWORD} # Set in .env file
+            POSTGRES_DB: ${DB_NAME} # Set in .env file
+            POSTGRES_USER: ${DB_USERNAME} # Set in .env file
+        volumes:
+            - db_data:/var/lib/postgresql/data
+
+    backend:
+        build: ./backend
+        ports:
+            - 3000:3000
+        env_file:
+            - .env
+
+    frontend:
+        build: ./frontend
+        ports:
+            - 80:5000
+
+volumes:
+    db_data:
