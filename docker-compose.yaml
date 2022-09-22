@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
     database:
-        image: postgres:14
+        image: postgres:14-alpine
         environment:
             POSTGRES_PASSWORD: ${DB_PASSWORD} # Set in .env file
             POSTGRES_DB: ${DB_NAME} # Set in .env file
@@ -15,7 +15,7 @@ services:
         volumes:
             - ${PWD}/backend:/app
         ports:
-            - 3000:3000
+            - 8080:3000
         command: /entrypoint.sh npm run start:dev
         env_file:
             - .env
@@ -25,7 +25,7 @@ services:
         volumes:
             - ${PWD}/frontend:/app
         ports:
-            - 5000:5000
+            - 80:5000
         command: /entrypoint.sh npm run dev
 
 volumes:

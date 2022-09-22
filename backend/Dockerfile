@@ -1,5 +1,5 @@
 #backend
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . /app
 
 RUN npm run build
 
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /app
 COPY --from=0 /app/dist /app/dist

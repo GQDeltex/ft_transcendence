@@ -1,5 +1,5 @@
 #backend
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -10,6 +10,6 @@ COPY . /app
 
 RUN npm run build
 
-FROM nginx
+FROM nginx:1.23-alpine
 
 COPY --from=0 /app/dist /usr/share/nginx/html
