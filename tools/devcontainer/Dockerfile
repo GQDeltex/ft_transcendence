@@ -1,4 +1,5 @@
-FROM node:18
+#dev
+FROM node:18-alpine
 
 RUN npm i -g @nestjs/cli @vue/cli
 

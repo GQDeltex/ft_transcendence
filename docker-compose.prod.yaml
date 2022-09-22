@@ -11,22 +11,16 @@ services:
             - db_data:/var/lib/postgresql/data
 
     backend:
-        build: ./tools/devcontainer
-        volumes:
-            - ${PWD}/backend:/app
+        build: ./backend
         ports:
             - 8080:3000
-        command: /entrypoint.sh npm run start:dev
         env_file:
             - .env
 
     frontend:
-        build: ./tools/devcontainer
-        volumes:
-            - ${PWD}/frontend:/app
+        build: ./frontend
         ports:
-            - 80:5000
-        command: /entrypoint.sh npm run dev
+            - 80:80
 
 volumes:
     db_data:
