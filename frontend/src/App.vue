@@ -4,27 +4,29 @@ import { RouterLink, RouterView } from 'vue-router';
 
 <template>
   <header>
-    <div>
+    <div class="cloumn1">
       <!--  <img
-		  alt="page logo"
-		  class="logo"
-		  src="@/assets/logo.svg"
-		  width="125"
-		  height="125"
-      /> add the LOGO later here!!!!!!!!!!!!!!!!!!!!!!please!!!!!!!!!!!!!!!! -->
+			  alt="page logo"
+			  class="logo"
+			  src="@/assets/logo.svg"
+			  width="125"
+			  height="125"
+		  /> add the LOGO later here!!!!!!!!!!!!!!!!!!!!!!please!!!!!!!!!!!!!!!! -->
 
       <h1>trans_logo</h1>
       <!-- just a placeholder!!!!!!!11elf -->
-
+    </div>
+    <div class="column2">
       <h2>username-placeholder</h2>
 
       <!--  <img
-		  alt="page logo"
-		  class="logo"
-		  src="@/assets/logo.svg"
-		  width="125"
-		  height="125"
-      /> add the LOGO later here!!!!!!!!!!!!!!!!!!!!!!please!!!!!!!!!!!!!!!! -->
+			  alt="page logo"
+			  class="logo"
+			  src="@/assets/logo.svg"
+			  width="125"
+			  height="125"
+		  /> add the LOGO later here!!!!!!!!!!!!!!!!!!!!!!please!!!!!!!!!!!!!!!! -->
+      <h3>photo placeholder</h3>
     </div>
     <nav>
       <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
@@ -46,10 +48,18 @@ body {
 </style>
 
 <style scoped>
-h2 {
-  float: right;
+header {
+  display: grid;
+}
+.column1 {
+  grid-column: 1 / 2;
+}
+.column2 {
+  grid-column: 2 / 3;
+  justify-self: end;
 }
 nav {
+  grid-column: 1 / 3;
   list-style-type: none;
   margin: 0;
   padding: 0;
