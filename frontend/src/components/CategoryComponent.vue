@@ -20,6 +20,6 @@ div {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  gap: 100px;
+  gap: 10px;
 }
 </style>

@@ -4,29 +4,24 @@ import { RouterLink, RouterView } from 'vue-router';
 
 <template>
   <header>
-    <div class="cloumn1">
-      <!--  <img
-			  alt="page logo"
-			  class="logo"
-			  src="@/assets/logo.svg"
-			  width="125"
-			  height="125"
-		  /> add the LOGO later here!!!!!!!!!!!!!!!!!!!!!!please!!!!!!!!!!!!!!!! -->
-
-      <h1>trans_logo</h1>
-      <!-- just a placeholder!!!!!!!11elf -->
+    <div class="column1">
+      <img
+        alt="page logo"
+        class="logo"
+        src="@/assets/pongking_boi.svg"
+        height="50"
+      />
+      <span>pongking</span>
     </div>
     <div class="column2">
-      <h2>username-placeholder</h2>
+      <span>gucalvi</span>
 
-      <!--  <img
-			  alt="page logo"
-			  class="logo"
-			  src="@/assets/logo.svg"
-			  width="125"
-			  height="125"
-		  /> add the LOGO later here!!!!!!!!!!!!!!!!!!!!!!please!!!!!!!!!!!!!!!! -->
-      <h3>photo placeholder</h3>
+      <img
+        alt="page logo"
+        class="logo"
+        src="@/assets/sexy-guy-001-modified.png"
+        height="50"
+      />
     </div>
     <nav>
       <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
@@ -50,15 +45,26 @@ body {
 <style scoped>
 header {
   display: grid;
+  row-gap: 10px;
+}
+img {
+  margin-left: 15px;
 }
 .column1 {
+  display: flex;
+  align-items: center;
   grid-column: 1 / 2;
+  justify-self: start;
 }
 .column2 {
+  display: flex;
+  align-items: center;
   grid-column: 2 / 3;
   justify-self: end;
 }
 nav {
+  border-top: 1px solid grey;
+  border-bottom: 1px solid gray;
   grid-column: 1 / 3;
   list-style-type: none;
   margin: 0;
