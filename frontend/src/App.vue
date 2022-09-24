@@ -1,91 +1,91 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import HelloWorld from './components/HelloWorld.vue';
 </script>
 
 <template>
   <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <div class="column1">
+      <img
+        alt="page logo"
+        class="logo"
+        src="@/assets/pongking_boi.svg"
+        height="50"
+      />
+      <span>pongking</span>
     </div>
-  </header>
+    <div class="column2">
+      <span>gucalvi</span>
 
+      <img
+        alt="page logo"
+        class="logo"
+        src="@/assets/sexy-guy-001-modified.png"
+        height="50"
+      />
+    </div>
+    <nav>
+      <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
+      <li><RouterLink to="play">Play Now</RouterLink></li>
+      <li><RouterLink to="skin">Skin Selection</RouterLink></li>
+      <li><RouterLink to="stream">Stream</RouterLink></li>
+      <li><RouterLink to="chat">Chat</RouterLink></li>
+    </nav>
+  </header>
   <RouterView />
 </template>
 
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  background-color: black;
+}
+</style>
+
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+  display: grid;
+  row-gap: 10px;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+img {
+  margin-left: 15px;
 }
-
+.column1 {
+  display: flex;
+  align-items: center;
+  grid-column: 1 / 2;
+  justify-self: start;
+}
+.column2 {
+  display: flex;
+  align-items: center;
+  grid-column: 2 / 3;
+  justify-self: end;
+}
 nav {
-  width: 100%;
-  font-size: 12px;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid gray;
+  grid-column: 1 / 3;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+li {
+  display: inline;
+  flex-grow: 4;
+}
+li a {
+  display: block;
+  color: #f8971d;
   text-align: center;
-  margin-top: 2rem;
+  padding: 14px 16px;
+  text-decoration: none;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+li a:hover {
+  background-color: #f8971d;
+  color: black;
 }
 </style>
