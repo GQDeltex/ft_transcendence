@@ -24,14 +24,19 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
     profile: any,
     done: VerifyCallBack,
   ): Promise<void> {
-    const { id, username, name, emails }: {
+    const {
+      id,
+      username,
+      name,
+      emails,
+    }: {
       id: string;
       username: string;
       name: {
         givenName: string;
         familyName: string;
       };
-      emails: [{value: string}];
+      emails: [{ value: string }];
     } = profile;
 
     const user: {
@@ -43,7 +48,7 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
       authInfo: {
         accessToken: string;
         refreshToken: string;
-      }
+      };
     } = {
       id: id,
       username: username,
@@ -52,8 +57,8 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
       email: emails[0].value,
       authInfo: {
         accessToken: accessToken,
-        refreshToken: refreshToken
-      }
+        refreshToken: refreshToken,
+      },
     };
 
     done(null, user);
