@@ -38,9 +38,9 @@ norm:
 	$(DC) exec $(BACK_NAME) npm run lint
 
 front:
-	$(DC) exec $(FRONT_NAME) /bin/bash
+	$(DC) exec $(FRONT_NAME) /bin/sh
 
 back:
-	$(DC) exec $(BACK_NAME) /bin/bash
+	$(DC) exec $(BACK_NAME) /bin/sh
 
 .PHONY: all prod dev stop clean fclean redev reprod norm front back
