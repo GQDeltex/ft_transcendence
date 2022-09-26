@@ -78,6 +78,9 @@ nav {
   align-items: center;
   justify-content: space-evenly;
 }
+.router-link-active {
+  color: white;
+}
 li {
   display: inline;
   flex-grow: 4;
