@@ -7,11 +7,21 @@ defineProps<{
 <template>
   <h3>{{ category }}</h3>
   <div>
-    <img src="@/assets/pong.png" width="200" height="100" />
-    <img src="@/assets/pong.png" width="200" height="100" />
-    <img src="@/assets/pong.png" width="200" height="100" />
-    <img src="@/assets/pong.png" width="200" height="100" />
-    <img src="@/assets/pong.png" width="200" height="100" />
+    <router-link to="/test">
+      <img src="@/assets/pong.png" width="200" height="100" />
+    </router-link>
+    <router-link to="/test">
+      <img src="@/assets/pong.png" width="200" height="100" />
+    </router-link>
+    <router-link to="/test">
+      <img src="@/assets/pong.png" width="200" height="100" />
+    </router-link>
+    <router-link to="/test">
+      <img src="@/assets/pong.png" width="200" height="100" />
+    </router-link>
+    <router-link to="/test">
+      <img src="@/assets/pong.png" width="200" height="100" />
+    </router-link>
   </div>
 </template>
 

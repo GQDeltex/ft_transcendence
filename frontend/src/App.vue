@@ -5,23 +5,26 @@ import { RouterLink, RouterView } from 'vue-router';
 <template>
   <header>
     <div class="column1">
-      <img
-        alt="page logo"
-        class="logo"
-        src="@/assets/pongking_boi.svg"
-        height="50"
-      />
-      <span>pongking</span>
+      <router-link to="/" class="columncontent">
+        <img
+          alt="page logo"
+          class="logo"
+          src="@/assets/pongking_boi.svg"
+          height="50"
+        />
+        <span>pongking</span>
+      </router-link>
     </div>
     <div class="column2">
-      <span>gucalvi</span>
-
-      <img
-        alt="page logo"
-        class="logo"
-        src="@/assets/sexy-guy-001-modified.png"
-        height="50"
-      />
+      <router-link to="/profile" class="columncontent">
+        <span>gucalvi</span>
+        <img
+          alt="page logo"
+          class="logo"
+          src="@/assets/sexy-guy-001-modified.png"
+          height="50"
+        />
+      </router-link>
     </div>
     <nav>
       <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
@@ -51,16 +54,18 @@ img {
   margin-left: 15px;
 }
 .column1 {
-  display: flex;
-  align-items: center;
   grid-column: 1 / 2;
   justify-self: start;
 }
 .column2 {
-  display: flex;
-  align-items: center;
   grid-column: 2 / 3;
   justify-self: end;
+}
+.columncontent {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
 }
 nav {
   border-top: 1px solid grey;
@@ -72,6 +77,9 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+.router-link-active {
+  color: white;
 }
 li {
   display: inline;
