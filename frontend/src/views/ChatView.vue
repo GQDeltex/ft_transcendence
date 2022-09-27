@@ -8,11 +8,11 @@ socket.on('connect', function () {
   socket.emit(
     'privmsg',
     { recipient: 'test', message: 'hello there' },
-    (data) => {
+    (data: any) => {
       console.log(data);
     },
   );
-  socket.emit('privmsg', { recipient: 'test', message: '' }, (data) => {
+  socket.emit('privmsg', { recipient: 'test', message: '' }, (data: any) => {
     console.log(data);
   });
 });
