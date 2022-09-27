@@ -26,4 +26,19 @@ export class User {
     default: '',
   })
   email: string;
+
+  @Column({
+    default: '',
+  })
+  picture: string;
+
+  @Column({
+    default: '',
+  })
+  campus: string;
+
+  @Column({
+    default: '',
+  })
+  country: string;
 }
