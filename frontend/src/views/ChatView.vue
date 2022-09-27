@@ -5,8 +5,16 @@ const socket = io('http://localhost:8080');
 
 socket.on('connect', function () {
   console.log('Connected');
-  socket.emit('events', { test: 'test' });
-  socket.emit('identity', 0, (response) => console.log('Identity:', response));
+  socket.emit(
+    'privmsg',
+    { recipient: 'test', message: 'hello there' },
+    (data) => {
+      console.log(data);
+    },
+  );
+  socket.emit('privmsg', { recipient: 'test', message: '' }, (data) => {
+    console.log(data);
+  });
 });
 
 socket.on('events', function (data) {
@@ -14,7 +22,7 @@ socket.on('events', function (data) {
 });
 
 socket.on('exception', function (data) {
-  console.log('event', data);
+  console.log('exception: ', data);
 });
 
 socket.on('disconnect', function () {

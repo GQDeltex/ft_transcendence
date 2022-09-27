@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PrcGateway } from './prc.gateway';
+import { PrcGateway } from './gateways/prc.gateway';
 
 @Module({
-  providers: [PrcGateway]
+  providers: [PrcGateway],
 })
 export class PrcModule {}
