@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Intra42ApiLoginResponse } from '../../dtos/intra42/intra42.dto';
+import { UsersDto } from '../../../users/dtos/users/users.dto';
 
 // passport-42 doesn't have @type module for typescript
 /* eslint-disable */
@@ -25,16 +25,12 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
     profile: any,
     done: VerifyCallBack,
   ): Promise<void> {
-    const user: Intra42ApiLoginResponse = {
+    const user: UsersDto = {
       id: profile.id,
       username: profile.username,
       firstname: profile.name.givenName,
       lastname: profile.name.familyName,
       email: profile.emails[0].value,
-      authInfo: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
     };
 
     done(null, user);

@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Intra42Controller } from './controllers/intra42/intra42.controller';
 import { Intra42Strategy } from './strategies/intra42/intra42.strategy';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JwtStrategy } from './strategies/jwt/jwt.strategy';
       },
       inject: [ConfigService],
     }),
+    UsersModule,
   ],
   providers: [JwtStrategy, Intra42Strategy],
   controllers: [Intra42Controller],

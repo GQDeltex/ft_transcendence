@@ -9,9 +9,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt/jwt.guard';
-import { CreateUserDto } from 'src/users/dtos/users/users.dto';
-import { UsersService } from 'src/users/services/users/users.service';
+import { JwtAuthGuard } from '../../../auth/guards/jwt/jwt.guard';
+import { UsersDto } from '../../dtos/users/users.dto';
+import { UsersService } from '../../services/users/users.service';
 
 @Controller('users')
 export class UsersController {
@@ -32,7 +32,7 @@ export class UsersController {
   @Post('create')
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
-  createUsers(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+  createUsers(@Body() createUser: UsersDto) {
+    return this.userService.createUser(createUser);
   }
 }
