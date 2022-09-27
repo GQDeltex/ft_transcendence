@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
+/* eslint-disable */
+// @ts-ignore
+import VLazyImage from 'v-lazy-image';
 </script>
 
 <template>
   <header>
     <div class="column1">
       <router-link to="/" class="columncontent">
-        <img
+        <v-lazy-image
           alt="page logo"
           class="logo"
-          src="@/assets/pongking_boi.svg"
+          src="https://raw.githubusercontent.com/GQDeltex/ft_transcendence/7c86fa0ab0c381be729a40a7f2b89ee9f8dde068/frontend/src/assets/pongking_boi.svg"
           height="50"
         />
         <span>pongking</span>
@@ -18,10 +21,10 @@ import { RouterLink, RouterView } from 'vue-router';
     <div class="column2">
       <router-link to="/profile" class="columncontent">
         <span>gucalvi</span>
-        <img
+        <v-lazy-image
           alt="page logo"
           class="logo"
-          src="@/assets/sexy-guy-001-modified.png"
+          src="https://raw.githubusercontent.com/GQDeltex/ft_transcendence/main/frontend/src/assets/sexy-guy-001-modified.png"
           height="50"
         />
       </router-link>
