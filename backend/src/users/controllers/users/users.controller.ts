@@ -17,22 +17,15 @@ import { UsersService } from '../../services/users/users.service';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @Get()
+  @Get('/')
   @UseGuards(JwtAuthGuard)
   getUsers() {
     return this.userService.getUsers();
   }
 
-  @Get('id/:id')
+  @Get('/:id')
   @UseGuards(JwtAuthGuard)
   findUsersById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findUsersById(id);
-  }
-
-  @Post('create')
-  @UsePipes(ValidationPipe)
-  @UseGuards(JwtAuthGuard)
-  createUsers(@Body() createUser: UsersDto) {
-    return this.userService.createUser(createUser);
   }
 }
