@@ -3,7 +3,6 @@ import LeaderboardCategoryComponent from '../components/LeaderboardCategoryCompo
 </script>
 
 <template>
-  <h1>this is the leaderboard</h1>
   <LeaderboardCategoryComponent category-name="Top Viewed Player" />
   <LeaderboardCategoryComponent category-name="Top Performer" />
 </template>
