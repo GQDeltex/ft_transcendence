@@ -1,7 +1,8 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Intra42OAuthGuard } from '../guard/intra42.guard';
+import { Intra42OAuthGuard } from '../../guards/intra42/intra42.guard';
 import { Response } from 'express';
+import { Intra42ApiLoginResponse } from '../../dtos/intra42/intra42.dto';
 
 @Controller('login')
 export class Intra42Controller {
@@ -18,23 +19,8 @@ export class Intra42Controller {
   async intra42AuthRedirect(
     @Req() req: any,
     @Res() res: Response,
-  ): Promise<any> {
-    const {
-      user,
-    }: {
-      user: {
-        id: string;
-        username: string;
-        firstname: string;
-        lastname: string;
-        email: string;
-        authInfo: {
-          accessToken: string;
-          refreshToken: string;
-        };
-      };
-    } = req;
-
+  ): Promise<Response> {
+    const user: Intra42ApiLoginResponse = req.user;
     const jwt_token = this.jwtService.sign({
       username: user.username,
       sub: user.id,

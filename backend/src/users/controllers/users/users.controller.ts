@@ -9,8 +9,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
-import { CreateUserDto } from 'src/users/dtos/users.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt/jwt.guard';
+import { CreateUserDto } from 'src/users/dtos/users/users.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 
 @Controller('users')
