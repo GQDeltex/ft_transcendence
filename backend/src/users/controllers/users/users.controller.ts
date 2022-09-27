@@ -1,16 +1,11 @@
 import {
-  Body,
   Controller,
   Get,
   Param,
   ParseIntPipe,
-  Post,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../auth/guards/jwt/jwt.guard';
-import { UsersDto } from '../../dtos/users/users.dto';
 import { UsersService } from '../../services/users/users.service';
 
 @Controller('users')
