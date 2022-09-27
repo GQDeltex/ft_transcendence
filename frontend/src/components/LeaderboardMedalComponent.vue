@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  goldName: string;
+  medalName: string;
 }>();
 </script>
 
@@ -14,12 +14,12 @@ defineProps<{
           height="100"
         />
         <img
-		  class="gold"
+          class="gold"
           src="@/assets/pongking_boi_gold.png"
           width="30"
           height="30"
         />
-        <span class="playername">{{ goldName }}</span>
+        <span class="playername">{{ medalName }}</span>
       </div>
     </router-link>
     <span class="sub">455 Matches</span>
@@ -45,6 +45,6 @@ div {
 }
 .gold {
   position: relative;
-  bottom: 20px;
-	}
+  bottom: 60px;
+}
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LeaderboardPlayerComponent from './LeaderboardPlayerComponent.vue';
-import LeaderboardGoldComponent from './LeaderboardGoldComponent.vue';
+//import LeaderboardMedalComponent from './LeaderboardMedalComponent.vue';
 defineProps<{
   categoryName: string;
 }>();
@@ -9,7 +9,8 @@ defineProps<{
 <template>
   <h3>{{ categoryName }}</h3>
   <div class="categories">
-    <LeaderboardGoldComponent gold-name="gucalvi" />
+    <!--    <LeaderboardMedalComponent medal-name="gucalvi" /> -->
+    <LeaderboardPlayerComponent player-name="gucalvi" />
     <LeaderboardPlayerComponent player-name="gucalvi" />
     <LeaderboardPlayerComponent player-name="gucalvi" />
     <LeaderboardPlayerComponent player-name="gucalvi" />
@@ -19,13 +20,17 @@ defineProps<{
 
 <style scoped>
 h3 {
-	padding: 5px;
-	color: orange;
-	}
+  padding: 5px;
+  color: orange;
+}
 .categories {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
   gap: 10px;
+}
+.gold {
+  position: relative;
+  bottom: 70px;
 }
 </style>
