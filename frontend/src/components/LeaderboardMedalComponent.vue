@@ -15,12 +15,7 @@ defineProps<{
           width="100"
           height="100"
         />
-        <img
-          :src=medalKind
-          class="gold"
-          width="30"
-          height="30"
-        />
+        <img :src="medalKind" class="gold" width="30" height="30" />
         <span class="playername">{{ medalName }}</span>
       </div>
     </router-link>
@@ -30,7 +25,6 @@ defineProps<{
 </template>
 
 <style scoped>
-
 div {
   display: grid;
   margin: auto;
@@ -48,7 +42,7 @@ div {
   justify-content: center;
 }
 .gilohm {
-  display :block;
+  display: block;
   margin-left: auto;
   margin-right: auto;
 }

@@ -29,7 +29,6 @@ defineProps<{
 </template>
 
 <style scoped>
-
 div {
   display: grid;
   margin: auto;
@@ -47,7 +46,7 @@ div {
   justify-content: center;
 }
 .gilohm {
-  display :block;
+  display: block;
   margin-left: auto;
   margin-right: auto;
 }
