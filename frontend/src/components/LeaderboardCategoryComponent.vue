@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LeaderboardPlayerComponent from './LeaderboardPlayerComponent.vue';
-//import LeaderboardMedalComponent from './LeaderboardMedalComponent.vue';
+import LeaderboardMedalComponent from './LeaderboardMedalComponent.vue';
 defineProps<{
   categoryName: string;
 }>();
@@ -9,9 +9,18 @@ defineProps<{
 <template>
   <h3>{{ categoryName }}</h3>
   <div class="categories">
-    <!--    <LeaderboardMedalComponent medal-name="gucalvi" /> -->
-    <LeaderboardPlayerComponent player-name="gucalvi" />
-    <LeaderboardPlayerComponent player-name="gucalvi" />
+    <LeaderboardMedalComponent
+      medal-name="gucalvi"
+      medal-kind="/src/assets/pongking_boi_gold.png"
+    />
+    <LeaderboardMedalComponent
+      medal-name="gucalvis evil twin"
+      medal-kind="/src/assets/pongking_boi_silver.png"
+    />
+    <LeaderboardMedalComponent
+      medal-name="gucalvis angelic twin"
+      medal-kind="/src/assets/pongking_boi_bronze.png"
+    />
     <LeaderboardPlayerComponent player-name="gucalvi" />
     <LeaderboardPlayerComponent player-name="gucalvi" />
     <LeaderboardPlayerComponent player-name="gucalvi" />
@@ -26,11 +35,7 @@ h3 {
 .categories {
   display: flex;
   justify-content: space-evenly;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.gold {
-  position: relative;
-  bottom: 70px;
+  flex-wrap: wrap-reverse;
+  gap: initial;
 }
 </style>

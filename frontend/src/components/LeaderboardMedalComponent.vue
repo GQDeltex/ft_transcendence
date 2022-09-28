@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   medalName: string;
+  medalKind: string;
 }>();
 </script>
 
@@ -9,16 +10,12 @@ defineProps<{
     <router-link to="/profile">
       <div>
         <img
+          class="gilohm"
           src="@/assets/sexy-guy-001-modified.png"
           width="100"
           height="100"
         />
-        <img
-          class="gold"
-          src="@/assets/pongking_boi_gold.png"
-          width="30"
-          height="30"
-        />
+        <img :src="medalKind" class="gold" width="30" height="30" />
         <span class="playername">{{ medalName }}</span>
       </div>
     </router-link>
@@ -30,6 +27,7 @@ defineProps<{
 <style scoped>
 div {
   display: grid;
+  margin: auto;
 }
 .playername {
   display: flex;
@@ -43,8 +41,14 @@ div {
   display: flex;
   justify-content: center;
 }
+.gilohm {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .gold {
   position: relative;
-  bottom: 60px;
+  bottom: calc(1em / 2 + 20px);
+  right: calc(100% / -2 + 50px);
 }
 </style>
