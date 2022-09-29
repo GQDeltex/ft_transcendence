@@ -1,12 +1,11 @@
-import entities from './typeorm';
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-//import { CustomersModule } from './customers/customers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { PrcModule } from './prc/prc.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -20,7 +19,7 @@ import { PrcModule } from './prc/prc.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: entities,
+        entities: [User],
         synchronize: true,
       }),
       inject: [ConfigService],
