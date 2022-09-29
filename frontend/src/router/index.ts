@@ -25,6 +25,11 @@ const router = createRouter({
       name: 'ChatView',
       component: () => import('../views/ChatView.vue'),
     },
+    {
+      path: '/skin',
+      name: 'SkinView',
+      component: () => import('../views/SkinView.vue'),
+    },
   ],
 });
 
