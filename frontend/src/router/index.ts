@@ -25,6 +25,11 @@ const router = createRouter({
       name: 'ChatView',
       component: () => import('../views/ChatView.vue'),
     },
+    {
+      path: '/login',
+      name: 'LoginView',
+      component: () => import('../views/LoginView.vue'),
+    },
   ],
 });
 
