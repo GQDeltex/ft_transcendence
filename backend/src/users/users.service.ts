@@ -11,7 +11,7 @@ export class UsersService {
   ) {}
 
   create(createUserInput: CreateUserInput) {
-    this.userRepository.upsert(createUserInput, ['id']);
+    return this.userRepository.upsert(createUserInput, ['id']);
   }
 
   findAll(): Promise<User[]> {
@@ -25,10 +25,10 @@ export class UsersService {
   }
 
   updatePicture(id: number, picture: string) {
-    this.userRepository.update(id, { picture: picture });
+    return this.userRepository.update(id, { picture: picture });
   }
 
   updateUsername(id: number, username: string) {
-    this.userRepository.update(id, { username: username });
+    return this.userRepository.update(id, { username: username });
   }
 }
