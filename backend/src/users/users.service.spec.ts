@@ -130,7 +130,8 @@ describe('UsersService', () => {
       campus: 'Berlin',
     };
     await service.create(newUser);
-    expect(await service.updatePicture(newUser.id, 'http://whoknows.com')).resolves;
+    expect(await service.updatePicture(newUser.id, 'http://whoknows.com'))
+      .resolves;
     newUser.picture = 'http://whoknows.com';
     expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
