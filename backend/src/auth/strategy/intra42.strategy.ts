@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { CreateUserInput } from '../../../users/dto/create-user.input';
+import { CreateUserInput } from '../../users/dto/create-user.input';
 
 // passport-42 doesn't have @type module for typescript
 /* eslint-disable */
