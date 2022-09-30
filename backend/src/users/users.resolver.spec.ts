@@ -1,23 +1,25 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { mockUsersRepository } from './mock.repository';
+import { Repository, Connection } from 'typeorm';
+import { memdbMock, testUser } from './memdb.mock';
 
 describe('UsersResolver', () => {
+  let db: Connection;
+  let service: UsersService;
+  let usersRepository: Repository<User>;
   let resolver: UsersResolver;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersResolver, UsersService, {
-            provide: getRepositoryToken(User),
-            useValue: mockUsersRepository,
-        },],
-    }).compile();
+    db = await memdbMock(User);
+    usersRepository = db.getRepository(User);
+    usersRepository.insert(testUser);
 
-    resolver = module.get<UsersResolver>(UsersResolver);
+    service = new UsersService(usersRepository);
+    resolver = new UsersResolver(service);
   });
+
+  afterEach(async () => db.close());
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();

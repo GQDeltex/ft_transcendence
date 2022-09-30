@@ -11,27 +11,24 @@ export class UsersService {
   ) {}
 
   create(createUserInput: CreateUserInput) {
-    const newUser = this.userRepository.create(createUserInput);
-    return this.userRepository.upsert(newUser, ['id']);
+    this.userRepository.upsert(createUserInput, ['id']);
   }
 
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  findOne(identifier: number | string) {
+  findOne(identifier: number | string): Promise<User | null> {
     if (typeof identifier == 'number')
       return this.userRepository.findOneBy({ id: identifier });
     else return this.userRepository.findOneBy({ username: identifier });
   }
 
-  async updatePicture(id: number, picture: string) {
-    await this.userRepository.update(id, { picture: picture });
-    return this.findOne(id);
+  updatePicture(id: number, picture: string) {
+    this.userRepository.update(id, { picture: picture });
   }
 
-  async updateUsername(id: number, username: string) {
-    await this.userRepository.update(id, { username: username });
-    return this.findOne(id);
+  updateUsername(id: number, username: string) {
+    this.userRepository.update(id, { username: username });
   }
 }
