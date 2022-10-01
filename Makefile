@@ -34,6 +34,7 @@ reprod: fclean prod
 norm:
 	$(DC) exec $(FRONT_NAME) npm run format
 	$(DC) exec $(FRONT_NAME) npm run lint
+	$(DC) exec $(FRONT_NAME) npm run type-check
 	$(DC) exec $(BACK_NAME) npm run format
 	$(DC) exec $(BACK_NAME) npm run lint
 
