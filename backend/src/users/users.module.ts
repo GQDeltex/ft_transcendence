@@ -13,6 +13,10 @@ import { User } from './entities/user.entity';
       debug: true,
       playground: true,
       autoSchemaFile: true,
+      cors: {
+        origin: 'http://localhost',
+        credentials: true,
+      },
     }),
     TypeOrmModule.forFeature([User]),
   ],
