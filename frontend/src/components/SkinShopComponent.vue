@@ -1,44 +1,40 @@
 <script setup lang="ts">
 defineProps<{
+  itemImg: string;
   itemName: string;
 }>();
 </script>
 
 <template>
-  <div>
-    <ul>
-      <li>
-        <img
-          class="item-pic"
-          src="@/assets/sexy-guy-001-modified.png"
-          width="100"
-          height="100"
-        />
-      </li>
-      <li>
-        <span class="item-name">{{ itemName }}</span>
-      </li>
-      <li><span class="item-price">7$</span></li>
-      <li><button>Buy</button></li>
-    </ul>
+  <div class="parent">
+    <img class="item-pic" :src="itemImg" width="100" height="100" />
+    <span class="item-name">{{ itemName }}</span>
+    <span class="item-price">7$</span>
+    <button>Buy</button>
   </div>
 </template>
 
 <style scoped>
-div {
-  border-top: 1px solid grey;
+.parent {
+  display: flex;
+  margin-left: 10%;
+  margin-right: 10%;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid gray;
+  padding: 10px;
+}
+.item-name {
+  text-decoration: none;
+  color: grey;
+  width: 50%;
+  padding: 10px;
 }
 .item-price {
   text-decoration: none;
   color: gray;
+  width: 20%;
   padding: 10px;
-  margin: 10px;
-}
-.item-name {
-  padding: 20px;
-  text-decoration: none;
-  color: grey;
 }
 button {
   height: 40px;
@@ -48,9 +44,5 @@ button {
   color: black;
   background-color: #f8971d;
   padding: 10px;
-  margin: 10px;
-}
-li {
-  display: inline;
 }
 </style>
