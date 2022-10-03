@@ -15,6 +15,12 @@ export class UsersService {
     return this.userRepository.upsert(newUser, ['id']);
   }
 
+  async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
+    return this.userRepository.update(userId, {
+      twoFactorAuthenticationSecret: secret,
+    });
+  }
+
   findAll() {
     return this.userRepository.find();
   }

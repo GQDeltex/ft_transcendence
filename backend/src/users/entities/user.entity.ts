@@ -9,6 +9,10 @@ export class User {
   id: number;
 
   @Field()
+  @Column({ nullable: true })
+  public twoFactorAuthenticationSecret?: string;
+
+  @Field()
   @Column()
   firstname: string;
 
