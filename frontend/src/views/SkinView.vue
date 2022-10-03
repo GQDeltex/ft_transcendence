@@ -3,6 +3,11 @@ import SkinShopComponent from '../components/SkinShopComponent.vue';
 </script>
 
 <template>
+  <div class="header">
+    <button class="button1">Profile Pictures</button>
+    <button class="button2">Maps</button>
+    <button class="button3">Sounds</button>
+  </div>
   <SkinShopComponent
     item-name="Avatar"
     item-img="/src/assets/sexy-guy-001-modified.png"
@@ -53,4 +58,44 @@ import SkinShopComponent from '../components/SkinShopComponent.vue';
   />
 </template>
 
-<style scoped></style>
+<style scoped>
+.header {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10%;
+  margin-right: 10%;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid grey;
+}
+.button1 {
+  height: 40px;
+  width: 25%;
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  background-color: #f8971d;
+  padding: 10px;
+  margin: 20px;
+}
+.button2 {
+  height: 40px;
+  width: 40%;
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  background-color: #f8971d;
+  padding: 10px;
+  margin: 20px;
+}
+.button3 {
+  height: 40px;
+  width: 25%;
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  background-color: #f8971d;
+  padding: 10px;
+  margin: 20px;
+}
+</style>
