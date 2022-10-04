@@ -18,7 +18,7 @@ export class UsersResolver {
   async findOneById(@Args('id', { type: () => Int }) id: number) {
     const user: User | null = await this.usersService.findOne(id);
     if (user == null)
-        throw new HttpException("User not Found", HttpStatus.NOT_FOUND);
+      throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
     return user;
   }
 
@@ -26,7 +26,7 @@ export class UsersResolver {
   async findOneByUsername(@Args('username') username: string) {
     const user: User | null = await this.usersService.findOne(username);
     if (user == null)
-        throw new HttpException("User not Found", HttpStatus.NOT_FOUND);
+      throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
     return user;
   }
 
