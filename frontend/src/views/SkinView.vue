@@ -4,9 +4,9 @@ import SkinShopComponent from '../components/SkinShopComponent.vue';
 
 <template>
   <div class="header">
-    <button class="button1">Profile Pictures</button>
-    <button class="button2">Maps</button>
-    <button class="button3">Sounds</button>
+    <button class="button">Profile Pictures</button>
+    <button class="button button-wide">Maps</button>
+    <button class="button">Sounds</button>
   </div>
   <SkinShopComponent
     item-name="Avatar"
