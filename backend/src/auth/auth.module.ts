@@ -21,7 +21,7 @@ import { UsersModule } from '../users/users.module';
     }),
     UsersModule,
   ],
-  providers: [JwtStrategy, Intra42Strategy],
+  providers: [JwtStrategy, Intra42Strategy, ConfigService],
   controllers: [Intra42Controller],
 })
 export class AuthModule {}

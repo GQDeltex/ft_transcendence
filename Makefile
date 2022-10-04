@@ -44,4 +44,7 @@ front:
 back:
 	$(DC) exec $(BACK_NAME) /bin/sh
 
+test:
+	$(DC) exec $(BACK_NAME) npm run test
+
 .PHONY: all prod dev stop clean fclean redev reprod norm front back
