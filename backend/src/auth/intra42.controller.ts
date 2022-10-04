@@ -23,7 +23,7 @@ export class Intra42Controller {
   async intra42AuthRedirect(
     @Req() req: any,
     @Res() res: Response,
-  ): Promise<Response> {
+  ): Promise<void> {
     const user: CreateUserInput = req.user;
     this.usersService.create(user);
     const jwt_token = this.jwtService.sign({
@@ -32,6 +32,6 @@ export class Intra42Controller {
     });
 
     res.cookie('jwt', jwt_token);
-    return res.status(201).json({ user, jwt_token: jwt_token });
+    return res.redirect('http://localhost/login');
   }
 }
