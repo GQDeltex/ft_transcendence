@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
+import { useUserStore } from './store/user';
+
+const userStore = useUserStore();
 </script>
 
 <template>
-  <header>
+  <header v-if="userStore.isLoggedIn">
     <div class="column1">
       <router-link to="/" class="columncontent">
         <img
@@ -17,11 +20,11 @@ import { RouterLink, RouterView } from 'vue-router';
     </div>
     <div class="column2">
       <router-link to="/profile" class="columncontent">
-        <span>gucalvi</span>
+        <span>{{ userStore.username }}</span>
         <img
           alt="page logo"
           class="logo"
-          src="@/assets/sexy-guy-001-modified.png"
+          :src="userStore.picture"
           height="50"
         />
       </router-link>

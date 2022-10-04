@@ -1,13 +1,26 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from './controllers/users/users.controller';
-import { UsersService } from './services/users/users.service';
+import { UsersService } from './users.service';
+import { UsersResolver } from './users.resolver';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/typeorm';
+import { User } from './entities/user.entity';
 
 @Module({
-  controllers: [UsersController],
-  providers: [UsersService],
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      debug: true,
+      playground: true,
+      autoSchemaFile: true,
+      cors: {
+        origin: 'http://localhost',
+        credentials: true,
+      },
+    }),
+    TypeOrmModule.forFeature([User]),
+  ],
+  providers: [UsersResolver, UsersService],
   exports: [UsersService],
 })
 export class UsersModule {}

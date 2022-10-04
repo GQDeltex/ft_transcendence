@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { Intra42Controller } from './controllers/intra42/intra42.controller';
-import { Intra42Strategy } from './strategies/intra42/intra42.strategy';
-import { JwtStrategy } from './strategies/jwt/jwt.strategy';
+import { Intra42Controller } from './intra42.controller';
+import { Intra42Strategy } from './strategy/intra42.strategy';
+import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 
 @Module({

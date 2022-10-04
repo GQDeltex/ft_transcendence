@@ -6,7 +6,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { PrivMsgDto } from '../dtos/privmsg.dto';
+import { PrivMsgDto } from './dto/privmsg.dto';
 import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { BadRequestExceptionFilter } from './BadRequestExceptionFilter';
 
