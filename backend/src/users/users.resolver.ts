@@ -1,4 +1,5 @@
 import { Mutation, Resolver, Query, Args, Int } from '@nestjs/graphql';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
@@ -14,13 +15,19 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOneById(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  async findOneById(@Args('id', { type: () => Int }) id: number) {
+    const user: User | null = await this.usersService.findOne(id);
+    if (user == null)
+        throw new HttpException("User not Found", HttpStatus.NOT_FOUND);
+    return user;
   }
 
   @Query(() => User, { name: 'userByName' })
-  findOneByUsername(@Args('username') username: string) {
-    return this.usersService.findOne(username);
+  async findOneByUsername(@Args('username') username: string) {
+    const user: User | null = await this.usersService.findOne(username);
+    if (user == null)
+        throw new HttpException("User not Found", HttpStatus.NOT_FOUND);
+    return user;
   }
 
   @Mutation(() => User)
