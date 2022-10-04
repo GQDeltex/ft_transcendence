@@ -68,7 +68,7 @@ import SkinShopComponent from '../components/SkinShopComponent.vue';
   align-items: center;
   border-bottom: 1px solid grey;
 }
-.button1 {
+.button {
   height: 40px;
   width: 25%;
   text-decoration: none;
@@ -78,24 +78,7 @@ import SkinShopComponent from '../components/SkinShopComponent.vue';
   padding: 10px;
   margin: 20px;
 }
-.button2 {
-  height: 40px;
+.button-wide {
   width: 40%;
-  text-decoration: none;
-  border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
-  padding: 10px;
-  margin: 20px;
-}
-.button3 {
-  height: 40px;
-  width: 25%;
-  text-decoration: none;
-  border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
-  padding: 10px;
-  margin: 20px;
 }
 </style>
