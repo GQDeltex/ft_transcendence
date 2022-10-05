@@ -36,7 +36,8 @@ export class Intra42Controller {
       throw new HttpException('User missing', HttpStatus.BAD_REQUEST);
     let user: User = req.user;
 
-    const userData: User | null = await this.usersService.findOne(user.id);
+    const userData: User | null = await this.usersService.findOne(+user.id);
+
     if (userData == null) {
       this.usersService.create(user);
     } else {
