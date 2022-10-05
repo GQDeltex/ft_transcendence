@@ -27,6 +27,8 @@ services:
         ports:
             - 80:5000
         command: /entrypoint.sh npm run dev
+        env_file:
+            - .env
 
 volumes:
     db_data:

@@ -3,7 +3,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json /app
+ARG VITE_PAYPAL_CLIENT_ID
+
+COPY package.json package-lock.json /app/
 RUN npm install
 
 COPY . /app
