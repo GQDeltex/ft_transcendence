@@ -56,7 +56,7 @@ describe('UsersService', () => {
     expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
 
-  it('should update a user if existing', async () => {
+  it('should not create a user if existing', async () => {
     const newUser: User = {
       id: 12345,
       username: 'test',
@@ -79,8 +79,8 @@ describe('UsersService', () => {
       country: 'Dreamland',
       campus: 'Shipwreckia',
     };
-    await service.create(newerUser);
-    expect(service.findOne(12345)).resolves.toEqual(newerUser);
+    await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
+    expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
 
   it('should change the username', async () => {

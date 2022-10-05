@@ -11,7 +11,7 @@ export class UsersService {
   ) {}
 
   create(createUserInput: CreateUserInput) {
-    return this.userRepository.upsert(createUserInput, ['id']);
+    return this.userRepository.insert(createUserInput);
   }
 
   findAll(): Promise<User[]> {
