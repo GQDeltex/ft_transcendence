@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChatChatComponent from '../components/ChatChatComponent.vue'
+import ChatChatComponent from '../components/ChatChatComponent.vue';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:8080');
