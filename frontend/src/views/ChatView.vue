@@ -33,7 +33,18 @@ socket.on('disconnect', function () {
 
 <template>
   <h1>Chat View (PRC)</h1>
-  <ChatChatComponent chat-name="gucalvi" />
+  <div class="parent">
+  <ChatChatComponent chat-name="gucalvi" class="chatchatcomp"/>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.parent {
+	display: flex;
+	justify-content: center; 
+	align-items: stretch;
+	}
+.chatchatcomp {
+	max-width: 80%;
+	}
+</style>
