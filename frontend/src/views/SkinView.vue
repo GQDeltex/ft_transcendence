@@ -9,50 +9,62 @@ import SkinShopComponent from '../components/SkinShopComponent.vue';
     <button class="button">Sounds</button>
   </div>
   <SkinShopComponent
+    item-id="shop-item-1"
     item-name="Avatar"
     item-img="/src/assets/sexy-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-2"
     item-name="Sexy Avatar"
     item-img="/src/assets/even-sexier-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-3"
     item-name="Even sexier Avatar"
     item-img="/src/assets/sexiest-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-4"
     item-name="Avatar"
     item-img="/src/assets/sexy-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-5"
     item-name="Sexy Avatar"
     item-img="/src/assets/even-sexier-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-6"
     item-name="Even sexier Avatar"
     item-img="/src/assets/sexiest-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-7"
     item-name="Avatar"
     item-img="/src/assets/sexy-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-8"
     item-name="Sexy Avatar"
     item-img="/src/assets/even-sexier-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-9"
     item-name="Even sexier Avatar"
     item-img="/src/assets/sexiest-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-10"
     item-name="Avatar"
     item-img="/src/assets/sexy-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-11"
     item-name="Sexy Avatar"
     item-img="/src/assets/even-sexier-guy-001-modified.png"
   />
   <SkinShopComponent
+    item-id="shop-item-12"
     item-name="Even sexier Avatar"
     item-img="/src/assets/sexiest-guy-001-modified.png"
   />

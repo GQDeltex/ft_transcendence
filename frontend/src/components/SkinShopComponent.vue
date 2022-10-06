@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import PayButtonComponent from '@/components/PayButtonComponent.vue';
+
 defineProps<{
+  itemId: string;
   itemImg: string;
   itemName: string;
 }>();
@@ -10,7 +13,7 @@ defineProps<{
     <img class="item-pic" :src="itemImg" width="100" height="100" />
     <span class="item-name">{{ itemName }}</span>
     <span class="item-price">7$</span>
-    <button>Buy</button>
+    <PayButtonComponent :id="itemId" price="7" />
   </div>
 </template>
 
@@ -34,15 +37,6 @@ defineProps<{
   text-decoration: none;
   color: gray;
   width: 20%;
-  padding: 10px;
-}
-button {
-  height: 40px;
-  width: 150px;
-  text-decoration: none;
-  border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
   padding: 10px;
 }
 </style>
