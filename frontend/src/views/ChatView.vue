@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChatChatComponent from '../components/ChatChatComponent.vue';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:8080');
@@ -31,7 +32,19 @@ socket.on('disconnect', function () {
 </script>
 
 <template>
-  <h1>Chat View (PRC)</h1>
+  <div class="parent">
+    <ChatChatComponent chat-name="gucalvi" class="chatchatcomp" />
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  margin: 2em;
+}
+.chatchatcomp {
+  max-width: 80%;
+}
+</style>
