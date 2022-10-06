@@ -9,7 +9,7 @@ defineProps<{
     <span class="chatname">{{ chatName }}</span>
     <span class="messages">here the messages will be displayed</span>
     <div class="lower">
-      <input type="text" class="text"/>
+      <input type="text" class="text" />
       <button class="sendbutton">Send</button>
     </div>
   </div>
@@ -33,12 +33,13 @@ defineProps<{
   background-color: black;
   display: flex;
   justify-content: center;
+  font-size: 2em;
 }
 .messages {
   margin-left: 9px;
   margin-right: 9px;
   background-color: black;
-  min-height: 100px;
+  min-height: 500px;
   display: flex;
   justify-content: end;
 }
@@ -51,8 +52,11 @@ defineProps<{
   display: flex;
 }
 .text {
-  flex-grow: 1
-	}
+  flex-grow: 1;
+}
 .sendbutton {
-	}
+  text-decoration: none;
+  color: white;
+  background-color: grey;
+}
 </style>
