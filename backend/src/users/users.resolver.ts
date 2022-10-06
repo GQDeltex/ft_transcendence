@@ -25,10 +25,11 @@ export class UsersResolver {
 
   @Mutation(() => User)
   updatePicture(@Args('user') updateUserPictureInput: UpdateUserPictureInput) {
-    return this.usersService.updatePicture(
+    this.usersService.updatePicture(
       updateUserPictureInput.id,
       updateUserPictureInput.picture,
     );
+    return this.usersService.findOne(updateUserPictureInput.id);
   }
 
   @Mutation(() => User)
