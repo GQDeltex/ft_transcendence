@@ -42,9 +42,10 @@ export class UsersResolver {
   updateUsername(
     @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
   ) {
-    return this.usersService.updateUsername(
+    this.usersService.updateUsername(
       updateUserUsernameInput.id,
       updateUserUsernameInput.username,
     );
+    return this.usersService.findOne(updateUserUsernameInput.id);
   }
 }
