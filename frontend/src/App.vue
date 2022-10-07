@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 import { useUserStore } from './store/user';
 import NavbarComponent from './components/NavbarComponent.vue';
 

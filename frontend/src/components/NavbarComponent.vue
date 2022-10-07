@@ -1,39 +1,34 @@
-<script setup lang = "ts">
+<script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '../store/user';
 const userStore = useUserStore();
 </script>
 
 <template>
-    <div class="column1">
-      <router-link to="/" class="columncontent">
-        <img
-          alt="page logo"
-          class="logo"
-          src="@/assets/pongking_boi.svg"
-          height="50"
-        />
-        <span>pongking</span>
-      </router-link>
-    </div>
-    <div class="column2">
-      <router-link to="/profile" class="columncontent">
-        <span>{{ userStore.username }}</span>
-        <img
-          alt="page logo"
-          class="logo"
-          :src="userStore.picture"
-          height="50"
-        />
-      </router-link>
-    </div>
-    <nav>
-      <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
-      <li><RouterLink to="play">Play Now</RouterLink></li>
-      <li><RouterLink to="skin">Skin Selection</RouterLink></li>
-      <li><RouterLink to="stream">Stream</RouterLink></li>
-      <li><RouterLink to="chat">Chat</RouterLink></li>
-    </nav>
+  <div class="column1">
+    <router-link to="/" class="columncontent">
+      <img
+        alt="page logo"
+        class="logo"
+        src="@/assets/pongking_boi.svg"
+        height="50"
+      />
+      <span>pongking</span>
+    </router-link>
+  </div>
+  <div class="column2">
+    <router-link to="/profile" class="columncontent">
+      <span>{{ userStore.username }}</span>
+      <img alt="page logo" class="logo" :src="userStore.picture" height="50" />
+    </router-link>
+  </div>
+  <nav>
+    <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
+    <li><RouterLink to="play">Play Now</RouterLink></li>
+    <li><RouterLink to="skin">Skin Selection</RouterLink></li>
+    <li><RouterLink to="stream">Stream</RouterLink></li>
+    <li><RouterLink to="chat">Chat</RouterLink></li>
+  </nav>
 </template>
 
 <style scoped>
