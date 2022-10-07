@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { Intra42Controller } from './intra42.controller';
+import { Intra42Controller } from './controller/intra42.controller';
 import { Intra42Strategy } from './strategy/intra42.strategy';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from '../users/users.module';
-import { TwoFactorAuthenticationController } from '../2FA/twoFactorAuthentication.controller';
-import { TwoFactorAuthenticationService } from '../2FA/twoFactorAuthentication.service';
+import { TwoFAController } from './controller/twoFA.controller';
+import { TwoFAService } from './service/twoFA.service';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { TwoFactorAuthenticationService } from '../2FA/twoFactorAuthentication.s
     }),
     UsersModule,
   ],
-  providers: [JwtStrategy, Intra42Strategy, TwoFactorAuthenticationService],
-  controllers: [Intra42Controller, TwoFactorAuthenticationController],
+  providers: [JwtStrategy, Intra42Strategy, TwoFAService],
+  controllers: [Intra42Controller, TwoFAController],
 })
 export class AuthModule {}

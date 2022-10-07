@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Intra42Strategy } from './intra42.strategy';
+import { TwoFAService } from './twoFA.service';
+import { UsersService } from '../../users/users.service';
 import { ConfigService } from '@nestjs/config';
 
-describe('Intra42Strategy', () => {
-  let service: Intra42Strategy;
+describe('TwoFAService', () => {
+  let service: TwoFAService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [Intra42Strategy, ConfigService],
+      providers: [TwoFAService, UsersService, ConfigService],
     }).compile();
 
-    service = module.get<Intra42Strategy>(Intra42Strategy);
+    service = module.get<TwoFAService>(TwoFAService);
   });
 
   it('should be defined', () => {

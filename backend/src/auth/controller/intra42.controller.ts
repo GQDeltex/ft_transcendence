@@ -1,9 +1,9 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Intra42OAuthGuard } from './guard/intra42.guard';
+import { Intra42OAuthGuard } from '../guard/intra42.guard';
 import { Response } from 'express';
-import { CreateUserInput } from '../users/dto/create-user.input';
-import { UsersService } from '../users/users.service';
+import { CreateUserInput } from '../../users/dto/create-user.input';
+import { UsersService } from '../../users/users.service';
 
 @Controller('login')
 export class Intra42Controller {

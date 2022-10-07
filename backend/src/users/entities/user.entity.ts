@@ -10,11 +10,11 @@ export class User {
 
   @Field()
   @Column({ nullable: true })
-  public twoFactorAuthenticationSecret?: string;
+  twoFASecret: string;
 
   @Field(() => Boolean)
   @Column({ type: 'bool', default: false })
-  public twoFAEnable: boolean;
+  twoFAEnable: boolean;
 
   @Field()
   @Column()
