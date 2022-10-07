@@ -21,6 +21,12 @@ export class UsersService {
     });
   }
 
+  async set2FAEnable(enabled: boolean, userId: number) {
+    return this.userRepository.update(userId, {
+      twoFAEnable: enabled,
+    });
+  }
+
   findAll() {
     return this.userRepository.find();
   }

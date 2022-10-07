@@ -12,6 +12,10 @@ export class User {
   @Column({ nullable: true })
   public twoFactorAuthenticationSecret?: string;
 
+  @Field(() => Boolean)
+  @Column({ type: 'bool', default: false })
+  public twoFAEnable: boolean;
+
   @Field()
   @Column()
   firstname: string;

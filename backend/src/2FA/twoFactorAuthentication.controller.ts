@@ -1,11 +1,12 @@
 import {
   ClassSerializerInterceptor,
   Controller,
-  Post,
   UseInterceptors,
   Res,
   UseGuards,
-  Body,
+  Req,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { TwoFactorAuthenticationService } from './twoFactorAuthentication.service';
 import { Response } from 'express';
@@ -18,17 +19,26 @@ export class TwoFactorAuthenticationController {
     private readonly twoFactorAuthenticationService: TwoFactorAuthenticationService,
   ) {}
 
-  @Post('generate')
+  @Get('generate')
   @UseGuards(JwtAuthGuard)
-  async register(@Res() response: Response, @Body() body: any) {
+  async register(@Req() request: any, @Res() response: Response) {
     const { otpauthUrl } =
       await this.twoFactorAuthenticationService.generateTwoFactorAuthenticationSecret(
-        body.user,
+        request.user.sub,
+        request.user.email,
       );
-
     return this.twoFactorAuthenticationService.pipeQrCodeStream(
       response,
       otpauthUrl,
+    );
+  }
+
+  @Get('enable')
+  @UseGuards(JwtAuthGuard)
+  async enable(@Req() request: any, @Query('code') code: string) {
+    return this.twoFactorAuthenticationService.enable2FA(
+      request.user.sub, //id of the user
+      code,
     );
   }
 }

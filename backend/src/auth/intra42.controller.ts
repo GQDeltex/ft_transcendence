@@ -29,6 +29,7 @@ export class Intra42Controller {
     const jwt_token = this.jwtService.sign({
       username: user.username,
       sub: user.id,
+      email: user.email,
     });
 
     res.cookie('jwt', jwt_token);
