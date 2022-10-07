@@ -1,4 +1,4 @@
-import { createConnection, Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 
 export const testUser: User = {
@@ -12,13 +12,13 @@ export const testUser: User = {
   campus: 'Unicorns 4 Lyfe',
 };
 
-export async function memdbMock(entity: any): Promise<Connection> {
-  return createConnection({
+export async function memdbMock(entity: any): Promise<DataSource> {
+  return new DataSource({
     type: 'sqlite',
     database: ':memory:',
     entities: [entity],
     dropSchema: true,
     synchronize: true,
     logging: false,
-  });
+  }).initialize();
 }
