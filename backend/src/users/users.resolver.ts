@@ -24,8 +24,10 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updatePicture(@Args('user') updateUserPictureInput: UpdateUserPictureInput) {
-    this.usersService.updatePicture(
+  async updatePicture(
+    @Args('user') updateUserPictureInput: UpdateUserPictureInput,
+  ) {
+    await this.usersService.updatePicture(
       updateUserPictureInput.id,
       updateUserPictureInput.picture,
     );
@@ -33,10 +35,10 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updateUsername(
+  async updateUsername(
     @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
   ) {
-    this.usersService.updateUsername(
+    await this.usersService.updateUsername(
       updateUserUsernameInput.id,
       updateUserUsernameInput.username,
     );
