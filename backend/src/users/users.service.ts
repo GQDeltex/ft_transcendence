@@ -33,7 +33,7 @@ export class UsersService {
     return this.userRepository.findOneBy({ id: id });
   }
 
-  async updateUsername(id: number, username: string) {
+  async updateUsername(id: number, username: string): Promise<User | null> {
     const result: UpdateResult = await this.userRepository.update(id, {
       username: username,
     });
