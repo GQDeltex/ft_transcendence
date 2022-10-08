@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import StreamCategoryComponent from '../components/StreamCategoryComponent.vue';
-import SearchComponent from '../components/SearchComponent.vue';
+import CategorySearchComponent from '../components/CategorySearchComponent.vue';
 </script>
 
 <template>
   <div>
-    <SearchComponent />
+    <CategorySearchComponent />
   </div>
   <div>
     <StreamCategoryComponent category-name="Top Rated" />
