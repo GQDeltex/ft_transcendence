@@ -23,7 +23,7 @@ import { TwoFAService } from './service/twoFA.service';
     }),
     UsersModule,
   ],
-  providers: [JwtStrategy, Intra42Strategy, TwoFAService],
+  providers: [JwtStrategy, Intra42Strategy, ConfigService, TwoFAService],
   controllers: [Intra42Controller, TwoFAController],
 })
 export class AuthModule {}

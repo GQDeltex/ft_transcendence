@@ -7,6 +7,7 @@ import {
   Req,
   Get,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { TwoFAService } from '../service/twoFA.service';
 import { Response } from 'express';
@@ -20,16 +21,24 @@ export class TwoFAController {
   @Get('generate')
   @UseGuards(JwtAuthGuard)
   async register(@Req() request: any, @Res() response: Response) {
-    const { otpauthUrl } = await this.twoFAService.generate2FASecret(
-      request.user.sub,
-      request.user.email,
-    );
-    return this.twoFAService.pipeQrCodeStream(response, otpauthUrl);
+    try {
+      const { otpauthUrl } = await this.twoFAService.generate2FASecret(
+        request.user.sub,
+        request.user.email,
+      );
+      return this.twoFAService.pipeQrCodeStream(response, otpauthUrl);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Get('enable')
   @UseGuards(JwtAuthGuard)
   async enable(@Req() request: any, @Query('code') code: string) {
-    return this.twoFAService.enable2FA(request.user.sub, code);
+    try {
+      return this.twoFAService.enable2FA(request.user.sub, code);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

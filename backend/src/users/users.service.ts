@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { Repository, QueryFailedError, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -11,39 +11,50 @@ export class UsersService {
   ) {}
 
   create(createUserInput: CreateUserInput) {
-    const newUser = this.userRepository.create(createUserInput);
-    return this.userRepository.upsert(newUser, ['id']);
+    return this.userRepository.insert(createUserInput);
   }
 
-  async set2FASecret(secret: string, userId: number) {
-    return this.userRepository.update(userId, {
+  async update2FASecret(id: number, secret: string): Promise<void> {
+    const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,
     });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
   }
 
-  async set2FAEnable(enabled: boolean, userId: number) {
-    return this.userRepository.update(userId, {
+  async update2FAEnable(id: number, enabled: boolean): Promise<void> {
+    const result: UpdateResult = await this.userRepository.update(id, {
       twoFAEnable: enabled,
     });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
   }
 
   findAll() {
     return this.userRepository.find();
   }
 
-  findOne(identifier: number | string) {
+  findOne(identifier: number | string): Promise<User | null> {
     if (typeof identifier == 'number')
       return this.userRepository.findOneBy({ id: identifier });
     else return this.userRepository.findOneBy({ username: identifier });
   }
 
-  async updatePicture(id: number, picture: string) {
-    await this.userRepository.update(id, { picture: picture });
-    return this.findOne(id);
+  async updatePicture(id: number, picture: string): Promise<User | null> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      picture: picture,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
+    return this.userRepository.findOneBy({ id: id });
   }
 
-  async updateUsername(id: number, username: string) {
-    await this.userRepository.update(id, { username: username });
-    return this.findOne(id);
+  async updateUsername(id: number, username: string): Promise<User | null> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      username: username,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
+    return this.userRepository.findOneBy({ id: id });
   }
 }

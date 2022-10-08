@@ -16,7 +16,7 @@ export class TwoFAService {
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(userEmail, 'Pongking', secret);
-    await this.usersService.set2FASecret(secret, userId);
+    await this.usersService.update2FASecret(userId, secret);
 
     return {
       secret,
@@ -30,20 +30,15 @@ export class TwoFAService {
 
   public async enable2FA(userId: number, code: string) {
     const user = await this.usersService.findOne(+userId);
-    if (!user) {
+    if (!user || !user.twoFASecret) {
       return false;
     }
 
-    const secret = user.twoFASecret;
-    if (!secret) {
+    if (!authenticator.verify({ token: code, secret: user.twoFASecret })) {
       return false;
     }
 
-    if (!authenticator.verify({ token: code, secret })) {
-      return false;
-    }
-
-    await this.usersService.set2FAEnable(true, userId);
+    await this.usersService.update2FAEnable(userId, true);
     return true;
   }
 }

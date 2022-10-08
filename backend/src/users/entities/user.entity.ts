@@ -9,14 +9,6 @@ export class User {
   id: number;
 
   @Field()
-  @Column({ nullable: true })
-  twoFASecret: string;
-
-  @Field(() => Boolean)
-  @Column({ type: 'bool', default: false })
-  twoFAEnable: boolean;
-
-  @Field()
   @Column()
   firstname: string;
 
@@ -43,4 +35,12 @@ export class User {
   @Field()
   @Column()
   country: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ type: String, nullable: true })
+  twoFASecret!: string | null;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  twoFAEnable: boolean;
 }

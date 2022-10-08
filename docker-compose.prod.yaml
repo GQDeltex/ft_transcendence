@@ -18,7 +18,10 @@ services:
             - .env
 
     frontend:
-        build: ./frontend
+        build:
+          context: ./frontend
+          args:
+            - VITE_PAYPAL_CLIENT_ID
         ports:
             - 80:80
 

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Intra42Strategy } from './intra42.strategy';
 import { ConfigService } from '@nestjs/config';
+import { Intra42Strategy } from './intra42.strategy';
 
 describe('Intra42Strategy', () => {
   let service: Intra42Strategy;
