@@ -87,8 +87,9 @@ describe('UsersService', () => {
   it('should change the username', async () => {
     const newUser: User = testUser;
     newUser.username = 'test2';
-    await expect(service.updateUsername(newUser.id, newUser.username))
-      .resolves.not.toThrow();
+    await expect(
+      service.updateUsername(newUser.id, newUser.username),
+    ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
@@ -110,17 +111,18 @@ describe('UsersService', () => {
       campus: 'Berlin',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
-    await expect(service.updateUsername(newUser.id, testUser.name)).rejects.toThrow(
-      QueryFailedError,
-    );
+    await expect(
+      service.updateUsername(newUser.id, testUser.name),
+    ).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
   it('should change the picture', async () => {
     const newUser: User = testUser;
     newUser.picture = 'http://whoknows.com';
-    await expect(await service.updatePicture(newUser.id, newUser.picture))
-      .resolves.not.toThrow();
+    await expect(
+      await service.updatePicture(newUser.id, newUser.picture),
+    ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
