@@ -30,8 +30,8 @@ describe('UsersService', () => {
 
   afterEach(async () => await db.destroy());
 
-  it('should be defined', async () => {
-    await expect(service).toBeDefined();
+  it('should be defined', () => {
+    expect(service).toBeDefined();
   });
 
   it('should find all users', async () => {
@@ -64,6 +64,8 @@ describe('UsersService', () => {
       email: 'test@example.com',
       country: 'Germany',
       campus: 'Berlin',
+      twoFASecret: null,
+      twoFAEnable: false,
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
@@ -79,6 +81,8 @@ describe('UsersService', () => {
       email: 'test@example.com',
       country: 'Dreamland',
       campus: 'Shipwreckia',
+      twoFASecret: null,
+      twoFAEnable: false,
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
@@ -109,6 +113,8 @@ describe('UsersService', () => {
       email: 'test@example.com',
       country: 'Germany',
       campus: 'Berlin',
+      twoFASecret: null,
+      twoFAEnable: false,
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
@@ -128,6 +134,36 @@ describe('UsersService', () => {
 
   it('should not change the picture if not exists', async () => {
     await expect(service.updatePicture(87542, 'nothing')).rejects.toThrow(
+      QueryFailedError,
+    );
+  });
+
+  it('should change the 2FA secret', async () => {
+    const newUser: User = testUser;
+    newUser.twoFASecret = 'somesecret';
+    await expect(
+      service.update2FASecret(newUser.id, newUser.twoFASecret),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change the 2FA secret if not exists', async () => {
+    await expect(service.update2FASecret(87542, 'nothing')).rejects.toThrow(
+      QueryFailedError,
+    );
+  });
+
+  it('should change the 2FA enable', async () => {
+    const newUser: User = testUser;
+    newUser.twoFAEnable = true;
+    await expect(
+      service.update2FAEnable(newUser.id, newUser.twoFAEnable),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change the 2FA enable if not exists', async () => {
+    await expect(service.update2FAEnable(87542, true)).rejects.toThrow(
       QueryFailedError,
     );
   });

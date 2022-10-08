@@ -14,7 +14,23 @@ export class UsersService {
     return this.userRepository.insert(createUserInput);
   }
 
-  findAll(): Promise<User[]> {
+  async update2FASecret(id: number, secret: string): Promise<void> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      twoFASecret: secret,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
+  }
+
+  async update2FAEnable(id: number, enabled: boolean): Promise<void> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      twoFAEnable: enabled,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
+  }
+
+  findAll() {
     return this.userRepository.find();
   }
 

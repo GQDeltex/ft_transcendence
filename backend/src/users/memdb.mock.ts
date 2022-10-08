@@ -10,6 +10,8 @@ export const testUser: User = {
   email: 'nobody@example.com',
   country: 'United States',
   campus: 'Unicorns 4 Lyfe',
+  twoFASecret: null,
+  twoFAEnable: false,
 };
 
 export async function memdbMock(entity: any): Promise<DataSource> {

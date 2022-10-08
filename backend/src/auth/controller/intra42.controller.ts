@@ -8,10 +8,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Intra42OAuthGuard } from './guard/intra42.guard';
+import { Intra42OAuthGuard } from '../guard/intra42.guard';
 import { Response } from 'express';
-import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
+import { UsersService } from '../../users/users.service';
 
 @Controller('login')
 export class Intra42Controller {
@@ -47,6 +47,7 @@ export class Intra42Controller {
     const jwt_token = this.jwtService.sign({
       username: user.username,
       sub: user.id,
+      email: user.email,
     });
 
     res.cookie('jwt', jwt_token);
