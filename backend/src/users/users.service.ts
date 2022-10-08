@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { Repository, QueryFailedError, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -24,11 +24,21 @@ export class UsersService {
     else return this.userRepository.findOneBy({ username: identifier });
   }
 
-  updatePicture(id: number, picture: string) {
-    return this.userRepository.update(id, { picture: picture });
+  async updatePicture(id: number, picture: string): Promise<User | null> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      picture: picture,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
+    return this.userRepository.findOneBy({ id: id });
   }
 
-  updateUsername(id: number, username: string) {
-    return this.userRepository.update(id, { username: username });
+  async updateUsername(id: number, username: string): Promise<User | null> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      username: username,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new QueryFailedError(result.raw, [], 'Cannot find user id');
+    return this.userRepository.findOneBy({ id: id });
   }
 }
