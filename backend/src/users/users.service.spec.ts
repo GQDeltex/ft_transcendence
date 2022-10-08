@@ -1,44 +1,57 @@
+import { TestingModule, Test } from '@nestjs/testing';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { memdbMock, testUser } from './memdb.mock';
-import { Repository, Connection, QueryFailedError } from 'typeorm';
+import { DataSource, Repository, QueryFailedError } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('UsersService', () => {
-  let db: Connection;
   let service: UsersService;
+  let db: DataSource;
   let usersRepository: Repository<User>;
 
   beforeEach(async () => {
     db = await memdbMock(User);
     usersRepository = db.getRepository(User);
-    usersRepository.insert(testUser);
-    service = new UsersService(usersRepository);
+    await usersRepository.insert(testUser);
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: usersRepository,
+        },
+      ],
+    }).compile();
+
+    service = module.get<UsersService>(UsersService);
   });
 
-  afterEach(async () => db.close());
+  afterEach(async () => await db.destroy());
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should be defined', async () => {
+    await expect(service).toBeDefined();
   });
 
   it('should find all users', async () => {
-    expect(service.findAll()).resolves.toEqual([testUser]);
+    await expect(service.findAll()).resolves.toEqual([testUser]);
   });
 
   it('should find user by id', async () => {
-    expect(service.findOne(84364)).resolves.toEqual(testUser);
+    await expect(service.findOne(84364)).resolves.toEqual(testUser);
   });
 
   it('should not find non-existing id', async () => {
-    expect(service.findOne(98989)).resolves.toEqual(null);
+    await expect(service.findOne(98989)).resolves.toEqual(null);
   });
 
   it('should find user by username', async () => {
-    expect(service.findOne('name')).resolves.toEqual(testUser);
+    await expect(service.findOne('name')).resolves.toEqual(testUser);
   });
 
   it('should not find non-existing username', async () => {
-    expect(service.findOne('nonexisting')).resolves.toEqual(null);
+    await expect(service.findOne('nonexisting')).resolves.toEqual(null);
   });
 
   it('should create a new user', async () => {
@@ -52,25 +65,13 @@ describe('UsersService', () => {
       country: 'Germany',
       campus: 'Berlin',
     };
-    await service.create(newUser);
-    expect(service.findOne(12345)).resolves.toEqual(newUser);
+    await expect(service.create(newUser)).resolves.not.toThrow();
+    await expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
 
   it('should not create a user if existing', async () => {
-    const newUser: User = {
-      id: 12345,
-      username: 'test',
-      picture: 'http://example.com',
-      firstname: 'test',
-      lastname: 'person',
-      email: 'test@example.com',
-      country: 'Germany',
-      campus: 'Berlin',
-    };
-    await service.create(newUser);
-    expect(service.findOne(12345)).resolves.toEqual(newUser);
     const newerUser: User = {
-      id: 12345,
+      id: testUser.id,
       username: 'nanu',
       picture: 'http://example.com',
       firstname: 'foo',
@@ -80,24 +81,22 @@ describe('UsersService', () => {
       campus: 'Shipwreckia',
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
-    expect(service.findOne(12345)).resolves.toEqual(newUser);
+    await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
   });
 
   it('should change the username', async () => {
-    const newUser: User = {
-      id: 12345,
-      username: 'test',
-      picture: 'http://example.com',
-      firstname: 'test',
-      lastname: 'person',
-      email: 'test@example.com',
-      country: 'Germany',
-      campus: 'Berlin',
-    };
-    await service.create(newUser);
-    expect(await service.updateUsername(newUser.id, 'test2')).resolves;
+    const newUser: User = testUser;
     newUser.username = 'test2';
-    expect(service.findOne(12345)).resolves.toEqual(newUser);
+    await expect(
+      service.updateUsername(newUser.id, newUser.username),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change the username if not exists', async () => {
+    await expect(service.updateUsername(87542, 'nothing')).rejects.toThrow(
+      QueryFailedError,
+    );
   });
 
   it('should not change the username if not unique', async () => {
@@ -111,28 +110,25 @@ describe('UsersService', () => {
       country: 'Germany',
       campus: 'Berlin',
     };
-    await service.create(newUser);
-    await expect(service.updateUsername(newUser.id, 'name')).rejects.toThrow(
-      QueryFailedError,
-    );
-    expect(service.findOne(12345)).resolves.toEqual(newUser);
+    await expect(service.create(newUser)).resolves.not.toThrow();
+    await expect(
+      service.updateUsername(newUser.id, testUser.username),
+    ).rejects.toThrow(QueryFailedError);
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
   it('should change the picture', async () => {
-    const newUser: User = {
-      id: 12345,
-      username: 'test',
-      picture: 'http://example.com',
-      firstname: 'test',
-      lastname: 'person',
-      email: 'test@example.com',
-      country: 'Germany',
-      campus: 'Berlin',
-    };
-    await service.create(newUser);
-    expect(await service.updatePicture(newUser.id, 'http://whoknows.com'))
-      .resolves;
+    const newUser: User = testUser;
     newUser.picture = 'http://whoknows.com';
-    expect(service.findOne(12345)).resolves.toEqual(newUser);
+    await expect(
+      service.updatePicture(newUser.id, newUser.picture),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change the picture if not exists', async () => {
+    await expect(service.updatePicture(87542, 'nothing')).rejects.toThrow(
+      QueryFailedError,
+    );
   });
 });
