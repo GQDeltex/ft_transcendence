@@ -1,11 +1,13 @@
+import { TestingModule, Test } from '@nestjs/testing';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { memdbMock, testUser } from './memdb.mock';
-import { Repository, Connection, QueryFailedError } from 'typeorm';
+import { DataSource, Repository, QueryFailedError } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('UsersService', () => {
-  let db: Connection;
   let service: UsersService;
+  let db: DataSource;
   let usersRepository: Repository<User>;
 
   beforeEach(async () => {
@@ -13,10 +15,20 @@ describe('UsersService', () => {
     usersRepository = db.getRepository(User);
     await usersRepository.insert(testUser);
 
-    service = new UsersService(usersRepository);
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: usersRepository,
+        },
+      ],
+    }).compile();
+
+    service = module.get<UsersService>(UsersService);
   });
 
-  afterEach(async () => db.close());
+  afterEach(async () => await db.destroy());
 
   it('should be defined', async () => {
     await expect(service).toBeDefined();
@@ -53,23 +65,30 @@ describe('UsersService', () => {
       country: 'Germany',
       campus: 'Berlin',
     };
-    await service.create(newUser);
+    await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
 
   it('should not create a user if existing', async () => {
-    const newerUser: User = testUser;
-    newerUser.username = 'newerUser'; // Only change username, id is identical
+    const newerUser: User = {
+      id: testUser.id,
+      username: 'nanu',
+      picture: 'http://example.com',
+      firstname: 'foo',
+      lastname: 'bar',
+      email: 'test@example.com',
+      country: 'Dreamland',
+      campus: 'Shipwreckia',
+    };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
-    testUser.username = 'name';
-    await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
+    await expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
 
   it('should change the username', async () => {
     const newUser: User = testUser;
     newUser.username = 'test2';
-    await expect(await service.updateUsername(newUser.id, newUser.username))
-      .resolves;
+    await expect(service.updateUsername(newUser.id, newUser.username))
+      .resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
@@ -90,11 +109,10 @@ describe('UsersService', () => {
       country: 'Germany',
       campus: 'Berlin',
     };
-    await service.create(newUser);
-    await expect(service.findAll()).resolves.toEqual([newUser, testUser]);
-    await expect(
-      service.updateUsername(newUser.id, testUser.username),
-    ).rejects.toThrow(QueryFailedError);
+    await expect(service.create(newUser)).resolves.not.toThrow();
+    await expect(service.updateUsername(newUser.id, testUser.name)).rejects.toThrow(
+      QueryFailedError,
+    );
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
@@ -102,7 +120,7 @@ describe('UsersService', () => {
     const newUser: User = testUser;
     newUser.picture = 'http://whoknows.com';
     await expect(await service.updatePicture(newUser.id, newUser.picture))
-      .resolves;
+      .resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
