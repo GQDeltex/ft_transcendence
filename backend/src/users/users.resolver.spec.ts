@@ -2,7 +2,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, QueryFailedError } from 'typeorm';
 import { memdbMock, testUser } from './memdb.mock';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
@@ -80,7 +80,7 @@ describe('UsersResolver', () => {
     };
     await expect(
       resolver.updatePicture(updateUserPictureInput),
-    ).resolves.toEqual(null); // Update after updating users.service
+    ).rejects.toThrow(QueryFailedError);
   });
 
   it('should update a users username', async () => {
@@ -96,15 +96,12 @@ describe('UsersResolver', () => {
   });
 
   it('should not update a users username if not exist', async () => {
-    const newUser = testUser;
-    newUser.username = 'testUser';
-    newUser.id = 12345;
     const updateUserUsernameInput: UpdateUserUsernameInput = {
-      id: newUser.id,
-      username: newUser.username,
+      id: 948624,
+      username: 'nothingtwice',
     };
     await expect(
       resolver.updateUsername(updateUserUsernameInput),
-    ).resolves.toEqual(newUser); // Update after updating users.service
+    ).rejects.toThrow(QueryFailedError);
   });
 });

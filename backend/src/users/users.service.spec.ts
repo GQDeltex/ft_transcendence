@@ -81,7 +81,7 @@ describe('UsersService', () => {
       campus: 'Shipwreckia',
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
-    await expect(service.findOne(12345)).resolves.toEqual(newUser);
+    await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
   });
 
   it('should change the username', async () => {
@@ -94,9 +94,9 @@ describe('UsersService', () => {
   });
 
   it('should not change the username if not exists', async () => {
-    await expect(
-      await service.updateUsername(87542, 'nothing'),
-    ).rejects.toThrow(QueryFailedError);
+    await expect(service.updateUsername(87542, 'nothing')).rejects.toThrow(
+      QueryFailedError,
+    );
   });
 
   it('should not change the username if not unique', async () => {
@@ -112,7 +112,7 @@ describe('UsersService', () => {
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
-      service.updateUsername(newUser.id, testUser.name),
+      service.updateUsername(newUser.id, testUser.username),
     ).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
@@ -121,13 +121,13 @@ describe('UsersService', () => {
     const newUser: User = testUser;
     newUser.picture = 'http://whoknows.com';
     await expect(
-      await service.updatePicture(newUser.id, newUser.picture),
+      service.updatePicture(newUser.id, newUser.picture),
     ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
   it('should not change the picture if not exists', async () => {
-    await expect(await service.updatePicture(87542, 'nothing')).rejects.toThrow(
+    await expect(service.updatePicture(87542, 'nothing')).rejects.toThrow(
       QueryFailedError,
     );
   });
