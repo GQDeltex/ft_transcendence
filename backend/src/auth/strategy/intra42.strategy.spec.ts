@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { Intra42Strategy } from './intra42.strategy';
 
-describe('Intra42Service', () => {
+describe('Intra42Strategy', () => {
   let service: Intra42Strategy;
 
   beforeEach(async () => {

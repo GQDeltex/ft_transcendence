@@ -35,4 +35,12 @@ export class User {
   @Field()
   @Column()
   country: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ type: String, nullable: true })
+  twoFASecret!: string | null;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  twoFAEnable: boolean;
 }

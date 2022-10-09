@@ -34,8 +34,8 @@ describe('UsersResolver', () => {
 
   afterEach(async () => await db.destroy());
 
-  it('should be defined', async () => {
-    await expect(resolver).toBeDefined();
+  it('should be defined', () => {
+    expect(resolver).toBeDefined();
   });
 
   it('should find all users', async () => {
