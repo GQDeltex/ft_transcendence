@@ -2,7 +2,7 @@
 
 <template>
   <span class="searchhead">
-    <img class="logo" src="@/assets/magnifier.png" width="25" height="25" />By
+    <img class="logo" src="@/assets/magnifier.svg" width="25" height="25" />By
     Category</span
   >
   <div class="buttongroup">
@@ -41,6 +41,10 @@
   border-radius: 10px;
   border: none;
   margin: 10px;
+}
+.button:hover {
+  background-color: #f8971d;
+  color: black;
 }
 .button1 {
   width: 20%;
