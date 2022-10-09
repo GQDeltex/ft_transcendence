@@ -9,12 +9,36 @@ defineProps<{
 <template>
   <h3>Search results for "{{ searchTerm }}"</h3>
   <div class="categories">
-    <component :is="componentType"></component>
-    <component :is="componentType"></component>
-    <component :is="componentType"></component>
-    <component :is="componentType"></component>
-    <component :is="componentType"></component>
-    <component :is="componentType"></component>
+    <component
+      :is="componentType"
+      player1-name="hlehmann"
+      player2-name="gucalvi"
+    ></component>
+    <component
+      :is="componentType"
+      player1-name="hlehmann"
+      player2-name="gucalvi"
+    ></component>
+    <component
+      :is="componentType"
+      player1-name="hlehmann"
+      player2-name="gucalvi"
+    ></component>
+    <component
+      :is="componentType"
+      player1-name="hlehmann"
+      player2-name="gucalvi"
+    ></component>
+    <component
+      :is="componentType"
+      player1-name="hlehmann"
+      player2-name="gucalvi"
+    ></component>
+    <component
+      :is="componentType"
+      player1-name="hlehmann"
+      player2-name="gucalvi"
+    ></component>
   </div>
 </template>
 
