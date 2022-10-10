@@ -41,6 +41,11 @@ const router = createRouter({
       name: 'ProfileView',
       component: () => import('../views/ProfileView.vue'),
     },
+    {
+      path: '/stream',
+      name: 'StreamView',
+      component: () => import('../views/StreamView.vue'),
+    },
   ],
 });
 
