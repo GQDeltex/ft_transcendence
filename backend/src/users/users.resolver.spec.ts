@@ -2,7 +2,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { Repository, DataSource, QueryFailedError } from 'typeorm';
+import { Repository, DataSource, EntityNotFoundError } from 'typeorm';
 import { memdbMock, testUser } from './memdb.mock';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
@@ -47,7 +47,9 @@ describe('UsersResolver', () => {
   });
 
   it('should not find non-existing user by id', async () => {
-    await expect(resolver.findOneById(76439)).resolves.toEqual(null); // OLD see #86
+    await expect(resolver.findOneById(76439)).rejects.toThrow(
+      EntityNotFoundError,
+    );
   });
 
   it('should find user by username', async () => {
@@ -55,7 +57,9 @@ describe('UsersResolver', () => {
   });
 
   it('should not find non-existing user by username', async () => {
-    await expect(resolver.findOneByUsername('nobody')).resolves.toEqual(null); // OLD see #86
+    await expect(resolver.findOneByUsername('nobody')).rejects.toThrow(
+      EntityNotFoundError,
+    );
   });
 
   it('should update a users picture', async () => {
@@ -80,7 +84,7 @@ describe('UsersResolver', () => {
     };
     await expect(
       resolver.updatePicture(updateUserPictureInput),
-    ).rejects.toThrow(QueryFailedError);
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should update a users username', async () => {
@@ -102,6 +106,6 @@ describe('UsersResolver', () => {
     };
     await expect(
       resolver.updateUsername(updateUserUsernameInput),
-    ).rejects.toThrow(QueryFailedError);
+    ).rejects.toThrow(EntityNotFoundError);
   });
 });
