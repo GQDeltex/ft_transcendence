@@ -36,6 +36,10 @@ export class User {
   @Column()
   country: string;
 
+  @Field()
+  @Column()
+  title: string;
+
   @Field(() => String, { nullable: true })
   @Column({ type: String, nullable: true })
   twoFASecret!: string | null;

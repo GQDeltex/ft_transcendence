@@ -34,8 +34,16 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
       picture: profile._json.image_url,
       campus: profile._json.campus[0].name,
       country: profile._json.campus[0].country,
+      title: clean_42_title(profile._json.titles[0].name),
     };
 
     done(null, user);
   }
+}
+
+function clean_42_title(input: string) {
+  var output: string = input.replace('%login', '');
+  output = output.replace(',', '');
+  output = output.trim();
+  return output;
 }
