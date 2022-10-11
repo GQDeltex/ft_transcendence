@@ -31,6 +31,6 @@ export class CreateUserInput {
   @Field()
   country: string;
 
-  @Field()
-  title: string;
+  @Field(() => [String])
+  title: string[];
 }

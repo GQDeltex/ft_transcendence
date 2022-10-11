@@ -10,7 +10,7 @@ export const testUser: User = {
   email: 'nobody@example.com',
   country: 'United States',
   campus: 'Unicorns 4 Lyfe',
-  title: '',
+  title: [''],
   twoFASecret: null,
   twoFAEnable: false,
 };
