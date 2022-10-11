@@ -1,10 +1,13 @@
+import { UseGuards } from '@nestjs/common';
 import { Mutation, Resolver, Query, Args, Int } from '@nestjs/graphql';
+import { GqlJwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 
 @Resolver(() => User)
+@UseGuards(GqlJwtAuthGuard)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
@@ -24,20 +27,24 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updatePicture(@Args('user') updateUserPictureInput: UpdateUserPictureInput) {
-    return this.usersService.updatePicture(
+  async updatePicture(
+    @Args('user') updateUserPictureInput: UpdateUserPictureInput,
+  ) {
+    await this.usersService.updatePicture(
       updateUserPictureInput.id,
       updateUserPictureInput.picture,
     );
+    return this.usersService.findOne(updateUserPictureInput.id);
   }
 
   @Mutation(() => User)
-  updateUsername(
+  async updateUsername(
     @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
   ) {
-    return this.usersService.updateUsername(
+    await this.usersService.updateUsername(
       updateUserUsernameInput.id,
       updateUserUsernameInput.username,
     );
+    return this.usersService.findOne(updateUserUsernameInput.id);
   }
 }

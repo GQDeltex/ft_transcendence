@@ -66,6 +66,7 @@ describe('UsersService', () => {
       campus: 'Berlin',
       twoFASecret: null,
       twoFAEnable: false,
+      socketId: '',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
@@ -83,6 +84,7 @@ describe('UsersService', () => {
       campus: 'Shipwreckia',
       twoFASecret: null,
       twoFAEnable: false,
+      socketId: '',
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
@@ -115,6 +117,7 @@ describe('UsersService', () => {
       campus: 'Berlin',
       twoFASecret: null,
       twoFAEnable: false,
+      socketId: '',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
@@ -166,5 +169,14 @@ describe('UsersService', () => {
     await expect(service.update2FAEnable(87542, true)).rejects.toThrow(
       QueryFailedError,
     );
+  });
+
+  it('should update the socket id', async () => {
+    const newUser: User = testUser;
+    newUser.socketId = 'f3ie389hd';
+    await expect(
+      service.updateSocketId(testUser.id, newUser.socketId),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(testUser.id)).resolves.toEqual(newUser);
   });
 });
