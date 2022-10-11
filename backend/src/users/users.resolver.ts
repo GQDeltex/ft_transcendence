@@ -1,11 +1,29 @@
-import { UseGuards } from '@nestjs/common';
-import { Mutation, Resolver, Query, Args, Int } from '@nestjs/graphql';
+import {
+  Mutation,
+  Resolver,
+  Query,
+  Args,
+  Int,
+  GqlExceptionFilter,
+  GqlArgumentsHost,
+} from '@nestjs/graphql';
+import { Catch, ArgumentsHost, UseFilters, UseGuards } from '@nestjs/common';
+import { EntityNotFoundError } from 'typeorm';
 import { GqlJwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 
+@Catch(EntityNotFoundError)
+export class CatchOurExceptionsFilter implements GqlExceptionFilter {
+  catch(exception: EntityNotFoundError, host: ArgumentsHost) {
+    GqlArgumentsHost.create(host);
+    return exception;
+  }
+}
+
+@UseFilters(new CatchOurExceptionsFilter())
 @Resolver(() => User)
 @UseGuards(GqlJwtAuthGuard)
 export class UsersResolver {
