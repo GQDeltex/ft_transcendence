@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { authenticator } from 'otplib';
 import { UsersService } from '../../users/users.service';
-import { ConfigService } from '@nestjs/config';
 import { toFileStream } from 'qrcode';
 import { Response } from 'express';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class TwoFAService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  public async generate2FASecret(userId: number, userEmail: string) {
+  async generate2FASecret(userId: number, userEmail: string) {
+    const user: User | null = await this.usersService.findOne(userId);
+    if (!user) throw new Error("Fatal error: Can't find user.");
+    if (user.twoFAEnable) throw new Error('2FA is already enabled.');
+
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(userEmail, 'Pongking', secret);
@@ -24,15 +25,17 @@ export class TwoFAService {
     };
   }
 
-  public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
+  async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
     return toFileStream(stream, otpauthUrl);
   }
 
-  public async enable2FA(userId: number, code: string) {
-    const user = await this.usersService.findOne(+userId);
-    if (!user || !user.twoFASecret) {
-      return false;
-    }
+  async enable2FA(userId: number, code: string): Promise<boolean> {
+    const user: User | null = await this.usersService.findOne(userId);
+    if (!user) throw new Error("Fatal error: Can't find user.");
+    if (user.twoFAEnable) throw new Error('2FA is already enabled.');
+
+    if (!user.twoFASecret)
+      throw new Error('Empty 2FA Secret but pending 2FA enable');
 
     if (!authenticator.verify({ token: code, secret: user.twoFASecret })) {
       return false;
@@ -40,5 +43,25 @@ export class TwoFAService {
 
     await this.usersService.update2FAEnable(userId, true);
     return true;
+  }
+
+  async verify2FA(userId: number, code: string): Promise<boolean> {
+    const user = await this.usersService.findOne(userId);
+    if (!user) throw new Error("Fatal error: Can't find user.");
+
+    if (!user.twoFAEnable) return true;
+
+    if (!user.twoFASecret)
+      throw new Error('Fatal error: empty 2FA Secret but 2FA is enabled.');
+
+    return authenticator.verify({ token: code, secret: user.twoFASecret });
+  }
+
+  async disable2FA(userId: number): Promise<void> {
+    const user = await this.usersService.findOne(userId);
+    if (!user) throw new Error("Fatal error: Can't find user.");
+    if (!user.twoFAEnable) throw new Error('2FA is not enabled.');
+
+    await this.usersService.update2FAEnable(userId, false);
   }
 }

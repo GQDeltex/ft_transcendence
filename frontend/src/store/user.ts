@@ -38,11 +38,11 @@ export const useUserStore = defineStore('user', {
       if (!jwt_token) return false;
 
       const {
-        sub,
+        id,
       }: {
-        sub: number;
+        id: number;
       } = parseJwt(jwt_token);
-      if (!sub) return false;
+      if (!id) return false;
 
       const { data, error } = await apolloClient.query({
         query: gql`
@@ -55,7 +55,7 @@ export const useUserStore = defineStore('user', {
           }
         `,
         variables: {
-          id: +sub,
+          id,
         },
       });
 

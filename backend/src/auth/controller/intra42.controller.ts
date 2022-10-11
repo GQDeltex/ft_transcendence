@@ -1,6 +1,5 @@
 import {
-  HttpException,
-  HttpStatus,
+  BadRequestException,
   Controller,
   Get,
   Req,
@@ -12,6 +11,7 @@ import { Intra42OAuthGuard } from '../guard/intra42.guard';
 import { Response } from 'express';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
+import { CreateUserInput } from '../../users/dto/create-user.input';
 
 @Controller('login')
 export class Intra42Controller {
@@ -33,21 +33,22 @@ export class Intra42Controller {
     @Res() res: Response,
   ): Promise<void> {
     if (typeof req.user == 'undefined')
-      throw new HttpException('User missing', HttpStatus.BAD_REQUEST);
-    let user: User = req.user;
+      throw new BadRequestException('Fatal error: user is missing.');
+    let user: User | CreateUserInput = req.user;
 
-    const userData: User | null = await this.usersService.findOne(+user.id);
+    const userData: User | null = await this.usersService.findOne(user.id);
 
     if (userData == null) {
-      this.usersService.create(user);
+      await this.usersService.create(user);
     } else {
       user = userData;
     }
-    // use 'user' object for 2FA here
+
     const jwt_token = this.jwtService.sign({
       username: user.username,
-      sub: user.id,
+      id: user.id,
       email: user.email,
+      isAuthenticated: !user.twoFAEnable,
     });
 
     res.cookie('jwt', jwt_token);
