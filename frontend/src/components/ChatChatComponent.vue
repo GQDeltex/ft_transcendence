@@ -1,16 +1,48 @@
 <script setup lang="ts">
-defineProps<{
+import { ref, onUnmounted } from 'vue';
+import type { Ref } from 'vue';
+import { socket } from '../socket';
+
+const props = defineProps<{
   chatName: string;
 }>();
+
+let text: Ref<string> = ref('');
+let messages: Ref<
+  {
+    from: { id: number; username: string };
+    to: { id: number; username: string };
+    msg: string;
+  }[]
+> = ref([]);
+
+socket.on('prc', (data) => {
+  console.log('Msg from: ', data);
+  messages.value.push(data);
+});
+
+function sendMsg() {
+  console.log(props.chatName, text.value);
+  socket.emit('prc', { to: props.chatName, msg: text.value });
+  text.value = '';
+}
+
+onUnmounted(() => socket.off('prc'));
 </script>
 
 <template>
   <div class="parent">
     <span class="chatname">{{ chatName }}</span>
-    <span class="messages">here the messages will be displayed</span>
+    <div class="messages">
+      <span
+        v-for="message in messages"
+        :key="`msg_${message.from}_${message.to}_${message.msg}`"
+        >{{ message.from.username }}: {{ message.msg }}<br
+      /></span>
+    </div>
     <div class="lower">
-      <input type="text" class="text" />
-      <button class="sendbutton">Send</button>
+      <input v-model="text" type="text" class="text" @keyup.enter="sendMsg()" />
+      <button class="sendbutton" @click="sendMsg()">Send</button>
     </div>
   </div>
 </template>
@@ -40,8 +72,6 @@ defineProps<{
   margin-right: 9px;
   background-color: black;
   min-height: 500px;
-  display: flex;
-  justify-content: end;
 }
 .lower {
   margin-left: 9px;

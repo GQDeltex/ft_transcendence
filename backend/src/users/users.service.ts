@@ -40,21 +40,27 @@ export class UsersService {
     else return this.userRepository.findOneByOrFail({ username: identifier });
   }
 
-  async updatePicture(id: number, picture: string): Promise<User | null> {
+  async updatePicture(id: number, picture: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       picture: picture,
     });
     if (typeof result.affected != 'undefined' && result.affected < 1)
       throw new EntityNotFoundError(User, { id: id });
-    return this.userRepository.findOneBy({ id: id });
   }
 
-  async updateUsername(id: number, username: string): Promise<User | null> {
+  async updateUsername(id: number, username: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       username: username,
     });
     if (typeof result.affected != 'undefined' && result.affected < 1)
       throw new EntityNotFoundError(User, { id: id });
-    return this.userRepository.findOneBy({ id: id });
+  }
+
+  async updateSocketId(id: number, socketId: string): Promise<void> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      socketId: socketId,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new EntityNotFoundError(User, { id: id });
   }
 }

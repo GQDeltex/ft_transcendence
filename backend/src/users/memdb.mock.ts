@@ -12,6 +12,7 @@ export const testUser: User = {
   campus: 'Unicorns 4 Lyfe',
   twoFASecret: null,
   twoFAEnable: false,
+  socketId: '',
 };
 
 export async function memdbMock(entity: any): Promise<DataSource> {
