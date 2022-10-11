@@ -85,7 +85,7 @@ export class TwoFAController {
     }
   }
 
-  @Get('disable')
+  @Get('disabl')
   @UseGuards(JwtAuthGuard, TwoFAGuard)
   async disable(
     @Req() request: any,
