@@ -32,6 +32,8 @@ export class WsJwtAuthGuard implements CanActivate {
     const user: any = jwtService.verify(token, {
       secret: this.configService.get<string>('JWT_SECRET'),
     });
+    user.id = Number(user.sub);
+    delete user.sub;
     if (!user) return false;
     client.data.user = user;
     return true;

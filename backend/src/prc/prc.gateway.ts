@@ -35,18 +35,22 @@ export const CurrentUserFromWs = createParamDecorator(
     credentials: true,
   },
 })
+@UseGuards(WsJwtAuthGuard)
 export class PrcGateway {
-  constructor(private readonly usersService: UsersService) {}
-
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('connect')
-  connect(@MessageBody() data: any): void {
-    console.log('Connect', data);
+  constructor(private readonly usersService: UsersService) {}
+
+  @SubscribeMessage('newconnection')
+  async connect(
+    @CurrentUserFromWs() user: any,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    console.log('Client connected', client.id, user.username);
+    await this.usersService.updateSocketId(user.id, client.id);
   }
 
-  @UseGuards(WsJwtAuthGuard)
   @SubscribeMessage('prc')
   async prcMessage(
     @CurrentUserFromWs() user: any,
@@ -54,8 +58,15 @@ export class PrcGateway {
     @MessageBody('msg') msg: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
+    if (typeof user == 'undefined') throw new Error('Not connected');
     console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
     const recipient: User | null = await this.usersService.findOne(to);
-    if (typeof recipient === 'undefined') throw new Error();
+    if (recipient == null) throw new Error('Recipient not in database');
+    if (recipient.socketId == '') throw new Error('Recipient socketId empty');
+    const sockets = await this.server.in(recipient.socketId).fetchSockets();
+    if (sockets.length < 1) throw new Error('Could not find Recipients socket');
+    const recClient = sockets[0];
+    recClient.emit('prc', { from: user.id, to: recipient.id, msg: msg });
+    console.log('Sent message!');
   }
 }

@@ -1,29 +1,15 @@
 <script setup lang="ts">
 import ChatChatComponent from '../components/ChatChatComponent.vue';
-import { io } from 'socket.io-client';
+import { ref } from 'vue';
+import type { Ref } from 'vue';
 
-const socket = io('http://localhost:8080', { withCredentials: true });
-
-socket.on('connect', function () {
-  console.log('Connected');
-});
-
-socket.on('prc', function (data) {
-  console.log('prc', data);
-});
-
-socket.on('exception', function (data) {
-  console.log('exception: ', data);
-});
-
-socket.on('disconnect', function () {
-  console.log('Disconnected');
-});
+const chatName: Ref<string> = ref('gucalvi');
 </script>
 
 <template>
+  <input v-model="chatName" type="test" />
   <div class="parent">
-    <ChatChatComponent chat-name="gucalvi" class="chatchatcomp" />
+    <ChatChatComponent :chat-name="chatName" class="chatchatcomp" />
   </div>
 </template>
 

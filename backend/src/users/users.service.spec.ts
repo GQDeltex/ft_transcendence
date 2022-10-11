@@ -170,4 +170,13 @@ describe('UsersService', () => {
       QueryFailedError,
     );
   });
+
+  it('should update the socket id', async () => {
+    const newUser: User = testUser;
+    newUser.socketId = 'f3ie389hd';
+    await expect(
+      service.updateSocketId(testUser.id, newUser.socketId),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(testUser.id)).resolves.toEqual(newUser);
+  });
 });

@@ -27,20 +27,24 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updatePicture(@Args('user') updateUserPictureInput: UpdateUserPictureInput) {
-    return this.usersService.updatePicture(
+  async updatePicture(
+    @Args('user') updateUserPictureInput: UpdateUserPictureInput,
+  ) {
+    await this.usersService.updatePicture(
       updateUserPictureInput.id,
       updateUserPictureInput.picture,
     );
+    return this.usersService.findOne(updateUserPictureInput.id);
   }
 
   @Mutation(() => User)
-  updateUsername(
+  async updateUsername(
     @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
   ) {
-    return this.usersService.updateUsername(
+    await this.usersService.updateUsername(
       updateUserUsernameInput.id,
       updateUserUsernameInput.username,
     );
+    return this.usersService.findOne(updateUserUsernameInput.id);
   }
 }

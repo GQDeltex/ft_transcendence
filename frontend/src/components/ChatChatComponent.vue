@@ -1,26 +1,39 @@
 <script setup lang="ts">
-import { io } from 'socket.io-client';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
+import { socket } from '../socket';
 
 const props = defineProps<{
   chatName: string;
 }>();
-const socket = io('http://localhost:8080', { withCredentials: true });
-let message: Ref<string> = ref('');
+
+let text: Ref<string> = ref('');
+let messages: Ref<{ from: number; to: number; msg: string }[]> = ref([]);
+
+socket.on('prc', (data) => {
+  console.log('Msg from: ', data);
+  messages.value.push(data);
+});
 
 function sendMsg() {
-  console.log(props.chatName, message.value);
-  socket.emit('prc', { to: props.chatName, msg: message.value });
+  console.log(props.chatName, text.value);
+  socket.emit('prc', { to: props.chatName, msg: text.value });
+  text.value = '';
 }
 </script>
 
 <template>
   <div class="parent">
     <span class="chatname">{{ chatName }}</span>
-    <span class="messages">{{ message }}</span>
+    <div class="messages">
+      <span
+        v-for="message in messages"
+        :key="`msg_${message.from}_${message.to}_${message.msg}`"
+        >{{ message.from }}: {{ message.msg }}<br
+      /></span>
+    </div>
     <div class="lower">
-      <input v-model="message" type="text" class="text" />
+      <input v-model="text" type="text" class="text" @keyup.enter="sendMsg()" />
       <button class="sendbutton" @click="sendMsg()">Send</button>
     </div>
   </div>
@@ -51,8 +64,6 @@ function sendMsg() {
   margin-right: 9px;
   background-color: black;
   min-height: 500px;
-  display: flex;
-  justify-content: end;
 }
 .lower {
   margin-left: 9px;
