@@ -66,7 +66,7 @@ export class PrcGateway {
     const sockets = await this.server.in(recipient.socketId).fetchSockets();
     if (sockets.length < 1) throw new Error('Could not find Recipients socket');
     const recClient = sockets[0];
-    recClient.emit('prc', { from: user.id, to: recipient.id, msg: msg });
+    recClient.emit('prc', { from: user, to: recipient, msg: msg });
     console.log('Sent message!');
   }
 }

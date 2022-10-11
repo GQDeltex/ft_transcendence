@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '../socket';
 
@@ -8,7 +8,13 @@ const props = defineProps<{
 }>();
 
 let text: Ref<string> = ref('');
-let messages: Ref<{ from: number; to: number; msg: string }[]> = ref([]);
+let messages: Ref<
+  {
+    from: { id: number; username: string };
+    to: { id: number; username: string };
+    msg: string;
+  }[]
+> = ref([]);
 
 socket.on('prc', (data) => {
   console.log('Msg from: ', data);
@@ -20,6 +26,8 @@ function sendMsg() {
   socket.emit('prc', { to: props.chatName, msg: text.value });
   text.value = '';
 }
+
+onUnmounted(() => socket.off('prc'));
 </script>
 
 <template>
@@ -29,7 +37,7 @@ function sendMsg() {
       <span
         v-for="message in messages"
         :key="`msg_${message.from}_${message.to}_${message.msg}`"
-        >{{ message.from }}: {{ message.msg }}<br
+        >{{ message.from.username }}: {{ message.msg }}<br
       /></span>
     </div>
     <div class="lower">
