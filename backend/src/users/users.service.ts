@@ -34,7 +34,7 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  findOne(identifier: number | string): Promise<User | null> {
+  findOne(identifier: number | string): Promise<User> {
     if (typeof identifier == 'number')
       return this.userRepository.findOneByOrFail({ id: identifier });
     else return this.userRepository.findOneByOrFail({ username: identifier });

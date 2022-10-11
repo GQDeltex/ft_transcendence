@@ -1,5 +1,6 @@
 DC := $(shell which docker-compose)
 
+FOLDER_NAME := $(shell basename $(realpath .))
 
 PROD		:=	./docker-compose.prod.yaml
 DEV			:=	./docker-compose.yaml
@@ -24,6 +25,9 @@ clean: stop
 	-$(DC) -f $(DEV) down
 	-$(DC) -f $(PROD) down
 
+volume:
+	docker volume rm $(FOLDER_NAME)_db_data
+
 fclean: clean
 	docker system prune -af --volumes
 
@@ -47,4 +51,4 @@ back:
 test:
 	$(DC) exec $(BACK_NAME) npm run test
 
-.PHONY: all prod dev stop clean fclean redev reprod norm front back
+.PHONY: all prod dev stop clean fclean redev reprod norm front back volume
