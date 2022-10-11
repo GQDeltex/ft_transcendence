@@ -4,6 +4,7 @@ FOLDER_NAME := $(shell basename $(realpath .))
 
 PROD		:=	./docker-compose.prod.yaml
 DEV			:=	./docker-compose.yaml
+DEBUG		:=	./docker-compose.debug.yaml
 
 FRONT_NAME	:=	frontend
 BACK_NAME	:=	backend
@@ -17,12 +18,18 @@ dev: $(DEV)
 	$(DC) -f $(DEV) up --build --remove-orphans -d
 	$(DC) -f $(DEV) logs --tail 100 -f
 
+debug: $(DEBUG)
+	$(DC) -f $(DEBUG) up --build --remove-orphans -d
+	$(DC) -f $(DEBUG) logs --tail 100 -f
+
 stop:
 	-$(DC) -f $(DEV) stop
+	-$(DC) -f $(DEBUG) stop
 	-$(DC) -f $(PROD) stop
 
 clean: stop
 	-$(DC) -f $(DEV) down
+	-$(DC) -f $(DEBUG) down
 	-$(DC) -f $(PROD) down
 
 volume:
@@ -34,6 +41,8 @@ fclean: clean
 redev: fclean dev
 
 reprod: fclean prod
+
+redebug: fclean debug
 
 norm:
 	$(DC) exec $(FRONT_NAME) npm run format
@@ -51,4 +60,4 @@ back:
 test:
 	$(DC) exec $(BACK_NAME) npm run test
 
-.PHONY: all prod dev stop clean fclean redev reprod norm front back volume
+.PHONY: all prod dev stop clean fclean redev reprod norm front back debug redebug volume
