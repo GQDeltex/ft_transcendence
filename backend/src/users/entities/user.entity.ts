@@ -47,4 +47,7 @@ export class User {
   @Field(() => Boolean)
   @Column({ default: false })
   twoFAEnable: boolean;
+
+  @Column({ default: '' })
+  socketId: string;
 }
