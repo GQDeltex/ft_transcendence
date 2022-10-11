@@ -18,7 +18,7 @@ const userStore = useUserStore();
   </div>
   <div class="column2">
     <router-link to="/profile" class="columncontent">
-      <span>{{ userStore.username }}</span>
+      <span>{{ userStore.title }} {{ userStore.username }}</span>
       <img alt="page logo" class="logo" :src="userStore.picture" height="50" />
     </router-link>
   </div>
