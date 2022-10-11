@@ -1,16 +1,27 @@
 <script setup lang="ts">
-defineProps<{
+import { io } from 'socket.io-client';
+import { ref } from 'vue';
+import type { Ref } from 'vue';
+
+const props = defineProps<{
   chatName: string;
 }>();
+const socket = io('http://localhost:8080', { withCredentials: true });
+let message: Ref<string> = ref('');
+
+function sendMsg() {
+  console.log(props.chatName, message.value);
+  socket.emit('prc', { to: props.chatName, msg: message.value });
+}
 </script>
 
 <template>
   <div class="parent">
     <span class="chatname">{{ chatName }}</span>
-    <span class="messages">here the messages will be displayed</span>
+    <span class="messages">{{ message }}</span>
     <div class="lower">
-      <input type="text" class="text" />
-      <button class="sendbutton">Send</button>
+      <input v-model="message" type="text" class="text" />
+      <button class="sendbutton" @click="sendMsg()">Send</button>
     </div>
   </div>
 </template>

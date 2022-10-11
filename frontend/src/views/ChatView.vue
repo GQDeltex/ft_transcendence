@@ -2,24 +2,14 @@
 import ChatChatComponent from '../components/ChatChatComponent.vue';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:8080');
+const socket = io('http://localhost:8080', { withCredentials: true });
 
 socket.on('connect', function () {
   console.log('Connected');
-  socket.emit(
-    'privmsg',
-    { recipient: 'test', message: 'hello there' },
-    (data: any) => {
-      console.log(data);
-    },
-  );
-  socket.emit('privmsg', { recipient: 'test', message: '' }, (data: any) => {
-    console.log(data);
-  });
 });
 
-socket.on('events', function (data) {
-  console.log('event', data);
+socket.on('prc', function (data) {
+  console.log('prc', data);
 });
 
 socket.on('exception', function (data) {
