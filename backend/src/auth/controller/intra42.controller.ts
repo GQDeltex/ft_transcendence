@@ -35,7 +35,6 @@ export class Intra42Controller {
     if (typeof req.user == 'undefined')
       throw new HttpException('User missing', HttpStatus.BAD_REQUEST);
     let user: User = req.user;
-    console.log(user);
     try {
       user = await this.usersService.findOne(+user.id);
     } catch {

@@ -25,6 +25,7 @@ export const useUserStore = defineStore('user', {
     token: useLocalStorage('token', ''),
     id: useLocalStorage('userId', ''),
     username: useLocalStorage('username', ''),
+    title: useLocalStorage('title', ''),
     picture: useLocalStorage('userPicture', ''),
   }),
   getters: {
@@ -50,6 +51,7 @@ export const useUserStore = defineStore('user', {
             user(id: $id) {
               id
               username
+              title
               picture
             }
           }
@@ -65,6 +67,7 @@ export const useUserStore = defineStore('user', {
       this.token = jwt_token;
       this.id = data.user.id;
       this.username = data.user.username;
+      this.title = data.user.title[0];
       this.picture = data.user.picture;
       return true;
     },
