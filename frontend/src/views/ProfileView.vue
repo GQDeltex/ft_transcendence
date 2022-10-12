@@ -2,6 +2,7 @@
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import UserHistoryComponent from '../components/UserHistoryComponent.vue';
+import ProfileComponent from '../components/ProfileComponent.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -14,7 +15,10 @@ function logOut() {
 
 <template>
   <button class="button" @click="logOut">Log out</button>
-  <UserHistoryComponent />
+  <div>
+    <ProfileComponent />
+    <UserHistoryComponent />
+  </div>
 </template>
 
 <style scoped>

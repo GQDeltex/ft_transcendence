@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import UserPlayedGameComponent from './UserPlayedGameComponent.vue';
-defineProps<{
-	gameImg: string;
-	}>();
 </script>
 
 <template>
-	<UserPlayedGameComponent />
+  <UserPlayedGameComponent />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
