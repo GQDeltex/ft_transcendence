@@ -37,7 +37,7 @@ export class User {
   country: string;
 
   @Field(() => [String])
-  @Column({ type: String, array: true })
+  @Column({ type: String, array: true, nullable: true })
   title: string[];
 
   @Field(() => String, { nullable: true })
