@@ -59,6 +59,6 @@ jobs:
         run: npm --prefix ./${{ matrix.project }} ci
 
       - name: Test
-         # Right now we only have test on backend
-         if: ${{ matrix.project  == 'backend' }}
-         run: npm --prefix ./${{ matrix.project }} run test
+        # Right now we only have test on backend
+        if: ${{ matrix.project  == 'backend' }}
+        run: npm --prefix ./${{ matrix.project }} run test
