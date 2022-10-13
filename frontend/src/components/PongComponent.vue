@@ -27,29 +27,15 @@ class Field {
   }
   getWidth(): number {
     if (this._htmlElem != null)
-      return Number(
-        getComputedStyle(this._htmlElem)
-          .getPropertyValue('width')
-          .substring(
-            0,
-            getComputedStyle(this._htmlElem).getPropertyValue('width').length -
-              2,
-          ),
-      );
+      return Number(getComputedStyle(this._htmlElem).getPropertyValue('width')
+          .substring(0,getComputedStyle(this._htmlElem).getPropertyValue('width').length - 2));
     else console.log('failiure, no object assigned\n');
     return 0;
   }
   getHeight(): number {
     if (this._htmlElem != null)
-      return Number(
-        getComputedStyle(this._htmlElem)
-          .getPropertyValue('height')
-          .substring(
-            0,
-            getComputedStyle(this._htmlElem).getPropertyValue('height').length -
-              2,
-          ),
-      );
+      return Number(getComputedStyle(this._htmlElem).getPropertyValue('height')
+          .substring(0,getComputedStyle(this._htmlElem).getPropertyValue('height').length - 2));
     else console.log('failiure, no object assigned\n');
     return 0;
   }
@@ -84,7 +70,7 @@ class Ball {
   }
   setx(value: number) {
     if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--x', String(value) * this._field.x);
+      this._htmlElem.style.setProperty('--x', String(value)/*  * this._field.x */);
     else console.log('failiure, no object assigned\n');
   }
   gety() {
@@ -96,7 +82,7 @@ class Ball {
   }
   sety(value: number) {
     if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--y', String(value) * this._field.y);
+      this._htmlElem.style.setProperty('--y', String(value)/*  * this._field.y */);
     else console.log('failiure, no object assigned\n');
   }
 
@@ -118,22 +104,25 @@ onMounted(() => {
     new Field(document.getElementById('feld')),
   );
 
-  ball.init();
-  let lastTime: number | null = null;
-  function pupdate(time: number) {
-    if (lastTime != null) {
-      const delta: number = time - lastTime;
-      ball.update(delta);
-    }
-    lastTime = time;
-    // window.requestAnimationFrame(pupdate);
-  }
-  window.requestAnimationFrame(pupdate);
-  window.requestAnimationFrame(pupdate);
-  window.requestAnimationFrame(pupdate);
-  window.requestAnimationFrame(pupdate);
-  window.requestAnimationFrame(pupdate);
-  window.requestAnimationFrame(pupdate);
+  ball.setx(200);
+  ball.sety(200);
+
+  // ball.init();
+  // let lastTime: number | null = null;
+  // function pupdate(time: number) {
+  //   if (lastTime != null) {
+  //     const delta: number = time - lastTime;
+  //     ball.update(delta);
+  //   }
+  //   lastTime = time;
+  //   // window.requestAnimationFrame(pupdate);
+  // }
+  // window.requestAnimationFrame(pupdate);
+  // window.requestAnimationFrame(pupdate);
+  // window.requestAnimationFrame(pupdate);
+  // window.requestAnimationFrame(pupdate);
+  // window.requestAnimationFrame(pupdate);
+  // window.requestAnimationFrame(pupdate);
 });
 </script>
 
