@@ -1,5 +1,8 @@
-import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository, DataSource, DataSourceOptions } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
+import { createDatabase } from 'typeorm-extension';
 
 export const testUser: User = {
   id: 84364,
@@ -25,4 +28,38 @@ export async function memdbMock(entity: any): Promise<DataSource> {
     synchronize: true,
     logging: false,
   }).initialize();
+}
+
+export function getMockRepoProvider(entities: any, mockData: any) {
+  return {
+    provide: getRepositoryToken(entities),
+    useFactory: async (
+      configService: ConfigService,
+    ): Promise<Repository<typeof entities>> => {
+      const options: DataSourceOptions = {
+        type: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: 'testing',
+        entities: [entities],
+        synchronize: true,
+      };
+      await createDatabase({
+        options,
+        initialDatabase: configService.get('DB_NAME'),
+        ifNotExist: true,
+        synchronize: true,
+      });
+      const source: DataSource = await new DataSource(options).initialize();
+      const repo: Repository<typeof entities> = await source.getRepository(
+        entities,
+      );
+      await repo.clear();
+      await repo.insert(mockData);
+      return repo;
+    },
+    inject: [ConfigService],
+  };
 }
