@@ -154,5 +154,7 @@
 <style scoped>
 marquee {
   font-family: monospace;
+  --color: 255;
+  color: var(--color);
 }
 </style>

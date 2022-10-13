@@ -17,7 +17,7 @@ const userStore = useUserStore();
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
-  background-color: black;
+  background-color: #000000;
 }
 </style>
 
