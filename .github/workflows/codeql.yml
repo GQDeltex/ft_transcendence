@@ -1,13 +1,14 @@
-name: "Code Scanning - Action"
+name: "CodeQL Scan"
 
 on:
   pull_request:
     branches: ["main"]
-
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-  CodeQL-Build:
+  codeql:
     # CodeQL runs on ubuntu-latest, windows-latest, and macos-latest
     runs-on: ubuntu-latest
 
