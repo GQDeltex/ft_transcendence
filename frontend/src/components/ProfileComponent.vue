@@ -5,6 +5,7 @@ const userStore = useUserStore();
 const checked = ref(true);
 </script>
 
+
 <template>
   <div class="profile">
     <img
@@ -15,11 +16,11 @@ const checked = ref(true);
       width="100"
     />
     <div class="infoBox">
-      <span class="username">{{ userStore.username }} (Rank 149) (C)</span>
+      <span class="username">{{ userStore.username }} (Rank 1) (C)</span>
       <br />
       <span class="campus">Wolfsburg, Germany</span>
       <br />
-      <span class="friends">0 Friends, 149 Videos Watched</span>
+      <span class="friends">1000 Friends, 149 Videos Watched</span>
     </div>
 
     <img class="banner" src="@/assets/PongKingBanner3D.png" />
@@ -36,6 +37,7 @@ const checked = ref(true);
     </span>
   </div>
 </template>
+
 
 <style scoped>
 .onSwitch {
@@ -54,8 +56,9 @@ const checked = ref(true);
 
 .banner {
   grid-column: 3 / 4;
-  width: 80%;
-  height: 80%;
+  grid-row: 1 / 3;
+  width: 90%;
+  height: 70%;
   display: block;
   margin-top: 10%;
   margin-left: 0;
@@ -64,8 +67,6 @@ const checked = ref(true);
 
 .profile {
   display: grid;
-  margin-left: 10%;
-  margin-right: 10%;
   align-items: center;
 
   padding: 10px;
