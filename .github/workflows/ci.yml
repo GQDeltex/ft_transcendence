@@ -1,15 +1,12 @@
-name: CI Pipeline
+name: Lint & Test
 
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   pull_request:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -40,7 +37,28 @@ jobs:
       - name: ESLint
         run: npm --prefix ./${{ matrix.project }} run lint-check
 
-      # - name: Test
-      #   # Right now we only have test on backend
-      #   if: ${{ matrix.project  == 'backend' }}
-      #   run: npm --prefix ./${{ matrix.project }} run test
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - backend
+          # Currently only there are only tests for the backend
+          #- frontend
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: "${{ matrix.project }}/package-lock.json"
+
+      - name: Install npm packages
+        run: npm --prefix ./${{ matrix.project }} ci
+
+      - name: Test
+         # Right now we only have test on backend
+         if: ${{ matrix.project  == 'backend' }}
+         run: npm --prefix ./${{ matrix.project }} run test
