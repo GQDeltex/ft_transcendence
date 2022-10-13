@@ -3,7 +3,16 @@ import UserPlayedGameComponent from './UserPlayedGameComponent.vue';
 </script>
 
 <template>
-  <UserPlayedGameComponent />
+  <div class="frame">
+    <UserPlayedGameComponent />
+    <UserPlayedGameComponent />
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.frame {
+  border: 1px solid #202020;
+  height: 60vh;
+  padding: 10px;
+}
+</style>

@@ -17,33 +17,45 @@ function logOut() {
 
 <template>
   <button class="button" @click="logOut">Log out</button>
+
   <div class="profileView">
     <div class="profile"><ProfileComponent /></div>
     <div class="history"><UserHistoryComponent /></div>
-    <div class="about"><AboutMeComponent /><AchievementComponent /></div>
-    
+    <div class="about">
+      <AboutMeComponent />
+      <div class="achievement"><AchievementComponent /></div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-
 .profileView {
   display: grid;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 10vh;
+  margin-right: 10vh;
 }
 
 .profile {
   grid-column: 1 / 6;
+  margin: 1px;
 }
 .history {
   grid-column: 1 / 4;
+  /* grid-row: 2 / 4; */
+  margin: 2px;
 }
 
 .about {
   grid-column: 4 / 6;
+  /* grid-row: 2 / 4; */
+  margin: 1px;
 }
 
+.achievement {
+  grid-column: 4 / 6;
+  margin: 1px;
+  margin-top: 4px;
+}
 button {
   text-decoration: none;
   border-radius: 20px;
@@ -52,5 +64,4 @@ button {
   padding: 10px;
   cursor: pointer;
 }
-
 </style>

@@ -5,7 +5,6 @@ const userStore = useUserStore();
 const checked = ref(true);
 </script>
 
-
 <template>
   <div class="profile">
     <img
@@ -38,7 +37,6 @@ const checked = ref(true);
   </div>
 </template>
 
-
 <style scoped>
 .onSwitch {
   color: white;
@@ -68,7 +66,6 @@ const checked = ref(true);
 .profile {
   display: grid;
   align-items: center;
-
   padding: 10px;
   padding-bottom: 20px;
   border-width: 1px;

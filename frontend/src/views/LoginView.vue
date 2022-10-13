@@ -1,25 +1,24 @@
-<script setup lang="ts">
-
-</script>
-
+<script setup lang="ts"></script>
 
 <template>
   <div class="loginParent">
     <div class="buttons">
-      <img
-        alt="page logo"
-        class="logo"
-        src="@/assets/pongking_boi.svg"
-      />
+      <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
     </div>
-    <span class="text">please log in to experience the full fun of PongKing</span>
+    <span class="text"
+      >please log in to experience the full fun of PongKing</span
+    >
     <div class="buttons">
-      <button class="button" onclick="location.href='http://localhost:8080/login'">Login</button>
+      <button
+        class="button"
+        onclick="location.href='http://localhost:8080/login'"
+      >
+        Login
+      </button>
       <!-- <a href="http://localhost:8080/login">Login</a> -->
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .loginParent {
@@ -89,16 +88,15 @@ button {
   /* text-transform: uppercase; */
   /* letter-spacing: 4px; */
   overflow: hidden;
-  
+
   box-shadow: 0 0 10px rgb(0, 0, 0, 1);
 
   font-size: 28px;
   font-weight: bolder;
   text-decoration: none;
-  background:linear-gradient(160deg, white, grey, grey, black);
-  text-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
+  background: linear-gradient(160deg, white, grey, grey, black);
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
   transition: 0.3s;
-
 }
 
 button:hover {
@@ -109,5 +107,4 @@ button:hover {
   box-shadow: 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
   transition-delay: 0.2s;
 }
-
 </style>
