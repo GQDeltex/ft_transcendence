@@ -4,11 +4,12 @@ import { useUserStore } from '../store/user';
 const userStore = useUserStore();
 </script>
 
+
 <template>
   <div class="about">
-    <p style="font-size: 0.7em">
+    <span style="font-size: 2vw">
       About<span style="float: right">(O) Online</span>
-    </p>
+    </span>
     <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
       User name: <span class="info">{{ userStore.username }}</span>
@@ -28,23 +29,24 @@ const userStore = useUserStore();
   </div>
 </template>
 
+
 <style scoped>
 .about {
-  padding: 10px;
-  display: grid;
+  padding: 1vw;
   border: 1px solid grey;
 }
 
 .moreAbout {
-  font-size: 0.7em;
+  font-size: 2vw;
   color: #f8971d;
 }
 .infoBox {
-  font-size: 0.7em;
+  font-size: 2vw;
   color: grey;
 }
 
 .info {
   color: white;
 }
+
 </style>

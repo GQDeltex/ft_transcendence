@@ -21,7 +21,7 @@ function logOut() {
   <div class="profileView">
     <ProfileComponent class="profile" />
     <UserHistoryComponent class="history" />
-    <div class="about">
+    <div class="aboutParent">
       <AboutMeComponent />
       <AchievementComponent class="achievement" />
     </div>
@@ -31,8 +31,9 @@ function logOut() {
 <style scoped>
 .profileView {
   display: grid;
-  margin-left: 10vh;
-  margin-right: 10vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  /* max-height: 30vh; */
 }
 
 .profile {
@@ -45,10 +46,11 @@ function logOut() {
   margin: 2px;
 }
 
-.about {
+.aboutParent {
   grid-column: 4 / 6;
-  /* grid-row: 2 / 4; */
+  grid-row: 2 / 4;
   margin: 1px;
+  /* max-height: 60%; */
 }
 
 .achievement {
