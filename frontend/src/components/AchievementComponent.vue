@@ -11,9 +11,9 @@
         height="40"
         width="50"
       />
-    <p class="infoBox">
-      Smol PongKing: <span class="info">first login</span>
-    </p>
+      <p class="infoBox">
+        Smol PongKing: <span class="info">first login</span>
+      </p>
     </div>
   </div>
 </template>

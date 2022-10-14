@@ -7,11 +7,7 @@ const checked = ref(true);
 
 <template>
   <div class="profile">
-    <img
-      class="picture"
-      alt="user picture"
-      :src="userStore.picture"
-    />
+    <img class="picture" alt="user picture" :src="userStore.picture" />
     <div class="infoBox">
       <span class="username">{{ userStore.username }} (Rank 1) (C)</span>
       <br />

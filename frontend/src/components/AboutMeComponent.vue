@@ -7,7 +7,7 @@ const userStore = useUserStore();
 <template>
   <div class="about">
     <p style="font-size: 0.7em">
-        About<span style="float: right">(O) Online</span>
+      About<span style="float: right">(O) Online</span>
     </p>
     <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
