@@ -19,11 +19,11 @@ function logOut() {
   <button class="button" @click="logOut">Log out</button>
 
   <div class="profileView">
-    <div class="profile"><ProfileComponent /></div>
-    <div class="history"><UserHistoryComponent /></div>
+    <ProfileComponent class="profile" />
+    <UserHistoryComponent class="history" />
     <div class="about">
       <AboutMeComponent />
-      <div class="achievement"><AchievementComponent /></div>
+      <AchievementComponent class="achievement" />
     </div>
   </div>
 </template>
@@ -52,7 +52,6 @@ function logOut() {
 }
 
 .achievement {
-  grid-column: 4 / 6;
   margin: 1px;
   margin-top: 4px;
 }
