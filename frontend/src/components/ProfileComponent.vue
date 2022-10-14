@@ -9,6 +9,8 @@ const checked = ref(true);
   <div class="profile">
     <img class="picture" alt="user picture" :src="userStore.picture" />
     <div class="infoBox">
+      <span class="title">{{ userStore.title }}</span>
+      <br />
       <span class="username">{{ userStore.username }} (Rank 1) (C)</span>
       <br />
       <span class="campus">Wolfsburg, Germany</span>
@@ -32,35 +34,38 @@ const checked = ref(true);
 </template>
 
 <style scoped>
+.title {
+  font-size: 2vw;
+}
 .onSwitch {
   color: white;
-  margin-top: 6%;
+  margin-top: 10%;
   margin-left: 6%;
   margin-right: 0;
 }
 
 .offSwitch {
   color: white;
-  margin-top: 6%;
-  margin-left: 55%;
-  margin-right: 0;
+  margin-top: 10%;
+  margin-left: 60%;
+  /* margin-right: 0%; */
 }
 
 .banner {
   grid-column: 3 / 4;
   grid-row: 1 / 3;
   max-width: 90%;
-  max-height: 20vh;
-  margin-left: 5%;
-  margin-top: 5%;
+  max-height: 20vw;
+  /* margin-left: 2%;
+  margin-top: 2%; */
 }
 
 .profile {
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 1%;
   align-items: center;
   padding: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 1%;
   border-width: 1px;
   border-style: solid;
   border-image: linear-gradient(to bottom, white, #f8971d, #f8971d, #202020) 1;
@@ -72,8 +77,8 @@ const checked = ref(true);
 .picture {
   object-fit: cover;
   object-position: 50% 0%;
-  height: 100px;
-  width: 100px;
+  height: 10vw;
+  width: 10vw;
   border-radius: 50%;
   border: 1px solid white;
   grid-column: 1 / 2;
@@ -81,15 +86,17 @@ const checked = ref(true);
 
 .username {
   color: #f8971d;
+  font-size: 2vw;
+  font-stretch: expanded;
 }
 
 .campus {
   color: white;
-  font-size: 0.7em;
+  font-size: 1vw;
 }
 .friends {
   color: grey;
-  font-size: 0.7em;
+  font-size: 1vw;
 }
 
 .twoFA {
@@ -97,7 +104,7 @@ const checked = ref(true);
   margin: 0;
   justify-content: left;
   color: grey;
-  font-size: 0.7em;
+  font-size: 1vw;
   display: flex;
 }
 
@@ -105,8 +112,8 @@ const checked = ref(true);
   position: relative;
   margin-top: -2%;
   margin-left: 5%;
-  width: 40px;
-  height: 20px;
+  width: 4vw;
+  height: 2vw;
 }
 
 .switch input {
@@ -123,17 +130,17 @@ const checked = ref(true);
   right: 0;
   bottom: 0;
   background-color: grey;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  /* -webkit-transition: 0.4s;
+  transition: 0.4s; */
 }
 
 .slider:before {
   position: absolute;
   content: '';
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  bottom: 2px;
+  height: 1.6vw;
+  width: 1.6vw;
+  left: 0.3vw;
+  bottom: 0.2vw;
   background-color: white;
   -webkit-transition: 0.5s;
   transition: 0.5s;
@@ -141,17 +148,19 @@ const checked = ref(true);
 
 input:checked + .slider {
   background-color: #f8971d;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(18px);
-  -ms-transform: translateX(18px);
-  transform: translateX(18px);
+  -webkit-transform: translateX(1.8vw);
+  -ms-transform: translateX(1.8vw);
+  transform: translateX(1.8vw);
 }
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 40px;
+  border-radius: 25vw;
 }
 
 .slider.round:before {

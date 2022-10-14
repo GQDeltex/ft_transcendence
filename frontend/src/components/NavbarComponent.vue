@@ -33,15 +33,17 @@ const userStore = useUserStore();
 
 <style scoped>
 img {
-  margin-left: 15px;
+  margin-left: 1vw;
 }
 .column1 {
   grid-column: 1 / 2;
   justify-self: start;
+  font-size: 2vw;
 }
 .column2 {
   grid-column: 2 / 3;
   justify-self: end;
+  font-size: 2vw;
 }
 .columncontent {
   display: flex;
@@ -59,6 +61,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  font-size: 2vw;
 }
 .router-link-active {
   color: white;
@@ -71,7 +74,7 @@ li a {
   display: block;
   color: #f8971d;
   text-align: center;
-  padding: 14px 16px;
+  padding: 1% 1%;
   text-decoration: none;
 }
 li a:hover {
