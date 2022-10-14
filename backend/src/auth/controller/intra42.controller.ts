@@ -50,6 +50,8 @@ export class Intra42Controller {
     });
 
     res.cookie('jwt', jwt_token);
-    return res.redirect(`http://${this.configService.get<string>("DOMAIN")}/login`);
+    return res.redirect(
+      `http://${this.configService.get<string>('DOMAIN')}/login`,
+    );
   }
 }

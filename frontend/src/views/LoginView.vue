@@ -1,5 +1,9 @@
 <script setup lang="ts">
 const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/login`;
+
+function logIn() {
+  location.href = uri;
+}
 </script>
 
 <template>
@@ -11,12 +15,7 @@ const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/login`;
       >please log in to experience the full fun of PongKing</span
     >
     <div class="buttons">
-      <button
-        class="button"
-        onclick="location.href=uri"
-      >
-        Login
-      </button>
+      <button class="button" @click="logIn()">Login</button>
       <!-- <a :href="uri">Login</a> -->
     </div>
   </div>
