@@ -12,12 +12,14 @@ import { Intra42OAuthGuard } from '../guard/intra42.guard';
 import { Response } from 'express';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('login')
 export class Intra42Controller {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Get()
@@ -48,6 +50,8 @@ export class Intra42Controller {
     });
 
     res.cookie('jwt', jwt_token);
-    return res.redirect('http://localhost/login');
+    return res.redirect(
+      `http://${this.configService.get<string>('DOMAIN')}/login`,
+    );
   }
 }

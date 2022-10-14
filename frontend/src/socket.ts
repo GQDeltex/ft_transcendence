@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
-export const socket: Socket = io('http://localhost:8080', {
+export const socket: Socket = io(`http://${import.meta.env.VITE_DOMAIN}:8080`, {
   withCredentials: true,
 });
 

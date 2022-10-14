@@ -14,7 +14,7 @@ import { User } from './entities/user.entity';
       playground: true,
       autoSchemaFile: true,
       cors: {
-        origin: 'http://localhost',
+        origin: `http://${process.env.DOMAIN}`,
         credentials: true,
       },
     }),
