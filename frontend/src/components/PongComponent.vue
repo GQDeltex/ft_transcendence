@@ -7,10 +7,15 @@
       <div id="player">123</div>
       <div id="henne">987</div>
     </div>
-    <div id="ball" class="ball"></div>
-    <div id="pp" class="paddle paddle-left"></div>
-    <div id="rp" class="paddle paddle-right"></div>
+    <div id="ball" class="ball" src="@/assets/sexy-guy-001-modified.png">
+      <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
+    </div>
+    <div id="playerPad" class="paddle paddle-left"></div>
+    <div id="remotePad" class="paddle paddle-right"></div>
   </div>
+  <!-- <div class="container">
+    <input type="text" class="keyboard" />
+  </div> -->
 </template>
 
 <script setup lang="ts">
@@ -27,23 +32,37 @@ class Field {
   }
   getWidth(): number {
     if (this._htmlElem != null)
-      return Number(getComputedStyle(this._htmlElem).getPropertyValue('width')
-          .substring(0,getComputedStyle(this._htmlElem).getPropertyValue('width').length - 2));
+      return Number(
+        getComputedStyle(this._htmlElem)
+          .getPropertyValue('width')
+          .substring(
+            0,
+            getComputedStyle(this._htmlElem).getPropertyValue('width').length -
+              2,
+          ),
+      );
     else console.log('failiure, no object assigned\n');
     return 0;
   }
   getHeight(): number {
     if (this._htmlElem != null)
-      return Number(getComputedStyle(this._htmlElem).getPropertyValue('height')
-          .substring(0,getComputedStyle(this._htmlElem).getPropertyValue('height').length - 2));
+      return Number(
+        getComputedStyle(this._htmlElem)
+          .getPropertyValue('height')
+          .substring(
+            0,
+            getComputedStyle(this._htmlElem).getPropertyValue('height').length -
+              2,
+          ),
+      );
     else console.log('failiure, no object assigned\n');
     return 0;
   }
 }
 
 class Vector {
-  private x: number;
-  private y: number;
+  public x: number;
+  public y: number;
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
@@ -52,49 +71,93 @@ class Vector {
 
 class Ball {
   private _htmlElem: HTMLElement | null;
+  private _shape: Vector;
   private _field: Vector;
   private _direction: Vector;
+  private _speed: number;
 
   constructor(ballElem: HTMLElement | null, field: Field) {
     this._htmlElem = ballElem;
     this._field = new Vector(field.getWidth(), field.getHeight());
     this._direction = new Vector(0, 0);
-  }
-
-  getx() {
-    if (this._htmlElem != null)
-      return (
-        getComputedStyle(this._htmlElem).getPropertyValue('--x') / this._field.x
-      );
-    else console.log('failiure, no object assigned\n');
-  }
-  setx(value: number) {
-    if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--x', String(value)/*  * this._field.x */);
-    else console.log('failiure, no object assigned\n');
-  }
-  gety() {
-    if (this._htmlElem != null)
-      return (
-        getComputedStyle(this._htmlElem).getPropertyValue('--y') / this._field.y
-      );
-    else console.log('failiure, no object assigned\n');
-  }
-  sety(value: number) {
-    if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--y', String(value)/*  * this._field.y */);
-    else console.log('failiure, no object assigned\n');
+    this._speed = 50;
+    let temp: Field = new Field(ballElem);
+    this._shape = new Vector(
+      temp.getWidth() / this._field.x,
+      temp.getHeight() / this._field.y,
+    );
   }
 
   init() {
-    this.setx(0.5);
-    this.sety(0.5);
-    this._direction.x = 0.05;
-    this._direction.x = 0;
+    this.setx(50);
+    this.sety(50);
+    this._direction.x = 20;
+    this._direction.y = 32;
+    this.speedLimit();
+  }
+
+  getx(): number {
+    if (this._htmlElem != null)
+      return parseFloat(
+        getComputedStyle(this._htmlElem).getPropertyValue('--x'),
+      );
+    else console.log('failiure, no object assigned\n');
+    return 2147483647;
+  }
+  setx(value: number) {
+    if (this._htmlElem != null)
+      this._htmlElem.style.setProperty('--x', String(value));
+    else console.log('failiure, no object assigned\n');
+  }
+  gety(): number {
+    if (this._htmlElem != null)
+      return parseFloat(
+        getComputedStyle(this._htmlElem).getPropertyValue('--y'),
+      );
+    else console.log('failiure, no object assigned\n');
+    return 2147483647;
+  }
+  sety(value: number) {
+    if (this._htmlElem != null)
+      this._htmlElem.style.setProperty('--y', String(value));
+    else console.log('failiure, no object assigned\n');
+  }
+
+  speedLimit() {
+    let temp: number = Math.pow(
+      Math.pow(this._direction.x, 2) + Math.pow(this._direction.y, 2),
+      0.5,
+    );
+    this._direction.x = this._direction.x / temp;
+    this._direction.y = this._direction.y / temp;
+  }
+
+  step() {
+    this.collision();
+    this.setx(
+      parseFloat(String(this.getx())) +
+        parseFloat(String(this._speed * this._direction.x * 0.001)),
+    );
+    this.sety(
+      parseFloat(String(this.gety())) +
+        parseFloat(String(this._speed * this._direction.y * 0.001)),
+    );
+  }
+
+  collision() {
+    if (this.getx() >= 100 - this._shape.x || this.getx() <= 0 + this._shape.x)
+      this._direction.x *= -1;
+    if (this.gety() >= 100 - this._shape.y || this.gety() <= 0 + this._shape.y)
+      this._direction.y *= -1;
   }
 
   public update(delta: number) {
-    console.log(delta);
+    let i = 0;
+    while (i < delta) {
+      this.step();
+      console.log('lal');
+      i++;
+    }
   }
 }
 
@@ -103,38 +166,40 @@ onMounted(() => {
     document.getElementById('ball'),
     new Field(document.getElementById('feld')),
   );
+  // const playerScore = document.getElementById('player');
+  // const remoteScore = document.getElementById('henne');
+  // const keyBoard = document.querySelector('.keyboard');
 
-  ball.setx(200);
-  ball.sety(200);
+  ball.init();
+  let lastTime: number | null = null;
+  function pupdate(time: number) {
+    if (lastTime != null) {
+      const delta: number = time - lastTime;
+      ball.update(delta);
+      // playerScore.textContent = parseInt(ball.getx());
+      // remoteScore.textContent = parseInt(ball.gety());
+    }
+    lastTime = time;
+    window.requestAnimationFrame(pupdate);
+  }
+  window.requestAnimationFrame(pupdate);
 
-  // ball.init();
-  // let lastTime: number | null = null;
-  // function pupdate(time: number) {
-  //   if (lastTime != null) {
-  //     const delta: number = time - lastTime;
-  //     ball.update(delta);
-  //   }
-  //   lastTime = time;
-  //   // window.requestAnimationFrame(pupdate);
-  // }
-  // window.requestAnimationFrame(pupdate);
-  // window.requestAnimationFrame(pupdate);
-  // window.requestAnimationFrame(pupdate);
-  // window.requestAnimationFrame(pupdate);
-  // window.requestAnimationFrame(pupdate);
-  // window.requestAnimationFrame(pupdate);
+  // keyBoard.addEventListener('keydown', (e) => {
+  //   ball.update(100);
+  //   playerScore.textContent = parseInt(ball.getx());
+  //   remoteScore.textContent = parseInt(ball.gety());
+  // });
 });
 </script>
 
 <style scoped>
 .field {
-  --hght: 75;
-  background-color: #214269;
+  background-color: #212121;
   position: relative;
   margin-left: 12vw;
   margin-top: 12vh;
-  width: 60vw;
-  height: 60vh;
+  width: 70vw;
+  height: 70vh;
   overflow: hidden;
 }
 .score {
@@ -148,7 +213,7 @@ onMounted(() => {
   --position: 50;
   position: absolute;
   margin: auto;
-  background-color: brown;
+  background-color: #fff;
   top: calc(var(--position) * 1%);
   transform: translate(-50%);
   width: 1%;
@@ -166,13 +231,13 @@ onMounted(() => {
   --y: 50;
 
   position: absolute;
-  background-color: #01a645;
+  background-color: #fff;
   left: calc(var(--x) * 1%);
   top: calc(var(--y) * 1%);
-  border-radius: 50%;
+  border-radius: 80%;
   transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
+  width: 4vh;
+  height: 4vh;
 }
 .score {
   transform: translateX(-50%);
