@@ -12,8 +12,10 @@ function logIn() {
       <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
     </div>
     <span class="text"
-      >please log in to experience the full fun of PongKing</span
-    >
+      >please log in
+      <p>to experience the full fun of</p>
+      <p>PongKing</p>
+    </span>
     <div class="buttons">
       <button class="button" @click="logIn()">Login</button>
       <!-- <a :href="uri">Login</a> -->
@@ -32,16 +34,17 @@ function logIn() {
 }
 
 .logo {
-  width: 300px;
+  width: 30%;
 }
 .text {
   text-align: center;
   flex-wrap: wrap;
   color: white;
-  padding: 10px;
+  font-size: 2vw;
 }
 .buttons {
   display: flex;
+  justify-content: center;
 }
 
 .button {
@@ -80,7 +83,7 @@ body {
 }
 
 button {
-  border-radius: 50px;
+  border-radius: 50%;
   border: 2px outset grey;
   position: relative;
   /* display: inline-block; */
@@ -92,7 +95,7 @@ button {
 
   box-shadow: 0 0 10px rgb(0, 0, 0, 1);
 
-  font-size: 28px;
+  font-size: 2vw;
   font-weight: bolder;
   text-decoration: none;
   background: linear-gradient(160deg, white, grey, grey, black);

@@ -22,14 +22,15 @@ div {
 }
 .username {
   color: #f8971d;
-  grid-column: 1 / 6;
+  font-size: 2vw;
+  grid-column: 1 / 2;
   grid-row: 1 / 2;
 }
 .time {
   padding: 2px;
-  font-size: 0.5em;
+  font-size: 1vw;
   color: grey;
-  grid-column: 1 / 6;
+  grid-column: 1 / 2;
   grid-row: 2 / 3;
 }
 </style>
