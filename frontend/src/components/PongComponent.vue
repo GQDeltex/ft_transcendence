@@ -155,7 +155,6 @@ class Ball {
     let i = 0;
     while (i < delta) {
       this.step();
-      console.log('lal');
       i++;
     }
   }
