@@ -36,6 +36,10 @@ export class User {
   @Column()
   country: string;
 
+  @Field(() => [String])
+  @Column({ type: String, array: true, nullable: true })
+  title: string[];
+
   @Field(() => String, { nullable: true })
   @Column({ type: String, nullable: true })
   twoFASecret!: string | null;
@@ -43,4 +47,7 @@ export class User {
   @Field(() => Boolean)
   @Column({ default: false })
   twoFAEnable: boolean;
+
+  @Column({ default: '' })
+  socketId: string;
 }

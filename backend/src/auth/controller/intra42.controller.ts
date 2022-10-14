@@ -35,13 +35,10 @@ export class Intra42Controller {
     if (typeof req.user == 'undefined')
       throw new HttpException('User missing', HttpStatus.BAD_REQUEST);
     let user: User = req.user;
-
-    const userData: User | null = await this.usersService.findOne(+user.id);
-
-    if (userData == null) {
+    try {
+      user = await this.usersService.findOne(+user.id);
+    } catch {
       this.usersService.create(user);
-    } else {
-      user = userData;
     }
     // use 'user' object for 2FA here
     const jwt_token = this.jwtService.sign({

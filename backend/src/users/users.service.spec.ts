@@ -2,7 +2,12 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { memdbMock, testUser } from './memdb.mock';
-import { DataSource, Repository, QueryFailedError } from 'typeorm';
+import {
+  DataSource,
+  Repository,
+  QueryFailedError,
+  EntityNotFoundError,
+} from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('UsersService', () => {
@@ -43,7 +48,7 @@ describe('UsersService', () => {
   });
 
   it('should not find non-existing id', async () => {
-    await expect(service.findOne(98989)).resolves.toEqual(null);
+    await expect(service.findOne(98989)).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should find user by username', async () => {
@@ -51,7 +56,9 @@ describe('UsersService', () => {
   });
 
   it('should not find non-existing username', async () => {
-    await expect(service.findOne('nonexisting')).resolves.toEqual(null);
+    await expect(service.findOne('nonexisting')).rejects.toThrow(
+      EntityNotFoundError,
+    );
   });
 
   it('should create a new user', async () => {
@@ -66,6 +73,7 @@ describe('UsersService', () => {
       campus: 'Berlin',
       twoFASecret: null,
       twoFAEnable: false,
+      socketId: '',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
@@ -83,6 +91,7 @@ describe('UsersService', () => {
       campus: 'Shipwreckia',
       twoFASecret: null,
       twoFAEnable: false,
+      socketId: '',
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
@@ -99,7 +108,7 @@ describe('UsersService', () => {
 
   it('should not change the username if not exists', async () => {
     await expect(service.updateUsername(87542, 'nothing')).rejects.toThrow(
-      QueryFailedError,
+      EntityNotFoundError,
     );
   });
 
@@ -115,6 +124,7 @@ describe('UsersService', () => {
       campus: 'Berlin',
       twoFASecret: null,
       twoFAEnable: false,
+      socketId: '',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
@@ -134,7 +144,7 @@ describe('UsersService', () => {
 
   it('should not change the picture if not exists', async () => {
     await expect(service.updatePicture(87542, 'nothing')).rejects.toThrow(
-      QueryFailedError,
+      EntityNotFoundError,
     );
   });
 
@@ -149,7 +159,7 @@ describe('UsersService', () => {
 
   it('should not change the 2FA secret if not exists', async () => {
     await expect(service.update2FASecret(87542, 'nothing')).rejects.toThrow(
-      QueryFailedError,
+      EntityNotFoundError,
     );
   });
 
@@ -164,7 +174,16 @@ describe('UsersService', () => {
 
   it('should not change the 2FA enable if not exists', async () => {
     await expect(service.update2FAEnable(87542, true)).rejects.toThrow(
-      QueryFailedError,
+      EntityNotFoundError,
     );
+  });
+
+  it('should update the socket id', async () => {
+    const newUser: User = testUser;
+    newUser.socketId = 'f3ie389hd';
+    await expect(
+      service.updateSocketId(testUser.id, newUser.socketId),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(testUser.id)).resolves.toEqual(newUser);
   });
 });
