@@ -1,39 +1,31 @@
 import { TestingModule, Test } from '@nestjs/testing';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { memdbMock, testUser } from './memdb.mock';
-import {
-  DataSource,
-  Repository,
-  QueryFailedError,
-  EntityNotFoundError,
-} from 'typeorm';
+import { getMockRepoProvider, testUser } from './memdb.mock';
+import { QueryFailedError, EntityNotFoundError, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let db: DataSource;
-  let usersRepository: Repository<User>;
+  let mockRepo: Repository<User>;
 
   beforeEach(async () => {
-    db = await memdbMock(User);
-    usersRepository = db.getRepository(User);
-    await usersRepository.insert(testUser);
-
+    const mockRepoProvider = await getMockRepoProvider('UsersService', User, [
+      testUser,
+    ]);
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: usersRepository,
-        },
-      ],
+      providers: [ConfigService, mockRepoProvider, UsersService],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+    mockRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  afterEach(async () => await db.destroy());
+  // Somehow this doesn't work, even though dataSource is the newer one...
+  //afterEach(async () => mockRepo.manager.dataSource.destroy());
+  // So using the older connection instead.
+  afterEach(async () => mockRepo.manager.connection.close());
 
   it('should be defined', () => {
     expect(service).toBeDefined();
@@ -74,6 +66,7 @@ describe('UsersService', () => {
       twoFASecret: null,
       twoFAEnable: false,
       socketId: '',
+      title: [''],
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
@@ -92,6 +85,7 @@ describe('UsersService', () => {
       twoFASecret: null,
       twoFAEnable: false,
       socketId: '',
+      title: [''],
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
@@ -125,6 +119,7 @@ describe('UsersService', () => {
       twoFASecret: null,
       twoFAEnable: false,
       socketId: '',
+      title: [''],
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
