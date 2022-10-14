@@ -30,7 +30,7 @@ export const CurrentUserFromWs = createParamDecorator(
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost',
+    origin: `http://${process.env.DOMAIN}`,
     methods: ['GET', 'POST'],
     credentials: true,
   },

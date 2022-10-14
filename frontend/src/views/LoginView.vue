@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/login`;
+
+function logIn() {
+  location.href = uri;
+}
+</script>
 
 <template>
   <div class="loginParent">
@@ -11,13 +17,8 @@
       <p>PongKing</p>
     </span>
     <div class="buttons">
-      <button
-        class="button"
-        onclick="location.href='http://localhost:8080/login'"
-      >
-        Login
-      </button>
-      <!-- <a href="http://localhost:8080/login">Login</a> -->
+      <button class="button" @click="logIn()">Login</button>
+      <!-- <a :href="uri">Login</a> -->
     </div>
   </div>
 </template>
