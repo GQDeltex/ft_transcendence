@@ -22,6 +22,11 @@ const router = createRouter({
       component: () => import('../views/LeaderboardView.vue'),
     },
     {
+      path: '/play',
+      name: 'PongView',
+      component: () => import('../views/PongView.vue'),
+    },
+    {
       path: '/chat',
       name: 'ChatView',
       component: () => import('../views/ChatView.vue'),

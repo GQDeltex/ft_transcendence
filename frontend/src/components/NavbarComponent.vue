@@ -19,7 +19,7 @@ const userStore = useUserStore();
   <div class="column2">
     <router-link to="/profile" class="columncontent">
       <span>{{ userStore.title }} {{ userStore.username }}</span>
-      <img alt="page logo" class="logo" :src="userStore.picture" height="50" />
+      <img alt="profile picture" class="prof_pic" :src="userStore.picture" />
     </router-link>
   </div>
   <nav>
@@ -50,6 +50,17 @@ img {
   align-items: center;
   text-decoration: none;
   color: white;
+}
+.logo {
+  margin-right: 5%;
+  height: 50px;
+  border-radius: 20%;
+}
+.prof_pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 nav {
   border-top: 1px solid grey;
