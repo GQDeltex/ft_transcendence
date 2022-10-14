@@ -83,6 +83,10 @@ jobs:
             INTRA42_AUTH_CALLBACK_URL=\"http://${HOSTNAME}/login/redirect\"
             JWT_SECRET='test'
             JWT_EXPIRES_IN='3600s'" > ./.env
+      
+      - name: DEBUG
+        run: cat ./.env
+        
       - name: Test
         # Right now we only have test on backend
         if: ${{ matrix.project  == 'backend' }}
