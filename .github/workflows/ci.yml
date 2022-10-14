@@ -69,23 +69,18 @@ jobs:
 
       - name: Install npm packages
         run: npm --prefix ./${{ matrix.project }} ci
-      
-      - name: Setup env
-        run: |
-          echo "DB_HOST='database'
-          DB_PORT=5432
-          DB_USERNAME='testuser'
-          DB_PASSWORD='testpassword'
-          DB_NAME='testuser'
-          HOSTNAME='localhost:8080'
-          INTRA42_AUTH_ID='test'
-          INTRA42_AUTH_SECRET='test'
-          INTRA42_AUTH_CALLBACK_URL=\"http://$${HOSTNAME}/login/redirect\"
-          JWT_SECRET='test'
-          JWT_EXPIRES_IN='3600s'" > ./.env
-      
-      - name: DEBUG
-        run: cat ./.env
         
       - name: Test
+        env:
+          DB_HOST: 'database'
+          DB_PORT: 5432
+          DB_USERNAME: 'testuser'
+          DB_PASSWORD: 'testpass'
+          DB_NAME: 'testuser'
+          HOSTNAME: 'localhost:8080'
+          INTRA42_AUTH_ID: 'test'
+          INTRA42_AUTH_SECRET: 'test'
+          INTRA42_AUTH_CALLBACK_URL: "http://$${HOSTNAME}/login/redirect"
+          JWT_SECRET: 'test'
+          JWT_EXPIRES_IN: '3600s'
         run: npm --prefix ./${{ matrix.project }} run test
