@@ -4,16 +4,17 @@ import { UsersService } from './users.service';
 import { getMockRepoProvider, testUser } from './memdb.mock';
 import { QueryFailedError, EntityNotFoundError, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ConfigService, ConfigModule } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
   let service: UsersService;
   let mockRepo: Repository<User>;
 
   beforeEach(async () => {
-    const mockRepoProvider = await getMockRepoProvider(User, [testUser]);
+    const mockRepoProvider = await getMockRepoProvider('UsersService', User, [
+      testUser,
+    ]);
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
       providers: [ConfigService, mockRepoProvider, UsersService],
     }).compile();
 

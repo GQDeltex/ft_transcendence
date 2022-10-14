@@ -19,18 +19,7 @@ export const testUser: User = {
   socketId: '',
 };
 
-export async function memdbMock(entity: any): Promise<DataSource> {
-  return new DataSource({
-    type: 'sqlite',
-    database: ':memory:',
-    entities: [entity],
-    dropSchema: true,
-    synchronize: true,
-    logging: false,
-  }).initialize();
-}
-
-export function getMockRepoProvider(entities: any, mockData: any) {
+export function getMockRepoProvider(key: string, entities: any, mockData: any) {
   return {
     provide: getRepositoryToken(entities),
     useFactory: async (
@@ -42,7 +31,7 @@ export function getMockRepoProvider(entities: any, mockData: any) {
         port: configService.get<number>('DB_PORT'),
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
-        database: 'testing',
+        database: `${key}_testing_db`,
         entities: [entities],
         synchronize: true,
       };
@@ -56,6 +45,9 @@ export function getMockRepoProvider(entities: any, mockData: any) {
       const repo: Repository<typeof entities> = await source.getRepository(
         entities,
       );
+      for (let i = 0; i < 10; i++) {
+        if (repo.manager.connection.isConnected) break;
+      }
       await repo.clear();
       await repo.insert(mockData);
       return repo;

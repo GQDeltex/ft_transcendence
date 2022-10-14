@@ -2,37 +2,30 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { Repository, DataSource, EntityNotFoundError } from 'typeorm';
-import { memdbMock, testUser } from './memdb.mock';
+import { Repository, EntityNotFoundError } from 'typeorm';
+import { getMockRepoProvider, testUser } from './memdb.mock';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
-  let db: DataSource;
-  let usersRepository: Repository<User>;
+  let mockRepo: Repository<User>;
 
   beforeEach(async () => {
-    db = await memdbMock(User);
-    usersRepository = db.getRepository(User);
-    await usersRepository.insert(testUser);
-
+    const mockRepoProvider = await getMockRepoProvider('UsersResolver', User, [
+      testUser,
+    ]);
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersResolver,
-        UsersService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: usersRepository,
-        },
-      ],
+      providers: [UsersResolver, UsersService, ConfigService, mockRepoProvider],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);
+    mockRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  afterEach(async () => await db.destroy());
+  afterEach(async () => mockRepo.manager.connection.close());
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
