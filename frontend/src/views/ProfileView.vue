@@ -57,6 +57,7 @@ function logOut() {
   margin: 1px;
   margin-top: 4px;
 }
+
 button {
   text-decoration: none;
   border-radius: 20px;

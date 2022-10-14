@@ -1,16 +1,15 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="loginParent">
     <div class="buttons">
       <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
     </div>
-    <p class="text"
+    <span class="text"
       >please log in
       <p>to experience the full fun of</p>
-      <p>PongKing</p></p
-    >
+      <p>PongKing</p>
+    </span>
     <div class="buttons">
       <button
         class="button"
@@ -22,7 +21,6 @@
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .loginParent {
@@ -39,7 +37,7 @@
 }
 .text {
   text-align: center;
-  flex-wrap:  wrap;
+  flex-wrap: wrap;
   color: white;
   font-size: 2vw;
 }

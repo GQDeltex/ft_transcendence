@@ -2,7 +2,6 @@
 import StreamGameComponent from './StreamGameComponent.vue';
 </script>
 
-
 <template>
   <div>
     <span class="username">gucalvi</span>
@@ -12,7 +11,6 @@ import StreamGameComponent from './StreamGameComponent.vue';
     </span>
   </div>
 </template>
-
 
 <style scoped>
 div {

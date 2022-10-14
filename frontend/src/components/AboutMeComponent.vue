@@ -4,7 +4,6 @@ import { useUserStore } from '../store/user';
 const userStore = useUserStore();
 </script>
 
-
 <template>
   <div class="about">
     <span style="font-size: 2vw">
@@ -29,7 +28,6 @@ const userStore = useUserStore();
   </div>
 </template>
 
-
 <style scoped>
 .about {
   padding: 1vw;
@@ -48,5 +46,4 @@ const userStore = useUserStore();
 .info {
   color: white;
 }
-
 </style>

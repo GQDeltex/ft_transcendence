@@ -5,7 +5,6 @@ defineProps<{
 }>();
 </script>
 
-
 <template>
   <router-link to="/placeholder">
     <div>
@@ -14,7 +13,6 @@ defineProps<{
     </div>
   </router-link>
 </template>
-
 
 <style scoped>
 div {

@@ -148,7 +148,7 @@ const checked = ref(true);
 
 input:checked + .slider {
   background-color: #f8971d;
-   -webkit-transition: 0.5s;
+  -webkit-transition: 0.5s;
   transition: 0.5s;
 }
 

@@ -5,41 +5,25 @@
     <span class="text">Achievements (1)</span>
     <div class="achievements">
       <div class="achieve">
-        <img
-          alt="page logo"
-          class="logo"
-          src="@/assets/pongking_boi.svg"
-        />
+        <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
         <p class="infoBox">
           Smol PongKing: <span class="info">first login</span>
         </p>
       </div>
       <div class="achieve">
-        <img
-          alt="page logo"
-          class="logo"
-          src="@/assets/pongking_boi.svg"
-        />
+        <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
         <p class="infoBox">
           Smol PongKing: <span class="info">second login</span>
         </p>
       </div>
       <div class="achieve">
-        <img
-          alt="page logo"
-          class="logo"
-          src="@/assets/pongking_boi.svg"
-        />
+        <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
         <p class="infoBox">
           Smol PongKing: <span class="info">third login</span>
         </p>
       </div>
       <div class="achieve">
-        <img
-          alt="page logo"
-          class="logo"
-          src="@/assets/pongking_boi.svg"
-        />
+        <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
         <p class="infoBox">
           Smol PongKing: <span class="info">fourth login</span>
         </p>
