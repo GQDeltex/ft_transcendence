@@ -44,7 +44,7 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
   }
 }
 
-function clean_42_title(input: { id: number; name: string }[], index : number) {
+function clean_42_title(input: { id: number; name: string }[], index: number) {
   var tmp: string;
   var output: string[] = [''];
 
@@ -55,17 +55,24 @@ function clean_42_title(input: { id: number; name: string }[], index : number) {
     tmp = tmp.trim();
     output.push(tmp);
   });
-  if (index >= 0)
-    output[0] = output[index + 1];
+  if (index >= 0) output[0] = output[index + 1];
   return output;
 }
 
-function titusPullus(input: { id : number; user_id : number; title_id : number; selected : boolean; created_at : string; updated_at : string}[]) {
-  let i :number = 0;
-  while ( i < input.length) {
-    if (input[i].selected === true)
-      return (i);
+function titusPullus(
+  input: {
+    id: number;
+    user_id: number;
+    title_id: number;
+    selected: boolean;
+    created_at: string;
+    updated_at: string;
+  }[],
+) {
+  let i: number = 0;
+  while (i < input.length) {
+    if (input[i].selected === true) return i;
     i++;
   }
-  return (-1);
+  return -1;
 }
