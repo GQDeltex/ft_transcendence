@@ -1,5 +1,9 @@
+<script setup lang="ts">
+const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/login`;
+</script>
+
 <template>
-  <a href="http://localhost:8080/login"> Login </a>
+  <a :href="uri"> Login </a>
 </template>
 
 <style scoped>
