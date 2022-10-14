@@ -36,11 +36,11 @@ const userStore = useUserStore();
 }
 
 .moreAbout {
-  font-size: 0.5em;
+  font-size: 0.7em;
   color: #f8971d;
 }
 .infoBox {
-  font-size: 0.5em;
+  font-size: 0.7em;
   color: grey;
 }
 

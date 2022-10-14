@@ -54,6 +54,7 @@ const checked = ref(true);
   grid-column: 3 / 4;
   grid-row: 1 / 3;
   max-width: 90%;
+  max-height: 20vh;
   margin-left: 5%;
   margin-top: 5%;
 }
@@ -74,6 +75,7 @@ const checked = ref(true);
 }
 .picture {
   object-fit: cover;
+  object-position: 50% 0%;
   height: 100px;
   width: 100px;
   border-radius: 50%;
