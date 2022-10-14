@@ -73,21 +73,19 @@ jobs:
       - name: Setup env
         run: |
           echo "DB_HOST='database'
-            DB_PORT=5432
-            DB_USERNAME='testuser'
-            DB_PASSWORD='testpassword'
-            DB_NAME='testuser'
-            HOSTNAME='localhost:8080'
-            INTRA42_AUTH_ID='test'
-            INTRA42_AUTH_SECRET='test'
-            INTRA42_AUTH_CALLBACK_URL=\"http://${HOSTNAME}/login/redirect\"
-            JWT_SECRET='test'
-            JWT_EXPIRES_IN='3600s'" > ./.env
+          DB_PORT=5432
+          DB_USERNAME='testuser'
+          DB_PASSWORD='testpassword'
+          DB_NAME='testuser'
+          HOSTNAME='localhost:8080'
+          INTRA42_AUTH_ID='test'
+          INTRA42_AUTH_SECRET='test'
+          INTRA42_AUTH_CALLBACK_URL=\"http://$${HOSTNAME}/login/redirect\"
+          JWT_SECRET='test'
+          JWT_EXPIRES_IN='3600s'" > ./.env
       
       - name: DEBUG
         run: cat ./.env
         
       - name: Test
-        # Right now we only have test on backend
-        if: ${{ matrix.project  == 'backend' }}
         run: npm --prefix ./${{ matrix.project }} run test
