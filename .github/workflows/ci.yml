@@ -79,10 +79,10 @@ jobs:
           DB_USERNAME: 'testuser'
           DB_PASSWORD: 'testpass'
           DB_NAME: 'testuser'
-          HOSTNAME: 'localhost:8080'
+          DOMAIN: 'localhost'
           INTRA42_AUTH_ID: 'test'
           INTRA42_AUTH_SECRET: 'test'
-          INTRA42_AUTH_CALLBACK_URL: "http://$${HOSTNAME}/login/redirect"
+          INTRA42_AUTH_CALLBACK_URL: "http://$${DOMAIN}:8080/login/redirect"
           JWT_SECRET: 'test'
           JWT_EXPIRES_IN: '3600s'
         run: npm --prefix ./${{ matrix.project }} run test
