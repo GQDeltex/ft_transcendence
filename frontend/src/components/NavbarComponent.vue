@@ -19,7 +19,7 @@ const userStore = useUserStore();
   <div class="column2">
     <router-link to="/profile" class="columncontent">
       <span>{{ userStore.username }}</span>
-      <img alt="henne stinkt" class="prof_pic" :src="userStore.picture" />
+      <img alt="profile picture" class="prof_pic" :src="userStore.picture" />
     </router-link>
   </div>
   <nav>
