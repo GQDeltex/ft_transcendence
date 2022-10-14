@@ -12,7 +12,6 @@ import UserPlayedGameComponent from './UserPlayedGameComponent.vue';
 <style scoped>
 .frame {
   border: 1px solid #202020;
-  height: 60vh;
   padding: 10px;
 }
 </style>

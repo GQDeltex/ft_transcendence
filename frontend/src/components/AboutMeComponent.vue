@@ -6,12 +6,10 @@ const userStore = useUserStore();
 
 <template>
   <div class="about">
-    <span style="font-size: 0.7em"
-      >About<span style="float: right">(O) Online</span></span
-    >
-    <br />
-    <span class="moreAbout">+ Tell us about yourself</span>
-    <br />
+    <p style="font-size: 0.7em">
+        About<span style="float: right">(O) Online</span>
+    </p>
+    <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
       User name: <span class="info">{{ userStore.username }}</span>
       <br />

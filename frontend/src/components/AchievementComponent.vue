@@ -3,7 +3,6 @@
 <template>
   <div class="achievements">
     <span class="text">Achievements (1)</span>
-    <br />
     <div class="achieve">
       <img
         alt="page logo"
@@ -12,9 +11,9 @@
         height="40"
         width="50"
       />
-    </div>
-    <div class="infoBox">
+    <p class="infoBox">
       Smol PongKing: <span class="info">first login</span>
+    </p>
     </div>
   </div>
 </template>
@@ -25,20 +24,20 @@
   padding: 10px;
   border: 1px solid grey;
   overflow-y: scroll;
-  height: 23vh;
 }
 .text {
   font-size: 0.7em;
   grid-column: 1 / 6;
 }
 .achieve {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   grid-column: 1 / 2;
-  margin: auto;
+  padding: 10px;
 }
 
 .infoBox {
-  margin-top: 10%;
-  grid-column: 2 / 6;
   font-size: 0.5em;
   color: grey;
 }

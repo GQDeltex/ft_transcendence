@@ -11,8 +11,6 @@ const checked = ref(true);
       class="picture"
       alt="user picture"
       :src="userStore.picture"
-      height="100"
-      width="100"
     />
     <div class="infoBox">
       <span class="username">{{ userStore.username }} (Rank 1) (C)</span>
@@ -55,16 +53,14 @@ const checked = ref(true);
 .banner {
   grid-column: 3 / 4;
   grid-row: 1 / 3;
-  width: 90%;
-  height: 70%;
-  display: block;
-  margin-top: 10%;
-  margin-left: 0;
-  margin-right: 0;
+  max-width: 90%;
+  margin-left: 5%;
+  margin-top: 5%;
 }
 
 .profile {
   display: grid;
+  grid-gap: 10px;
   align-items: center;
   padding: 10px;
   padding-bottom: 20px;
@@ -77,6 +73,9 @@ const checked = ref(true);
   grid-column: 2 / 3;
 }
 .picture {
+  object-fit: cover;
+  height: 100px;
+  width: 100px;
   border-radius: 50%;
   border: 1px solid white;
   grid-column: 1 / 2;
