@@ -45,7 +45,7 @@ export class MockRepo {
         this.repo = await this.source.getRepository(this.entity);
         // Just for safety, don't know if really needed
         for (let i = 0; i < 10; i++) {
-          if (this.repo.manager.connection.isConnected) break;
+          if (this.repo.manager.connection.isInitialized) break;
         }
         await this.repo.clear();
         await this.repo.insert(this.getTestEntity());
@@ -61,6 +61,6 @@ export class MockRepo {
   }
 
   async destroyRepo(): Promise<void> {
-    dropDatabase(this.options);
+    await dropDatabase(this.options);
   }
 }
