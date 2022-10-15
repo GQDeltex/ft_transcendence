@@ -25,6 +25,7 @@ describe('TwoFAService', () => {
     service = module.get<TwoFAService>(TwoFAService);
   });
 
+  afterEach(async () => await mockRepo.clearRepo());
   afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {

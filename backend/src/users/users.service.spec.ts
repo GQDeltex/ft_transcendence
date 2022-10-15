@@ -20,6 +20,7 @@ describe('UsersService', () => {
     service = module.get<UsersService>(UsersService);
   });
 
+  afterEach(async () => await mockRepo.clearRepo());
   afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {

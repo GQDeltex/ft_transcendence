@@ -25,6 +25,7 @@ describe('PrcGateway', () => {
     gateway = module.get<PrcGateway>(PrcGateway);
   });
 
+  afterEach(async () => await mockRepo.clearRepo());
   afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {

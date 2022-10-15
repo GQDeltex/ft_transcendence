@@ -26,6 +26,7 @@ describe('Intra42Controller', () => {
     controller = module.get<Intra42Controller>(Intra42Controller);
   });
 
+  afterEach(async () => await mockRepo.clearRepo());
   afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {

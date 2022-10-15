@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { createDatabase, dropDatabase } from 'typeorm-extension';
 
 export class MockRepo {
-  private options: any;
+  private options: any = {};
   private repo: Repository<any>;
   private source: DataSource;
 
@@ -12,9 +12,7 @@ export class MockRepo {
     private readonly key: string,
     private readonly entity: any,
     private readonly testData: any,
-  ) {
-    this.options = {};
-  }
+  ) {}
 
   getTestEntity(options?: any): typeof this.entity {
     return Object.assign(this.testData, options);
@@ -57,12 +55,12 @@ export class MockRepo {
     };
   }
 
-  clearRepo(): void {
-    this.repo.clear();
+  async clearRepo(): Promise<void> {
+    await this.repo.clear();
+    await this.source.destroy();
   }
 
   async destroyRepo(): Promise<void> {
-    await this.source.destroy();
     dropDatabase(this.options);
   }
 }

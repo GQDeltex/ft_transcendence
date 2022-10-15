@@ -28,6 +28,7 @@ describe('UsersResolver', () => {
     resolver = module.get<UsersResolver>(UsersResolver);
   });
 
+  afterEach(async () => await mockRepo.clearRepo());
   afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {
