@@ -1,81 +1,40 @@
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@vueuse/core';
-import apolloClient from '@/plugin/apolloClient';
-import gql from 'graphql-tag';
-import { useCookies } from '@vueuse/integrations/useCookies';
-
-function parseJwt(token: string) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    window
-      .atob(base64)
-      .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join(''),
-  );
-
-  return JSON.parse(jsonPayload);
-}
+import UserService from '@/service/UserService';
+import { useErrorStore } from './error';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    token: useLocalStorage('token', ''),
+    isLoggedIn: useLocalStorage('isLoggedIn', false),
     id: useLocalStorage('userId', ''),
     username: useLocalStorage('username', ''),
     title: useLocalStorage('title', ''),
     picture: useLocalStorage('userPicture', ''),
   }),
-  getters: {
-    isLoggedIn(): boolean {
-      return this.token !== '';
-    },
-  },
   actions: {
-    async signIn(): Promise<boolean> {
-      const jwt_token: string | null = useCookies(['jwt']).get('jwt');
-      if (!jwt_token) return false;
-
-      const {
-        sub,
-      }: {
-        sub: number;
-      } = parseJwt(jwt_token);
-      if (!sub) return false;
-
-      const { data, error } = await apolloClient.query({
-        query: gql`
-          query User($id: Int!) {
-            user(id: $id) {
-              id
-              username
-              title
-              picture
-            }
-          }
-        `,
-        variables: {
-          id: +sub,
-        },
-      });
-
-      if (error) throw new Error(error.message);
-      if (!data) return false;
-
-      this.token = jwt_token;
-      this.id = data.user.id;
-      this.username = data.user.username;
-      this.title = data.user.title[0];
-      this.picture = data.user.picture;
-      return true;
+    async login(code: string): Promise<void> {
+      try {
+        const id: number = await UserService.fetchJwtAndId(code);
+        const user = await UserService.findOneById(id);
+        this.isLoggedIn = true;
+        this.id = user.id;
+        this.username = user.username;
+        this.title = user.title[0];
+        this.picture = user.picture;
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+        await this.logout();
+      }
     },
-    logOut(): void {
-      if (this.isLoggedIn) {
-        localStorage.clear();
-        this.$reset();
-        useCookies(['jwt']).remove('jwt');
+    async logout(): Promise<void> {
+      if (this.isLoggedIn || this.id !== '') {
+        try {
+          localStorage.clear();
+          this.$reset();
+          await UserService.logout();
+        } catch (error) {
+          useErrorStore().setError((error as Error).message);
+        }
       }
     },
   },

@@ -61,18 +61,9 @@ router.beforeResolve(async (to) => {
     return { name: 'LoginView' };
   }
 
-  if (!userStore.isLoggedIn && to.name === 'LoginView') {
-    try {
-      const isLoggedIn = await userStore.signIn();
-      if (isLoggedIn) {
-        return { name: 'home' };
-      }
-    } catch (error) {
-      // TODO: handle error using state (pinia)
-      // https://stackoverflow.com/questions/72652304/vue-js-v3-use-error-component-without-changing-url
-      console.log(error);
-      return { name: 'LoginView' };
-    }
+  if (!userStore.isLoggedIn && to.name === 'LoginView' && to.query['code']) {
+    await userStore.login(to.query['code'] as string);
+    return { name: 'home' };
   }
 
   if (userStore.isLoggedIn && to.name === 'LoginView') {
