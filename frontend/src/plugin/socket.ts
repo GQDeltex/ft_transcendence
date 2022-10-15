@@ -1,5 +1,5 @@
 import { io, Socket } from 'socket.io-client';
-import { useErrorStore } from './store/error';
+import { useErrorStore } from '../store/error';
 
 const errorStore = useErrorStore();
 
