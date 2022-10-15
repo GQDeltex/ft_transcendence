@@ -32,7 +32,7 @@ onUnmounted(() => socket.off('prc'));
 
 <template>
   <div class="parent">
-    <span class="chatname">{{ chatName }}</span>
+    <span class="chatname">chat: {{ chatName }}</span>
     <div class="messages">
       <span
         v-for="message in messages"
@@ -51,42 +51,33 @@ onUnmounted(() => socket.off('prc'));
 .parent {
   display: flex;
   flex-direction: column;
-  background-color: #202020;
-  align-items: center;
-  min-width: 50%;
-  flex-grow: inherit;
+  border: 1px solid #202020;
+  height: inherit;
+  width: 60vw;
 }
 .chatname {
   color: #f8971d;
-  margin-left: 9px;
-  margin-right: 9px;
-  margin-top: 9px;
-  margin-bottom: 9px;
-  background-color: black;
-  display: flex;
-  justify-content: center;
-  font-size: 2em;
+  padding: 1%;
+  font-size: 1vw;
 }
 .messages {
-  margin-left: 9px;
-  margin-right: 9px;
-  background-color: black;
-  min-height: 500px;
+  height: 100%;
+  border-top: 1px solid #202020;
+  border-bottom: 1px solid #202020;
+  font-size: 1vw;
 }
 .lower {
-  margin-left: 9px;
-  margin-right: 9px;
-  margin-top: 9px;
-  margin-bottom: 9px;
-  background-color: black;
   display: flex;
+  width: 100%;
 }
 .text {
   flex-grow: 1;
+  font-size: 1vw;
 }
 .sendbutton {
   text-decoration: none;
   color: white;
-  background-color: grey;
+  background-color: #f8971d;
+  font-size: 1vw;
 }
 </style>
