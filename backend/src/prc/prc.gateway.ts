@@ -6,6 +6,7 @@ import {
   ConnectedSocket,
   WsException,
   BaseWsExceptionFilter,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import {
   UseGuards,
@@ -57,11 +58,17 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
 })
 @UseGuards(WsJwtAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
-export class PrcGateway {
+export class PrcGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
   constructor(private readonly usersService: UsersService) {}
+
+  async handleDisconnect(@ConnectedSocket() client: Socket) {
+    console.log('Client disconnected', client.id);
+    await this.usersService.updateStatus(client.id, 'offline');
+    await this.usersService.updateSocketId(client.id, '');
+  }
 
   @SubscribeMessage('newconnection')
   async connect(
@@ -70,6 +77,7 @@ export class PrcGateway {
   ): Promise<void> {
     console.log('Client connected', client.id, user.username);
     await this.usersService.updateSocketId(user.id, client.id);
+    await this.usersService.updateStatus(user.id, 'online');
   }
 
   @SubscribeMessage('prc')

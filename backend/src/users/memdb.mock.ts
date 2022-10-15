@@ -16,7 +16,7 @@ export const testUser: User = {
   title: [''],
   twoFASecret: null,
   twoFAEnable: false,
-  socketId: '',
+  socketId: '98hf32-f3f',
   status: 'offline',
 };
 
