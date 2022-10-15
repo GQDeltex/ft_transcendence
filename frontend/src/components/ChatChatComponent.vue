@@ -62,7 +62,7 @@ onUnmounted(() => socket.off('prc'));
 }
 .chatname {
   color: #f8971d;
-  padding: 1%;
+  padding: 1vw;
   font-size: 1vw;
 }
 .messages {
@@ -70,6 +70,7 @@ onUnmounted(() => socket.off('prc'));
   border-top: 1px solid #202020;
   border-bottom: 1px solid #202020;
   font-size: 1vw;
+  padding: 0.5vw;
 }
 .lower {
   display: flex;

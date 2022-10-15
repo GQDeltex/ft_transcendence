@@ -10,14 +10,10 @@
 <style scoped>
 .optionsParent {
   display: grid;
-  padding: 1vw;
+  padding: 0.5vw;
   border: 1px solid #202020;
-  /* margin: 0; */
   height: inherit;
   width: 15vw;
-  /* min-height: 70vh; */
-  /* max-height: inherit;
-  min-height: inherit; */
 }
 .text {
   font-size: 1vw;

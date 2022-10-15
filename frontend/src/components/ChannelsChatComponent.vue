@@ -10,12 +10,8 @@
 <style scoped>
 .channelsParent {
   display: grid;
-  padding: 1vw;
+  padding: 0.5vw;
   border: 1px solid #202020;
-  /* height: 33%; */
-  /* width: inherit / 4; */
-  /* max-height: 25%;
-  min-height: 20vh; */
 }
 .text {
   font-size: 1vw;

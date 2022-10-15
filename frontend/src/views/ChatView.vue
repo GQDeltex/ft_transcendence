@@ -8,6 +8,7 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 
 const chatName: Ref<string> = ref('gucalvi');
+
 </script>
 
 <template>
@@ -20,8 +21,6 @@ const chatName: Ref<string> = ref('gucalvi');
     <ChatChatComponent :chat-name="chatName" class="chatChatComp" />
     <input v-model="chatName" type="test" class="inputBox" />
     <ChatOptionsChatComponent class="optionsComp" />
-    <!-- <div class="parent">
-      </div> -->
   </div>
 </template>
 
@@ -37,24 +36,29 @@ const chatName: Ref<string> = ref('gucalvi');
 }
 
 .leftSide {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  /* flex-direction: column; */
   width: 15vw;
-  height: 100%;
+  height: inherit;
+  /* max-height: 100%; */
+  grid-auto-rows: 1fr;
 }
 .friendsPeopleComp {
-  grid-column: 1 / 2;
-  flex-grow: 1;
+  grid-row: 1 / 2;
+  max-height: 25vh;
+  /* flex-grow: 1; */
 }
 
 .channelsComp {
-  grid-column: 1 / 2;
-  flex-grow: 1;
+  grid-row: 2 / 3;
+  max-height: 26vh;
+  /* flex-grow: 1; */
 }
 
 .requestsComp {
-  grid-column: 1 / 2;
-  flex-grow: 1;
+  grid-row: 3 / 4;
+  max-height: 26vh;
+  /* flex-grow: 1; */
 }
 .chatChatComp {
   grid-column: 2 / 3;

@@ -1,29 +1,43 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ChatClientComponent from "./ChatClientComponent.vue";
+import { ref } from 'vue';
+import type { Ref } from 'vue';
+
+let clients: Ref<
+  {
+    clientId: number;
+    username: string;
+    picture: string;
+    status: string;
+  }[]
+> = ref([]);
+</script>
 
 <template>
   <div class="friendsPeopleParent">
     <span class="text">People</span>
-    <div class="list"></div>
+    <div class="list">
+      <ChatClientComponent :key="client.clientId" v-for="client in clients" :clientId="client.clientId" :username="client.username" :picture="client.picture"
+      :status="client.status"/>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .friendsPeopleParent {
   display: flex;
-  padding: 1vw;
+  flex-direction: column;
+  padding: 0.5vw;
+  padding-bottom: 0.5vw;
   border: 1px solid #202020;
-  /* flex-direction: column;
-  height: 33%; */
-  /* width: inherit / 4; */
-  /* max-height: 25%;
-  min-height: 20vh; */
 }
 .text {
   font-size: 1vw;
   color: #f8971d;
 }
 .list {
-  max-height: 25vh;
+  /* max-height: 33.33%; */
   overflow-y: scroll;
+  padding-left: 5%;
 }
 </style>
