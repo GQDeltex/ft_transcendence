@@ -10,8 +10,8 @@ const props = defineProps<{
 let text: Ref<string> = ref('');
 let messages: Ref<
   {
-    from: { id: number; username: string };
-    to: { id: number; username: string };
+    from: { id?: number; username: string };
+    to: { id?: number; username: string };
     msg: string;
   }[]
 > = ref([]);
@@ -24,6 +24,11 @@ socket.on('prc', (data) => {
 function sendMsg() {
   console.log(props.chatName, text.value);
   socket.emit('prc', { to: props.chatName, msg: text.value });
+  messages.value.push({
+    from: { username: 'Me' },
+    to: { username: props.chatName },
+    msg: text.value,
+  });
   text.value = '';
 }
 
