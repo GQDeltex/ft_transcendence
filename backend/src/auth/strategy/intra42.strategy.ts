@@ -7,7 +7,6 @@ import { CreateUserInput } from '../../users/dto/create-user.input';
 /* eslint-disable */
 // @ts-ignore
 import { Strategy, VerifyCallBack } from 'passport-42';
-import { InputTypeFactory } from '@nestjs/graphql/dist/schema-builder/factories/input-type.factory';
 
 @Injectable()
 export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
@@ -45,8 +44,8 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
 }
 
 function clean_42_title(input: { id: number; name: string }[], index: number) {
-  var tmp: string;
-  var output: string[] = [''];
+  let tmp: string;
+  let output: string[] = [''];
 
   input.forEach((item: { id: number; name: string }) => {
     tmp = item.name;
@@ -71,7 +70,7 @@ function titusPullus(
 ) {
   let i: number = 0;
   while (i < input.length) {
-    if (input[i].selected === true) return i;
+    if (input[i].selected) return i;
     i++;
   }
   return -1;
