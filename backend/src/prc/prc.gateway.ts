@@ -4,16 +4,23 @@ import {
   SubscribeMessage,
   MessageBody,
   ConnectedSocket,
+  WsException,
+  BaseWsExceptionFilter,
 } from '@nestjs/websockets';
 import {
   UseGuards,
   createParamDecorator,
   ExecutionContext,
+  UseFilters,
+  Catch,
+  ArgumentsHost,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { WsJwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
+import { EntityNotFoundError } from 'typeorm';
+import { TokenExpiredError } from 'jsonwebtoken';
 
 export const CurrentUserFromWs = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
@@ -28,6 +35,19 @@ export const CurrentUserFromWs = createParamDecorator(
   },
 );
 
+@Catch(WsException, EntityNotFoundError, TokenExpiredError)
+export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
+  catch(
+    exception: WsException | EntityNotFoundError | TokenExpiredError,
+    host: ArgumentsHost,
+  ) {
+    // For some reason this throws an 'Error' again?
+    //super.catch(exception, host);
+    const client = host.switchToWs().getClient<Socket>();
+    client.emit('exception', { status: 'error', message: exception.message });
+  }
+}
+
 @WebSocketGateway({
   cors: {
     origin: `http://${process.env.DOMAIN}`,
@@ -36,6 +56,7 @@ export const CurrentUserFromWs = createParamDecorator(
   },
 })
 @UseGuards(WsJwtAuthGuard)
+@UseFilters(CustomPrcExceptionFilter)
 export class PrcGateway {
   @WebSocketServer()
   server: Server;
@@ -58,13 +79,15 @@ export class PrcGateway {
     @MessageBody('msg') msg: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    if (typeof user == 'undefined') throw new Error('Not connected');
+    if (typeof user == 'undefined') throw new WsException('Not connected');
     console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
     const recipient: User | null = await this.usersService.findOne(to);
-    if (recipient == null) throw new Error('Recipient not in database');
-    if (recipient.socketId == '') throw new Error('Recipient socketId empty');
+    if (recipient == null) throw new WsException('Recipient not in database');
+    if (recipient.socketId == '')
+      throw new WsException('Recipient socketId empty');
     const sockets = await this.server.in(recipient.socketId).fetchSockets();
-    if (sockets.length < 1) throw new Error('Could not find Recipients socket');
+    if (sockets.length < 1)
+      throw new WsException('Could not find Recipients socket');
     const recClient = sockets[0];
     recClient.emit('prc', { from: user, to: recipient, msg: msg });
     console.log('Sent message!');
