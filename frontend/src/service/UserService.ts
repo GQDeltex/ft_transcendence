@@ -58,6 +58,29 @@ class UserService {
 
     return data.user;
   }
+
+  async findAll() {
+    const { data, error, errors } = await apolloClient.query({
+      query: gql`
+        query {
+          users {
+            id
+            username
+            title
+            picture
+            status
+          }
+        }
+      `,
+    });
+
+    if (error) throw new Error(error.message);
+    if (errors && errors.length > 0) throw new Error(errors[0].message);
+    if (typeof data === 'undefined' || typeof data.users === 'undefined')
+      throw new Error('Empty user data');
+
+    return data.users;
+  }
 }
 
 export default new UserService();

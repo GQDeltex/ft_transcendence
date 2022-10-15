@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import ChatClientComponent from "./ChatClientComponent.vue";
-import { ref } from 'vue';
-import type { Ref } from 'vue';
+import ChatClientComponent from './ChatClientComponent.vue';
 
-let clients: Ref<
-  {
+const props = defineProps<{
+  clients: {
     clientId: number;
     username: string;
     picture: string;
     status: string;
-  }[]
-> = ref([]);
+  }[];
+}>();
 </script>
 
 <template>
   <div class="friendsPeopleParent">
     <span class="text">People</span>
     <div class="list">
-      <ChatClientComponent :key="client.clientId" v-for="client in clients" :clientId="client.clientId" :username="client.username" :picture="client.picture"
-      :status="client.status"/>
+      <ChatClientComponent
+        v-for="client in clients"
+        :key="client.clientId"
+        :client-id="client.clientId"
+        :username="client.username"
+        :picture="client.picture"
+        :status="client.status"
+      />
     </div>
   </div>
 </template>

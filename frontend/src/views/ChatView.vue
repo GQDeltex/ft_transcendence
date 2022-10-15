@@ -6,15 +6,20 @@ import RequestsChatComponent from '../components/RequestsChatComponent.vue';
 import ChatOptionsChatComponent from '../components/ChatOptionsChatComponent.vue';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
+import UserService from '../service/UserService';
+import { onMounted } from 'vue';
 
 const chatName: Ref<string> = ref('gucalvi');
-
+const users: Ref<any> = ref([]);
+onMounted(async () => {
+  users.value = await UserService.findAll();
+});
 </script>
 
 <template>
   <div class="chatViewParent">
     <div class="leftSide">
-      <FriendsPeopleChatComponent class="friendsPeopleComp" />
+      <FriendsPeopleChatComponent :clients="users" class="friendsPeopleComp" />
       <ChannelsChatComponent class="channelsComp" />
       <RequestsChatComponent class="requestsComp" />
     </div>
