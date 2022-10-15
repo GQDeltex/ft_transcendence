@@ -56,11 +56,35 @@ export class UsersService {
       throw new EntityNotFoundError(User, { id: id });
   }
 
-  async updateSocketId(id: number, socketId: string): Promise<void> {
-    const result: UpdateResult = await this.userRepository.update(id, {
-      socketId: socketId,
-    });
+  async updateSocketId(
+    identification: number | string,
+    socketId: string,
+  ): Promise<void> {
+    const searchOptions: { id?: number; socketId?: string } = {};
+    if (typeof identification === 'number') searchOptions.id = identification;
+    else searchOptions.socketId = identification;
+    const result: UpdateResult = await this.userRepository.update(
+      searchOptions,
+      { socketId },
+    );
     if (typeof result.affected != 'undefined' && result.affected < 1)
-      throw new EntityNotFoundError(User, { id: id });
+      throw new EntityNotFoundError(User, searchOptions);
+  }
+
+  async updateStatus(
+    identification: number | string,
+    status: string,
+  ): Promise<void> {
+    const searchOptions: { id?: number; socketId?: string } = {};
+    if (typeof identification === 'number') searchOptions.id = identification;
+    else searchOptions.socketId = identification;
+    const result: UpdateResult = await this.userRepository.update(
+      searchOptions,
+      {
+        status,
+      },
+    );
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new EntityNotFoundError(User, searchOptions);
   }
 }

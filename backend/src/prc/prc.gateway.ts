@@ -6,6 +6,7 @@ import {
   ConnectedSocket,
   WsException,
   BaseWsExceptionFilter,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import {
   UseGuards,
@@ -57,11 +58,23 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
 })
 @UseGuards(WsJwtAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
-export class PrcGateway {
+export class PrcGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
   constructor(private readonly usersService: UsersService) {}
+
+  async handleDisconnect(@ConnectedSocket() client: Socket) {
+    console.log('Client disconnected', client.id);
+    try {
+      await this.usersService.updateStatus(client.id, 'offline');
+      await this.usersService.updateSocketId(client.id, '');
+    } catch (EntityNotFoundError) {
+      // Do nothing.
+      // We need to do this to catch errors that arise if the socket
+      // information is not in the database yet. So this shouldn't be a problem.
+    }
+  }
 
   @SubscribeMessage('newconnection')
   async connect(
@@ -70,6 +83,7 @@ export class PrcGateway {
   ): Promise<void> {
     console.log('Client connected', client.id, user.username);
     await this.usersService.updateSocketId(user.id, client.id);
+    await this.usersService.updateStatus(user.id, 'online');
   }
 
   @SubscribeMessage('prc')

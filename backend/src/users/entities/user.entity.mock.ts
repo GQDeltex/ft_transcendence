@@ -13,4 +13,5 @@ export const mockUser: User = {
   twoFASecret: null,
   twoFAEnable: false,
   socketId: '',
+  status: 'offline',
 };

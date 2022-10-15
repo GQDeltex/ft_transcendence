@@ -69,6 +69,7 @@ describe('UsersService', () => {
       twoFAEnable: false,
       socketId: '',
       title: [''],
+      status: 'offline',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
@@ -89,6 +90,7 @@ describe('UsersService', () => {
       twoFAEnable: false,
       socketId: '',
       title: [''],
+      status: 'offline',
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
@@ -122,6 +124,7 @@ describe('UsersService', () => {
       twoFAEnable: false,
       socketId: '',
       title: [''],
+      status: 'offline',
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
@@ -182,5 +185,54 @@ describe('UsersService', () => {
       service.updateSocketId(newUser.id, newUser.socketId),
     ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change socket id if not exists', async () => {
+    await expect(service.updateSocketId(87542, '98hf23')).rejects.toThrow(
+      EntityNotFoundError,
+    );
+  });
+
+  it('should update the socket id via socketId', async () => {
+    const testUser: User = mockRepo.getTestEntity();
+    const newUser: User = mockRepo.getTestEntity({ socketId: 'f3ie389hd' });
+    await expect(
+      service.updateSocketId(testUser.socketId, newUser.socketId),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(testUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change socket id via socketId if not exists', async () => {
+    await expect(service.updateSocketId('9gf3jhd', '98hf23')).rejects.toThrow(
+      EntityNotFoundError,
+    );
+  });
+
+  it('should update the status', async () => {
+    const newUser: User = mockRepo.getTestEntity({ status: 'online' });
+    await expect(
+      service.updateStatus(newUser.id, newUser.status),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not change status if not exists', async () => {
+    await expect(service.updateStatus(87542, 'offline')).rejects.toThrow(
+      EntityNotFoundError,
+    );
+  });
+
+  it('should update the status via socket-id', async () => {
+    const newUser: User = mockRepo.getTestEntity({ status: 'online' });
+    await expect(
+      service.updateStatus(newUser.socketId, newUser.status),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should not update the status via socket-id if not exists', async () => {
+    await expect(service.updateStatus('98zh3f09', 'online')).rejects.toThrow(
+      EntityNotFoundError,
+    );
   });
 });
