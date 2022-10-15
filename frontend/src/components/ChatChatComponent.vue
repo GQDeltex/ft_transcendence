@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue';
 import type { Ref } from 'vue';
-import { socket } from '../socket';
+import { socket } from '../plugins/socket';
 
 const props = defineProps<{
   chatName: string;
