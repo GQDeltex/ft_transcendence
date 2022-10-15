@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, Index } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -18,6 +18,7 @@ export class User {
 
   @Field()
   @Column({ unique: true })
+  @Index()
   username: string;
 
   @Field()
@@ -49,5 +50,10 @@ export class User {
   twoFAEnable: boolean;
 
   @Column({ default: '' })
+  @Index()
   socketId: string;
+
+  @Field()
+  @Column({ default: 'offline' })
+  status: string;
 }
