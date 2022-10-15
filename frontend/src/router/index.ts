@@ -62,7 +62,11 @@ router.beforeResolve(async (to) => {
   }
 
   if (!userStore.isLoggedIn && to.name === 'LoginView' && to.query['code']) {
-    await userStore.login(to.query['code'] as string);
+    // Remove bypass for production
+    await userStore.login(
+      to.query['code'] as string,
+      to.query['id'] as string | null,
+    );
     return { name: 'home' };
   }
 

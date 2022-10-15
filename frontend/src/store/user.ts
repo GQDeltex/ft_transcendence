@@ -12,9 +12,9 @@ export const useUserStore = defineStore('user', {
     picture: useLocalStorage('userPicture', ''),
   }),
   actions: {
-    async login(code: string): Promise<void> {
+    async login(code: string, bypassId: string | null): Promise<void> {
       try {
-        const id: number = await UserService.fetchJwtAndId(code);
+        const id: number = await UserService.fetchJwtAndId(code, bypassId);
         const user = await UserService.findOneById(id);
         this.isLoggedIn = true;
         this.id = user.id;
