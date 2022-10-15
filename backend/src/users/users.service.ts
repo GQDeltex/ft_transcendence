@@ -68,7 +68,7 @@ export class UsersService {
       { socketId },
     );
     if (typeof result.affected != 'undefined' && result.affected < 1)
-      throw new EntityNotFoundError(User, { id: identification });
+      throw new EntityNotFoundError(User, searchOptions);
   }
 
   async updateStatus(
@@ -85,6 +85,6 @@ export class UsersService {
       },
     );
     if (typeof result.affected != 'undefined' && result.affected < 1)
-      throw new EntityNotFoundError(User, { id: identification });
+      throw new EntityNotFoundError(User, searchOptions);
   }
 }

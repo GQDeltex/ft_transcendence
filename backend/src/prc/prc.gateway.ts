@@ -66,8 +66,14 @@ export class PrcGateway implements OnGatewayDisconnect {
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('Client disconnected', client.id);
-    await this.usersService.updateStatus(client.id, 'offline');
-    await this.usersService.updateSocketId(client.id, '');
+    try {
+      await this.usersService.updateStatus(client.id, 'offline');
+      await this.usersService.updateSocketId(client.id, '');
+    } catch (EntityNotFoundError) {
+      // Do nothing.
+      // We need to do this to catch errors that arise if the socket
+      // information is not in the database yet. So this shouldn't be a problem.
+    }
   }
 
   @SubscribeMessage('newconnection')
