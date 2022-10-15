@@ -2,41 +2,48 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { Repository, EntityNotFoundError } from 'typeorm';
-import { getMockRepoProvider, testUser } from './memdb.mock';
+import { mockUser } from './entities/user.entity.mock';
+import { MockRepo } from '../tools/memdb.mock';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { EntityNotFoundError } from 'typeorm';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
-  let mockRepo: Repository<User>;
+  let mockRepo: MockRepo;
 
   beforeEach(async () => {
-    const mockRepoProvider = await getMockRepoProvider('UsersResolver', User, [
-      testUser,
-    ]);
+    mockRepo = new MockRepo('UsersResolver', User, mockUser);
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersResolver, UsersService, ConfigService, mockRepoProvider],
+      providers: [
+        UsersResolver,
+        UsersService,
+        ConfigService,
+        mockRepo.getProvider(),
+      ],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);
-    mockRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  afterEach(async () => mockRepo.manager.connection.close());
+  afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
   });
 
   it('should find all users', async () => {
-    await expect(resolver.findAll()).resolves.toEqual([testUser]);
+    await expect(resolver.findAll()).resolves.toEqual([
+      mockRepo.getTestEntity(),
+    ]);
   });
 
   it('should find user by id', async () => {
-    await expect(resolver.findOneById(84364)).resolves.toEqual(testUser);
+    await expect(resolver.findOneById(84364)).resolves.toEqual(
+      mockRepo.getTestEntity(),
+    );
   });
 
   it('should not find non-existing user by id', async () => {
@@ -46,7 +53,9 @@ describe('UsersResolver', () => {
   });
 
   it('should find user by username', async () => {
-    await expect(resolver.findOneByUsername('name')).resolves.toEqual(testUser);
+    await expect(resolver.findOneByUsername('name')).resolves.toEqual(
+      mockRepo.getTestEntity(),
+    );
   });
 
   it('should not find non-existing user by username', async () => {
@@ -56,8 +65,9 @@ describe('UsersResolver', () => {
   });
 
   it('should update a users picture', async () => {
-    const newUser = testUser;
-    newUser.picture = 'http://test.whoknows.xyz';
+    const newUser = mockRepo.getTestEntity({
+      picture: 'http://test.whoknows.xyz',
+    });
     const updateUserPictureInput: UpdateUserPictureInput = {
       id: newUser.id,
       picture: newUser.picture,
@@ -68,9 +78,10 @@ describe('UsersResolver', () => {
   });
 
   it('should not update a users picture if user not exist', async () => {
-    const newUser = testUser;
-    newUser.picture = 'http://test.whoknows.xyz';
-    newUser.id = 12345;
+    const newUser = mockRepo.getTestEntity({
+      id: 12345,
+      picture: 'http://test.whoknows.xyz',
+    });
     const updateUserPictureInput: UpdateUserPictureInput = {
       id: newUser.id,
       picture: newUser.picture,
@@ -81,8 +92,7 @@ describe('UsersResolver', () => {
   });
 
   it('should update a users username', async () => {
-    const newUser = testUser;
-    newUser.username = 'testUser';
+    const newUser = mockRepo.getTestEntity({ username: 'testUser' });
     const updateUserUsernameInput: UpdateUserUsernameInput = {
       id: newUser.id,
       username: newUser.username,

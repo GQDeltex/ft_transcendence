@@ -1,42 +1,41 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { getMockRepoProvider, testUser } from './memdb.mock';
-import { QueryFailedError, EntityNotFoundError, Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { mockUser } from './entities/user.entity.mock';
+import { MockRepo } from '../tools/memdb.mock';
+import { QueryFailedError, EntityNotFoundError } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let mockRepo: Repository<User>;
+  let mockRepo: MockRepo;
 
   beforeEach(async () => {
-    const mockRepoProvider = await getMockRepoProvider('UsersService', User, [
-      testUser,
-    ]);
+    mockRepo = new MockRepo('UsersService', User, mockUser);
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ConfigService, mockRepoProvider, UsersService],
+      providers: [ConfigService, mockRepo.getProvider(), UsersService],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    mockRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  // Somehow this doesn't work, even though dataSource is the newer one...
-  //afterEach(async () => mockRepo.manager.dataSource.destroy());
-  // So using the older connection instead.
-  afterEach(async () => mockRepo.manager.connection.close());
+  afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
   it('should find all users', async () => {
-    await expect(service.findAll()).resolves.toEqual([testUser]);
+    await expect(service.findAll()).resolves.toEqual([
+      mockRepo.getTestEntity(),
+    ]);
   });
 
   it('should find user by id', async () => {
-    await expect(service.findOne(84364)).resolves.toEqual(testUser);
+    await expect(service.findOne(84364)).resolves.toEqual(
+      mockRepo.getTestEntity(),
+    );
   });
 
   it('should not find non-existing id', async () => {
@@ -44,7 +43,9 @@ describe('UsersService', () => {
   });
 
   it('should find user by username', async () => {
-    await expect(service.findOne('name')).resolves.toEqual(testUser);
+    await expect(service.findOne('name')).resolves.toEqual(
+      mockRepo.getTestEntity(),
+    );
   });
 
   it('should not find non-existing username', async () => {
@@ -73,6 +74,7 @@ describe('UsersService', () => {
   });
 
   it('should not create a user if existing', async () => {
+    const testUser = mockRepo.getTestEntity();
     const newerUser: User = {
       id: testUser.id,
       username: 'nanu',
@@ -92,8 +94,7 @@ describe('UsersService', () => {
   });
 
   it('should change the username', async () => {
-    const newUser: User = testUser;
-    newUser.username = 'test2';
+    const newUser: User = mockRepo.getTestEntity({ username: 'test2' });
     await expect(
       service.updateUsername(newUser.id, newUser.username),
     ).resolves.not.toThrow();
@@ -123,13 +124,13 @@ describe('UsersService', () => {
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
-      service.updateUsername(newUser.id, testUser.username),
+      service.updateUsername(newUser.id, mockRepo.getTestEntity().username),
     ).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 
   it('should change the picture', async () => {
-    const newUser: User = testUser;
+    const newUser: User = mockRepo.getTestEntity();
     newUser.picture = 'http://whoknows.com';
     await expect(
       service.updatePicture(newUser.id, newUser.picture),
@@ -144,8 +145,10 @@ describe('UsersService', () => {
   });
 
   it('should change the 2FA secret', async () => {
-    const newUser: User = testUser;
-    newUser.twoFASecret = 'somesecret';
+    const newUser: User = mockRepo.getTestEntity({
+      twoFASecret: 'somesecret',
+    });
+    if (newUser.twoFASecret == null) throw new Error('2FA Secret is empty');
     await expect(
       service.update2FASecret(newUser.id, newUser.twoFASecret),
     ).resolves.not.toThrow();
@@ -159,8 +162,7 @@ describe('UsersService', () => {
   });
 
   it('should change the 2FA enable', async () => {
-    const newUser: User = testUser;
-    newUser.twoFAEnable = true;
+    const newUser: User = mockRepo.getTestEntity({ twoFAEnable: true });
     await expect(
       service.update2FAEnable(newUser.id, newUser.twoFAEnable),
     ).resolves.not.toThrow();
@@ -174,11 +176,10 @@ describe('UsersService', () => {
   });
 
   it('should update the socket id', async () => {
-    const newUser: User = testUser;
-    newUser.socketId = 'f3ie389hd';
+    const newUser: User = mockRepo.getTestEntity({ socketId: 'f3ie389hd' });
     await expect(
-      service.updateSocketId(testUser.id, newUser.socketId),
+      service.updateSocketId(newUser.id, newUser.socketId),
     ).resolves.not.toThrow();
-    await expect(service.findOne(testUser.id)).resolves.toEqual(newUser);
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 });
