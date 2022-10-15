@@ -17,6 +17,7 @@ export const testUser: User = {
   twoFASecret: null,
   twoFAEnable: false,
   socketId: '',
+  status: 'offline',
 };
 
 export function getMockRepoProvider(key: string, entities: any, mockData: any) {

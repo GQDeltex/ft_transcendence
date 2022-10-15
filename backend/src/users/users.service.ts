@@ -63,4 +63,12 @@ export class UsersService {
     if (typeof result.affected != 'undefined' && result.affected < 1)
       throw new EntityNotFoundError(User, { id: id });
   }
+
+  async updateStatus(id: number, status: string): Promise<void> {
+    const result: UpdateResult = await this.userRepository.update(id, {
+      status: status,
+    });
+    if (typeof result.affected != 'undefined' && result.affected < 1)
+      throw new EntityNotFoundError(User, { id: id });
+  }
 }
