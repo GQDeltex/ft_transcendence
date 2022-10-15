@@ -9,14 +9,14 @@ import AchievementComponent from '../components/AchievementComponent.vue';
 const router = useRouter();
 const userStore = useUserStore();
 
-function logOut() {
-  userStore.logOut();
-  router.push({ path: '/login' });
-}
+const logout = async () => {
+  await userStore.logout();
+  await router.push({ path: '/login' });
+};
 </script>
 
 <template>
-  <button class="button" @click="logOut">Log out</button>
+  <button class="button" @click="logout">Log out</button>
 
   <div class="profileView">
     <ProfileComponent class="profile" />

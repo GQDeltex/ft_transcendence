@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/login`;
+const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 
-function logIn() {
+const login = () => {
   location.href = uri;
-}
+};
 </script>
 
 <template>
@@ -17,8 +17,7 @@ function logIn() {
       <p>PongKing</p>
     </span>
     <div class="buttons">
-      <button class="button" @click="logIn()">Login</button>
-      <!-- <a :href="uri">Login</a> -->
+      <button class="button" @click="login">Login</button>
     </div>
   </div>
 </template>
@@ -36,12 +35,14 @@ function logIn() {
 .logo {
   width: 30%;
 }
+
 .text {
   text-align: center;
   flex-wrap: wrap;
   color: white;
   font-size: 2vw;
 }
+
 .buttons {
   display: flex;
   justify-content: center;
@@ -58,19 +59,6 @@ function logIn() {
   width: min-content;
   align-items: center;
 }
-
-/* a {
-  text-decoration: none;
-  border-radius: 20px;
-  color: white;
-  background-color: #f8971d;
-  padding: 10px;
-  align-content: center;
-  width: min-content;
-} */
-/* * {
-  box-sizing: border-box;
-} */
 
 body {
   margin: 0;
