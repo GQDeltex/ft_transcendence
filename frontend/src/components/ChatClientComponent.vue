@@ -2,8 +2,9 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
-  clientId: number;
+  'client-id': number;
   username: string;
+  title: string;
   picture: string;
   status: string;
 }>();
@@ -11,7 +12,7 @@ const props = defineProps<{
 const statusStyle = computed(() => {
   switch (props.status) {
     case 'online':
-      return { color: 'green' };
+      return { color: 'lime' };
     default:
       return { color: 'grey' };
   }
@@ -20,7 +21,7 @@ const statusStyle = computed(() => {
 const statusBorder = computed(() => {
   switch (props.status) {
     case 'online':
-      return { 'border-color': 'green' };
+      return { 'border-color': 'lime' };
     default:
       return { 'border-color': 'grey' };
   }
@@ -36,7 +37,7 @@ const statusBorder = computed(() => {
       :src="picture"
     />
     <div class="infoBox">
-      <span class="username">{{ username }}</span>
+      <span class="username">{{ title }} {{ username }}</span>
       <span :style="statusStyle" class="status">{{ status }}</span>
     </div>
   </div>
@@ -70,6 +71,6 @@ const statusBorder = computed(() => {
 
 .status {
   font-size: 0.5vw;
-  color: green;
+  color: lime;
 }
 </style>

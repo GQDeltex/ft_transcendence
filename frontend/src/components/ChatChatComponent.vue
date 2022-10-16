@@ -22,6 +22,7 @@ socket.on('prc', (data) => {
 });
 
 function sendMsg() {
+  if (text.value == '') return;
   console.log(props.chatName, text.value);
   socket.emit('prc', { to: props.chatName, msg: text.value });
   messages.value.push({
@@ -46,7 +47,13 @@ onUnmounted(() => socket.off('prc'));
       /></span>
     </div>
     <div class="lower">
-      <input v-model="text" type="text" class="text" @keyup.enter="sendMsg()" />
+      <input
+        v-model="text"
+        alt="inputBox"
+        type="text"
+        class="text"
+        @keyup.enter="sendMsg()"
+      />
       <button class="sendbutton" @click="sendMsg()">Send</button>
     </div>
   </div>
@@ -82,8 +89,11 @@ onUnmounted(() => socket.off('prc'));
 }
 .sendbutton {
   text-decoration: none;
-  color: white;
+  border-radius: 5px;
+  color: black;
   background-color: #f8971d;
   font-size: 1vw;
+  border-color: transparent;
+  cursor: pointer;
 }
 </style>
