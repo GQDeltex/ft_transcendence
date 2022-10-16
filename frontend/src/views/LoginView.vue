@@ -12,12 +12,14 @@ const login = () => {
       <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
     </div>
     <span class="text"
-      >please log in
-      <p>to experience the full fun of</p>
-      <p>PongKing</p>
+      >{{ $t('LoginView.welcome1') }}
+      <p>{{ $t('LoginView.welcome2') }}</p>
+      <p>{{ $t('LoginView.welcome3') }}</p>
     </span>
     <div class="buttons">
-      <button class="button" @click="login">Login</button>
+      <button class="button" @click="login">
+        {{ $t('LoginView.loginbutton') }}
+      </button>
     </div>
   </div>
 </template>
