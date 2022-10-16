@@ -9,7 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { Catch, ArgumentsHost, UseFilters, UseGuards } from '@nestjs/common';
 import { EntityNotFoundError } from 'typeorm';
-import { GqlJwtAuthGuard } from '../auth/guard/jwt.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
@@ -25,7 +25,7 @@ export class CatchOurExceptionsFilter implements GqlExceptionFilter {
 
 @UseFilters(new CatchOurExceptionsFilter())
 @Resolver(() => User)
-@UseGuards(GqlJwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 

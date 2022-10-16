@@ -17,7 +17,7 @@ import {
   ArgumentsHost,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { WsJwtAuthGuard } from '../auth/guard/jwt.guard';
+import { WsJwtAuthGuard } from '../auth/guard/wsJwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { EntityNotFoundError } from 'typeorm';

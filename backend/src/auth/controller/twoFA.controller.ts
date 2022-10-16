@@ -31,7 +31,7 @@ export class TwoFAController {
   ) {
     try {
       const { otpauthUrl } = await this.twoFAService.generate2FASecret(
-        request.user.sub,
+        request.user.id,
         request.user.email,
       );
       return this.twoFAService.pipeQrCodeStream(response, otpauthUrl);

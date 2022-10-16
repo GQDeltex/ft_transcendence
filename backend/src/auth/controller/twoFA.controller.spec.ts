@@ -6,6 +6,7 @@ import { User } from '../../users/entities/user.entity';
 import { mockUser } from '../../users/entities/user.entity.mock';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 describe('TwoFAController', () => {
   let controller: TwoFAController;
@@ -19,6 +20,7 @@ describe('TwoFAController', () => {
       providers: [
         TwoFAService,
         UsersService,
+        JwtService,
         ConfigService,
         mockRepo.getProvider(),
       ],
