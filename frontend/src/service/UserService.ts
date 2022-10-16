@@ -15,7 +15,22 @@ class UserService {
           typeof res.data.isAuthenticated === 'undefined'
         )
           throw new Error('Empty user ID.');
-        return { id: res.data.id, is2FAEnabled: !res.data.isAuthenticated };
+        return { id: res.data.id, require2FAverify: !res.data.isAuthenticated };
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async generate2FA(): Promise<string> {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/generate`, {
+        withCredentials: true,
+        responseType: 'blob',
+      })
+      .then((res) => {
+        return URL.createObjectURL(res.data);
       })
       .catch((error) => {
         if (typeof error.response === 'undefined') throw error;
@@ -33,6 +48,35 @@ class UserService {
         if (typeof res.data.id === 'undefined')
           throw new Error('Empty user ID.');
         return { id: res.data.id };
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async disable2FA(): Promise<void> {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/disable`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        return;
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async enable2FA(code: string) {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/enable`, {
+        params: { code },
+        withCredentials: true,
+      })
+      .then(() => {
+        return;
       })
       .catch((error) => {
         if (typeof error.response === 'undefined') throw error;
@@ -63,6 +107,7 @@ class UserService {
             username
             title
             picture
+            twoFAEnable
           }
         }
       `,

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
 
+const router = useRouter();
 const userStore = useUserStore();
 const code = ref('');
 
 const submit = async () => {
   await userStore.verify2FA(code.value);
   if (userStore.isLoggedIn) {
-    location.href = '/';
+    await router.push({ path: '/' });
   }
 };
 </script>

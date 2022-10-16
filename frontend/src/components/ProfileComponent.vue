@@ -1,8 +1,33 @@
 <script setup lang="ts">
 import { useUserStore } from '../store/user';
-import { ref } from 'vue';
+import { ref, watch, nextTick } from 'vue';
+import Enable2FAComponent from './Enable2FAComponent.vue';
+
 const userStore = useUserStore();
-const checked = ref(true);
+const checked = ref(userStore.twoFAEnable);
+const show = ref(false);
+
+watch(checked, async (newValue, oldValue) => {
+  if (newValue === oldValue) return;
+
+  if (!newValue && oldValue && userStore.twoFAEnable) {
+    if (!(await userStore.disable2FA())) {
+      await nextTick();
+      checked.value = true;
+    }
+  }
+
+  if (newValue && !oldValue && !userStore.twoFAEnable) {
+    show.value = true;
+  }
+});
+
+const onClose = () => {
+  show.value = false;
+  if (!userStore.twoFAEnable) {
+    checked.value = false;
+  }
+};
 </script>
 
 <template>
@@ -29,6 +54,7 @@ const checked = ref(true);
           <p v-else class="offSwitch">off</p>
         </span>
       </label>
+      <Enable2FAComponent v-if="show" @close="onClose" />
     </span>
   </div>
 </template>
