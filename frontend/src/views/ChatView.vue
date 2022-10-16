@@ -56,13 +56,13 @@ onMounted(async () => {
 
 .channelsComp {
   grid-row: 2 / 3;
-  max-height: 26vh;
+  max-height: 25vh;
   /* flex-grow: 1; */
 }
 
 .requestsComp {
   grid-row: 3 / 4;
-  max-height: 26vh;
+  max-height: 25vh;
   /* flex-grow: 1; */
 }
 .chatChatComp {

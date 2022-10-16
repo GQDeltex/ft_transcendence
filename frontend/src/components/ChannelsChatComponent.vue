@@ -1,24 +1,90 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ChatChannelComponent from './ChatChannelComponent.vue';
+
+const newChannel = async () => {
+  console.log('newChannel button pressed');
+};
+</script>
 
 <template>
   <div class="channelsParent">
-    <span class="text">Channels</span>
-    <div class="list"></div>
+    <span class="text"
+      >Channels
+      <button class="button" @click="newChannel">New Channel</button>
+    </span>
+    <div class="list">
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="devOps"
+        picture="@/assets/pongking_boi.svg"
+      />
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="chitChat"
+        picture="@/assets/pongking_boi.svg"
+      />
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="42Wolfsburg"
+        picture="@/assets/pongking_boi.svg"
+      />
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="examPrep"
+        picture="@/assets/pongking_boi.svg"
+      />
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="ThisAndThat"
+        picture="@/assets/pongking_boi.svg"
+      />
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="SecretChannel"
+        picture="@/assets/pongking_boi.svg"
+      />
+      <ChatChannelComponent
+        key="4242"
+        :client-id="4242"
+        channel-name="StaffOnly!"
+        picture="@/assets/pongking_boi.svg"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .channelsParent {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   padding: 0.5vw;
+  padding-bottom: 0.5vw;
   border: 1px solid #202020;
 }
 .text {
+  display: flex;
   font-size: 1vw;
   color: #f8971d;
+  justify-content: space-between;
 }
 .list {
-  max-height: 28vh;
   overflow-y: scroll;
+  padding-left: 5%;
+}
+
+button {
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  background-color: #f8971d;
+  cursor: pointer;
+  font-size: 0.5vw;
+  border-color: transparent;
 }
 </style>
