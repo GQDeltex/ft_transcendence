@@ -3,7 +3,8 @@ import ChatClientComponent from './ChatClientComponent.vue';
 
 const props = defineProps<{
   clients: {
-    clientId: number;
+    id: number;
+    title: string;
     username: string;
     picture: string;
     status: string;
@@ -17,8 +18,9 @@ const props = defineProps<{
     <div class="list">
       <ChatClientComponent
         v-for="client in clients"
-        :key="client.clientId"
-        :client-id="client.clientId"
+        :key="client.id"
+        :client-id="client.id"
+        :title="client.title[0]"
         :username="client.username"
         :picture="client.picture"
         :status="client.status"
