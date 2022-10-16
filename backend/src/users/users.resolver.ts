@@ -14,6 +14,7 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
+import { TwoFAGuard } from '../auth/guard/twoFA.guard';
 
 @Catch(EntityNotFoundError)
 export class CatchOurExceptionsFilter implements GqlExceptionFilter {
@@ -25,7 +26,7 @@ export class CatchOurExceptionsFilter implements GqlExceptionFilter {
 
 @UseFilters(new CatchOurExceptionsFilter())
 @Resolver(() => User)
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TwoFAGuard)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 

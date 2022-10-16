@@ -25,16 +25,13 @@ export class TwoFAController {
 
   @Get('generate')
   @UseGuards(JwtAuthGuard, TwoFAGuard)
-  async register(
-    @Req() request: any,
-    @Res({ passthrough: true }) response: Response,
-  ) {
+  async generate(@Req() req: any, @Res() res: Response): Promise<void> {
     try {
       const { otpauthUrl } = await this.twoFAService.generate2FASecret(
-        request.user.id,
-        request.user.email,
+        req.user.id,
+        req.user.email,
       );
-      return this.twoFAService.pipeQrCodeStream(response, otpauthUrl);
+      return this.twoFAService.pipeQrCodeStream(res, otpauthUrl);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -43,12 +40,12 @@ export class TwoFAController {
   @Get('enable')
   @UseGuards(JwtAuthGuard, TwoFAGuard)
   async enable(
-    @Req() request: any,
+    @Req() req: any,
     @Query('code') code: string | null,
   ): Promise<void> {
     if (!code) throw new BadRequestException('Empty 2FA code');
     try {
-      await this.twoFAService.enable2FA(request.user.id, code);
+      await this.twoFAService.enable2FA(req.user.id, code);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -57,29 +54,25 @@ export class TwoFAController {
   @Get('verify')
   @UseGuards(JwtAuthGuard)
   async verify(
-    @Req() request: any,
-    @Res({ passthrough: true }) response: Response,
+    @Req() req: any,
+    @Res({ passthrough: true }) res: Response,
     @Query('code') code: string | null,
-  ): Promise<void> {
-    if (request.user.isAuthenticated)
-      return response.redirect('http://localhost/login');
+  ) {
+    if (req.user.isAuthenticated)
+      throw new BadRequestException('User is already authenticated');
     if (!code) throw new BadRequestException('Empty 2FA code');
     try {
-      await this.twoFAService
-        .verify2FA(request.user.id, code)
-        .then((isVerified) => {
-          if (!isVerified) throw new BadRequestException('Wrong 2FA code');
-
-          const jwt_token = this.jwtService.sign({
-            username: request.user.username,
-            id: request.user.id,
-            email: request.user.email,
-            isAuthenticated: true,
-          });
-
-          response.cookie('jwt', jwt_token);
-          return response.redirect('http://localhost/login');
+      return this.twoFAService.verify2FA(req.user.id, code).then(() => {
+        const jwt_token = this.jwtService.sign({
+          username: req.user.username,
+          id: req.user.id,
+          email: req.user.email,
+          isAuthenticated: true,
         });
+
+        res.cookie('jwt', jwt_token, { httpOnly: true });
+        return { id: +req.user.id, isAuthenticated: true };
+      });
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -87,13 +80,9 @@ export class TwoFAController {
 
   @Get('disable')
   @UseGuards(JwtAuthGuard, TwoFAGuard)
-  async disable(
-    @Req() request: any,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<void> {
+  async disable(@Req() req: any): Promise<void> {
     try {
-      await this.twoFAService.disable2FA(request.user.id);
-      return response.redirect('http://localhost/login');
+      await this.twoFAService.disable2FA(req.user.id);
     } catch (error) {
       throw new BadRequestException(error.message);
     }

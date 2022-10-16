@@ -23,16 +23,13 @@ export class Intra42Controller {
 
   @Get('login')
   @UseGuards(Intra42OAuthGuard)
-  intra42Login(): void {
+  login(): void {
     return;
   }
 
   @Get('callback')
   @UseGuards(Intra42OAuthGuard)
-  async intra42AuthRedirect(
-    @Req() req: any,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async callback(@Req() req: any, @Res({ passthrough: true }) res: Response) {
     if (typeof req.user == 'undefined')
       throw new BadRequestException("Can't find user from 42 intra");
 
@@ -55,7 +52,7 @@ export class Intra42Controller {
     });
 
     res.cookie('jwt', jwt_token, { httpOnly: true });
-    return { id: +user.id };
+    return { id: +user.id, isAuthenticated: !user.twoFAEnable };
   }
 
   @Get('logout')
