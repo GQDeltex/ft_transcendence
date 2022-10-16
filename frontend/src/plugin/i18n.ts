@@ -1,42 +1,24 @@
 import { createI18n } from 'vue-i18n';
+import type { DefineNumberFormat } from 'vue-i18n';
+import { en, NF_en } from './en.translation';
+import { de, NF_de } from './de.translation';
 
 const messages = {
-  en: {
-    NavBar: {
-      leaderboard: 'Leaderboard',
-      playnow: 'Play Now',
-      skinselection: 'Skin Selection',
-      stream: 'Stream',
-      chat: 'Chat',
-    },
-    LoginView: {
-      welcome1: 'please log in',
-      welcome2: 'to experience the full fun with',
-      welcome3: 'PongKing',
-      loginbutton: 'Login',
-    },
-  },
-  de: {
-    NavBar: {
-      leaderboard: 'Bestenliste',
-      playnow: 'Jetzt Spielen',
-      skinselection: 'Skin Auswahl',
-      stream: 'Übertragungen',
-      chat: 'Chat',
-    },
-    LoginView: {
-      welcome1: 'Bitte melde dich an',
-      welcome2: 'um den ganzen Spaß mit',
-      welcome3: 'PongKing zu erleben',
-      loginbutton: 'Anmelden',
-    },
-  },
+  'en-US': en,
+  'de-DE': de,
 };
+
+const numberFormats = {
+  'en-US': NF_en,
+  'de-DE': NF_de,
+} as { [key: string]: DefineNumberFormat };
 
 export const i18n = createI18n({
   // Set manually to test, because my browser always defaults to english
-  locale: 'de',
-  //locale: navigator.language.substr(0, 2),
-  fallbackLocale: 'en',
+  locale: 'de-DE',
+  legacy: false,
+  //locale: navigator.language.substr,
+  fallbackLocale: 'en-US',
   messages,
+  numberFormats,
 });

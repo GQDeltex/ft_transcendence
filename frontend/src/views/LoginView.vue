@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 
 const login = () => {
@@ -12,13 +13,13 @@ const login = () => {
       <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
     </div>
     <span class="text"
-      >{{ $t('LoginView.welcome1') }}
-      <p>{{ $t('LoginView.welcome2') }}</p>
-      <p>{{ $t('LoginView.welcome3') }}</p>
+      >{{ useI18n().t('welcome1') }}
+      <p>{{ useI18n().t('welcome2') }}</p>
+      <p>{{ useI18n().t('welcome3') }}</p>
     </span>
     <div class="buttons">
       <button class="button" @click="login">
-        {{ $t('LoginView.loginbutton') }}
+        {{ useI18n().t('loginbutton') }}
       </button>
     </div>
   </div>

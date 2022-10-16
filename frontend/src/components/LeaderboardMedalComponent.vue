@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
 defineProps<{
   medalName: string;
   medalKind: string;
@@ -19,8 +21,12 @@ defineProps<{
         <span class="playername">{{ medalName }}</span>
       </div>
     </router-link>
-    <span class="sub">455 Matches</span>
-    <span class="sub">3 Mio. Views</span>
+    <span class="sub">{{
+      useI18n().t('matches', { n: useI18n().n(455, 'shortnumber') }, 2)
+    }}</span>
+    <span class="sub">{{
+      useI18n().t('views', { n: useI18n().n(3000000000, 'shortnumber') }, 2)
+    }}</span>
   </div>
 </template>
 

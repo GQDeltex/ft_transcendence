@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '../store/user';
+import { useI18n } from 'vue-i18n';
 const userStore = useUserStore();
 </script>
 
@@ -23,11 +24,21 @@ const userStore = useUserStore();
     </router-link>
   </div>
   <nav>
-    <li><RouterLink to="leaderboard">{{ $t('NavBar.leaderboard') }}</RouterLink></li>
-    <li><RouterLink to="play">{{ $t('NavBar.playnow') }}</RouterLink></li>
-    <li><RouterLink to="skin">{{ $t('NavBar.skinselection') }}</RouterLink></li>
-    <li><RouterLink to="stream">{{ $t('NavBar.stream') }}</RouterLink></li>
-    <li><RouterLink to="chat">{{ $t('NavBar.chat') }}</RouterLink></li>
+    <li>
+      <RouterLink to="leaderboard">{{ useI18n().t('leaderboard') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="play">{{ useI18n().t('playnow') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="skin">{{ useI18n().t('skinselection') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="stream">{{ useI18n().t('stream') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="chat">{{ useI18n().t('chat') }}</RouterLink>
+    </li>
   </nav>
 </template>
 
