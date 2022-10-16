@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import TwoFAInputComponent from '@/components/TwoFAInputComponent.vue';
+import { useUserStore } from '@/store/user';
+
+const userStore = useUserStore();
+
 const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 
 const login = () => {
@@ -16,9 +21,15 @@ const login = () => {
       <p>to experience the full fun of</p>
       <p>PongKing</p>
     </span>
-    <div class="buttons">
+    <div
+      v-if="!userStore.isLoggedIn && !userStore.is2FAEnabled"
+      class="buttons"
+    >
       <button class="button" @click="login">Login</button>
     </div>
+    <TwoFAInputComponent
+      v-else-if="!userStore.isLoggedIn && userStore.is2FAEnabled"
+    />
   </div>
 </template>
 

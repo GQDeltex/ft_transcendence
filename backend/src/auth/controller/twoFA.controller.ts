@@ -62,7 +62,7 @@ export class TwoFAController {
       throw new BadRequestException('User is already authenticated');
     if (!code) throw new BadRequestException('Empty 2FA code');
     try {
-      return this.twoFAService.verify2FA(req.user.id, code).then(() => {
+      return await this.twoFAService.verify2FA(req.user.id, code).then(() => {
         const jwt_token = this.jwtService.sign({
           username: req.user.username,
           id: req.user.id,
