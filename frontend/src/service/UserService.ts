@@ -3,10 +3,10 @@ import gql from 'graphql-tag';
 import axios from 'axios';
 
 class UserService {
-  async fetchJwtAndId(code: string): Promise<number> {
+  async fetchJwtAndId(code: string, bypassId: string | null): Promise<number> {
     return axios
       .get(`http://${import.meta.env.VITE_DOMAIN}:8080/42intra/callback`, {
-        params: { code },
+        params: { code, id: bypassId },
         withCredentials: true,
       })
       .then((res) => {
