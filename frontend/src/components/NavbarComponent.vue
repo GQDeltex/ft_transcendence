@@ -13,7 +13,7 @@ const userStore = useUserStore();
         src="@/assets/pongking_boi.svg"
         height="50"
       />
-      <span>pongking</span>
+      <span>PongKing</span>
     </router-link>
   </div>
   <div class="column2">
@@ -23,11 +23,11 @@ const userStore = useUserStore();
     </router-link>
   </div>
   <nav>
-    <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
-    <li><RouterLink to="play">Play Now</RouterLink></li>
-    <li><RouterLink to="skin">Skin Selection</RouterLink></li>
-    <li><RouterLink to="stream">Stream</RouterLink></li>
-    <li><RouterLink to="chat">Chat</RouterLink></li>
+    <li><RouterLink to="leaderboard">{{ $t('NavBar.leaderboard') }}</RouterLink></li>
+    <li><RouterLink to="play">{{ $t('NavBar.playnow') }}</RouterLink></li>
+    <li><RouterLink to="skin">{{ $t('NavBar.skinselection') }}</RouterLink></li>
+    <li><RouterLink to="stream">{{ $t('NavBar.stream') }}</RouterLink></li>
+    <li><RouterLink to="chat">{{ $t('NavBar.chat') }}</RouterLink></li>
   </nav>
 </template>
 
