@@ -1,22 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DataSource, Repository } from 'typeorm';
 import { TwoFAService } from '../service/twoFA.service';
 import { TwoFAController } from './twoFA.controller';
-import { User } from '../../users/entities/user.entity';
-import { memdbMock, testUser } from '../../users/memdb.mock';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { UsersService } from '../../users/users.service';
+import { User } from '../../users/entities/user.entity';
+import { mockUser } from '../../users/entities/user.entity.mock';
+import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 
 describe('TwoFAController', () => {
   let controller: TwoFAController;
-  let db: DataSource;
-  let usersRepository: Repository<User>;
+  let mockRepo: MockRepo;
 
   beforeEach(async () => {
-    db = await memdbMock(User);
-    usersRepository = db.getRepository(User);
-    await usersRepository.insert(testUser);
+    mockRepo = new MockRepo('TwoFAController', User, mockUser);
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TwoFAController],
@@ -24,15 +20,15 @@ describe('TwoFAController', () => {
         TwoFAService,
         UsersService,
         ConfigService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: usersRepository,
-        },
+        mockRepo.getProvider(),
       ],
     }).compile();
 
     controller = module.get<TwoFAController>(TwoFAController);
   });
+
+  afterEach(async () => await mockRepo.clearRepo());
+  afterAll(async () => await mockRepo.destroyRepo());
 
   it('should be defined', () => {
     expect(controller).toBeDefined();

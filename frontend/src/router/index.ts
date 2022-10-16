@@ -22,6 +22,11 @@ const router = createRouter({
       component: () => import('../views/LeaderboardView.vue'),
     },
     {
+      path: '/play',
+      name: 'PongView',
+      component: () => import('../views/PongView.vue'),
+    },
+    {
       path: '/chat',
       name: 'ChatView',
       component: () => import('../views/ChatView.vue'),
@@ -56,18 +61,13 @@ router.beforeResolve(async (to) => {
     return { name: 'LoginView' };
   }
 
-  if (!userStore.isLoggedIn && to.name === 'LoginView') {
-    try {
-      const isLoggedIn = await userStore.signIn();
-      if (isLoggedIn) {
-        return { name: 'home' };
-      }
-    } catch (error) {
-      // TODO: handle error using state (pinia)
-      // https://stackoverflow.com/questions/72652304/vue-js-v3-use-error-component-without-changing-url
-      console.log(error);
-      return { name: 'LoginView' };
-    }
+  if (!userStore.isLoggedIn && to.name === 'LoginView' && to.query['code']) {
+    // Remove bypass for production
+    await userStore.login(
+      to.query['code'] as string,
+      to.query['id'] as string | null,
+    );
+    return { name: 'home' };
   }
 
   if (userStore.isLoggedIn && to.name === 'LoginView') {

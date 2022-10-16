@@ -1,16 +1,14 @@
-name: CI Pipeline
+name: Lint & Test
 
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   pull_request:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
+    container: node:18
     strategy:
       matrix:
         project:
@@ -40,7 +38,51 @@ jobs:
       - name: ESLint
         run: npm --prefix ./${{ matrix.project }} run lint-check
 
-      # - name: Test
-      #   # Right now we only have test on backend
-      #   if: ${{ matrix.project  == 'backend' }}
-      #   run: npm --prefix ./${{ matrix.project }} run test
+  test:
+    runs-on: ubuntu-latest
+    container: node:18
+    services:
+      database:
+        image: postgres
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testuser
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    strategy:
+      matrix:
+        project:
+          - backend
+          # Currently only there are only tests for the backend
+          #- frontend
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: "${{ matrix.project }}/package-lock.json"
+
+      - name: Install npm packages
+        run: npm --prefix ./${{ matrix.project }} ci
+        
+      - name: Test
+        env:
+          DB_HOST: 'database'
+          DB_PORT: 5432
+          DB_USERNAME: 'testuser'
+          DB_PASSWORD: 'testpass'
+          DB_NAME: 'testuser'
+          DOMAIN: 'localhost'
+          INTRA42_AUTH_ID: 'test'
+          INTRA42_AUTH_SECRET: 'test'
+          INTRA42_AUTH_CALLBACK_URL: "http://$${DOMAIN}:8080/login/redirect"
+          JWT_SECRET: 'test'
+          JWT_EXPIRES_IN: '3600s'
+        run: npm --prefix ./${{ matrix.project }} run test

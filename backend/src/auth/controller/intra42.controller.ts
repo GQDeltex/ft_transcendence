@@ -11,37 +11,40 @@ import { Intra42OAuthGuard } from '../guard/intra42.guard';
 import { Response } from 'express';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
+import { EntityNotFoundError } from 'typeorm';
 import { CreateUserInput } from '../../users/dto/create-user.input';
 
-@Controller('login')
+@Controller('42intra')
 export class Intra42Controller {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
   ) {}
 
-  @Get()
+  @Get('login')
   @UseGuards(Intra42OAuthGuard)
-  async login(): Promise<void> {
+  intra42Login(): void {
     return;
   }
 
-  @Get('redirect')
+  @Get('callback')
   @UseGuards(Intra42OAuthGuard)
   async intra42AuthRedirect(
     @Req() req: any,
-    @Res() res: Response,
-  ): Promise<void> {
+    @Res({ passthrough: true }) res: Response,
+  ) {
     if (typeof req.user == 'undefined')
-      throw new BadRequestException('Fatal error: user is missing.');
+      throw new BadRequestException("Can't find user from 42 intra");
+
     let user: User | CreateUserInput = req.user;
-
-    const userData: User | null = await this.usersService.findOne(user.id);
-
-    if (userData == null) {
-      await this.usersService.create(user);
-    } else {
-      user = userData;
+    try {
+      user = await this.usersService.findOne(+user.id);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        await this.usersService.create(user);
+      } else {
+        throw error;
+      }
     }
 
     const jwt_token = this.jwtService.sign({
@@ -51,7 +54,12 @@ export class Intra42Controller {
       isAuthenticated: !user.twoFAEnable,
     });
 
-    res.cookie('jwt', jwt_token);
-    return res.redirect('http://localhost/login');
+    res.cookie('jwt', jwt_token, { httpOnly: true });
+    return { id: +user.id };
+  }
+
+  @Get('logout')
+  logout(@Res({ passthrough: true }) res: Response): void {
+    res.clearCookie('jwt', { httpOnly: true });
   }
 }

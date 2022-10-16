@@ -33,4 +33,7 @@ export class CreateUserInput {
 
   @Field()
   twoFAEnable: boolean;
+
+  @Field(() => [String])
+  title: string[];
 }
