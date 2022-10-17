@@ -11,24 +11,28 @@ import RequestChatComponent from './RequestChatComponent.vue';
         :client-id="4242"
         sender="Guillaume"
         request="has send a friend request"
+        target=""
       />
       <RequestChatComponent
         key="4242"
         :client-id="4242"
         sender="Henne"
         request="has invited you to play a game"
+        target=""
       />
       <RequestChatComponent
         key="4242"
         :client-id="4242"
         sender="René"
-        request="has send a friend request"
+        request="has invited you to join the channel"
+        target="SecretChannel"
       />
       <RequestChatComponent
         key="4242"
         :client-id="4242"
         sender="Vinny"
         request="has invited you to play a game"
+        target=""
       />
     </div>
   </div>
@@ -39,12 +43,12 @@ import RequestChatComponent from './RequestChatComponent.vue';
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
-  padding-bottom: 0.5vw;
   border: 1px solid #202020;
 }
 .text {
   /* display: flex; */
   font-size: 1vw;
+  padding-bottom: 0.5vw;
   color: #f8971d;
   /* justify-content: space-between; */
 }

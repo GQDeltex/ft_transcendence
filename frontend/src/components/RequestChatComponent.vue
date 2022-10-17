@@ -3,6 +3,7 @@ const props = defineProps<{
   'client-id': number;
   sender: string;
   request: string;
+  target: string;
 }>();
 
 const acceptButton = async () => {
@@ -18,7 +19,8 @@ const declineButton = async () => {
   <div class="requestParent">
     <div class="infoBox">
       <span class="sender">
-        {{ sender }} <span class="requestText">{{ request }}</span></span
+        {{ sender }} <span class="requestText">{{ request }}</span>
+        {{ target }}</span
       >
     </div>
     <div class="buttonBox">
