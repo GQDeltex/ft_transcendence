@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryColumn, Index } from 'typeorm';
+import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
+import { OneToMany, Column, Entity, PrimaryColumn, Index } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -56,4 +57,8 @@ export class User {
   @Field()
   @Column({ default: 'offline' })
   status: string;
+
+  @Field(() => [Int])
+  @OneToMany(() => ChannelUser, (channelUser) => channelUser.user)
+  channelList: ChannelUser[];
 }

@@ -14,4 +14,5 @@ export const mockUser: User = {
   twoFAEnable: false,
   socketId: '',
   status: 'offline',
+  channelList: [],
 };
