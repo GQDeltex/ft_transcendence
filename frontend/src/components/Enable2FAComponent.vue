@@ -1,38 +1,43 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { onMounted } from 'vue';
+import { useUserStore } from '@/store/user';
 
-type CallbackFunction = (key: string) => void;
+const emits = defineEmits(['close']);
+const qrCode = ref('');
+const code = ref('');
+const userStore = useUserStore();
 
-const props = defineProps<{
-  heading: string;
-  text: string;
-  callback: CallbackFunction;
-}>();
+const submit = async () => {
+  if (await userStore.enable2FA(code.value)) {
+    emits('close');
+  }
+};
 
-const active = ref(true);
-
-function close() {
-  active.value = false;
-  props.callback(props.text);
-}
+onMounted(async () => {
+  qrCode.value = await userStore.generate2FA();
+});
 </script>
 
 <template>
-  <div v-if="active === true" class="modal">
+  <div class="modal">
     <div class="modal-content">
-      <span class="close" @click="close()">&times;</span>
-      <h1>{{ heading }}</h1>
-      <p>{{ text }}</p>
-      <button @click="close()">OK</button>
+      <div class="qrCode">
+        <img :src="qrCode" />
+      </div>
+      <div class="input">
+        <span>Please enter your 2FA code</span><br />
+        <input v-model="code" type="text" @keyup.enter="submit" /><br />
+        <button class="button" @click="submit">Submit</button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 999; /* Sit on top */
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -42,7 +47,6 @@ function close() {
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
-/* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
@@ -50,18 +54,18 @@ function close() {
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
   color: black;
+  text-align: center;
 }
 
-/* The Close Button */
-.close {
+.button {
   color: #aaa;
-  float: right;
   font-size: 28px;
   font-weight: bold;
+  margin: 10px;
 }
 
-.close:hover,
-.close:focus {
+.button:hover,
+.button:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
