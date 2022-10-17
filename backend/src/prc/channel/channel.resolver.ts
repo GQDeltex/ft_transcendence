@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlJwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { GqlJwtAuthGuard } from '../../auth/guard/jwt.guard';
 import { ChannelService } from './channel.service';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { Channel } from './entities/channel.entity';
