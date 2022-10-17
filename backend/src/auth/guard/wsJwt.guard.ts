@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class WsJwtAuthGuard implements CanActivate {
+export class WsJwt2FAAuthGuard implements CanActivate {
   constructor(private readonly configService: ConfigService) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -20,7 +20,7 @@ export class WsJwtAuthGuard implements CanActivate {
     const user: any = jwtService.verify(token, {
       secret: this.configService.get<string>('JWT_SECRET'),
     });
-    if (!user) return false;
+    if (!user && !user.isAuthenticated) return false;
     client.data.user = user;
     return true;
   }

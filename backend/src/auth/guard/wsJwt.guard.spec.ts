@@ -1,16 +1,16 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { WsJwtAuthGuard } from './wsJwt.guard';
+import { WsJwt2FAAuthGuard } from './wsJwt.guard';
 
-describe('Intra42Guard', () => {
-  let guard: WsJwtAuthGuard;
+describe('WsJwt2FAAuthGuard', () => {
+  let guard: WsJwt2FAAuthGuard;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [WsJwtAuthGuard, ConfigService],
+      providers: [WsJwt2FAAuthGuard, ConfigService],
     }).compile();
 
-    guard = module.get<WsJwtAuthGuard>(WsJwtAuthGuard);
+    guard = module.get<WsJwt2FAAuthGuard>(WsJwt2FAAuthGuard);
   });
 
   it('should be defined', () => {

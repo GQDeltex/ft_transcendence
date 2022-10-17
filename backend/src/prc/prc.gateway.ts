@@ -17,7 +17,7 @@ import {
   ArgumentsHost,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { WsJwtAuthGuard } from '../auth/guard/wsJwt.guard';
+import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { EntityNotFoundError } from 'typeorm';
@@ -56,7 +56,7 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
     credentials: true,
   },
 })
-@UseGuards(WsJwtAuthGuard)
+@UseGuards(WsJwt2FAAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
 export class PrcGateway implements OnGatewayDisconnect {
   @WebSocketServer()
