@@ -21,6 +21,10 @@ export class Channel {
   password: string;
 
   @Field(() => [Int])
-  @OneToMany(() => ChannelUser, (channelUser) => channelUser.channel)
+  @OneToMany(() => ChannelUser, (channelUser) => channelUser.channel, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   userList: ChannelUser[];
 }

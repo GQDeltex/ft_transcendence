@@ -70,7 +70,6 @@ describe('UsersService', () => {
       socketId: '',
       title: [''],
       status: 'offline',
-      channelList: [],
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
@@ -92,7 +91,6 @@ describe('UsersService', () => {
       socketId: '',
       title: [''],
       status: 'offline',
-      channelList: [],
     };
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
@@ -127,7 +125,6 @@ describe('UsersService', () => {
       socketId: '',
       title: [''],
       status: 'offline',
-      channelList: [],
     };
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
