@@ -13,9 +13,9 @@
     <div id="playerPad" class="paddle paddle-left"></div>
     <div id="remotePad" class="paddle paddle-right"></div>
   </div>
-  <!-- <div class="container">
+  <div class="container">
     <input type="text" class="keyboard" />
-  </div> -->
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +25,7 @@ defineProps<{
   game: string;
 }>();
 
-class Field {
+class Element {
   private _htmlElem: HTMLElement | null;
   constructor(fieldElem: HTMLElement | null) {
     this._htmlElem = fieldElem;
@@ -76,12 +76,12 @@ class Ball {
   private _direction: Vector;
   private _speed: number;
 
-  constructor(ballElem: HTMLElement | null, field: Field) {
+  constructor(ballElem: HTMLElement | null, field: Element) {
     this._htmlElem = ballElem;
     this._field = new Vector(field.getWidth(), field.getHeight());
     this._direction = new Vector(0, 0);
-    this._speed = 50;
-    let temp: Field = new Field(ballElem);
+    this._speed = 30;
+    let temp: Element = new Element(ballElem);
     this._shape = new Vector(
       temp.getWidth() / this._field.x,
       temp.getHeight() / this._field.y,
@@ -161,33 +161,43 @@ class Ball {
 }
 
 onMounted(() => {
+  const field = new Element(document.getElementById('feld'));
   const ball = new Ball(
     document.getElementById('ball'),
-    new Field(document.getElementById('feld')),
+    field,
   );
-  // const playerScore = document.getElementById('player');
-  // const remoteScore = document.getElementById('henne');
-  // const keyBoard = document.querySelector('.keyboard');
+  const playerPad = new Element(document.getElementById('playerPad'));
+  const remotePad = new Element(document.getElementById('remotePad'));
+  const playerScore = document.getElementById('player');
+  const remoteScore = document.getElementById('henne');
+  const keyBoard = document.querySelector('.keyboard');
 
   ball.init();
+
   let lastTime: number | null = null;
   function pupdate(time: number) {
     if (lastTime != null) {
       const delta: number = time - lastTime;
       ball.update(delta);
-      // playerScore.textContent = parseInt(ball.getx());
-      // remoteScore.textContent = parseInt(ball.gety());
+      playerScore.textContent = parseInt(ball.getx());
+      remoteScore.textContent = parseInt(ball.gety());
     }
     lastTime = time;
-    window.requestAnimationFrame(pupdate);
+    // window.requestAnimationFrame(pupdate);
   }
   window.requestAnimationFrame(pupdate);
-
-  // keyBoard.addEventListener('keydown', (e) => {
-  //   ball.update(100);
-  //   playerScore.textContent = parseInt(ball.getx());
-  //   remoteScore.textContent = parseInt(ball.gety());
-  // });
+  function heelp() {
+    keyBoard.addEventListener('keydown', (e) => {
+    window.requestAnimationFrame(pupdate);
+    })
+  }
+  let i:number = 1;
+  while(i > 0)
+  {
+    setInterval(heelp, 10);
+    
+    i++;
+  };
 });
 </script>
 
@@ -195,10 +205,10 @@ onMounted(() => {
 .field {
   background-color: #212121;
   position: relative;
-  margin-left: 12vw;
-  margin-top: 12vh;
+  margin-left: 15vw;
+  margin-top:calc((100vh - 142px) / 100 * 15);
   width: 70vw;
-  height: 70vh;
+  height: calc((100vh - 142px) / 10 * 7);
   overflow: hidden;
 }
 .score {
@@ -220,7 +230,7 @@ onMounted(() => {
 }
 
 .paddle-left {
-  left: 1%;
+  right: 97%;
 }
 .paddle-right {
   right: 1%;
