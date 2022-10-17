@@ -65,12 +65,12 @@ const statusBorder = computed(() => {
 
 .username {
   color: white;
-  font-size: 0.5vw;
+  font-size: 0.8vw;
   font-stretch: expanded;
 }
 
 .status {
-  font-size: 0.5vw;
+  font-size: 0.6vw;
   color: lime;
 }
 </style>

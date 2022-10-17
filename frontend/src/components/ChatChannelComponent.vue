@@ -41,7 +41,7 @@ const props = defineProps<{
 }
 .channelName {
   color: white;
-  font-size: 0.5vw;
+  font-size: 0.8vw;
   font-stretch: expanded;
 }
 </style>

@@ -84,7 +84,7 @@ button {
   color: black;
   background-color: #f8971d;
   cursor: pointer;
-  font-size: 0.5vw;
+  font-size: 0.8vw;
   border-color: transparent;
 }
 </style>
