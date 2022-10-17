@@ -3,16 +3,80 @@ import gql from 'graphql-tag';
 import axios from 'axios';
 
 class UserService {
-  async fetchJwtAndId(code: string, bypassId: string | null): Promise<number> {
+  async fetchJwtAndId(code: string, bypassId: string | null) {
     return axios
       .get(`http://${import.meta.env.VITE_DOMAIN}:8080/42intra/callback`, {
         params: { code, id: bypassId },
         withCredentials: true,
       })
       .then((res) => {
+        if (
+          typeof res.data.id === 'undefined' ||
+          typeof res.data.isAuthenticated === 'undefined'
+        )
+          throw new Error('Empty user ID.');
+        return { id: res.data.id, require2FAverify: !res.data.isAuthenticated };
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async generate2FA(): Promise<string> {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/generate`, {
+        withCredentials: true,
+        responseType: 'blob',
+      })
+      .then((res) => {
+        return URL.createObjectURL(res.data);
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async verify2FA(code: string) {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/verify`, {
+        params: { code },
+        withCredentials: true,
+      })
+      .then((res) => {
         if (typeof res.data.id === 'undefined')
           throw new Error('Empty user ID.');
-        return res.data.id;
+        return { id: res.data.id };
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async disable2FA(): Promise<void> {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/disable`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        return;
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
+  async enable2FA(code: string) {
+    return axios
+      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/enable`, {
+        params: { code },
+        withCredentials: true,
+      })
+      .then(() => {
+        return;
       })
       .catch((error) => {
         if (typeof error.response === 'undefined') throw error;
@@ -43,6 +107,7 @@ class UserService {
             username
             title
             picture
+            twoFAEnable
           }
         }
       `,

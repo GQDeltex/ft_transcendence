@@ -1,10 +1,10 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsUrl, IsEmail, IsNotEmpty } from 'class-validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { IsEmail, IsNotEmpty, IsUrl } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
-  @IsNotEmpty()
   @Field(() => Int)
+  @IsNotEmpty()
   id: number;
 
   @Field()
@@ -30,6 +30,9 @@ export class CreateUserInput {
 
   @Field()
   country: string;
+
+  @Field()
+  twoFAEnable: boolean;
 
   @Field(() => [String])
   title: string[];

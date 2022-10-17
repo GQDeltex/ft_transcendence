@@ -1,8 +1,33 @@
 <script setup lang="ts">
-import { useUserStore } from '../store/user';
-import { ref } from 'vue';
+import { useUserStore } from '@/store/user';
+import { ref, watch, nextTick } from 'vue';
+import Enable2FAComponent from './Enable2FAComponent.vue';
+
 const userStore = useUserStore();
-const checked = ref(true);
+const checked = ref(userStore.twoFAEnable);
+const show = ref(false);
+
+watch(checked, async (newValue, oldValue) => {
+  if (newValue === oldValue) return;
+
+  if (!newValue && oldValue && userStore.twoFAEnable) {
+    if (!(await userStore.disable2FA())) {
+      await nextTick();
+      checked.value = true;
+    }
+  }
+
+  if (newValue && !oldValue && !userStore.twoFAEnable) {
+    show.value = true;
+  }
+});
+
+const onClose = () => {
+  show.value = false;
+  if (!userStore.twoFAEnable) {
+    checked.value = false;
+  }
+};
 </script>
 
 <template>
@@ -18,7 +43,7 @@ const checked = ref(true);
       <span class="friends">1000 Friends, 149 Videos Watched</span>
     </div>
 
-    <img class="banner" src="@/assets/PongKingBanner3D.png" />
+    <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
 
     <span class="twoFA"
       >2 Factor Authentication
@@ -29,6 +54,7 @@ const checked = ref(true);
           <p v-else class="offSwitch">off</p>
         </span>
       </label>
+      <Enable2FAComponent v-if="show" @close="onClose" />
     </span>
   </div>
 </template>
@@ -37,6 +63,7 @@ const checked = ref(true);
 .title {
   font-size: 2vw;
 }
+
 .onSwitch {
   color: white;
   margin-top: 10%;
@@ -74,6 +101,7 @@ const checked = ref(true);
 .infoBox {
   grid-column: 2 / 3;
 }
+
 .picture {
   object-fit: cover;
   object-position: 50% 0%;
@@ -94,6 +122,7 @@ const checked = ref(true);
   color: white;
   font-size: 1vw;
 }
+
 .friends {
   color: grey;
   font-size: 1vw;

@@ -67,7 +67,8 @@ router.beforeResolve(async (to) => {
       to.query['code'] as string,
       to.query['id'] as string | null,
     );
-    return { name: 'home' };
+    delete to.query.code;
+    to.fullPath = to.path;
   }
 
   if (userStore.isLoggedIn && to.name === 'LoginView') {

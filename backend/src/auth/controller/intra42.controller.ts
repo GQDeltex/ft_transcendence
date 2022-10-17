@@ -12,8 +12,7 @@ import { Response } from 'express';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { EntityNotFoundError } from 'typeorm';
-import { CreateUserInput } from 'src/users/dto/create-user.input';
-import { JwtAuthGuard } from '../guard/jwt.guard';
+import { CreateUserInput } from '../../users/dto/create-user.input';
 
 @Controller('42intra')
 export class Intra42Controller {
@@ -24,16 +23,13 @@ export class Intra42Controller {
 
   @Get('login')
   @UseGuards(Intra42OAuthGuard)
-  intra42Login(): void {
+  login(): void {
     return;
   }
 
   @Get('callback')
   @UseGuards(Intra42OAuthGuard)
-  async intra42AuthRedirect(
-    @Req() req: any,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async callback(@Req() req: any, @Res({ passthrough: true }) res: Response) {
     if (typeof req.user == 'undefined')
       throw new BadRequestException("Can't find user from 42 intra");
 
@@ -50,16 +46,16 @@ export class Intra42Controller {
 
     const jwt_token = this.jwtService.sign({
       username: user.username,
-      sub: user.id,
+      id: user.id,
       email: user.email,
+      isAuthenticated: !user.twoFAEnable,
     });
 
     res.cookie('jwt', jwt_token, { httpOnly: true });
-    return { id: +user.id };
+    return { id: +user.id, isAuthenticated: !user.twoFAEnable };
   }
 
   @Get('logout')
-  @UseGuards(JwtAuthGuard)
   logout(@Res({ passthrough: true }) res: Response): void {
     res.clearCookie('jwt', { httpOnly: true });
   }
