@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from '../store/user';
+import { useUserStore } from '@/store/user';
 import { ref, watch, nextTick } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
 
@@ -43,7 +43,7 @@ const onClose = () => {
       <span class="friends">1000 Friends, 149 Videos Watched</span>
     </div>
 
-    <img class="banner" src="@/assets/PongKingBanner3D.png" />
+    <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
 
     <span class="twoFA"
       >2 Factor Authentication
@@ -63,6 +63,7 @@ const onClose = () => {
 .title {
   font-size: 2vw;
 }
+
 .onSwitch {
   color: white;
   margin-top: 10%;
@@ -100,6 +101,7 @@ const onClose = () => {
 .infoBox {
   grid-column: 2 / 3;
 }
+
 .picture {
   object-fit: cover;
   object-position: 50% 0%;
@@ -120,6 +122,7 @@ const onClose = () => {
   color: white;
   font-size: 1vw;
 }
+
 .friends {
   color: grey;
   font-size: 1vw;

@@ -18,7 +18,7 @@ function close() {
 </script>
 
 <template>
-  <div v-if="active == true" class="modal">
+  <div v-if="active === true" class="modal">
     <div class="modal-content">
       <span class="close" @click="close()">&times;</span>
       <h1>{{ heading }}</h1>

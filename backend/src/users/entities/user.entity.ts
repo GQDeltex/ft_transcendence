@@ -41,7 +41,6 @@ export class User {
   @Column({ type: String, array: true, nullable: true })
   title: string[];
 
-  @Field(() => String, { nullable: true })
   @Column({ type: String, nullable: true })
   twoFASecret!: string | null;
 
