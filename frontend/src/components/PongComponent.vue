@@ -183,21 +183,21 @@ onMounted(() => {
       remoteScore.textContent = parseInt(ball.gety());
     }
     lastTime = time;
-    // window.requestAnimationFrame(pupdate);
+    window.requestAnimationFrame(pupdate);
   }
   window.requestAnimationFrame(pupdate);
-  function heelp() {
-    keyBoard.addEventListener('keydown', (e) => {
-    window.requestAnimationFrame(pupdate);
-    })
-  }
-  let i:number = 1;
-  while(i > 0)
-  {
-    setInterval(heelp, 10);
+  // function heelp() {
+  //   keyBoard.addEventListener('keydown', (e) => {
+  //   window.requestAnimationFrame(pupdate);
+  //   })
+  // }
+  // let i:number = 1;
+  // while(i > 0)
+  // {
+  //   setInterval(heelp, 10);
     
-    i++;
-  };
+  //   i++;
+  // };
 });
 </script>
 
@@ -237,12 +237,11 @@ onMounted(() => {
 }
 .ball {
   --x: 50;
-  --y: 50;
 
   position: absolute;
   background-color: #fff;
   left: calc(var(--x) * 1%);
-  top: calc(var(--y) * 1%);
+  top: calc(var(--x) * 1%);
   border-radius: 80%;
   transform: translate(-50%, -50%);
   width: 4vh;
