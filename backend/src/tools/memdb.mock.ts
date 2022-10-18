@@ -1,62 +1,74 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository, DataSource, DataSourceOptions } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
 import { createDatabase, dropDatabase } from 'typeorm-extension';
+import { User } from '../users/entities/user.entity';
+import { Channel } from '../prc/channel/entities/channel.entity';
+import { ChannelUser } from '../prc/channel/entities/channeluser.entity';
 
 export class MockRepo {
   private options: any = {};
   private repo: Repository<any>;
   private source: DataSource;
+  private hasDbSetup = false;
 
   constructor(
     private readonly key: string,
     private readonly entity: any,
-    private readonly testData: any,
-  ) {}
+    private readonly testData?: any,
+  ) {
+    const dataSourceOptions: DataSourceOptions = {
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: `${this.key}_testing_db`,
+      entities: [User, ChannelUser, Channel],
+      synchronize: true,
+      logging: 'all',
+    };
+    this.options = {
+      options: dataSourceOptions,
+      initialDatabase: process.env.DB_NAME,
+      ifNotExist: true,
+      ifExist: true,
+      synchronize: true,
+    };
+  }
 
   getTestEntity(options?: any): typeof this.entity {
     return Object.assign(this.testData, options);
   }
 
+  async setupDb() {
+    await createDatabase(this.options);
+    this.hasDbSetup = true;
+  }
+
   getProvider() {
     return {
       provide: getRepositoryToken(this.entity),
-      useFactory: async (
-        configService: ConfigService,
-      ): Promise<Repository<typeof this.entity>> => {
-        const dataSourceOptions: DataSourceOptions = {
-          type: 'postgres',
-          host: configService.get('DB_HOST'),
-          port: configService.get<number>('DB_PORT'),
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          database: `${this.key}_testing_db`,
-          entities: [this.entity],
-          synchronize: true,
-        };
-        this.options = {
-          options: dataSourceOptions,
-          initialDatabase: configService.get('DB_NAME'),
-          ifNotExist: true,
-          synchronize: true,
-        };
-        await createDatabase(this.options);
-        this.source = await new DataSource(dataSourceOptions).initialize();
+      useFactory: async (): Promise<Repository<typeof this.entity>> => {
+        if (!this.hasDbSetup) await this.setupDb();
+        this.source = await new DataSource(this.options.options).initialize();
         this.repo = await this.source.getRepository(this.entity);
         // Just for safety, don't know if really needed
         for (let i = 0; i < 10; i++) {
           if (this.repo.manager.connection.isInitialized) break;
         }
-        await this.repo.clear();
-        await this.repo.insert(this.getTestEntity());
+        await this.source
+          .createQueryBuilder()
+          .delete()
+          .from(this.entity)
+          .execute();
+        if (this.testData != null) await this.repo.insert(this.getTestEntity());
         return this.repo;
       },
-      inject: [ConfigService],
     };
   }
 
   async clearRepo(): Promise<void> {
-    await this.repo.clear();
+    await this.source.createQueryBuilder().delete().from(this.entity).execute();
     await this.source.destroy();
   }
 

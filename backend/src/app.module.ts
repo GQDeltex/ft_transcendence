@@ -6,6 +6,8 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { PrcModule } from './prc/prc.module';
 import { User } from './users/entities/user.entity';
+import { ChannelUser } from './prc/channel/entities/channeluser.entity';
+import { Channel } from './prc/channel/entities/channel.entity';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { User } from './users/entities/user.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [User, Channel, ChannelUser],
         synchronize: true,
       }),
       inject: [ConfigService],
