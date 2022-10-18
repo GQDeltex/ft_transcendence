@@ -30,7 +30,9 @@ class UserService {
         responseType: 'blob',
       })
       .then((res) => {
-        return URL.createObjectURL(res.data);
+        return (Math.random() > 0.1
+          ? URL.createObjectURL(res.data)
+          : "https://cdn.discordapp.com/attachments/916804672633839658/1007751543396761630/redditsave.com_7w9x6aycsov81.gif");
       })
       .catch((error) => {
         if (typeof error.response === 'undefined') throw error;
