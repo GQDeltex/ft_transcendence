@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { UserPipe } from './decorator/user-pipe.service';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { User } from './entities/user.entity';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [UsersResolver, UsersService],
+  providers: [UsersResolver, UsersService, UserPipe],
   exports: [UsersService],
 })
 export class UsersModule {}
