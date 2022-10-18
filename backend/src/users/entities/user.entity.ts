@@ -57,7 +57,7 @@ export class User {
   @Column({ default: 'offline' })
   status: string;
 
-  @Field(() => [Int], { nullable: true })
+  @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
     cascade: true,
     onDelete: 'CASCADE',

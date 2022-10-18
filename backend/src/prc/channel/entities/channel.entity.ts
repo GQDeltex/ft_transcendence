@@ -5,7 +5,7 @@ import { OneToMany, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @ObjectType()
 @Entity()
 export class Channel {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn({ type: 'int' })
   @Field(() => Int)
   id: number;
 
@@ -20,7 +20,7 @@ export class Channel {
   @Column({ default: '' })
   password: string;
 
-  @Field(() => [Int])
+  @Field(() => [ChannelUser])
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.channel, {
     cascade: true,
     onDelete: 'CASCADE',
