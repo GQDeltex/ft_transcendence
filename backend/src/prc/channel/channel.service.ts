@@ -4,9 +4,7 @@ import { InsertResult, Repository } from 'typeorm';
 import { Channel } from './entities/channel.entity';
 import { ChannelUser } from './entities/channeluser.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
-import { User } from 'src/users/entities/user.entity';
-import { userInfo } from 'os';
-
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class ChannelService {
@@ -23,9 +21,10 @@ export class ChannelService {
 
   findOne(identifier: number | string): Promise<Channel> {
     if (typeof identifier === 'number')
-      return this.channelRepository.findOneByOrFail({ id: identifier });
-    else return this.channelRepository.findOneByOrFail({ name: identifier });
+      return this.channelRepository.findOneOrFail({ where: {id: identifier}, relations: ['userList', 'userList.user'] });
+    else return this.channelRepository.findOneOrFail({ where: {name: identifier}, relations: ['userList', 'userList.user'] });
   }
+
 
 async create(createChannelInput: CreateChannelInput) {
     const result: InsertResult = await this.channelRepository.insert(
@@ -39,7 +38,7 @@ async create(createChannelInput: CreateChannelInput) {
   async join(createChannelInput: CreateChannelInput, user: User)
   { 
     let channel : Channel;
-    let shiny : boolean = false; 
+    let brandNew : boolean = false; 
     try
     {
     channel = await this.findOne(createChannelInput.name);
@@ -47,25 +46,28 @@ async create(createChannelInput: CreateChannelInput) {
     catch (Error)
     {
       console.log("New Channel created");
-      channel = await this.findOne( await this.create(createChannelInput));
-      shiny = true;
+      channel = await this.findOne(await this.create(createChannelInput));
+      brandNew = true;
     }
     if (createChannelInput.password === channel.password)
     {
       console.log("Good Password");
       if (!channel.userList.some((channelUser)=>channelUser.user.id === user.id))
       {
-        await this.channelUserRepository.insert(
-     {user : user,
-      channel : channel,
-      owner : shiny,
-      admin : shiny
+        await this.channelUserRepository.insert({
+          user : user,
+          channel : channel,
+          owner : brandNew,
+          admin : brandNew
+        })
       }
-        )
-      }
-      //(check if user is already on Channel ? throw "already on channel" : create new channel user and add to channel)
+      else
+        throw new Error("Already in Channel");
+        //Can probably be removed as we dont really care
     }
-    return this.findOne(channel.id);// for testing
+    else 
+      throw new Error("Bad Password");
+    return this.findOne(+channel.id);// for testing
   }
 
 }

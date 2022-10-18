@@ -1,15 +1,15 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
-import { CurrentJwtPayload } from 'src/users/decorator/current-jwt-payload.decorator';
-import { UsersService } from 'src/users/users.service';
+import { CurrentUser } from '../../users/decorator/current-user.decorator';
+import { User } from '../../users/entities/user.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt.guard';
 import { ChannelService } from './channel.service';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { Channel } from './entities/channel.entity';
+import { TwoFAGuard } from '../../auth/guard/twoFA.guard';
 
 @Resolver(() => Channel)
-//@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TwoFAGuard)
 export class ChannelResolver {
   constructor(private readonly channelService: ChannelService) {}
 
@@ -35,8 +35,8 @@ export class ChannelResolver {
   }
 
   @Mutation(() => Channel)
-  async joinChannel(@Args() createChannelInput: CreateChannelInput, @CurrentJwtPayload() jwtUser: JwtPayload) {
-    const result = await this.channelService.join(createChannelInput, );
+  async joinChannel(@Args() createChannelInput: CreateChannelInput, @CurrentUser() user: User) {
+    const result = await this.channelService.join(createChannelInput, user);
     return result;
   }
 }

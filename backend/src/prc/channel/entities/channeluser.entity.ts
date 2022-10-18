@@ -30,7 +30,7 @@ export class ChannelUser {
   @Field()
   ban: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   unbantime: Date;
 
@@ -38,7 +38,7 @@ export class ChannelUser {
   @Field()
   mute: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   unmutetime: Date;
 }
