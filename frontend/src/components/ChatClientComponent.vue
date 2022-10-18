@@ -29,7 +29,8 @@ const statusBorder = computed(() => {
 </script>
 
 <template>
-  <div class="client">
+  <input id="check01" type="checkbox" name="menu" />
+  <label class="client" for="check01">
     <img
       :style="statusBorder"
       class="picture"
@@ -40,7 +41,8 @@ const statusBorder = computed(() => {
       <span class="username">{{ title }} {{ username }}</span>
       <span :style="statusStyle" class="status">{{ status }}</span>
     </div>
-  </div>
+  </label>
+
   <div class="popup">
     <button class="butt">Add Friend</button>
     <button class="butt">Block</button>
@@ -50,6 +52,20 @@ const statusBorder = computed(() => {
 </template>
 
 <style scoped>
+input,
+div.popup {
+  display: none;
+}
+
+label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+input:checked ~ div.popup {
+  display: block;
+}
 .client {
   display: flex;
   align-items: center;
