@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SkinShopComponent from '../components/SkinShopComponent.vue';
+import SkinShopComponent from '../components/skinShop/ParentSkinShopComponent.vue';
 </script>
 
 <template>

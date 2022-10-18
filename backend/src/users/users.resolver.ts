@@ -45,6 +45,12 @@ export class UsersResolver {
     return this.usersService.findOne(username);
   }
 
+  @Query(() => User, { name: 'userChannelList' })
+  async findUserChannelList(@Args('username') username: string) {
+    const result: User = await this.usersService.findUserChannelList(username);
+    return result;
+  }
+
   @Mutation(() => User)
   async updatePicture(
     @Args('user') updateUserPictureInput: UpdateUserPictureInput,

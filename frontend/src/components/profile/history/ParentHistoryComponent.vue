@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UserPlayedGameComponent from './UserPlayedGameComponent.vue';
+import UserPlayedGameComponent from '../../globalUse/UserPlayedGameComponent.vue';
 </script>
 
 <template>

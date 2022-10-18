@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import StreamCategoryComponent from '../components/StreamCategoryComponent.vue';
-import CategorySearchComponent from '../components/CategorySearchComponent.vue';
-import StreamGameComponent from '../components/StreamGameComponent.vue';
-import SearchResultComponent from '../components/SearchResultComponent.vue';
+import ParentStreamComponent from '../components/stream/ParentStreamComponent.vue';
+import CategorySearchComponent from '../components/landingview/CategorySearchComponent.vue';
+import ChildStreamComponent from '../components/stream/ChildStreamComponent.vue';
+import SearchResultComponent from '../components/stream/SearchResultComponent.vue';
 </script>
 
 <template>
@@ -12,10 +12,10 @@ import SearchResultComponent from '../components/SearchResultComponent.vue';
   <div>
     <SearchResultComponent
       search-term="placeholder"
-      :component-type="StreamGameComponent"
+      :component-type="ChildStreamComponent"
     />
-    <StreamCategoryComponent category-name="Top Rated" />
-    <StreamCategoryComponent category-name="Most Popular" />
+    <ParentStreamComponent category-name="Top Rated" />
+    <ParentStreamComponent category-name="Most Popular" />
   </div>
 </template>
 

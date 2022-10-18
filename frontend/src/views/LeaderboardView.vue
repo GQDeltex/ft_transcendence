@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import LeaderboardCategoryComponent from '../components/LeaderboardCategoryComponent.vue';
+import ParentLeaderboardComponent from '../components/leaderboard/ParentLeaderboardComponent.vue';
 </script>
 
 <template>
-  <LeaderboardCategoryComponent category-name="Top Viewed Player" />
-  <LeaderboardCategoryComponent category-name="Top Performer" />
+  <ParentLeaderboardComponent category-name="Top Viewed Player" />
+  <ParentLeaderboardComponent category-name="Top Performer" />
 </template>
 
 <style scoped></style>

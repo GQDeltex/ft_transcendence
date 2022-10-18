@@ -14,6 +14,29 @@ export class UsersService {
     return this.userRepository.insert(createUserInput);
   }
 
+  findAll(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
+  findOne(identifier: number | string): Promise<User> {
+    if (typeof identifier == 'number')
+      return this.userRepository.findOneByOrFail({ id: identifier });
+    else return this.userRepository.findOneByOrFail({ username: identifier });
+  }
+
+  findUserChannelList(identifier: number | string): Promise<User> {
+    if (typeof identifier == 'number')
+      return this.userRepository.findOneOrFail({
+        where: { id: identifier },
+        relations: ['channelList'],
+      });
+    else
+      return this.userRepository.findOneOrFail({
+        where: { username: identifier },
+        relations: ['channelList'],
+      });
+  }
+
   async update2FASecret(id: number, secret: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,
@@ -28,16 +51,6 @@ export class UsersService {
     });
     if (typeof result.affected != 'undefined' && result.affected < 1)
       throw new EntityNotFoundError(User, { id: id });
-  }
-
-  findAll() {
-    return this.userRepository.find();
-  }
-
-  findOne(identifier: number | string): Promise<User> {
-    if (typeof identifier == 'number')
-      return this.userRepository.findOneByOrFail({ id: identifier });
-    else return this.userRepository.findOneByOrFail({ username: identifier });
   }
 
   async updatePicture(id: number, picture: string): Promise<void> {

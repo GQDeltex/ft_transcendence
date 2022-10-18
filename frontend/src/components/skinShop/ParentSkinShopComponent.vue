@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PayButtonComponent from '@/components/PayButtonComponent.vue';
+import PayButtonComponent from '@/components/skinShop/PayPalButtonComponent.vue';
 
 defineProps<{
   itemId: string;
