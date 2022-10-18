@@ -13,7 +13,7 @@ describe('UserPipe', () => {
     mockRepo = new MockRepo('UsersService', User, mockUser);
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, mockRepo.getProvider()],
+      providers: [UserPipe, UsersService, mockRepo.getProvider()],
     }).compile();
 
     pipe = module.get<UserPipe>(UserPipe);
