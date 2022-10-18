@@ -85,7 +85,7 @@ class Ball extends Element {
     super(ballElem);
     this._field = new Vector(field.getWidth(), field.getHeight());
     this._direction = new Vector(0, 0);
-    this._speed = 100;
+    this._speed = 80;
     this._shape = new Vector(
       (super.getWidth() * 50) / this._field.x,
       (super.getHeight() * 50) / this._field.y,
@@ -96,8 +96,8 @@ class Ball extends Element {
   reset() {
     this.setx(50);
     this.sety(50);
-    this._direction.x = Math.random() * 100 - 50;
-    this._direction.y = Math.random() * 100 - 50;
+    this._direction.x = Math.random() * 10 - 5;
+    this._direction.y = Math.random() * 10 - 5;
     this.speedLimit();
   }
 
@@ -184,7 +184,7 @@ class Paddle extends Element {
 
   constructor(padElement: HTMLElement | null, field: Element) {
     super(padElement);
-    this._direction = new Vector(0, 10);
+    this._direction = new Vector(0, 0);
     this._speed = 10;
     this._shape = new Vector(
       (super.getWidth() * 50) / field.getWidth(),
@@ -206,6 +206,12 @@ class Paddle extends Element {
     else console.log('9 failiure, no object assigned\n');
   }
 
+  changeDir(pad : number, dir: number, time: number) {
+    if (this._direction.y === dir) return;
+    this._direction.y = dir;
+    console.log("paddle " + pad + " time " + time + " dir " + dir);
+  }
+
   step() {
     let g: number =
       parseFloat(String(this.gety())) +
@@ -214,8 +220,8 @@ class Paddle extends Element {
     if (g > 100 - this._shape.y) g = 100 - this._shape.y;
     this.sety(g);
   }
-  update(delta: number, speed: number) {
-    this._speed = speed;
+  update(delta: number, speed: number | null) {
+    if (speed != null) this.changeDir(speed);
     let i = 0;
     while (i < delta) {
       this.step();
@@ -239,7 +245,9 @@ onMounted(() => {
     if (lastTime != null) {
       delta = time - lastTime;
       ball.update(delta, [playerPad.getRect(), remotePad.getRect()]);
-      remotePad.update(delta, ball.gety() - remotePad.gety() > 0 ? 10 : -10);
+      // remotePad.update(delta, ball.gety() - remotePad.gety() > 0 ? 10 : 1, -10, time);
+      remotePad.update(delta, null);
+      playerPad.update(delta, null);
 
       loseCase();
     }
@@ -247,13 +255,26 @@ onMounted(() => {
     window.requestAnimationFrame(pupdate);
   }
 
-  // document.addEventListener('mousemove', e => {
-  //   console.log(e.y + "   " + window.outerHeight)
-  //     playerPad.update(delta, (e.y - playerPad.gety() * (window.innerHeight / 100)) > 0 ? 10 : -10);
-  // })
-
   document.addEventListener('keydown', (e) => {
-    console.log(e);
+    if (e.repeat) return;
+    if (e.key == 'w') {
+      playerPad.changeDir(1, -10);
+    } else if (e.key == 's') {
+      playerPad.changeDir(1, 10);
+    }
+    if (e.code == 'ArrowUp') {
+      remotePad.changeDir(2, -10);
+    } else if (e.code == 'ArrowDown') {
+      remotePad.changeDir(2, 10);
+    }
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.key == 'w' || e.key == 's') {
+      playerPad.changeDir(1, 0);
+    }
+    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
+      remotePad.changeDir(2, 0);
+    }
   });
 
   function loseCase() {
@@ -264,6 +285,8 @@ onMounted(() => {
     ) {
       playerScore.textContent = String(parseInt(playerScore.textContent) + 1);
       ball.reset();
+      playerPad.sety(50);
+      remotePad.sety(50);
     }
     if (
       ball.getx() <= 0 &&
@@ -272,14 +295,11 @@ onMounted(() => {
     ) {
       remoteScore.textContent = String(parseInt(remoteScore.textContent) + 1);
       ball.reset();
+      playerPad.sety(50);
+      remotePad.sety(50);
     }
   }
   window.requestAnimationFrame(pupdate);
-  // keyBoard.addEventListener('keydown', (e) => {
-  //   ball.update(100);
-  //   playerScore.textContent = parseInt(ball.getx());
-  //   remoteScore.textContent = parseInt(ball.gety());
-  // });
 });
 </script>
 
