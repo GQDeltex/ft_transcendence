@@ -1,6 +1,12 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
-import { OneToMany, Column, Entity, PrimaryColumn, Index, JoinColumn } from 'typeorm';
+import {
+  OneToMany,
+  Column,
+  Entity,
+  PrimaryColumn,
+  Index,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()

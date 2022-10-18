@@ -1,7 +1,13 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Channel } from './channel.entity';
 import { User } from '../../../users/entities/user.entity';
-import { ManyToOne, Column, Entity, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import {
+  ManyToOne,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -11,20 +17,20 @@ export class ChannelUser {
   id: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: "user_id"})
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @Field(() => Int)
   @Column()
-  user_id : number
+  user_id: number;
 
   @ManyToOne(() => Channel)
-  @JoinColumn({ name: "channel_id"})
+  @JoinColumn({ name: 'channel_id' })
   channel: Channel;
-  
+
   @Field(() => Int)
   @Column()
-  channel_id : number
+  channel_id: number;
 
   @Column({ default: false })
   @Field()

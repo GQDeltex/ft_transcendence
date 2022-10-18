@@ -47,7 +47,7 @@ export class UsersResolver {
 
   @Query(() => User, { name: 'userChannelList' })
   async findUserChannelList(@Args('username') username: string) {
-    let result : User = await this.usersService.findUserChannelList(username);
+    const result: User = await this.usersService.findUserChannelList(username);
     return result;
   }
 

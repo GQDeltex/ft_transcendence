@@ -35,7 +35,10 @@ export class ChannelResolver {
   }
 
   @Mutation(() => Channel)
-  async joinChannel(@Args() createChannelInput: CreateChannelInput, @CurrentUser() user: User) {
+  async joinChannel(
+    @Args() createChannelInput: CreateChannelInput,
+    @CurrentUser() user: User,
+  ) {
     const result = await this.channelService.join(createChannelInput, user);
     return result;
   }
