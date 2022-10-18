@@ -70,6 +70,7 @@ const newChannel = async () => {
 .text {
   display: flex;
   font-size: 1vw;
+  padding-bottom: 0.5vw;
   color: #f8971d;
   justify-content: space-between;
 }
@@ -84,7 +85,7 @@ button {
   color: black;
   background-color: #f8971d;
   cursor: pointer;
-  font-size: 0.5vw;
+  font-size: 0.8vw;
   border-color: transparent;
 }
 </style>
