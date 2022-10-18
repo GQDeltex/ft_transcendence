@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TwoFAInputComponent from '@/components/TwoFAInputComponent.vue';
+import TwoFAInputComponent from '@/components/globalUse/TwoFAInputComponent.vue';
 import { useUserStore } from '@/store/user';
 
 const userStore = useUserStore();

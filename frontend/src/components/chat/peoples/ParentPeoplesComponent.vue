@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChatClientComponent from './ChatClientComponent.vue';
+import ChildPeopleComponent from './ChildPeopleComponent.vue';
 
 const props = defineProps<{
   clients: {
@@ -16,7 +16,7 @@ const props = defineProps<{
   <div class="friendsPeopleParent">
     <span class="text">People</span>
     <div class="list">
-      <ChatClientComponent
+      <ChildPeopleComponent
         v-for="client in clients"
         :key="client.id"
         :client-id="client.id"

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import ChatChatComponent from '../components/ChatChatComponent.vue';
-import FriendsPeopleChatComponent from '../components/FriendsPeopleChatComponent.vue';
-import ChannelsChatComponent from '../components/ChannelsChatComponent.vue';
-import RequestsChatComponent from '../components/RequestsChatComponent.vue';
-import ChatOptionsChatComponent from '../components/ChatOptionsChatComponent.vue';
+import ParentChatComponent from '../components/chat/chat/ParentChatComponent.vue';
+import ParentPeoplesComponent from '../components/chat/peoples/ParentPeoplesComponent.vue';
+import ParentChannelsComponent from '../components/chat/channels/ParentChannelsComponent.vue';
+import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
+import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import UserService from '../service/UserService';
@@ -19,13 +19,13 @@ onMounted(async () => {
 <template>
   <div class="chatViewParent">
     <div class="leftSide">
-      <FriendsPeopleChatComponent :clients="users" class="friendsPeopleComp" />
-      <ChannelsChatComponent class="channelsComp" />
-      <RequestsChatComponent class="requestsComp" />
+      <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
+      <ParentChannelsComponent class="channelsComp" />
+      <ParentRequestsComponent class="requestsComp" />
     </div>
-    <ChatChatComponent :chat-name="chatName" class="chatChatComp" />
+    <ParentChatComponent :chat-name="chatName" class="chatChatComp" />
     <input v-model="chatName" type="test" class="inputBox" />
-    <ChatOptionsChatComponent class="optionsComp" />
+    <ParentOptionsComponent class="optionsComp" />
   </div>
 </template>
 
