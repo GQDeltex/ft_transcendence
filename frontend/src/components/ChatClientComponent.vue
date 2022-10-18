@@ -26,9 +26,20 @@ const statusBorder = computed(() => {
       return { 'border-color': 'grey' };
   }
 });
+
+let awesome = false;
+
+function work() {
+  awesome = !awesome;
+  console.log(awesome);
+}
 </script>
 
 <template>
+  <button @click="work">Toggle</button>
+  <h1 v-show="awesome">Vue can suck my dick</h1>
+  <!-- <h1 v-else>Oh no 😢</h1> -->
+
   <input id="check01" type="checkbox" name="menu" />
   <label class="client" for="check01">
     <img
