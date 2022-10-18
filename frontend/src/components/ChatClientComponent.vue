@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
   clientId: number;
@@ -27,21 +27,15 @@ const statusBorder = computed(() => {
   }
 });
 
-let awesome = false;
+var awesome = ref(false);
 
 function work() {
-  awesome = !awesome;
-  console.log(awesome);
+  awesome.value = !awesome.value;
 }
 </script>
 
 <template>
-  <button @click="work">Toggle</button>
-  <h1 v-show="awesome">Vue can suck my dick</h1>
-  <!-- <h1 v-else>Oh no 😢</h1> -->
-
-  <input id="check01" type="checkbox" name="menu" />
-  <label class="client" for="check01">
+  <div class="client" @click="work">
     <img
       :style="statusBorder"
       class="picture"
@@ -52,9 +46,8 @@ function work() {
       <span class="username">{{ title }} {{ username }}</span>
       <span :style="statusStyle" class="status">{{ status }}</span>
     </div>
-  </label>
-
-  <div class="popup">
+  </div>
+  <div v-show="awesome" class="popup">
     <button class="butt">Add Friend</button>
     <button class="butt">Block</button>
     <button class="butt">Invite to Game</button>
@@ -63,24 +56,11 @@ function work() {
 </template>
 
 <style scoped>
-input,
-div.popup {
-  display: none;
-}
-
-label {
-  position: relative;
-  display: block;
-  cursor: pointer;
-}
-
-input:checked ~ div.popup {
-  display: block;
-}
 .client {
   display: flex;
   align-items: center;
   padding-top: 1%;
+  cursor: pointer;
 }
 .infoBox {
   display: flex;
