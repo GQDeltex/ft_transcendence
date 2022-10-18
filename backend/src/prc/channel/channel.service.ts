@@ -4,6 +4,7 @@ import { InsertResult, Repository } from 'typeorm';
 import { Channel } from './entities/channel.entity';
 import { ChannelUser } from './entities/channeluser.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ChannelService {
@@ -29,5 +30,28 @@ export class ChannelService {
     if (typeof identifier === 'number')
       return this.channelRepository.findOneByOrFail({ id: identifier });
     else return this.channelRepository.findOneByOrFail({ name: identifier });
+  }
+
+  /**
+   *( Tries to find Channel based on name ? creates channel : Checks input password )
+   */
+  async join(createChannelInput: CreateChannelInput)
+  { 
+    let result : Channel;
+    try
+    {
+    result = await this.findOne(createChannelInput.name);
+    }
+    catch (Error)
+    {
+      console.log("New Channel created");
+      return await this.findOne( await this.create(createChannelInput));
+    }
+    if (createChannelInput.password === result.password)
+    {
+      console.log("Good Password");
+      //(check if user is already on Channel ? throw "already on channel" : create new channel user and add to channel)
+    }
+    return result;
   }
 }

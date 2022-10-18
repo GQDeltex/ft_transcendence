@@ -21,7 +21,7 @@ export class ChannelResolver {
   }
 
   @Query(() => Channel, { name: 'channelByName' })
-  findOneByUsername(@Args('name') channelname: string) {
+  findOneByChannelname(@Args('name') channelname: string) {
     return this.channelService.findOne(channelname);
   }
 
@@ -29,5 +29,11 @@ export class ChannelResolver {
   async createChannel(@Args() createChannelInput: CreateChannelInput) {
     const id = await this.channelService.create(createChannelInput);
     return this.channelService.findOne(id);
+  }
+
+  @Mutation(() => Channel)
+  async joinChannel(@Args() createChannelInput: CreateChannelInput) {
+    const result = await this.channelService.join(createChannelInput, );
+    return result;
   }
 }
