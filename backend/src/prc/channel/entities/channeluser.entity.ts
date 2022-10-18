@@ -1,22 +1,36 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Channel } from './channel.entity';
 import { User } from '../../../users/entities/user.entity';
-import { ManyToOne, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  ManyToOne,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
 export class ChannelUser {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn({ type: 'int' })
   @Field(() => Int)
   id: number;
 
-  @Field(() => [Int])
   @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Field(() => [Int])
+  @Field(() => Int)
+  @Column()
+  user_id: number;
+
   @ManyToOne(() => Channel)
+  @JoinColumn({ name: 'channel_id' })
   channel: Channel;
+
+  @Field(() => Int)
+  @Column()
+  channel_id: number;
 
   @Column({ default: false })
   @Field()
@@ -30,7 +44,7 @@ export class ChannelUser {
   @Field()
   ban: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   unbantime: Date;
 
@@ -38,7 +52,7 @@ export class ChannelUser {
   @Field()
   mute: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   unmutetime: Date;
 }
