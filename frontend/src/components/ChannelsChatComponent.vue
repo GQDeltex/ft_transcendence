@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { setMapStoreSuffix } from 'pinia';
 import ChatChannelComponent from './ChatChannelComponent.vue';
 import ModalJoinCreateChannelComponent from './ModalJoinCreateChannelComponent.vue';
 import { ref } from 'vue';
-import { shouldWriteResult } from '@apollo/client/core/QueryInfo';
 
 const modalActive = ref(false);
 
