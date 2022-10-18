@@ -26,8 +26,8 @@ export class UsersService {
 
   findUserChannelList(identifier: number | string): Promise<User> {
     if (typeof identifier == 'number')
-      return this.userRepository.findOneOrFail({ where: {id: identifier}, relations: ['channelList', 'channelList.channel'] });
-    else return this.userRepository.findOneOrFail({ where: {username: identifier}, relations: ['channelList', 'channelList.channel'] });
+      return this.userRepository.findOneOrFail({ where: {id: identifier}, relations: ['channelList'] });
+    else return this.userRepository.findOneOrFail({ where: {username: identifier}, relations: ['channelList'] });
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {

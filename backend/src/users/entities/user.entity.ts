@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
-import { OneToMany, Column, Entity, PrimaryColumn, Index } from 'typeorm';
+import { OneToMany, Column, Entity, PrimaryColumn, Index, JoinColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -57,7 +57,7 @@ export class User {
   @Column({ default: 'offline' })
   status: string;
 
-  @Field(() => [Int], { nullable: true })
+  @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
     cascade: true,
     onDelete: 'CASCADE',
