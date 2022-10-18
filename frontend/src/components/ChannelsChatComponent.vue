@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { setMapStoreSuffix } from 'pinia';
 import ChatChannelComponent from './ChatChannelComponent.vue';
+import ModalJoinCreateChannelComponent from './ModalJoinCreateChannelComponent.vue';
+import { ref } from 'vue';
+import { shouldWriteResult } from '@apollo/client/core/QueryInfo';
 
-const newChannel = async () => {
-  console.log('newChannel button pressed');
+const modalActive = ref(false);
+
+const joinNewChannel = () => {
+  modalActive.value = true;
+};
+
+const onClose = () => {
+  modalActive.value = false;
 };
 </script>
 
@@ -10,7 +20,10 @@ const newChannel = async () => {
   <div class="channelsParent">
     <span class="text"
       >Channels
-      <button class="button" @click="newChannel">New Channel</button>
+      <button class="button" @click="joinNewChannel">
+        Join / Create Channel
+      </button>
+      <ModalJoinCreateChannelComponent v-show="modalActive" @close="onClose" />
     </span>
     <div class="list">
       <ChatChannelComponent
