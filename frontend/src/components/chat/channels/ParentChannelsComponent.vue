@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ChatChannelComponent from './ChatChannelComponent.vue';
-import ModalJoinCreateChannelComponent from './ModalJoinCreateChannelComponent.vue';
+import ChildChannelComponent from './ChildChannelComponent.vue';
+import ModalChannelComponent from './ModalChannelComponent.vue';
 import { ref } from 'vue';
 
 const modalActive = ref(false);
@@ -21,46 +21,46 @@ const onClose = () => {
       <button class="button" @click="joinNewChannel">
         Join / Create Channel
       </button>
-      <ModalJoinCreateChannelComponent v-show="modalActive" @close="onClose" />
+      <ModalChannelComponent v-show="modalActive" @close="onClose" />
     </span>
     <div class="list">
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="devOps"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="chitChat"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="42Wolfsburg"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="examPrep"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="ThisAndThat"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="SecretChannel"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="StaffOnly!"

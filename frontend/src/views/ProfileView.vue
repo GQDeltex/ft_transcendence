@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
-import UserHistoryComponent from '../components/UserHistoryComponent.vue';
-import ProfileComponent from '../components/ProfileComponent.vue';
-import AboutMeComponent from '../components/AboutMeComponent.vue';
-import AchievementComponent from '../components/AchievementComponent.vue';
+import ParentHistoryComponent from '../components/profile/history/ParentHistoryComponent.vue';
+import ProfileComponent from '../components/profile/profile/ProfileComponent.vue';
+import AboutMeComponent from '../components/profile/aboutMe/AboutMeComponent.vue';
+import ParentAchievementsComponent from '../components/profile/achievement/ParentAchievementsComponent.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -20,10 +20,10 @@ const logout = async () => {
 
   <div class="profileView">
     <ProfileComponent class="profile" />
-    <UserHistoryComponent class="history" />
+    <ParentHistoryComponent class="history" />
     <div class="aboutParent">
       <AboutMeComponent />
-      <AchievementComponent class="achievement" />
+      <ParentAchievementsComponent class="achievement" />
     </div>
   </div>
 </template>

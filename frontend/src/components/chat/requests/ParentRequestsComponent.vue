@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import RequestChatComponent from './RequestChatComponent.vue';
+import ChildRequestComponent from './ChildRequestComponent.vue';
 </script>
 
 <template>
   <div class="requestsParent">
     <span class="text">Requests</span>
     <div class="list">
-      <RequestChatComponent
+      <ChildRequestComponent
         key="4242"
         :client-id="4242"
         sender="Guillaume"
         request="has send a friend request"
         target=""
       />
-      <RequestChatComponent
+      <ChildRequestComponent
         key="4242"
         :client-id="4242"
         sender="Henne"
         request="has invited you to play a game"
         target=""
       />
-      <RequestChatComponent
+      <ChildRequestComponent
         key="4242"
         :client-id="4242"
         sender="René"
         request="has invited you to join the channel"
         target="SecretChannel"
       />
-      <RequestChatComponent
+      <ChildRequestComponent
         key="4242"
         :client-id="4242"
         sender="Vinny"
