@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChildPeopleComponent from './ChildPeopleComponent.vue';
 
-const props = defineProps<{
+defineProps<{
   clients: {
     id: number;
     title: string;
