@@ -3,7 +3,7 @@ import { User } from './user.entity';
 export const mockUser: User = {
   id: 84364,
   username: 'name',
-  picture: 'http://example.com',
+  picture: 'https://example.com',
   firstname: 'nobody',
   lastname: 'knows',
   email: 'nobody@example.com',
@@ -17,3 +17,22 @@ export const mockUser: User = {
   following: [],
   followers: [],
 };
+
+export const createMockUser = (options: Partial<User> = {}): User => ({
+  id: 12345,
+  username: 'test',
+  picture: 'https://example.com',
+  firstname: 'test',
+  lastname: 'person',
+  email: 'test@example.com',
+  country: 'Germany',
+  campus: 'Berlin',
+  twoFASecret: null,
+  twoFAEnable: false,
+  socketId: '',
+  title: [''],
+  status: 'offline',
+  following: [],
+  followers: [],
+  ...options,
+});
