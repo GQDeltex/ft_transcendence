@@ -1,29 +1,24 @@
 import { defineStore } from 'pinia';
-import { useLocalStorage } from '@vueuse/core';
 import UserService from '@/service/UserService';
 import { useErrorStore } from './error';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    isLoggedIn: useLocalStorage('isLoggedIn', false),
-    id: useLocalStorage('userId', ''),
-    username: useLocalStorage('username', ''),
-    title: useLocalStorage('title', ''),
-    picture: useLocalStorage('userPicture', ''),
-    twoFAEnable: useLocalStorage('twoFAEnable', false),
-    require2FAverify: false,
+    isLoggedIn: false,
+    id: '',
+    username: '',
+    title: '',
+    picture: '',
+    twoFAEnable: false,
+    require2FAVerify: false,
   }),
   actions: {
-    async login(code: string, bypassId: string | null): Promise<void> {
+    async login(code: string, bypassId?: string): Promise<void> {
       try {
-        const { id, require2FAverify } = await UserService.fetchJwtAndId(
-          code,
-          bypassId,
-        );
-        this.require2FAverify = require2FAverify;
-        if (require2FAverify && !this.isLoggedIn) return;
-
-        await this.fetchUserData(id);
+        const { require2FAVerify } = await UserService.fetchJwt(code, bypassId);
+        this.require2FAVerify = require2FAVerify;
+        if (require2FAVerify && !this.isLoggedIn) return;
+        await this.fetchSelfData();
       } catch (error) {
         useErrorStore().setError((error as Error).message);
         await this.logout();
@@ -31,15 +26,15 @@ export const useUserStore = defineStore('user', {
     },
     async verify2FA(code: string): Promise<void> {
       try {
-        const { id } = await UserService.verify2FA(code);
-        await this.fetchUserData(id);
+        await UserService.verify2FA(code);
+        await this.fetchSelfData();
       } catch (error) {
         useErrorStore().setError((error as Error).message);
         await this.logout();
       }
     },
-    async fetchUserData(id: number): Promise<void> {
-      const user = await UserService.findOneById(id);
+    async fetchSelfData(): Promise<void> {
+      const user = await UserService.findSelf();
       this.isLoggedIn = true;
       this.id = user.id;
       this.username = user.username;
@@ -50,7 +45,6 @@ export const useUserStore = defineStore('user', {
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id !== '') {
         try {
-          localStorage.clear();
           this.$reset();
           await UserService.logout();
         } catch (error) {

@@ -71,7 +71,7 @@ export class TwoFAController {
         });
 
         res.cookie('jwt', jwt_token, { httpOnly: true });
-        return { id: +req.user.id, isAuthenticated: true };
+        return { isAuthenticated: true };
       });
     } catch (error) {
       throw new BadRequestException(error.message);

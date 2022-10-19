@@ -57,6 +57,12 @@ const router = createRouter({
 router.beforeResolve(async (to) => {
   const userStore = useUserStore();
 
+  try {
+    await userStore.fetchSelfData();
+  } catch (error) {
+    await userStore.logout();
+  }
+
   if (!userStore.isLoggedIn && to.name !== 'LoginView') {
     return { name: 'LoginView' };
   }
@@ -65,7 +71,7 @@ router.beforeResolve(async (to) => {
     // Remove bypass for production
     await userStore.login(
       to.query['code'] as string,
-      to.query['id'] as string | null,
+      to.query['id'] as string | undefined,
     );
     delete to.query.code;
     to.fullPath = to.path;
