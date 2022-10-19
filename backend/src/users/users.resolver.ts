@@ -15,6 +15,7 @@ import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { TwoFAGuard } from '../auth/guard/twoFA.guard';
+import { CurrentUser } from './decorator/current-user.decorator';
 
 @Catch(EntityNotFoundError)
 export class CatchOurExceptionsFilter implements GqlExceptionFilter {
@@ -54,7 +55,10 @@ export class UsersResolver {
   @Mutation(() => User)
   async updatePicture(
     @Args('user') updateUserPictureInput: UpdateUserPictureInput,
+    @CurrentUser() user: User,
   ) {
+    if (user.id != updateUserPictureInput.id)
+      throw new Error('Missing Permissions to change other User');
     await this.usersService.updatePicture(
       updateUserPictureInput.id,
       updateUserPictureInput.picture,
@@ -65,7 +69,10 @@ export class UsersResolver {
   @Mutation(() => User)
   async updateUsername(
     @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
+    @CurrentUser() user: User,
   ) {
+    if (user.id != updateUserUsernameInput.id)
+      throw new Error('Missing Permissions to change other User');
     await this.usersService.updateUsername(
       updateUserUsernameInput.id,
       updateUserUsernameInput.username,
