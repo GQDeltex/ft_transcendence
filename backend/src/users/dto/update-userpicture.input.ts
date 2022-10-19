@@ -1,12 +1,8 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { ArgsType, Field } from '@nestjs/graphql';
 import { IsUrl, IsNotEmpty } from 'class-validator';
 
-@InputType()
+@ArgsType()
 export class UpdateUserPictureInput {
-  @IsNotEmpty()
-  @Field(() => Int)
-  id: number;
-
   @IsNotEmpty()
   @IsUrl()
   @Field()
