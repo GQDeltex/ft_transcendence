@@ -23,7 +23,7 @@ onMounted(async () => {
       <ParentRequestsComponent class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />
-    <input v-model="chatName" type="test" class="inputBox" />
+    <input v-model="chatName" type="text" class="inputBox" />
     <ParentOptionsComponent class="optionsComp" />
   </div>
 </template>
