@@ -22,6 +22,10 @@ import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { EntityNotFoundError } from 'typeorm';
 import { TokenExpiredError } from 'jsonwebtoken';
+import { CreateChannelInput } from './channel/dto/create-channel.input';
+import { CurrentUser } from '../users/decorator/current-user.decorator';
+import { ChannelService } from './channel/channel.service';
+import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 
 export const CurrentUserFromWs = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
@@ -62,7 +66,7 @@ export class PrcGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService, private readonly channelService : ChannelService) {}
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('Client disconnected', client.id);
@@ -105,5 +109,20 @@ export class PrcGateway implements OnGatewayDisconnect {
     const recClient = sockets[0];
     recClient.emit('prc', { from: user, to: recipient, msg: msg });
     console.log('Sent message!');
+  }
+
+  @SubscribeMessage('join')
+  async joinChannel(
+    @CurrentUserFromWs() user: JwtPayload,
+    @ConnectedSocket() client: Socket,
+    @MessageBody('channel') channelInput: CreateChannelInput,
+  ): Promise <void> {
+    if (typeof user == 'undefined') throw new WsException('Not connected');
+      console.log(`Join attempt from ${user.username} for ${channelInput.name}`);
+    const sender: User | null = await this.usersService.findOne(user.username);
+    const channel = await this.channelService.join(channelInput, sender);
+    client.join(channel.name);
+    client.broadcast.to(channel.name).emit('status', user.username + ' has joined your channel.');
+    console.log(`Join success from ${user.username} for ${channelInput.name}`);
   }
 }
