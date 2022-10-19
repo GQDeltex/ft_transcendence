@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import SkinShopComponent from '../components/skinShop/ParentSkinShopComponent.vue';
+import sexy_guy_001_modified from '../assets/sexy-guy-001-modified.png';
+import even_sexier_guy_001_modified from '../assets/even-sexier-guy-001-modified.png';
+import sexiest_guy_001_modified from '../assets/sexiest-guy-001-modified.png';
 </script>
 
 <template>
@@ -11,62 +14,62 @@ import SkinShopComponent from '../components/skinShop/ParentSkinShopComponent.vu
   <SkinShopComponent
     item-id="shop-item-1"
     item-name="Avatar"
-    item-img="/src/assets/sexy-guy-001-modified.png"
+    :item-img="sexy_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-2"
     item-name="Sexy Avatar"
-    item-img="/src/assets/even-sexier-guy-001-modified.png"
+    :item-img="even_sexier_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-3"
     item-name="Even sexier Avatar"
-    item-img="/src/assets/sexiest-guy-001-modified.png"
+    :item-img="sexiest_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-4"
     item-name="Avatar"
-    item-img="/src/assets/sexy-guy-001-modified.png"
+    :item-img="sexy_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-5"
     item-name="Sexy Avatar"
-    item-img="/src/assets/even-sexier-guy-001-modified.png"
+    :item-img="even_sexier_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-6"
     item-name="Even sexier Avatar"
-    item-img="/src/assets/sexiest-guy-001-modified.png"
+    :item-img="sexiest_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-7"
     item-name="Avatar"
-    item-img="/src/assets/sexy-guy-001-modified.png"
+    :item-img="sexy_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-8"
     item-name="Sexy Avatar"
-    item-img="/src/assets/even-sexier-guy-001-modified.png"
+    :item-img="even_sexier_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-9"
     item-name="Even sexier Avatar"
-    item-img="/src/assets/sexiest-guy-001-modified.png"
+    :item-img="sexiest_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-10"
     item-name="Avatar"
-    item-img="/src/assets/sexy-guy-001-modified.png"
+    :item-img="sexy_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-11"
     item-name="Sexy Avatar"
-    item-img="/src/assets/even-sexier-guy-001-modified.png"
+    :item-img="even_sexier_guy_001_modified"
   />
   <SkinShopComponent
     item-id="shop-item-12"
     item-name="Even sexier Avatar"
-    item-img="/src/assets/sexiest-guy-001-modified.png"
+    :item-img="sexiest_guy_001_modified"
   />
 </template>
 
