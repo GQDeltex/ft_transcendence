@@ -22,6 +22,7 @@ services:
           context: ./frontend
           args:
             - VITE_PAYPAL_CLIENT_ID
+            - VITE_DOMAIN
         ports:
             - 80:80
 
