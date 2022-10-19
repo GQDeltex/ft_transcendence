@@ -77,8 +77,6 @@ function closeCancel() {
   cursor: pointer;
 }
 .cancel {
-  /* justify-content: right;
-  align-self: right; */
   float: right;
   margin: 0;
 }
