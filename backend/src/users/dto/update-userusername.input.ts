@@ -1,13 +1,10 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { ArgsType, Field } from '@nestjs/graphql';
+import { IsNotEmpty, Length } from 'class-validator';
 
-@InputType()
+@ArgsType()
 export class UpdateUserUsernameInput {
   @IsNotEmpty()
-  @Field(() => Int)
-  id: number;
-
-  @IsNotEmpty()
   @Field()
+  @Length(1, 42)
   username: string;
 }

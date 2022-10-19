@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const props = defineProps<{
-  'client-id': number;
+defineProps<{
+  clientId: number;
   sender: string;
   request: string;
   target: string;

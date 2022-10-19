@@ -17,6 +17,10 @@ const submit = async () => {
 onMounted(async () => {
   qrCode.value = await userStore.generate2FA();
 });
+
+function closeCancel() {
+  emits('close');
+}
 </script>
 
 <template>
@@ -24,9 +28,11 @@ onMounted(async () => {
     <div class="modal-content">
       <div class="qrCode">
         <img :src="qrCode" />
+        <span class="button cancel" @click="closeCancel()">&times;</span>
       </div>
       <div class="input">
-        <span>Please enter your 2FA code</span><br />
+        <span>Please enter your 2FA code</span>
+        <br />
         <input v-model="code" type="text" @keyup.enter="submit" /><br />
         <button class="button" @click="submit">Submit</button>
       </div>
@@ -52,7 +58,7 @@ onMounted(async () => {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 40%; /* Could be more or less, depending on screen size */
   color: black;
   text-align: center;
 }
@@ -69,5 +75,9 @@ onMounted(async () => {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+.cancel {
+  float: right;
+  margin: 0;
 }
 </style>

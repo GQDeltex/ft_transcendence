@@ -5,12 +5,11 @@ import ParentChannelsComponent from '../components/chat/channels/ParentChannelsC
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
 import { ref } from 'vue';
-import type { Ref } from 'vue';
 import UserService from '../service/UserService';
 import { onMounted } from 'vue';
 
-const chatName: Ref<string> = ref('gucalvi');
-const users: Ref<any> = ref([]);
+const chatName = ref('gucalvi');
+const users = ref([]);
 onMounted(async () => {
   users.value = await UserService.findAll();
 });
@@ -24,7 +23,7 @@ onMounted(async () => {
       <ParentRequestsComponent class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />
-    <input v-model="chatName" type="test" class="inputBox" />
+    <input v-model="chatName" type="text" class="inputBox" />
     <ParentOptionsComponent class="optionsComp" />
   </div>
 </template>

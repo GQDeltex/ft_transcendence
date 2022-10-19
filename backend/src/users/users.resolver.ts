@@ -1,30 +1,25 @@
 import {
-  Mutation,
-  Resolver,
-  Query,
   Args,
   Int,
-  GqlExceptionFilter,
-  GqlArgumentsHost,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
 } from '@nestjs/graphql';
-import { Catch, ArgumentsHost, UseFilters, UseGuards } from '@nestjs/common';
-import { EntityNotFoundError } from 'typeorm';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { TwoFAGuard } from '../auth/guard/twoFA.guard';
+import { UpdateUserFriendshipInput } from './dto/update-friendship.input';
+import { CurrentJwtPayload } from './decorator/current-jwt-payload.decorator';
+import { JwtPayload } from '../auth/strategy/jwt.strategy';
+import { AllExceptionFilter } from '../tools/ExceptionFilter';
 
-@Catch(EntityNotFoundError)
-export class CatchOurExceptionsFilter implements GqlExceptionFilter {
-  catch(exception: EntityNotFoundError, host: ArgumentsHost) {
-    GqlArgumentsHost.create(host);
-    return exception;
-  }
-}
-
-@UseFilters(new CatchOurExceptionsFilter())
+@UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
 export class UsersResolver {
@@ -36,7 +31,12 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOneById(@Args('id', { type: () => Int }) id: number) {
+  findOneById(
+    @Args('id', { type: () => Int, nullable: true }) id: number | undefined,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
+  ) {
+    if (typeof id === 'undefined')
+      return this.usersService.findOne(jwtPayload.id);
     return this.usersService.findOne(id);
   }
 
@@ -47,29 +47,81 @@ export class UsersResolver {
 
   @Query(() => User, { name: 'userChannelList' })
   async findUserChannelList(@Args('username') username: string) {
-    const result: User = await this.usersService.findUserChannelList(username);
-    return result;
+    return await this.usersService.findUserChannelList(username);
   }
 
   @Mutation(() => User)
   async updatePicture(
-    @Args('user') updateUserPictureInput: UpdateUserPictureInput,
+    @Args() updateUserPictureInput: UpdateUserPictureInput,
+    @CurrentJwtPayload() user: JwtPayload,
   ) {
     await this.usersService.updatePicture(
-      updateUserPictureInput.id,
+      user.id,
       updateUserPictureInput.picture,
     );
-    return this.usersService.findOne(updateUserPictureInput.id);
+    return this.usersService.findOne(user.id);
   }
 
   @Mutation(() => User)
   async updateUsername(
-    @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
+    @Args() updateUserUsernameInput: UpdateUserUsernameInput,
+    @CurrentJwtPayload() user: JwtPayload,
   ) {
     await this.usersService.updateUsername(
-      updateUserUsernameInput.id,
+      user.id,
       updateUserUsernameInput.username,
     );
-    return this.usersService.findOne(updateUserUsernameInput.id);
+    return this.usersService.findOne(user.id);
+  }
+
+  @Mutation(() => User)
+  async updateFriendship(
+    @CurrentJwtPayload() user: JwtPayload,
+    @Args() args: UpdateUserFriendshipInput,
+  ): Promise<User> {
+    await this.usersService.updateFriendship(
+      user.id,
+      args.method,
+      args.friendId,
+    );
+    return this.usersService.findOne(user.id);
+  }
+
+  @ResolveField(() => [User])
+  async friends(@Parent() user: User): Promise<User[]> {
+    if (
+      typeof user.following === 'undefined' ||
+      typeof user.followers === 'undefined'
+    )
+      return [];
+    return user.followers.filter((follower) =>
+      user.following.some((following) => following.id === follower.id),
+    );
+  }
+
+  @ResolveField(() => [User])
+  async sentFriendRequests(@Parent() user: User): Promise<User[]> {
+    if (
+      typeof user.following === 'undefined' ||
+      typeof user.followers === 'undefined'
+    )
+      return [];
+    return user.following.filter(
+      (following) =>
+        !user.followers.some((follower) => follower.id === following.id),
+    );
+  }
+
+  @ResolveField(() => [User])
+  async receivedFriendRequests(@Parent() user: User): Promise<User[]> {
+    if (
+      typeof user.following === 'undefined' ||
+      typeof user.followers === 'undefined'
+    )
+      return [];
+    return user.followers.filter(
+      (follower) =>
+        !user.following.some((following) => following.id === follower.id),
+    );
   }
 }

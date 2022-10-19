@@ -1,14 +1,24 @@
 <script setup lang="ts">
+import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { RouterView } from 'vue-router';
 import { useUserStore } from './store/user';
 import { useErrorStore } from './store/error';
+import { socket } from './plugin/socket';
 import ModalComponent from './components/globalUse/ModalComponent.vue';
 import NavbarComponent from './components/globalUse/NavbarComponent.vue';
 
 const userStore = useUserStore();
+const { isLoggedIn } = storeToRefs(userStore);
 const errorStore = useErrorStore();
 const { getErrors: errors } = storeToRefs(errorStore);
+
+if (isLoggedIn.value && !socket.connected) socket.connect();
+
+watch(isLoggedIn, (newLogState) => {
+  if (newLogState) socket.connect();
+  else socket.disconnect();
+});
 </script>
 
 <template>
