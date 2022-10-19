@@ -78,6 +78,7 @@ onUnmounted(() => socket.off('prc'));
   border-bottom: 1px solid #202020;
   font-size: 1vw;
   padding: 0.5vw;
+  overflow-y: scroll;
 }
 .lower {
   display: flex;
