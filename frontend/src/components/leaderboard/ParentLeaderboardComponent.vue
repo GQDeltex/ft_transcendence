@@ -12,10 +12,7 @@ defineProps<{
 <template>
   <h3>{{ categoryName }}</h3>
   <div class="categories">
-    <ChildMedalComponent
-      medal-name="gucalvi"
-      :medal-kind="pongking_boi_gold"
-    />
+    <ChildMedalComponent medal-name="gucalvi" :medal-kind="pongking_boi_gold" />
     <ChildMedalComponent
       medal-name="gucalvis evil twin"
       :medal-kind="pongking_boi_silver"
