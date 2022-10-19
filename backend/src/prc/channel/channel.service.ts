@@ -66,6 +66,6 @@ export class ChannelService {
       } //else throw new Error('Already in Channel');
       //still needds to rejoin room(if they are not being stupid and just clicking join again while being in the room)
     } else throw new WsException('Bad Password');
-    return this.findOne(+channel.id); // for testing
+    return this.findOne(+channel.id); //'+' VIC ;)
   }
 }

@@ -24,11 +24,11 @@ socket.on('prc', (data) => {
 socket.on('status', (status) => {
   console.log(status);
   messages.value.push({
-    from: {username : ''},
-    to: {username: 'No one'},
+    from: { username: '' },
+    to: { username: 'No one' },
     msg: status,
   });
-})
+});
 
 function sendMsg() {
   if (text.value == '') return;

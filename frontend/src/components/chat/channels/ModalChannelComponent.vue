@@ -11,7 +11,9 @@ function closeOk() {
   console.log(
     'channelName= ' + channelName.value + ' password= ' + password.value,
   );
-  socket.emit('join', {channel: {name: channelName.value, password: password.value}});
+  socket.emit('join', {
+    channel: { name: channelName.value, password: password.value },
+  });
   channelName.value = '';
   password.value = '';
   emits('close');
