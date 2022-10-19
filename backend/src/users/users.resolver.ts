@@ -1,7 +1,5 @@
 import {
   Args,
-  GqlArgumentsHost,
-  GqlExceptionFilter,
   Int,
   Mutation,
   Parent,
@@ -9,8 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { ArgumentsHost, Catch, UseFilters, UseGuards } from '@nestjs/common';
-import { EntityNotFoundError } from 'typeorm';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
@@ -20,16 +17,9 @@ import { TwoFAGuard } from '../auth/guard/twoFA.guard';
 import { UpdateUserFriendshipInput } from './dto/update-friendship.input';
 import { CurrentJwtPayload } from './decorator/current-jwt-payload.decorator';
 import { JwtPayload } from '../auth/strategy/jwt.strategy';
+import { AllExceptionFilter } from '../tools/ExceptionFilter';
 
-@Catch(EntityNotFoundError)
-export class CatchOurExceptionsFilter implements GqlExceptionFilter {
-  catch(exception: EntityNotFoundError, host: ArgumentsHost) {
-    GqlArgumentsHost.create(host);
-    return exception;
-  }
-}
-
-@UseFilters(new CatchOurExceptionsFilter())
+@UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
 export class UsersResolver {

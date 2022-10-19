@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
+import { UserInputError } from 'apollo-server-express';
 
 @Injectable()
 export class UsersService {
@@ -115,7 +116,7 @@ export class UsersService {
     friendId: number,
   ): Promise<void> {
     if (id === friendId)
-      throw new Error('You cannot send a friend request to yourself');
+      throw new UserInputError('You cannot send a friend request to yourself');
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: friendId }],
       relations: ['following', 'followers'],
@@ -134,7 +135,7 @@ export class UsersService {
         user.following.some((following) => following.id === friendId) ||
         friend.following.some((following) => following.id === id)
       )
-        throw new Error('Failed to send friend request');
+        throw new UserInputError('Failed to send friend request');
 
       user.following.push(friend);
       await this.userRepository.save(user);
@@ -145,7 +146,7 @@ export class UsersService {
         !user.following.some((following) => following.id === friendId) ||
         !friend.following.some((following) => following.id === id)
       )
-        throw new Error('Failed to remove friend');
+        throw new UserInputError('Failed to remove friend');
 
       user.following = user.following.filter(
         (following) => following.id !== friendId,
@@ -161,7 +162,7 @@ export class UsersService {
         user.following.some((following) => following.id === friendId) ||
         !friend.following.some((following) => following.id === id)
       ) {
-        throw new Error('Failed to accept friend request');
+        throw new UserInputError('Failed to accept friend request');
       }
       user.following.push(friend);
       await this.userRepository.save(user);
@@ -172,7 +173,7 @@ export class UsersService {
         user.following.some((following) => following.id === friendId) ||
         !friend.following.some((following) => following.id === id)
       )
-        throw new Error('Failed to decline friend request');
+        throw new UserInputError('Failed to decline friend request');
 
       friend.following = friend.following.filter(
         (following) => following.id !== id,
@@ -185,13 +186,12 @@ export class UsersService {
         !user.following.some((following) => following.id === friendId) ||
         friend.following.some((following) => following.id === id)
       ) {
-        throw new Error('Failed to cancel friend request');
+        throw new UserInputError('Failed to cancel friend request');
       }
       user.following = user.following.filter(
         (following) => following.id !== friendId,
       );
       await this.userRepository.save(user);
     }
-    return;
   }
 }
