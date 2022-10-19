@@ -15,6 +15,9 @@ import {
   UseFilters,
   Catch,
   ArgumentsHost,
+  UsePipes,
+  ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
@@ -39,10 +42,14 @@ export const CurrentUserFromWs = createParamDecorator(
   },
 );
 
-@Catch(WsException, EntityNotFoundError, TokenExpiredError)
+@Catch(WsException, EntityNotFoundError, TokenExpiredError, BadRequestException)
 export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
   catch(
-    exception: WsException | EntityNotFoundError | TokenExpiredError,
+    exception:
+      | WsException
+      | EntityNotFoundError
+      | TokenExpiredError
+      | BadRequestException,
     host: ArgumentsHost,
   ) {
     // For some reason this throws an 'Error' again?
@@ -52,6 +59,7 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
   }
 }
 
+@UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
     origin: `http://${process.env.DOMAIN}`,
