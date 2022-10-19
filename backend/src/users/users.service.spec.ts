@@ -1,9 +1,9 @@
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { mockUser } from './entities/user.entity.mock';
+import { createMockUser, mockUser } from './entities/user.entity.mock';
 import { MockRepo } from '../tools/memdb.mock';
-import { QueryFailedError, EntityNotFoundError } from 'typeorm';
+import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
@@ -56,42 +56,14 @@ describe('UsersService', () => {
   });
 
   it('should create a new user', async () => {
-    const newUser: User = {
-      id: 12345,
-      username: 'test',
-      picture: 'http://example.com',
-      firstname: 'test',
-      lastname: 'person',
-      email: 'test@example.com',
-      country: 'Germany',
-      campus: 'Berlin',
-      twoFASecret: null,
-      twoFAEnable: false,
-      socketId: '',
-      title: [''],
-      status: 'offline',
-    };
+    const newUser: User = createMockUser();
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(service.findOne(12345)).resolves.toEqual(newUser);
   });
 
   it('should not create a user if existing', async () => {
     const testUser = mockRepo.getTestEntity();
-    const newerUser: User = {
-      id: testUser.id,
-      username: 'nanu',
-      picture: 'http://example.com',
-      firstname: 'foo',
-      lastname: 'bar',
-      email: 'test@example.com',
-      country: 'Dreamland',
-      campus: 'Shipwreckia',
-      twoFASecret: null,
-      twoFAEnable: false,
-      socketId: '',
-      title: [''],
-      status: 'offline',
-    };
+    const newerUser: User = createMockUser({ id: testUser.id });
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
   });
@@ -111,21 +83,7 @@ describe('UsersService', () => {
   });
 
   it('should not change the username if not unique', async () => {
-    const newUser: User = {
-      id: 12345,
-      username: 'test',
-      picture: 'http://example.com',
-      firstname: 'test',
-      lastname: 'person',
-      email: 'test@example.com',
-      country: 'Germany',
-      campus: 'Berlin',
-      twoFASecret: null,
-      twoFAEnable: false,
-      socketId: '',
-      title: [''],
-      status: 'offline',
-    };
+    const newUser: User = createMockUser();
     await expect(service.create(newUser)).resolves.not.toThrow();
     await expect(
       service.updateUsername(newUser.id, mockRepo.getTestEntity().username),
@@ -135,7 +93,7 @@ describe('UsersService', () => {
 
   it('should change the picture', async () => {
     const newUser: User = mockRepo.getTestEntity();
-    newUser.picture = 'http://whoknows.com';
+    newUser.picture = 'https://whoknows.com';
     await expect(
       service.updatePicture(newUser.id, newUser.picture),
     ).resolves.not.toThrow();
