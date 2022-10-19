@@ -70,29 +70,11 @@ describe('UsersResolver', () => {
       picture: 'http://test.whoknows.xyz',
     });
     const updateUserPictureInput: UpdateUserPictureInput = {
-      id: newUser.id,
       picture: newUser.picture,
     };
     await expect(
       resolver.updatePicture(updateUserPictureInput, newUser),
     ).resolves.toEqual(newUser);
-  });
-
-  it('should not update other users picture', async () => {
-    const newUser = mockRepo.getTestEntity({
-      picture: 'heyho',
-    });
-    const testUser = mockRepo.getTestEntity({
-      id: 12345,
-      picture: 'hoho',
-    });
-    const updateUserPictureInput: UpdateUserPictureInput = {
-      id: newUser.id,
-      picture: newUser.picture,
-    };
-    await expect(
-      resolver.updatePicture(updateUserPictureInput, testUser),
-    ).rejects.toThrow(Error);
   });
 
   it('should not update a users picture if user not exist', async () => {
@@ -101,7 +83,6 @@ describe('UsersResolver', () => {
       picture: 'http://test.whoknows.xyz',
     });
     const updateUserPictureInput: UpdateUserPictureInput = {
-      id: newUser.id,
       picture: newUser.picture,
     };
     await expect(
@@ -112,7 +93,6 @@ describe('UsersResolver', () => {
   it('should update a users username', async () => {
     const newUser = mockRepo.getTestEntity({ username: 'testUser' });
     const updateUserUsernameInput: UpdateUserUsernameInput = {
-      id: newUser.id,
       username: newUser.username,
     };
     await expect(
@@ -120,29 +100,11 @@ describe('UsersResolver', () => {
     ).resolves.toEqual(newUser);
   });
 
-  it('should not update other users username', async () => {
-    const newUser = mockRepo.getTestEntity({
-      username: 'heyho',
-    });
-    const testUser = mockRepo.getTestEntity({
-      id: 12345,
-      username: 'hoho',
-    });
-    const updateUserUsernameInput: UpdateUserUsernameInput = {
-      id: newUser.id,
-      username: newUser.username,
-    };
-    await expect(
-      resolver.updateUsername(updateUserUsernameInput, testUser),
-    ).rejects.toThrow(Error);
-  });
-
   it('should not update a users username if not exist', async () => {
     const newUser = mockRepo.getTestEntity({
       id: 8974632,
     });
     const updateUserUsernameInput: UpdateUserUsernameInput = {
-      id: newUser.id,
       username: 'nothingtwice',
     };
     await expect(

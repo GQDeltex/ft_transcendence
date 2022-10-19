@@ -54,29 +54,25 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async updatePicture(
-    @Args('user') updateUserPictureInput: UpdateUserPictureInput,
+    @Args() updateUserPictureInput: UpdateUserPictureInput,
     @CurrentUser() user: User,
   ) {
-    if (user.id != updateUserPictureInput.id)
-      throw new Error('Missing Permissions to change other User');
     await this.usersService.updatePicture(
-      updateUserPictureInput.id,
+      user.id,
       updateUserPictureInput.picture,
     );
-    return this.usersService.findOne(updateUserPictureInput.id);
+    return this.usersService.findOne(user.id);
   }
 
   @Mutation(() => User)
   async updateUsername(
-    @Args('user') updateUserUsernameInput: UpdateUserUsernameInput,
+    @Args() updateUserUsernameInput: UpdateUserUsernameInput,
     @CurrentUser() user: User,
   ) {
-    if (user.id != updateUserUsernameInput.id)
-      throw new Error('Missing Permissions to change other User');
     await this.usersService.updateUsername(
-      updateUserUsernameInput.id,
+      user.id,
       updateUserUsernameInput.username,
     );
-    return this.usersService.findOne(updateUserUsernameInput.id);
+    return this.usersService.findOne(user.id);
   }
 }
