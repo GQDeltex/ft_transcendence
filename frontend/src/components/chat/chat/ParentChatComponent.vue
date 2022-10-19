@@ -16,9 +16,16 @@ let messages: Ref<
   }[]
 > = ref([]);
 
+function scrollToBottom() {
+  const container = document.getElementById('container');
+  if (container == null) return;
+  container.scrollTop = container.scrollHeight;
+}
+
 socket.on('prc', (data) => {
   console.log('Msg from: ', data);
   messages.value.push(data);
+  scrollToBottom();
 });
 
 function sendMsg() {
@@ -39,7 +46,7 @@ onUnmounted(() => socket.off('prc'));
 <template>
   <div class="parent">
     <span class="chatname">chat: {{ chatName }}</span>
-    <div class="messages">
+    <div id="container" class="messages">
       <span
         v-for="message in messages"
         :key="`msg_${message.from}_${message.to}_${message.msg}`"
@@ -78,6 +85,7 @@ onUnmounted(() => socket.off('prc'));
   border-bottom: 1px solid #202020;
   font-size: 1vw;
   padding: 0.5vw;
+  overflow-y: scroll;
 }
 .lower {
   display: flex;
