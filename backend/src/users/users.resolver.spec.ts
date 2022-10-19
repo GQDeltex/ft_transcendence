@@ -1,4 +1,4 @@
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
@@ -41,16 +41,37 @@ describe('UsersResolver', () => {
     ]);
   });
 
+  it('should find self by id in jwt token', async () => {
+    await expect(
+      resolver.findOneById(undefined, {
+        username: 'test',
+        id: mockRepo.getTestEntity().id,
+        email: 'test@example.com',
+        isAuthenticated: true,
+      }),
+    ).resolves.toEqual(mockRepo.getTestEntity());
+  });
+
   it('should find user by id', async () => {
-    await expect(resolver.findOneById(84364)).resolves.toEqual(
-      mockRepo.getTestEntity(),
-    );
+    await expect(
+      resolver.findOneById(84364, {
+        username: 'test',
+        id: 12345,
+        email: 'test@example.com',
+        isAuthenticated: true,
+      }),
+    ).resolves.toEqual(mockRepo.getTestEntity());
   });
 
   it('should not find non-existing user by id', async () => {
-    await expect(resolver.findOneById(76439)).rejects.toThrow(
-      EntityNotFoundError,
-    );
+    await expect(
+      resolver.findOneById(76439, {
+        username: 'test',
+        id: 12345,
+        email: 'test@example.com',
+        isAuthenticated: true,
+      }),
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should find user by username', async () => {

@@ -42,10 +42,15 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
     },
     {
-      path: '/profile',
+      path: '/profile/:username',
       name: 'ProfileView',
       component: () => import('../views/ProfileView.vue'),
     },
+    // {
+    //   path: '/profile',
+    //   name: 'ProfileView',
+    //   component: () => import('../views/ProfileView.vue'),
+    // },
     {
       path: '/stream',
       name: 'StreamView',
@@ -57,6 +62,12 @@ const router = createRouter({
 router.beforeResolve(async (to) => {
   const userStore = useUserStore();
 
+  try {
+    await userStore.fetchSelfData();
+  } catch (error) {
+    await userStore.logout();
+  }
+
   if (!userStore.isLoggedIn && to.name !== 'LoginView') {
     return { name: 'LoginView' };
   }
@@ -65,7 +76,7 @@ router.beforeResolve(async (to) => {
     // Remove bypass for production
     await userStore.login(
       to.query['code'] as string,
-      to.query['id'] as string | null,
+      to.query['id'] as string | undefined,
     );
     delete to.query.code;
     to.fullPath = to.path;

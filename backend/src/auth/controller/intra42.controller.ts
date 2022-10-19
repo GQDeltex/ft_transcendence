@@ -52,7 +52,7 @@ export class Intra42Controller {
     });
 
     res.cookie('jwt', jwt_token, { httpOnly: true });
-    return { id: +user.id, isAuthenticated: !user.twoFAEnable };
+    return { isAuthenticated: !user.twoFAEnable };
   }
 
   @Get('logout')

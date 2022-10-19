@@ -17,17 +17,17 @@ const userStore = useUserStore();
     </router-link>
   </div>
   <div class="column2">
-    <router-link to="/profile" class="columncontent">
+    <router-link :to="`/profile/${userStore.username}`" class="columncontent">
       <span>{{ userStore.title }} {{ userStore.username }}</span>
       <img alt="profile picture" class="prof_pic" :src="userStore.picture" />
     </router-link>
   </div>
   <nav>
-    <li><RouterLink to="leaderboard">Leaderboard</RouterLink></li>
-    <li><RouterLink to="play">Play Now</RouterLink></li>
-    <li><RouterLink to="skin">Skin Selection</RouterLink></li>
-    <li><RouterLink to="stream">Stream</RouterLink></li>
-    <li><RouterLink to="chat">Chat</RouterLink></li>
+    <li><RouterLink to="/leaderboard">Leaderboard</RouterLink></li>
+    <li><RouterLink to="/play">Play Now</RouterLink></li>
+    <li><RouterLink to="/skin">Skin Selection</RouterLink></li>
+    <li><RouterLink to="/stream">Stream</RouterLink></li>
+    <li><RouterLink to="/chat">Chat</RouterLink></li>
   </nav>
 </template>
 
