@@ -13,13 +13,9 @@
     <div id="playerPad" class="paddle paddle-left"></div>
     <div id="remotePad" class="paddle paddle-right"></div>
   </div>
-  <!-- <div class="container">
-    <input type="text" class="keyboard" />
-  </div> -->
 </template>
 
 <script setup lang="ts">
-import { directiveHooks } from '@vueuse/shared';
 import { onMounted } from 'vue';
 
 defineProps<{
@@ -76,7 +72,7 @@ class Vector {
 }
 
 class Ball extends Element {
-  private _shape: Vector;
+  public _shape: Vector;
   private _field: Vector;
   private _direction: Vector;
   private _speed: number;
@@ -85,7 +81,7 @@ class Ball extends Element {
     super(ballElem);
     this._field = new Vector(field.getWidth(), field.getHeight());
     this._direction = new Vector(0, 0);
-    this._speed = 80;
+    this._speed = 30;
     this._shape = new Vector(
       (super.getWidth() * 50) / this._field.x,
       (super.getHeight() * 50) / this._field.y,
@@ -96,9 +92,9 @@ class Ball extends Element {
   reset() {
     this.setx(50);
     this.sety(50);
-    this._direction.x = Math.random() * 10 - 5;
-    this._direction.y = Math.random() * 10 - 5;
-    this.speedLimit();
+    this._direction.x = Math.random() > 0.5 ? 1 : -1;
+    this._direction.y = Math.random() * 4 - 2;
+    // this.speedLimit();
   }
 
   getx(): number {
@@ -181,6 +177,7 @@ class Paddle extends Element {
   private _direction: Vector;
   private _speed: number;
   private _shape: Vector;
+  private _time = 0;
 
   constructor(padElement: HTMLElement | null, field: Element) {
     super(padElement);
@@ -206,10 +203,10 @@ class Paddle extends Element {
     else console.log('9 failiure, no object assigned\n');
   }
 
-  changeDir(pad : number, dir: number, time: number) {
+  changeDir(pad: number, dir: number) {
     if (this._direction.y === dir) return;
     this._direction.y = dir;
-    console.log("paddle " + pad + " time " + time + " dir " + dir);
+    console.log('paddle ' + pad + ' time ' + this._time + ' dir ' + dir);
   }
 
   step() {
@@ -220,8 +217,8 @@ class Paddle extends Element {
     if (g > 100 - this._shape.y) g = 100 - this._shape.y;
     this.sety(g);
   }
-  update(delta: number, speed: number | null) {
-    if (speed != null) this.changeDir(speed);
+  update(delta: number, speed: number | null, time: number) {
+    this._time = time;
     let i = 0;
     while (i < delta) {
       this.step();
@@ -246,8 +243,8 @@ onMounted(() => {
       delta = time - lastTime;
       ball.update(delta, [playerPad.getRect(), remotePad.getRect()]);
       // remotePad.update(delta, ball.gety() - remotePad.gety() > 0 ? 10 : 1, -10, time);
-      remotePad.update(delta, null);
-      playerPad.update(delta, null);
+      remotePad.update(delta, null, time);
+      playerPad.update(delta, null, time);
 
       loseCase();
     }
@@ -269,6 +266,7 @@ onMounted(() => {
     }
   });
   document.addEventListener('keyup', (e) => {
+    if (e.repeat) return;
     if (e.key == 'w' || e.key == 's') {
       playerPad.changeDir(1, 0);
     }
@@ -279,7 +277,7 @@ onMounted(() => {
 
   function loseCase() {
     if (
-      ball.getx() >= 100 &&
+      ball.getx() >= 100 - ball._shape.x &&
       playerScore !== null &&
       playerScore.textContent !== null
     ) {
@@ -289,7 +287,7 @@ onMounted(() => {
       remotePad.sety(50);
     }
     if (
-      ball.getx() <= 0 &&
+      ball.getx() <= 0 + ball._shape.x &&
       remoteScore !== null &&
       remoteScore.textContent !== null
     ) {
