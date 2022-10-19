@@ -1,6 +1,14 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
-import { OneToMany, Column, Entity, PrimaryColumn, Index } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -56,6 +64,18 @@ export class User {
   @Field()
   @Column({ default: 'offline' })
   status: string;
+
+  @ManyToMany(() => User, (user) => user.followers, {
+    nullable: true,
+  })
+  @JoinTable()
+  following: User[];
+
+  @ManyToMany(() => User, (user) => user.following, {
+    cascade: true,
+    nullable: true,
+  })
+  followers: User[];
 
   @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
