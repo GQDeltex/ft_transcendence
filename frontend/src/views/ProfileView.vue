@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import ParentHistoryComponent from '../components/profile/history/ParentHistoryComponent.vue';
 import ProfileComponent from '../components/profile/profile/ProfileComponent.vue';
 import AboutMeComponent from '../components/profile/aboutMe/AboutMeComponent.vue';
@@ -8,6 +8,9 @@ import ParentAchievementsComponent from '../components/profile/achievement/Paren
 
 const router = useRouter();
 const userStore = useUserStore();
+const route = useRoute();
+
+const { username } = route.params;
 
 const logout = async () => {
   await userStore.logout();
