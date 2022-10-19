@@ -5,6 +5,7 @@ import { Channel } from './entities/channel.entity';
 import { ChannelUser } from './entities/channeluser.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { User } from '../../users/entities/user.entity';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class ChannelService {
@@ -62,9 +63,9 @@ export class ChannelService {
           owner: brandNew,
           admin: brandNew,
         });
-      } else throw new Error('Already in Channel');
-      //Can probably be removed as we dont really care
-    } else throw new Error('Bad Password');
-    return this.findOne(+channel.id); // for testing
+      } //else throw new Error('Already in Channel');
+      //still needds to rejoin room(if they are not being stupid and just clicking join again while being in the room)
+    } else throw new WsException('Bad Password');
+    return this.findOne(+channel.id); //'+' VIC ;)
   }
 }

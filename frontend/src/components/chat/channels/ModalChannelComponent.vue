@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
+import { socket } from '../../../plugin/socket';
 const emits = defineEmits(['close']);
 
 let channelName: Ref<string> = ref('');
@@ -10,6 +11,9 @@ function closeOk() {
   console.log(
     'channelName= ' + channelName.value + ' password= ' + password.value,
   );
+  socket.emit('join', {
+    channel: { name: channelName.value, password: password.value },
+  });
   channelName.value = '';
   password.value = '';
   emits('close');
