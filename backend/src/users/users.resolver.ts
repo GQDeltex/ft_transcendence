@@ -15,7 +15,8 @@ import { User } from './entities/user.entity';
 import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { TwoFAGuard } from '../auth/guard/twoFA.guard';
-import { CurrentUser } from './decorator/current-user.decorator';
+import { CurrentJwtPayload } from './decorator/current-jwt-payload.decorator';
+import { JwtPayload } from '../auth/strategy/jwt.strategy';
 
 @Catch(EntityNotFoundError)
 export class CatchOurExceptionsFilter implements GqlExceptionFilter {
@@ -55,7 +56,7 @@ export class UsersResolver {
   @Mutation(() => User)
   async updatePicture(
     @Args() updateUserPictureInput: UpdateUserPictureInput,
-    @CurrentUser() user: User,
+    @CurrentJwtPayload() user: JwtPayload,
   ) {
     await this.usersService.updatePicture(
       user.id,
@@ -67,7 +68,7 @@ export class UsersResolver {
   @Mutation(() => User)
   async updateUsername(
     @Args() updateUserUsernameInput: UpdateUserUsernameInput,
-    @CurrentUser() user: User,
+    @CurrentJwtPayload() user: JwtPayload,
   ) {
     await this.usersService.updateUsername(
       user.id,
