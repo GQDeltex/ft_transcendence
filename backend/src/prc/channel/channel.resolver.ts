@@ -29,12 +29,6 @@ export class ChannelResolver {
   }
 
   @Mutation(() => Channel)
-  async createChannel(@Args() createChannelInput: CreateChannelInput) {
-    const id = await this.channelService.create(createChannelInput);
-    return this.channelService.findOne(id);
-  }
-
-  @Mutation(() => Channel)
   async joinChannel(
     @Args() createChannelInput: CreateChannelInput,
     @CurrentUser() user: User,
