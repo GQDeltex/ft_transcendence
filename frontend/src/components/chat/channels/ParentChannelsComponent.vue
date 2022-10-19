@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import ChatChannelComponent from './ChatChannelComponent.vue';
+import ChildChannelComponent from './ChildChannelComponent.vue';
+import ModalChannelComponent from './ModalChannelComponent.vue';
+import { ref } from 'vue';
 
-const newChannel = async () => {
-  console.log('newChannel button pressed');
+const modalActive = ref(false);
+
+const joinNewChannel = () => {
+  modalActive.value = true;
+};
+
+const onClose = () => {
+  modalActive.value = false;
 };
 </script>
 
@@ -10,46 +18,49 @@ const newChannel = async () => {
   <div class="channelsParent">
     <span class="text"
       >Channels
-      <button class="button" @click="newChannel">New Channel</button>
+      <button class="button" @click="joinNewChannel">
+        Join / Create Channel
+      </button>
+      <ModalChannelComponent v-show="modalActive" @close="onClose" />
     </span>
     <div class="list">
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="devOps"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="chitChat"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="42Wolfsburg"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="examPrep"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="ThisAndThat"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="SecretChannel"
         picture="@/assets/pongking_boi.svg"
       />
-      <ChatChannelComponent
+      <ChildChannelComponent
         key="4242"
         :client-id="4242"
         channel-name="StaffOnly!"
@@ -70,6 +81,7 @@ const newChannel = async () => {
 .text {
   display: flex;
   font-size: 1vw;
+  padding-bottom: 0.5vw;
   color: #f8971d;
   justify-content: space-between;
 }
@@ -84,7 +96,7 @@ button {
   color: black;
   background-color: #f8971d;
   cursor: pointer;
-  font-size: 0.5vw;
+  font-size: 0.8vw;
   border-color: transparent;
 }
 </style>

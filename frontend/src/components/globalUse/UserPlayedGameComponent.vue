@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import StreamGameComponent from './StreamGameComponent.vue';
+import ChildStreamComponent from '../stream/ChildStreamComponent.vue';
 </script>
 
 <template>
@@ -7,7 +7,7 @@ import StreamGameComponent from './StreamGameComponent.vue';
     <span class="username">gucalvi</span>
     <span class="time">6h ago</span>
     <span class="stream">
-      <StreamGameComponent player1-name="hlehmann" player2-name="gucalvi" />
+      <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
     </span>
   </div>
 </template>
