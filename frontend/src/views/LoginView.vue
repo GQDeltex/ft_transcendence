@@ -22,13 +22,13 @@ const login = () => {
       <p>PongKing</p>
     </span>
     <div
-      v-if="!userStore.isLoggedIn && !userStore.require2FAverify"
+      v-if="!userStore.isLoggedIn && !userStore.require2FAVerify"
       class="buttons"
     >
       <button class="button" @click="login">Login</button>
     </div>
     <TwoFAInputComponent
-      v-else-if="!userStore.isLoggedIn && userStore.require2FAverify"
+      v-else-if="!userStore.isLoggedIn && userStore.require2FAVerify"
     />
   </div>
 </template>

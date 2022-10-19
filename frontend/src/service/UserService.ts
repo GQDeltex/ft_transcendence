@@ -1,21 +1,17 @@
-import apolloClient from '@/plugin/apolloClient';
-import gql from 'graphql-tag';
+import graphQLService from '@/plugin/GraphQLService';
 import axios from 'axios';
 
 class UserService {
-  async fetchJwtAndId(code: string, bypassId: string | null) {
+  async fetchJwt(code: string, bypassId?: string) {
     return axios
       .get(`http://${import.meta.env.VITE_DOMAIN}:8080/42intra/callback`, {
         params: { code, id: bypassId },
         withCredentials: true,
       })
       .then((res) => {
-        if (
-          typeof res.data.id === 'undefined' ||
-          typeof res.data.isAuthenticated === 'undefined'
-        )
-          throw new Error('Empty user ID.');
-        return { id: res.data.id, require2FAverify: !res.data.isAuthenticated };
+        if (typeof res.data.isAuthenticated === 'undefined')
+          throw new Error('Empty user authentication.');
+        return { require2FAVerify: !res.data.isAuthenticated };
       })
       .catch((error) => {
         if (typeof error.response === 'undefined') throw error;
@@ -40,16 +36,14 @@ class UserService {
       });
   }
 
-  async verify2FA(code: string) {
+  async verify2FA(code: string): Promise<void> {
     return axios
       .get(`http://${import.meta.env.VITE_DOMAIN}:8080/2fa/verify`, {
         params: { code },
         withCredentials: true,
       })
-      .then((res) => {
-        if (typeof res.data.id === 'undefined')
-          throw new Error('Empty user ID.');
-        return { id: res.data.id };
+      .then(() => {
+        return;
       })
       .catch((error) => {
         if (typeof error.response === 'undefined') throw error;
@@ -100,9 +94,30 @@ class UserService {
       });
   }
 
+  async findSelf() {
+    const { user } = await graphQLService.query(
+      `
+        query {
+          user {
+            id
+            username
+            title
+            picture
+            status
+            twoFAEnable
+          }
+        }
+      `,
+      undefined,
+      { fetchPolicy: 'network-only' },
+    );
+    if (typeof user === 'undefined') throw new Error('Empty user data');
+    return user;
+  }
+
   async findOneById(id: number) {
-    const { data, error, errors } = await apolloClient.query({
-      query: gql`
+    const { user } = await graphQLService.query(
+      `
         query User($id: Int!) {
           user(id: $id) {
             id
@@ -113,22 +128,15 @@ class UserService {
           }
         }
       `,
-      variables: {
-        id,
-      },
-    });
-
-    if (error) throw new Error(error.message);
-    if (errors && errors.length > 0) throw new Error(errors[0].message);
-    if (typeof data === 'undefined' || typeof data.user === 'undefined')
-      throw new Error('Empty user data');
-
-    return data.user;
+      { id },
+    );
+    if (typeof user === 'undefined') throw new Error('Empty user data');
+    return user;
   }
 
   async findAll() {
-    const { data, error, errors } = await apolloClient.query({
-      query: gql`
+    const { users } = await graphQLService.query(
+      `
         query {
           users {
             id
@@ -139,14 +147,9 @@ class UserService {
           }
         }
       `,
-    });
-
-    if (error) throw new Error(error.message);
-    if (errors && errors.length > 0) throw new Error(errors[0].message);
-    if (typeof data === 'undefined' || typeof data.users === 'undefined')
-      throw new Error('Empty user data');
-
-    return data.users;
+    );
+    if (typeof users === 'undefined') throw new Error('Empty users data');
+    return users;
   }
 }
 

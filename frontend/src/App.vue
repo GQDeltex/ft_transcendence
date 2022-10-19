@@ -13,10 +13,10 @@ const { isLoggedIn } = storeToRefs(userStore);
 const errorStore = useErrorStore();
 const { getErrors: errors } = storeToRefs(errorStore);
 
-if (isLoggedIn.value == true && !socket.connected) socket.connect();
+if (isLoggedIn.value && !socket.connected) socket.connect();
 
 watch(isLoggedIn, (newLogState) => {
-  if (newLogState == true) socket.connect();
+  if (newLogState) socket.connect();
   else socket.disconnect();
 });
 </script>
