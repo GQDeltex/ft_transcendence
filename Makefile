@@ -45,7 +45,7 @@ reprod: fclean prod
 redebug: fclean debug
 
 norm:
-	-osascript -e "set Volume 50"
+	-osascript -e "set Volume 3.5"
 	-python -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(FRONT_NAME) npm run format
 	$(DC) exec $(FRONT_NAME) npm run lint
@@ -60,7 +60,7 @@ back:
 	$(DC) exec $(BACK_NAME) /bin/sh
 
 test:
-	-osascript -e "set Volume 50"
+	-osascript -e "set Volume 3.5"
 	-python -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(BACK_NAME) npm run test
 
