@@ -4,9 +4,8 @@ import ParentPeoplesComponent from '../components/chat/peoples/ParentPeoplesComp
 import ParentChannelsComponent from '../components/chat/channels/ParentChannelsComponent.vue';
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import UserService from '../service/UserService';
-import { onMounted } from 'vue';
 
 const chatName = ref('gucalvi');
 const users = ref([]);
