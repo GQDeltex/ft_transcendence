@@ -16,6 +16,7 @@ export const mockUser: User = {
   status: 'offline',
   following: [],
   followers: [],
+  channelList: [],
 };
 
 export const createMockUser = (options: Partial<User> = {}): User => ({
@@ -34,5 +35,6 @@ export const createMockUser = (options: Partial<User> = {}): User => ({
   status: 'offline',
   following: [],
   followers: [],
+  channelList: [],
   ...options,
 });
