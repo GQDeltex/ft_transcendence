@@ -8,6 +8,7 @@ import { PrcModule } from './prc/prc.module';
 import { User } from './users/entities/user.entity';
 import { ChannelUser } from './prc/channel/entities/channeluser.entity';
 import { Channel } from './prc/channel/entities/channel.entity';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { Channel } from './prc/channel/entities/channel.entity';
     UsersModule,
     AuthModule,
     PrcModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],

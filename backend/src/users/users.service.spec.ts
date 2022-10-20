@@ -39,6 +39,13 @@ describe('UsersService', () => {
     );
   });
 
+  // Issue #194 https://github.com/GQDeltex/ft_transcendence/issues/194
+  it('should not find user with undefined', async () => {
+    await expect(
+      service.findOne(undefined as unknown as string),
+    ).rejects.toThrow(EntityNotFoundError);
+  });
+
   it('should not find non-existing id', async () => {
     await expect(service.findOne(98989)).rejects.toThrow(EntityNotFoundError);
   });
