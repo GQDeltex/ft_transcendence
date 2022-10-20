@@ -9,9 +9,12 @@ services:
             POSTGRES_USER: ${DB_USERNAME} # Set in .env file
         volumes:
             - db_data:/var/lib/postgresql/data
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
 
     backend:
         build: ./backend
+        depends_on: ['database']
         ports:
             - 8080:3000
         env_file:
@@ -23,6 +26,7 @@ services:
           args:
             - VITE_PAYPAL_CLIENT_ID
             - VITE_DOMAIN
+        depends_on: ['backend']
         ports:
             - 80:80
 
