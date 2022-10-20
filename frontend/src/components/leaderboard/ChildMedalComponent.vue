@@ -13,6 +13,7 @@ defineProps<{
     <router-link to="/profile">
       <div>
         <RoundPictureComponent
+          class="gilohm"
           :picture="ImportedPicture"
           size="100px"
           border-color="transparent"
