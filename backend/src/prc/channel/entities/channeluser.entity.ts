@@ -25,12 +25,12 @@ export class ChannelUser {
   user_id: number;
 
   @ManyToOne(() => Channel)
-  @JoinColumn({ name: 'channel_id' })
+  @JoinColumn({ name: 'channel_name', referencedColumnName: 'name' })
   channel: Channel;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Column()
-  channel_id: number;
+  channel_name: string;
 
   @Column({ default: false })
   @Field()
