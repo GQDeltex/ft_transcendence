@@ -45,6 +45,8 @@ reprod: fclean prod
 redebug: fclean debug
 
 norm:
+	-@osascript -e "set Volume 3.5"
+	-@python -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(FRONT_NAME) npm run format
 	$(DC) exec $(FRONT_NAME) npm run lint
 	$(DC) exec $(FRONT_NAME) npm run type-check
@@ -58,6 +60,8 @@ back:
 	$(DC) exec $(BACK_NAME) /bin/sh
 
 test:
+	-@osascript -e "set Volume 3.5"
+	-@python -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(BACK_NAME) npm run test
 
 .PHONY: all prod dev stop clean fclean redev reprod norm front back debug redebug volume
