@@ -28,6 +28,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
+import { ChannelUser } from './channel/entities/channeluser.entity';
 
 export const CurrentUserFromWs = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
@@ -92,17 +93,25 @@ export class PrcGateway implements OnGatewayDisconnect {
 
   @SubscribeMessage('newconnection')
   async connect(
-    @CurrentUserFromWs() user: any,
+    @CurrentUserFromWs() JWTtoken: JwtPayload,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Client connected', client.id, user.username);
-    await this.usersService.updateSocketId(user.id, client.id);
-    await this.usersService.updateStatus(user.id, 'online');
+    console.log('Client connected', client.id, JWTtoken.username);
+    await this.usersService.updateSocketId(JWTtoken.id, client.id);
+    await this.usersService.updateStatus(JWTtoken.id, 'online');
+    const user: User = await this.usersService.findOne(JWTtoken.id);
+    const channelUsers: ChannelUser[] | undefined = user.channelList;
+    if (typeof channelUsers === 'undefined') return;
+    channelUsers.forEach((channelUser) =>
+      client.join(channelUser.channel_name),
+    );
   }
+
+  //array1.forEach(element => console.log(element));
 
   @SubscribeMessage('prc')
   async prcMessage(
-    @CurrentUserFromWs() user: any,
+    @CurrentUserFromWs() user: JwtPayload,
     @MessageBody('to') to: string,
     @MessageBody('msg') msg: string,
     @ConnectedSocket() client: Socket,
