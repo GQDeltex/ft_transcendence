@@ -2,10 +2,12 @@
 import { useUserStore } from '@/store/user';
 import { ref, watch, nextTick } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
+import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
+const modalActive = ref(false);
 
 watch(checked, async (newValue, oldValue) => {
   if (newValue === oldValue) return;
@@ -28,6 +30,10 @@ const onClose = () => {
     checked.value = false;
   }
 };
+
+const changeUsername = () => {
+  modalActive.value = !modalActive.value;
+};
 </script>
 
 <template>
@@ -36,7 +42,15 @@ const onClose = () => {
     <div class="infoBox">
       <span class="title">{{ userStore.title }}</span>
       <br />
-      <span class="username">{{ userStore.username }} (Rank 1) (C)</span>
+      <span class="username"
+        >{{ userStore.username }} (Rank 1)
+        <span @click="changeUsername">(C)</span></span
+      >
+      <ModalChangeUsernameComponent
+        v-show="modalActive"
+        :input-username="userStore.username"
+        @close="changeUsername"
+      />
       <br />
       <span class="campus">Wolfsburg, Germany</span>
       <br />
