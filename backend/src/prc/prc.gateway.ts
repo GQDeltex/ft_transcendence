@@ -29,6 +29,7 @@ import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { ChannelUser } from './channel/entities/channeluser.entity';
+import { Channel } from './channel/entities/channel.entity';
 
 export const CurrentUserFromWs = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
@@ -116,14 +117,19 @@ export class PrcGateway implements OnGatewayDisconnect {
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
     console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
-    const recipient: User | null = await this.usersService.findOne(to);
-    if (recipient == null) throw new WsException('Recipient not in database');
-    if (recipient.socketId == '')
-      throw new WsException('Recipient socketId empty');
-    const sockets = await this.server.in(recipient.socketId).fetchSockets();
-    if (sockets.length < 1)
-      throw new WsException('Could not find Recipients socket');
-    const recClient = sockets[0];
+    let recipient: User | Channel;
+    if (to[0] == '#' || to[0] == '&')
+      recipient = await this.channelService.findOne(to);
+    else recipient = await this.usersService.findOne(to);
+    let recClient;
+    if (recipient instanceof User) {
+      if (recipient.socketId == '')
+        throw new WsException('Recipient socketId empty');
+      const sockets = await this.server.in(recipient.socketId).fetchSockets();
+      if (sockets.length < 1)
+        throw new WsException('Could not find Recipients socket');
+      recClient = sockets[0];
+    } else recClient = client.to(recipient.name);
     recClient.emit('prc', { from: user, to: recipient, msg: msg });
     console.log('Sent message!');
   }
