@@ -1,17 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
+import UserService from '@/service/UserService';
+import { useUserStore } from '@/store/user';
+import { useErrorStore } from '@/store/error';
 const emits = defineEmits(['close']);
 
 let outputUsername: Ref<string> = ref('');
+const userStore = useUserStore();
+const errorStore = useErrorStore();
 
 const props = defineProps<{
+  userId: number;
   inputUsername: string;
 }>();
 
-function closeOk() {
-  console.log('username= ' + outputUsername.value);
-  //@ToDo change username in database with GraphQL
+async function closeOk() {
+  try {
+    userStore.username = (
+      await UserService.changeUsername(outputUsername.value)
+    ).username;
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+    return;
+  }
   outputUsername.value = '';
   emits('close');
 }
@@ -28,7 +40,7 @@ function closeCancel() {
       <h1>
         Change Username<span class="close" @click="closeCancel()">&times;</span>
       </h1>
-      <label>Name</label>
+      <label>new Username</label>
       <input
         v-model="outputUsername"
         type="text"
@@ -44,7 +56,7 @@ function closeCancel() {
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 999; /* Sit on top */
+  z-index: 800; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
