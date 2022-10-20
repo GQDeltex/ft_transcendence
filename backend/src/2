@@ -40,9 +40,9 @@ describe('UsersService', () => {
   });
 
   it('should not find user with undefined', async () => {
-    await expect(
-      service.findOne(undefined as unknown as string),
-    ).rejects.toThrow(EntityNotFoundError);
+    await expect(service.findOne(undefined)).resolves.toEqual(
+      mockRepoUser.getTestEntity(),
+    );
   });
 
   it('should not find non-existing id', async () => {
