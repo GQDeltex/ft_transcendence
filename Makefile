@@ -1,4 +1,7 @@
 DC := $(shell which docker-compose)
+ifeq ($(DC),)
+	DC := "docker compose"
+endif
 
 FOLDER_NAME := $(shell basename $(realpath .))
 
@@ -19,12 +22,10 @@ dev: $(DEV)
 
 stop:
 	-$(DC) -f $(DEV) stop
-	-$(DC) -f $(DEBUG) stop
 	-$(DC) -f $(PROD) stop
 
 clean: stop
 	-$(DC) -f $(DEV) down
-	-$(DC) -f $(DEBUG) down
 	-$(DC) -f $(PROD) down
 
 volume:
