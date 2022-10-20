@@ -47,6 +47,7 @@ const changeUsername = () => {
         <img
           alt="pen"
           class="pen"
+		  title="Change username"
           src="@/assets/pen.png"
           @click="changeUsername"
       	/>
@@ -134,9 +135,6 @@ const changeUsername = () => {
 .username {
   color: #f8971d;
   font-size: 2vw;
-  font-stretch: expanded;
-  justify-content: center;
-  align-content: center;
 }
 
 .campus {
@@ -218,7 +216,7 @@ input:checked + .slider:before {
 }
 
 .pen {
-  height: 2vw;
-  width: 2vw;
+  height: 1.5vw;
+  width: 1.5vw;
 }
 </style>
