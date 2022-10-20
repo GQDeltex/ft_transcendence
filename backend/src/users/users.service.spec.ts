@@ -39,6 +39,7 @@ describe('UsersService', () => {
     );
   });
 
+  // Issue #194 https://github.com/GQDeltex/ft_transcendence/issues/194
   it('should not find user with undefined', async () => {
     await expect(
       service.findOne(undefined as unknown as string),
