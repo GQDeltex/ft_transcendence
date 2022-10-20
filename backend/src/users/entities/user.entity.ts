@@ -81,6 +81,7 @@ export class User {
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
     cascade: true,
     onDelete: 'CASCADE',
+    eager: true,
   })
   channelList?: ChannelUser[];
 }
