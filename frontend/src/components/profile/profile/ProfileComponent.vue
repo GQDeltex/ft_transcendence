@@ -2,6 +2,7 @@
 import { useUserStore } from '@/store/user';
 import { ref, watch, nextTick } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
+import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
@@ -32,7 +33,12 @@ const onClose = () => {
 
 <template>
   <div class="profile">
-    <img class="picture" alt="user picture" :src="userStore.picture" />
+    <RoundPictureComponent
+      class="picture"
+      :picture="userStore.picture"
+      size="10vw"
+      border-color="white"
+    />
     <div class="infoBox">
       <span class="title">{{ userStore.title }}</span>
       <br />
@@ -103,12 +109,6 @@ const onClose = () => {
 }
 
 .picture {
-  object-fit: cover;
-  object-position: 50% 0%;
-  height: 10vw;
-  width: 10vw;
-  border-radius: 50%;
-  border: 1px solid white;
   grid-column: 1 / 2;
 }
 

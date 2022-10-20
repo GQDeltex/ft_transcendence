@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 
 const props = defineProps<{
   clientId: number;
@@ -21,9 +22,9 @@ const statusStyle = computed(() => {
 const statusBorder = computed(() => {
   switch (props.status) {
     case 'online':
-      return { 'border-color': 'lime' };
+      return 'lime';
     default:
-      return { 'border-color': 'grey' };
+      return 'grey';
   }
 });
 
@@ -36,11 +37,11 @@ function work() {
 
 <template>
   <div class="client" @click="work">
-    <img
-      :style="statusBorder"
+    <RoundPictureComponent
       class="picture"
-      alt="user picture"
-      :src="picture"
+      :picture="picture"
+      size="1.5vw"
+      :border-color="statusBorder"
     />
     <div class="infoBox">
       <span class="username">{{ title }} {{ username }}</span>
@@ -67,15 +68,6 @@ function work() {
   flex-direction: column;
   padding-left: 5%;
 }
-.picture {
-  object-fit: cover;
-  object-position: 50% 0%;
-  height: 1.5vw;
-  width: 1.5vw;
-  border-radius: 50%;
-  border: 1px solid white;
-}
-
 .username {
   color: white;
   font-size: 0.8vw;

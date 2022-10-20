@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
+import ImportedPicture from '@/assets/sexy-guy-001-modified.png';
+
 defineProps<{
   playerName: string;
 }>();
@@ -8,11 +11,10 @@ defineProps<{
   <div>
     <router-link to="/profile">
       <div>
-        <img
-          class="gilohm"
-          src="@/assets/sexy-guy-001-modified.png"
-          width="100"
-          height="100"
+        <RoundPictureComponent
+          :picture="ImportedPicture"
+          size="100px"
+          border-color="transparent"
         />
         <img
           class="mty"
