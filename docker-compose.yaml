@@ -9,19 +9,26 @@ services:
             POSTGRES_USER: ${DB_USERNAME} # Set in .env file
         volumes:
             - db_data:/var/lib/postgresql/data
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
 
     backend:
         build: ./tools/devcontainer
+        depends_on: ['database']
         volumes:
             - ${PWD}/backend:/app
         ports:
             - 8080:3000
-        command: /entrypoint.sh npm run start:dev
+            - 9229:9229
+        command: /entrypoint.sh npm run start:debug
         env_file:
             - .env
+        healthcheck:
+            test: ["CMD-SHELL", "curl --fail http://localhost:3000/health/check"]
 
     frontend:
         build: ./tools/devcontainer
+        depends_on: ['backend']
         volumes:
             - ${PWD}/frontend:/app
         ports:
@@ -29,6 +36,8 @@ services:
         command: /entrypoint.sh npm run dev
         env_file:
             - .env
+        healthcheck:
+            test: ["CMD-SHELL", "curl --fail http://localhost:5000/"]
 
 volumes:
     db_data:
