@@ -42,14 +42,15 @@ const changeUsername = () => {
     <div class="infoBox">
       <span class="title">{{ userStore.title }}</span>
       <br />
-      <span class="username"
-        >{{ userStore.username }} (Rank 1)
+      <div class="username">
+		<span>{{ userStore.username }} (Rank 1) </span>
         <img
           alt="pen"
           class="pen"
           src="@/assets/pen.png"
           @click="changeUsername"
-      /></span>
+      	/>
+	  </div>
       <ModalChangeUsernameComponent
         v-show="modalActive"
         :input-username="userStore.username"
