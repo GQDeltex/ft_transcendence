@@ -107,8 +107,6 @@ export class PrcGateway implements OnGatewayDisconnect {
     );
   }
 
-  //array1.forEach(element => console.log(element));
-
   @SubscribeMessage('prc')
   async prcMessage(
     @CurrentUserFromWs() user: JwtPayload,
