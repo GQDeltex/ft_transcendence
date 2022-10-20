@@ -44,8 +44,12 @@ const changeUsername = () => {
       <br />
       <span class="username"
         >{{ userStore.username }} (Rank 1)
-        <span @click="changeUsername">(C)</span></span
-      >
+        <img
+          alt="pen"
+          class="pen"
+          src="@/assets/pen.png"
+          @click="changeUsername"
+      /></span>
       <ModalChangeUsernameComponent
         v-show="modalActive"
         :input-username="userStore.username"
@@ -130,6 +134,8 @@ const changeUsername = () => {
   color: #f8971d;
   font-size: 2vw;
   font-stretch: expanded;
+  justify-content: center;
+  align-content: center;
 }
 
 .campus {
@@ -208,5 +214,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.pen {
+  height: 2vw;
+  width: 2vw;
 }
 </style>
