@@ -2,12 +2,22 @@ import { defineStore } from 'pinia';
 import UserService from '@/service/UserService';
 import { useErrorStore } from './error';
 
+export type User = {
+  isLogged?: boolean;
+  id: number;
+  username: string;
+  title: string[];
+  picture: string;
+  twoFAEnable: boolean;
+  require2FAVerify?: boolean;
+};
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
-    id: '',
+    id: -1,
     username: '',
-    title: '',
+    title: [''],
     picture: '',
     twoFAEnable: false,
     require2FAVerify: false,
@@ -38,12 +48,12 @@ export const useUserStore = defineStore('user', {
       this.isLoggedIn = true;
       this.id = user.id;
       this.username = user.username;
-      this.title = user.title[0];
+      this.title = user.title;
       this.picture = user.picture;
       this.twoFAEnable = user.twoFAEnable;
     },
     async logout(): Promise<void> {
-      if (this.isLoggedIn || this.id !== '') {
+      if (this.isLoggedIn || this.id > 0) {
         try {
           this.$reset();
           await UserService.logout();

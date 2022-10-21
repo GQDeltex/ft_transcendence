@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { useUserStore } from '@/store/user';
+import { inject } from 'vue';
+import type { User } from '@/store/user';
 
-const userStore = useUserStore();
+const { user } = inject<{ user: User | null }>('user', {
+  user: null,
+});
 </script>
 
 <template>
@@ -11,11 +14,11 @@ const userStore = useUserStore();
     </span>
     <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
-      User name: <span class="info">{{ userStore.username }}</span>
+      User name: <span class="info">{{ user.username }}</span>
       <br />
-      First name: <span class="info">{{ userStore.username }}</span>
+      First name: <span class="info">{{ user.username }}</span>
       <br />
-      Last name: <span class="info">{{ userStore.username }}</span>
+      Last name: <span class="info">{{ user.username }}</span>
       <br />
       Intra login: <span class="info">intralogin</span>
       <br />
@@ -38,6 +41,7 @@ const userStore = useUserStore();
   font-size: 2vw;
   color: #f8971d;
 }
+
 .infoBox {
   font-size: 2vw;
   color: grey;

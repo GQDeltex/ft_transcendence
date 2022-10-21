@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
-import { ref, watch, nextTick } from 'vue';
+import type { User } from '@/store/user';
+import { inject, nextTick, ref, watch } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
 import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
@@ -9,6 +10,11 @@ const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
 const modalActive = ref(false);
+
+const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
+  user: null,
+  isMe: false,
+});
 
 watch(checked, async (newValue, oldValue) => {
   if (newValue === oldValue) return;
@@ -31,38 +37,35 @@ const onClose = () => {
     checked.value = false;
   }
 };
-
-const changeUsername = () => {
-  modalActive.value = !modalActive.value;
-};
 </script>
 
 <template>
   <div class="profile">
     <RoundPictureComponent
       class="picture"
-      :picture="userStore.picture"
+      :picture="user.picture"
       size="10vw"
       border-color="white"
     />
     <div class="infoBox">
-      <span class="title">{{ userStore.title }}</span>
+      <span class="title">{{ user.title[0] }}</span>
       <br />
       <div class="username">
-        <span>{{ userStore.username }} (Rank 1) </span>
+        <span>{{ user.username }} (Rank 1) </span>
         <img
+          v-if="isMe"
           alt="pen"
           class="pen"
           title="Change username"
           src="@/assets/pen.png"
-          @click="changeUsername"
+          @click="modalActive = true"
         />
       </div>
       <ModalChangeUsernameComponent
         v-show="modalActive"
-        :user-id="+userStore.id"
-        :input-username="userStore.username"
-        @close="changeUsername"
+        :user-id="user.id"
+        :input-username="user.username"
+        @close="modalActive = false"
       />
       <br />
       <span class="campus">Wolfsburg, Germany</span>
@@ -72,7 +75,7 @@ const changeUsername = () => {
 
     <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
 
-    <span class="twoFA"
+    <span v-if="isMe" class="twoFA"
       >2 Factor Authentication
       <label class="switch">
         <input v-model="checked" type="checkbox" />
@@ -102,7 +105,6 @@ const changeUsername = () => {
   color: white;
   margin-top: 10%;
   margin-left: 60%;
-  /* margin-right: 0%; */
 }
 
 .banner {
@@ -110,16 +112,13 @@ const changeUsername = () => {
   grid-row: 1 / 3;
   max-width: 90%;
   max-height: 20vw;
-  /* margin-left: 2%;
-  margin-top: 2%; */
 }
 
 .profile {
   display: grid;
   grid-gap: 1%;
   align-items: center;
-  padding: 10px;
-  padding-bottom: 1%;
+  padding: 10px 10px 1%;
   border-width: 1px;
   border-style: solid;
   border-image: linear-gradient(to bottom, white, #f8971d, #f8971d, #202020) 1;
@@ -179,8 +178,6 @@ const changeUsername = () => {
   right: 0;
   bottom: 0;
   background-color: grey;
-  /* -webkit-transition: 0.4s;
-  transition: 0.4s; */
 }
 
 .slider:before {
@@ -207,7 +204,6 @@ input:checked + .slider:before {
   transform: translateX(1.8vw);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 25vw;
 }
