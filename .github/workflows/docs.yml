@@ -1,0 +1,36 @@
+name: Documentation
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.PAT_DOC_GENERATOR }}
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: "backend/package-lock.json"
+
+      - name: Install npm packages
+        run: npm --prefix ./backend ci
+
+      - name: Generate docs
+        run: npm --prefix ./backend run docs
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update Documentation'
+          default_author: github_actions
+          add: './backend/docs'
