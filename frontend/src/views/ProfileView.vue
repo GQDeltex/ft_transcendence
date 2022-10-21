@@ -10,7 +10,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const route = useRoute();
 
-const { username } = route.params;
+//const { username } = route.params;
 
 const logout = async () => {
   await userStore.logout();
