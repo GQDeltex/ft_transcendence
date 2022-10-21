@@ -35,7 +35,7 @@
 
 #### Defined in
 
-src/prc/channel/channel.resolver.ts:14
+[src/prc/channel/channel.resolver.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.resolver.ts#L14)
 
 ## Properties
 
@@ -45,7 +45,7 @@ src/prc/channel/channel.resolver.ts:14
 
 #### Defined in
 
-src/prc/channel/channel.resolver.ts:14
+[src/prc/channel/channel.resolver.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.resolver.ts#L14)
 
 ## Methods
 
@@ -59,7 +59,7 @@ src/prc/channel/channel.resolver.ts:14
 
 #### Defined in
 
-src/prc/channel/channel.resolver.ts:16
+[src/prc/channel/channel.resolver.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.resolver.ts#L16)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-src/prc/channel/channel.resolver.ts:26
+[src/prc/channel/channel.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.resolver.ts#L26)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-src/prc/channel/channel.resolver.ts:21
+[src/prc/channel/channel.resolver.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.resolver.ts#L21)
 
 ___
 
@@ -120,4 +120,4 @@ ___
 
 #### Defined in
 
-src/prc/channel/channel.resolver.ts:31
+[src/prc/channel/channel.resolver.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.resolver.ts#L31)

@@ -47,4 +47,4 @@ GqlExceptionFilter.catch
 
 #### Defined in
 
-src/tools/ExceptionFilter.ts:21
+[src/tools/ExceptionFilter.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/ExceptionFilter.ts#L21)

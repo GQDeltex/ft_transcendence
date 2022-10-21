@@ -29,7 +29,7 @@
 
 #### Defined in
 
-src/users/dto/update-friendship.input.ts:24
+[src/users/dto/update-friendship.input.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/dto/update-friendship.input.ts#L24)
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 #### Defined in
 
-src/users/dto/update-friendship.input.ts:20
+[src/users/dto/update-friendship.input.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/dto/update-friendship.input.ts#L20)

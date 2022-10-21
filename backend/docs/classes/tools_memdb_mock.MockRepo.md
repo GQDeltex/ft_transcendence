@@ -44,7 +44,7 @@
 
 #### Defined in
 
-src/tools/memdb.mock.ts:14
+[src/tools/memdb.mock.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L14)
 
 ## Properties
 
@@ -54,7 +54,7 @@ src/tools/memdb.mock.ts:14
 
 #### Defined in
 
-src/tools/memdb.mock.ts:16
+[src/tools/memdb.mock.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L16)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:12
+[src/tools/memdb.mock.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L12)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:15
+[src/tools/memdb.mock.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L15)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:9
+[src/tools/memdb.mock.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L9)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:10
+[src/tools/memdb.mock.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L10)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:11
+[src/tools/memdb.mock.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L11)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:17
+[src/tools/memdb.mock.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L17)
 
 ## Methods
 
@@ -128,7 +128,7 @@ src/tools/memdb.mock.ts:17
 
 #### Defined in
 
-src/tools/memdb.mock.ts:70
+[src/tools/memdb.mock.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L70)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:75
+[src/tools/memdb.mock.ts:75](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L75)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:48
+[src/tools/memdb.mock.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L48)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:39
+[src/tools/memdb.mock.ts:39](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L39)
 
 ___
 
@@ -195,4 +195,4 @@ ___
 
 #### Defined in
 
-src/tools/memdb.mock.ts:43
+[src/tools/memdb.mock.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/memdb.mock.ts#L43)

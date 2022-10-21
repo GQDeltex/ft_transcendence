@@ -49,7 +49,7 @@ PassportStrategy(Strategy).constructor
 
 #### Defined in
 
-src/auth/strategy/jwt.strategy.ts:16
+[src/auth/strategy/jwt.strategy.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/strategy/jwt.strategy.ts#L16)
 
 ## Properties
 
@@ -59,7 +59,7 @@ src/auth/strategy/jwt.strategy.ts:16
 
 #### Defined in
 
-src/auth/strategy/jwt.strategy.ts:16
+[src/auth/strategy/jwt.strategy.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/strategy/jwt.strategy.ts#L16)
 
 ___
 
@@ -309,4 +309,4 @@ ___
 
 #### Defined in
 
-src/auth/strategy/jwt.strategy.ts:34
+[src/auth/strategy/jwt.strategy.ts:34](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/strategy/jwt.strategy.ts#L34)

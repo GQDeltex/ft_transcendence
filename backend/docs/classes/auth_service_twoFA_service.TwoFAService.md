@@ -36,7 +36,7 @@
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:10
+[src/auth/service/twoFA.service.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L10)
 
 ## Properties
 
@@ -46,7 +46,7 @@ src/auth/service/twoFA.service.ts:10
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:10
+[src/auth/service/twoFA.service.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L10)
 
 ## Methods
 
@@ -66,7 +66,7 @@ src/auth/service/twoFA.service.ts:10
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:56
+[src/auth/service/twoFA.service.ts:56](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L56)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:31
+[src/auth/service/twoFA.service.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L31)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:12
+[src/auth/service/twoFA.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L12)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:27
+[src/auth/service/twoFA.service.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L27)
 
 ___
 
@@ -150,4 +150,4 @@ ___
 
 #### Defined in
 
-src/auth/service/twoFA.service.ts:44
+[src/auth/service/twoFA.service.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/service/twoFA.service.ts#L44)

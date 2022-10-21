@@ -32,4 +32,4 @@
 
 #### Defined in
 
-src/health/health.controller.ts:5
+[src/health/health.controller.ts:5](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/health/health.controller.ts#L5)

@@ -54,7 +54,7 @@ AuthGuard(&#x27;intra42&#x27;).constructor
 
 #### Defined in
 
-src/auth/guard/intra42.guard.ts:9
+[src/auth/guard/intra42.guard.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/intra42.guard.ts#L9)
 
 ## Properties
 
@@ -64,7 +64,7 @@ src/auth/guard/intra42.guard.ts:9
 
 #### Defined in
 
-src/auth/guard/intra42.guard.ts:9
+[src/auth/guard/intra42.guard.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/intra42.guard.ts#L9)
 
 ___
 
@@ -146,7 +146,7 @@ AuthGuard(&#x27;intra42&#x27;).canActivate
 
 #### Defined in
 
-src/auth/guard/intra42.guard.ts:13
+[src/auth/guard/intra42.guard.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/intra42.guard.ts#L13)
 
 ___
 

@@ -46,4 +46,4 @@ ExceptionFilter.catch
 
 #### Defined in
 
-src/tools/ExceptionFilter.ts:31
+[src/tools/ExceptionFilter.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/tools/ExceptionFilter.ts#L31)
