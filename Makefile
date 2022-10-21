@@ -39,7 +39,7 @@ redev: fclean dev
 reprod: fclean prod
 
 norm:
-	-@osascript -e "set Volume 1"
+	-@osascript -e "set Volume 2"
 	-@python3 -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(FRONT_NAME) npm run format
 	$(DC) exec $(FRONT_NAME) npm run lint
@@ -54,7 +54,7 @@ back:
 	$(DC) exec $(BACK_NAME) /bin/sh
 
 test:
-	-@osascript -e "set Volume 1"
+	-@osascript -e "set Volume 2"
 	-@python3 -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(BACK_NAME) npm run test
 
