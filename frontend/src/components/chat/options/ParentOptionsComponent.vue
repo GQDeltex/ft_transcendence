@@ -15,6 +15,7 @@ defineProps<{
 var inchatvar = ref(false);
 var bannedvar = ref(false);
 var adminvar = ref(false);
+var mutedvar = ref(false);
 
 function bannedfunc() {
   bannedvar.value = !bannedvar.value;
@@ -26,6 +27,10 @@ function adminfunc() {
 
 function inchatfunc() {
   inchatvar.value = !inchatvar.value;
+}
+
+function mutedfunc() {
+  mutedvar.value = !mutedvar.value;
 }
 </script>
 
@@ -69,7 +74,22 @@ function inchatfunc() {
           :status="client.status"
         />
       </div>
-      <div class="leave">Leave Chat</div>
+      <div class="subheader" @click="mutedfunc">Muted ▾</div>
+      <div v-show="mutedvar" class="people">
+        <ChildPeopleComponent
+          v-for="client in clients"
+          :key="client.id"
+          :client-id="client.id"
+          :title="client.title[0]"
+          :username="client.username"
+          :picture="client.picture"
+          :status="client.status"
+        />
+      </div>
+      <div class="buttonlist">
+        <button class="button">Change Password</button>
+        <button class="button">Leave Chat</button>
+      </div>
     </div>
   </div>
 </template>
@@ -97,9 +117,26 @@ function inchatfunc() {
   font-size: 0.8vw;
   color: grey;
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .people {
   padding-left: 5%;
+}
+
+.buttonlist {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  background-color: #f8971d;
+  cursor: pointer;
+  font-size: 0.8vw;
+  border-color: transparent;
+  margin-top: 5px;
 }
 </style>
