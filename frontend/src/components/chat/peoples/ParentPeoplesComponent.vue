@@ -32,41 +32,43 @@ function friendsfunc() {
 <template>
   <div class="friendsPeopleParent">
     <span class="text">People</span>
-    <div class="subheader" @click="friendsfunc">Friends ▾</div>
-    <div v-show="friendsvar" class="people">
-      <ChildPeopleComponent
-        v-for="client in clients"
-        :key="client.id"
-        :client-id="client.id"
-        :title="client.title[0]"
-        :username="client.username"
-        :picture="client.picture"
-        :status="client.status"
-      />
-    </div>
-    <div class="subheader" @click="peoplefunc">People ▾</div>
-    <div v-show="peoplevar" class="people">
-      <ChildPeopleComponent
-        v-for="client in clients"
-        :key="client.id"
-        :client-id="client.id"
-        :title="client.title[0]"
-        :username="client.username"
-        :picture="client.picture"
-        :status="client.status"
-      />
-    </div>
-    <div class="subheader" @click="blockedfunc">Blocked ▾</div>
-    <div v-show="blockedvar" class="people">
-      <ChildPeopleComponent
-        v-for="client in clients"
-        :key="client.id"
-        :client-id="client.id"
-        :title="client.title[0]"
-        :username="client.username"
-        :picture="client.picture"
-        :status="client.status"
-      />
+    <div class="scroll">
+      <div class="subheader" @click="friendsfunc">Friends ▾</div>
+      <div v-show="friendsvar" class="people">
+        <ChildPeopleComponent
+          v-for="client in clients"
+          :key="client.id"
+          :client-id="client.id"
+          :title="client.title[0]"
+          :username="client.username"
+          :picture="client.picture"
+          :status="client.status"
+        />
+      </div>
+      <div class="subheader" @click="peoplefunc">People ▾</div>
+      <div v-show="peoplevar" class="people">
+        <ChildPeopleComponent
+          v-for="client in clients"
+          :key="client.id"
+          :client-id="client.id"
+          :title="client.title[0]"
+          :username="client.username"
+          :picture="client.picture"
+          :status="client.status"
+        />
+      </div>
+      <div class="subheader" @click="blockedfunc">Blocked ▾</div>
+      <div v-show="blockedvar" class="people">
+        <ChildPeopleComponent
+          v-for="client in clients"
+          :key="client.id"
+          :client-id="client.id"
+          :title="client.title[0]"
+          :username="client.username"
+          :picture="client.picture"
+          :status="client.status"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +88,10 @@ function friendsfunc() {
   color: #f8971d;
 }
 
+.scroll {
+  overflow-y: scroll;
+}
+
 .subheader {
   cursor: pointer;
   font-size: 0.8vw;
@@ -93,7 +99,6 @@ function friendsfunc() {
   font-weight: bold;
 }
 .people {
-  overflow-y: scroll;
   padding-left: 5%;
 }
 </style>
