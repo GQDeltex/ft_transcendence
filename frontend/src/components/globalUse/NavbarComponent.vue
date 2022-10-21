@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '../../store/user';
+import RoundPictureComponent from './RoundPictureComponent.vue';
+
 const userStore = useUserStore();
 </script>
 
@@ -19,7 +21,11 @@ const userStore = useUserStore();
   <div class="column2">
     <router-link :to="`/profile/${userStore.username}`" class="columncontent">
       <span>{{ userStore.title }} {{ userStore.username }}</span>
-      <img alt="profile picture" class="prof_pic" :src="userStore.picture" />
+      <RoundPictureComponent
+        :picture="userStore.picture"
+        size="50px"
+        border-color="transparent"
+      />
     </router-link>
   </div>
   <nav>
@@ -56,12 +62,7 @@ img {
   height: 50px;
   border-radius: 20%;
 }
-.prof_pic {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+
 nav {
   border-top: 1px solid grey;
   border-bottom: 1px solid gray;

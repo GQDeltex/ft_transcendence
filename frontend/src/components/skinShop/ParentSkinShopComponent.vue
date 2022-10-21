@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PayButtonComponent from '@/components/skinShop/PayPalButtonComponent.vue';
+import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 
 defineProps<{
   itemId: string;
@@ -10,7 +11,11 @@ defineProps<{
 
 <template>
   <div class="parent">
-    <img class="item-pic" :src="itemImg" width="100" height="100" />
+    <RoundPictureComponent
+      :picture="itemImg"
+      size="100px"
+      border-color="transparent"
+    />
     <span class="item-name">{{ itemName }}</span>
     <span class="item-price">7$</span>
     <PayButtonComponent :id="itemId" price="7" />

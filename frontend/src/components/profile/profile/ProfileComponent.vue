@@ -2,10 +2,13 @@
 import { useUserStore } from '@/store/user';
 import { ref, watch, nextTick } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
+import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
+import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
+const modalActive = ref(false);
 
 watch(checked, async (newValue, oldValue) => {
   if (newValue === oldValue) return;
@@ -28,15 +31,39 @@ const onClose = () => {
     checked.value = false;
   }
 };
+
+const changeUsername = () => {
+  modalActive.value = !modalActive.value;
+};
 </script>
 
 <template>
   <div class="profile">
-    <img class="picture" alt="user picture" :src="userStore.picture" />
+    <RoundPictureComponent
+      class="picture"
+      :picture="userStore.picture"
+      size="10vw"
+      border-color="white"
+    />
     <div class="infoBox">
       <span class="title">{{ userStore.title }}</span>
       <br />
-      <span class="username">{{ userStore.username }} (Rank 1) (C)</span>
+      <div class="username">
+        <span>{{ userStore.username }} (Rank 1) </span>
+        <img
+          alt="pen"
+          class="pen"
+          title="Change username"
+          src="@/assets/pen.png"
+          @click="changeUsername"
+        />
+      </div>
+      <ModalChangeUsernameComponent
+        v-show="modalActive"
+        :user-id="+userStore.id"
+        :input-username="userStore.username"
+        @close="changeUsername"
+      />
       <br />
       <span class="campus">Wolfsburg, Germany</span>
       <br />
@@ -103,19 +130,12 @@ const onClose = () => {
 }
 
 .picture {
-  object-fit: cover;
-  object-position: 50% 0%;
-  height: 10vw;
-  width: 10vw;
-  border-radius: 50%;
-  border: 1px solid white;
   grid-column: 1 / 2;
 }
 
 .username {
   color: #f8971d;
   font-size: 2vw;
-  font-stretch: expanded;
 }
 
 .campus {
@@ -194,5 +214,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.pen {
+  height: 1.5vw;
+  width: 1.5vw;
 }
 </style>
