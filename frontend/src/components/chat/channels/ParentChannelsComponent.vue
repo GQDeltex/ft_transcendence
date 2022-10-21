@@ -3,6 +3,13 @@ import ChildChannelComponent from './ChildChannelComponent.vue';
 import ModalChannelComponent from './ModalChannelComponent.vue';
 import { ref } from 'vue';
 
+defineProps<{
+  channels: {
+    id: number;
+    name: string;
+    private: string;
+  }[];
+}>();
 const modalActive = ref(false);
 
 const joinNewChannel = () => {
@@ -25,45 +32,11 @@ const onClose = () => {
     </span>
     <div class="list">
       <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="devOps"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="chitChat"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="42Wolfsburg"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="examPrep"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="ThisAndThat"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="SecretChannel"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="StaffOnly!"
+        v-for="channel in channels"
+        :key="channel.id"
+        :channel-id="channel.id"
+        :channel-name="channel.name"
+        :private="channel.private"
         picture="@/assets/pongking_boi.svg"
       />
     </div>

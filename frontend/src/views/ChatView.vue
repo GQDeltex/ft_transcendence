@@ -6,12 +6,17 @@ import ParentRequestsComponent from '../components/chat/requests/ParentRequestsC
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
 import { ref } from 'vue';
 import UserService from '../service/UserService';
+import ChannelService from '../service/ChannelService';
+
 import { onMounted } from 'vue';
 
 const chatName = ref('gucalvi');
 const users = ref([]);
+const channels = ref([]);
+
 onMounted(async () => {
   users.value = await UserService.findAll();
+  channels.value = await ChannelService.findAll();
 });
 </script>
 
@@ -19,7 +24,7 @@ onMounted(async () => {
   <div class="chatViewParent">
     <div class="leftSide">
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
-      <ParentChannelsComponent class="channelsComp" />
+      <ParentChannelsComponent :channels="channels" class="channelsComp" />
       <ParentRequestsComponent class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />

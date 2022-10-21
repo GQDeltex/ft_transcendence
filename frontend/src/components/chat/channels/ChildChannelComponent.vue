@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  clientId: number;
+  channelId: number;
   channelName: string;
   picture: string;
 }>();
