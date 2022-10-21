@@ -41,7 +41,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L26)
+[src/users/users.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L26)
 
 ## Properties
 
@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L26)
+[src/users/users.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L26)
 
 ## Methods
 
@@ -65,7 +65,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L28)
+[src/users/users.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L28)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:33](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L33)
+[src/users/users.resolver.ts:33](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L33)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L43)
+[src/users/users.resolver.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L43)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L48)
+[src/users/users.resolver.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L48)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:90](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L90)
+[src/users/users.resolver.ts:90](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L90)
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:115](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L115)
+[src/users/users.resolver.ts:115](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L115)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:102](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L102)
+[src/users/users.resolver.ts:102](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L102)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:77](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L77)
+[src/users/users.resolver.ts:77](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L77)
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L53)
+[src/users/users.resolver.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L53)
 
 ___
 
@@ -249,4 +249,4 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/users.resolver.ts#L65)
+[src/users/users.resolver.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/users.resolver.ts#L65)

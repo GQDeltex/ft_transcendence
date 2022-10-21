@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/users/decorator/current-user.decorator.ts:4](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/decorator/current-user.decorator.ts#L4)
+[src/users/decorator/current-user.decorator.ts:4](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/decorator/current-user.decorator.ts#L4)

@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/auth/guard/wsJwt.guard.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/wsJwt.guard.ts#L8)
+[src/auth/guard/wsJwt.guard.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/guard/wsJwt.guard.ts#L8)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/auth/guard/wsJwt.guard.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/wsJwt.guard.ts#L8)
+[src/auth/guard/wsJwt.guard.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/guard/wsJwt.guard.ts#L8)
 
 ## Methods
 
@@ -70,4 +70,4 @@ CanActivate.canActivate
 
 #### Defined in
 
-[src/auth/guard/wsJwt.guard.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/wsJwt.guard.ts#L10)
+[src/auth/guard/wsJwt.guard.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/guard/wsJwt.guard.ts#L10)

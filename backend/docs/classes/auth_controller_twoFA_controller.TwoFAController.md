@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L21)
+[src/auth/controller/twoFA.controller.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L21)
 
 ## Properties
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L23)
+[src/auth/controller/twoFA.controller.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L23)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L22)
+[src/auth/controller/twoFA.controller.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L22)
 
 ## Methods
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:81](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L81)
+[src/auth/controller/twoFA.controller.ts:81](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L81)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L40)
+[src/auth/controller/twoFA.controller.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L40)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L26)
+[src/auth/controller/twoFA.controller.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L26)
 
 ___
 
@@ -141,4 +141,4 @@ ___
 
 #### Defined in
 
-[src/auth/controller/twoFA.controller.ts:54](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/controller/twoFA.controller.ts#L54)
+[src/auth/controller/twoFA.controller.ts:54](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/controller/twoFA.controller.ts#L54)

@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[src/auth/guard/jwt.guard.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/guard/jwt.guard.ts#L7)
+[src/auth/guard/jwt.guard.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/guard/jwt.guard.ts#L7)
 
 ___
 

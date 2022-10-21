@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L12)
+[src/prc/channel/channel.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L12)
 
 ## Properties
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L14)
+[src/prc/channel/channel.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L14)
 
 ___
 
@@ -57,13 +57,20 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L16)
+[src/prc/channel/channel.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L16)
 
 ## Methods
 
 ### create
 
 ▸ **create**(`createChannelInput`): `Promise`<`number`\>
+
+Create a new channel.
+
+Args:
+  createChannelInput: The input for the createChannel method.
+Returns:
+  The id of the newly created channel.
 
 #### Parameters
 
@@ -77,7 +84,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L36)
+[src/prc/channel/channel.service.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L50)
 
 ___
 
@@ -91,7 +98,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L19)
+[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L19)
 
 ___
 
@@ -111,7 +118,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L23)
+[src/prc/channel/channel.service.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L29)
 
 ___
 
@@ -119,7 +126,11 @@ ___
 
 ▸ **join**(`createChannelInput`, `user`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
 
-( Tries to find Channel based on name ? creates channel : Checks input password )
+1. First, we try to find the channel by its name. If it doesn’t exist, we create it.
+2. Then, we check if the password is correct. If it is, we add the user to the channel.
+3. If the password is incorrect, we throw an error.
+4. If the user is already in the channel, we throw an error.
+5. Finally, we return the channel.
 
 #### Parameters
 
@@ -134,4 +145,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/prc/channel/channel.service.ts#L45)
+[src/prc/channel/channel.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L64)

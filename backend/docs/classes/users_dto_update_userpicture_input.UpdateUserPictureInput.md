@@ -28,4 +28,4 @@
 
 #### Defined in
 
-[src/users/dto/update-userpicture.input.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/users/dto/update-userpicture.input.ts#L9)
+[src/users/dto/update-userpicture.input.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/dto/update-userpicture.input.ts#L9)

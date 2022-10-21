@@ -38,7 +38,7 @@ PassportStrategy(Strategy, &#x27;intra42&#x27;).constructor
 
 #### Defined in
 
-[src/auth/strategy/intra42.strategy.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/strategy/intra42.strategy.ts#L13)
+[src/auth/strategy/intra42.strategy.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/strategy/intra42.strategy.ts#L13)
 
 ## Methods
 
@@ -61,4 +61,4 @@ PassportStrategy(Strategy, &#x27;intra42&#x27;).constructor
 
 #### Defined in
 
-[src/auth/strategy/intra42.strategy.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/95a7401/backend/src/auth/strategy/intra42.strategy.ts#L22)
+[src/auth/strategy/intra42.strategy.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/strategy/intra42.strategy.ts#L22)
