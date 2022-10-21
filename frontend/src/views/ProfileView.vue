@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import ParentHistoryComponent from '../components/profile/history/ParentHistoryComponent.vue';
 import ProfileComponent from '../components/profile/profile/ProfileComponent.vue';
 import AboutMeComponent from '../components/profile/aboutMe/AboutMeComponent.vue';
@@ -8,9 +8,6 @@ import ParentAchievementsComponent from '../components/profile/achievement/Paren
 
 const router = useRouter();
 const userStore = useUserStore();
-const route = useRoute();
-
-//const { username } = route.params;
 
 const logout = async () => {
   await userStore.logout();
@@ -44,7 +41,6 @@ const logout = async () => {
   display: grid;
   margin-left: 5vw;
   margin-right: 5vw;
-  /* max-height: 30vh; */
 }
 
 .profile {
@@ -53,7 +49,6 @@ const logout = async () => {
 }
 .history {
   grid-column: 1 / 4;
-  /* grid-row: 2 / 4; */
   margin: 2px;
 }
 
@@ -61,7 +56,6 @@ const logout = async () => {
   grid-column: 4 / 6;
   grid-row: 2 / 4;
   margin: 1px;
-  /* max-height: 60%; */
 }
 
 .achievement {
