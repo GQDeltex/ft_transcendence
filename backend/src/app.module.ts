@@ -9,10 +9,22 @@ import { User } from './users/entities/user.entity';
 import { ChannelUser } from './prc/channel/entities/channeluser.entity';
 import { Channel } from './prc/channel/entities/channel.entity';
 import { HealthModule } from './health/health.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      debug: true,
+      playground: true,
+      autoSchemaFile: 'src/schema.gql',
+      cors: {
+        origin: `http://${process.env.DOMAIN}`,
+        credentials: true,
+      },
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
