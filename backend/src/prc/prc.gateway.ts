@@ -103,9 +103,15 @@ export class PrcGateway implements OnGatewayDisconnect {
     const user: User = await this.usersService.findOne(JWTtoken.id);
     const channelUsers: ChannelUser[] | undefined = user.channelList;
     if (typeof channelUsers === 'undefined') return;
-    channelUsers.forEach((channelUser) =>
+    channelUsers.forEach((channelUser) => {
       client.join(channelUser.channel_name),
-    );
+        this.channelService
+          .findMessagesForRecipient(channelUser.channel_name)
+          .forEach((message) => client.emit('prc', message));
+    });
+    this.channelService
+      .findMessagesForRecipient(user.username)
+      .forEach((message) => client.emit('prc', message));
   }
 
   @SubscribeMessage('prc')
@@ -116,6 +122,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
+
     console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
     let recipient: User | Channel;
     if (to[0] == '#' || to[0] == '&')
@@ -123,9 +130,17 @@ export class PrcGateway implements OnGatewayDisconnect {
     else recipient = await this.usersService.findOne(to);
     const sender: User = await this.usersService.findOne(user.id);
     let recClient;
+    const message = {
+      from: { id: sender.id, username: sender.username },
+      to: { name: to },
+      msg: msg,
+    };
     if (recipient instanceof User) {
-      if (recipient.socketId == '')
-        throw new WsException('Recipient socketId empty');
+      if (recipient.socketId == '') {
+        //throw new WsException('Recipient socketId empty');
+        this.channelService.saveMessage(message);
+        return;
+      }
       const sockets = await this.server.in(recipient.socketId).fetchSockets();
       if (sockets.length < 1)
         throw new WsException('Could not find Recipients socket');
@@ -137,7 +152,8 @@ export class PrcGateway implements OnGatewayDisconnect {
         );
       recClient = client.to(recipient.name);
     }
-    recClient.emit('prc', { from: user, to: recipient, msg: msg });
+    recClient.emit('prc', message);
+    this.channelService.saveMessage(message);
     console.log('Sent message!');
   }
 
@@ -152,9 +168,16 @@ export class PrcGateway implements OnGatewayDisconnect {
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
-    client.broadcast
-      .to(channel.name)
-      .emit('status', sender.username + ' has joined your channel.');
+    const message = {
+      from: { id: -1, username: '' },
+      to: { name: channel.name },
+      msg: sender.username + ' has joined your channel.',
+    };
+    //this.channelService.saveMessage(message);
+    client.broadcast.to(channel.name).emit('status', message);
+    this.channelService
+      .findMessagesForRecipient(channel.name)
+      .forEach((message) => client.emit('prc', message));
     console.log(`Join success from ${user.username} for ${channelInput.name}`); // DEBUG
   }
 }
