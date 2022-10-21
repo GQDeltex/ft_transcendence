@@ -29,6 +29,14 @@ export class UsersService {
       });
   }
 
+  isInChannel(user: User, channel_name: string): boolean {
+    const result = user.channelList?.some(
+      (channelUser) => channelUser.channel_name === channel_name,
+    );
+    if (typeof result === 'undefined' || !result) return false;
+    return true;
+  }
+
   async update2FASecret(id: number, secret: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,
