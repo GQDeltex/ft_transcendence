@@ -108,7 +108,7 @@ function mutedfunc() {
   color: #f8971d;
 }
 .list {
-  max-height: 25vh;
+  max-height: 1fr;
   overflow-y: scroll;
 }
 
