@@ -125,6 +125,8 @@ ___
 
 ▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<`void`\>
 
+It creates a new channel and adds the user to it.
+
 #### Parameters
 
 | Name | Type |
@@ -139,13 +141,23 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:144](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L144)
+[src/prc/prc.gateway.ts:174](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L174)
 
 ___
 
 ### prcMessage
 
 ▸ **prcMessage**(`user`, `to`, `msg`, `client`): `Promise`<`void`\>
+
+It sends mmessage to a channel or user.
+
+Args:
+user: The user who sent the message.
+to: The recipient of the message.
+msg: The message that was sent.
+client: The socket that sent the message.
+Returns:
+Nothing.
 
 #### Parameters
 
@@ -162,4 +174,4 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:111](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L111)
+[src/prc/prc.gateway.ts:128](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L128)

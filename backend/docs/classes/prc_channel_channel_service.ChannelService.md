@@ -14,13 +14,16 @@
 
 - [channelRepository](prc_channel_channel_service.ChannelService.md#channelrepository)
 - [channelUserRepository](prc_channel_channel_service.ChannelService.md#channeluserrepository)
+- [messages](prc_channel_channel_service.ChannelService.md#messages)
 
 ### Methods
 
 - [create](prc_channel_channel_service.ChannelService.md#create)
 - [findAll](prc_channel_channel_service.ChannelService.md#findall)
+- [findMessagesForRecipient](prc_channel_channel_service.ChannelService.md#findmessagesforrecipient)
 - [findOne](prc_channel_channel_service.ChannelService.md#findone)
 - [join](prc_channel_channel_service.ChannelService.md#join)
+- [saveMessage](prc_channel_channel_service.ChannelService.md#savemessage)
 
 ## Constructors
 
@@ -37,7 +40,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L12)
+[src/prc/channel/channel.service.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L15)
 
 ## Properties
 
@@ -47,7 +50,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L14)
+[src/prc/channel/channel.service.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L17)
 
 ___
 
@@ -57,7 +60,17 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L16)
+[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L19)
+
+___
+
+### messages
+
+• **messages**: [`Message`](prc_message_message.Message.md)[] = `[]`
+
+#### Defined in
+
+[src/prc/channel/channel.service.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L13)
 
 ## Methods
 
@@ -84,7 +97,7 @@ Returns:
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L50)
+[src/prc/channel/channel.service.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L53)
 
 ___
 
@@ -98,7 +111,27 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L19)
+[src/prc/channel/channel.service.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L22)
+
+___
+
+### findMessagesForRecipient
+
+▸ **findMessagesForRecipient**(`recipient`): [`Message`](prc_message_message.Message.md)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `recipient` | `string` |
+
+#### Returns
+
+[`Message`](prc_message_message.Message.md)[]
+
+#### Defined in
+
+[src/prc/channel/channel.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L64)
 
 ___
 
@@ -118,7 +151,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L29)
+[src/prc/channel/channel.service.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L32)
 
 ___
 
@@ -145,4 +178,24 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L64)
+[src/prc/channel/channel.service.ts:77](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L77)
+
+___
+
+### saveMessage
+
+▸ **saveMessage**(`message`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | [`Message`](prc_message_message.Message.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[src/prc/channel/channel.service.ts:60](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L60)

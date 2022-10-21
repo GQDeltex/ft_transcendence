@@ -27,6 +27,7 @@
 - [prc/channel/entities/channel.entity](modules/prc_channel_entities_channel_entity.md)
 - [prc/channel/entities/channeluser.entity](modules/prc_channel_entities_channeluser_entity.md)
 - [prc/dto/privmsg.dto](modules/prc_dto_privmsg_dto.md)
+- [prc/message/message](modules/prc_message_message.md)
 - [prc/prc.gateway](modules/prc_prc_gateway.md)
 - [prc/prc.module](modules/prc_prc_module.md)
 - [tools/ExceptionFilter](modules/tools_ExceptionFilter.md)
