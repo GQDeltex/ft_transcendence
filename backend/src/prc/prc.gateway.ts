@@ -114,6 +114,17 @@ export class PrcGateway implements OnGatewayDisconnect {
       .forEach((message) => client.emit('prc', message));
   }
 
+  /**
+    It sends mmessage to a channel or user.
+  
+  Args:
+    user: The user who sent the message.
+    to: The recipient of the message.
+    msg: The message that was sent.
+    client: The socket that sent the message.
+  Returns:
+    Nothing.
+  */
   @SubscribeMessage('prc')
   async prcMessage(
     @CurrentUserFromWs() user: JwtPayload,
@@ -157,6 +168,9 @@ export class PrcGateway implements OnGatewayDisconnect {
     console.log('Sent message!');
   }
 
+  /**
+  It creates a new channel and adds the user to it.
+  */
   @SubscribeMessage('join')
   async joinChannel(
     @CurrentUserFromWs() user: JwtPayload,
