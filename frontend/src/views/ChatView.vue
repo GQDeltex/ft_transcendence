@@ -40,28 +40,23 @@ onMounted(async () => {
 
 .leftSide {
   display: grid;
-  /* flex-direction: column; */
   width: 15vw;
   height: inherit;
-  /* max-height: 100%; */
   grid-auto-rows: 1fr;
 }
 .friendsPeopleComp {
   grid-row: 1 / 2;
   max-height: 25vh;
-  /* flex-grow: 1; */
 }
 
 .channelsComp {
   grid-row: 2 / 3;
   max-height: 25vh;
-  /* flex-grow: 1; */
 }
 
 .requestsComp {
   grid-row: 3 / 4;
   max-height: 25vh;
-  /* flex-grow: 1; */
 }
 .chatChatComp {
   grid-column: 2 / 3;

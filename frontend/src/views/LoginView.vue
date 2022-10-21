@@ -85,11 +85,7 @@ button {
   border-radius: 50%;
   border: 2px outset grey;
   position: relative;
-  /* display: inline-block; */
-  /* padding: 15px 30px; */
   color: white;
-  /* text-transform: uppercase; */
-  /* letter-spacing: 4px; */
   overflow: hidden;
 
   box-shadow: 0 0 10px rgb(0, 0, 0, 1);
