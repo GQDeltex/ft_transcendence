@@ -6,9 +6,12 @@ import { ChannelUser } from './entities/channeluser.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
+import { Message } from '../message/message';
 
 @Injectable()
 export class ChannelService {
+  messages: Message[] = [];
+
   constructor(
     @InjectRepository(Channel)
     private readonly channelRepository: Repository<Channel>,
@@ -54,6 +57,16 @@ export class ChannelService {
     return +result.identifiers[0].id;
   }
 
+  saveMessage(message: Message) {
+    this.messages.push(message);
+  }
+
+  findMessagesForRecipient(recipient: string) {
+    return this.messages.filter(
+      ({ from, to }) => from.username === recipient || to.name === recipient,
+    );
+  }
+
   /**
   1. First, we try to find the channel by its name. If it doesn’t exist, we create it.
   2. Then, we check if the password is correct. If it is, we add the user to the channel.
@@ -82,7 +95,7 @@ export class ChannelService {
           owner: brandNew,
           admin: brandNew,
         });
-      } //else throw new Error('Already in Channel');
+      } else throw new WsException('Already in Channel');
       //still needds to rejoin room(if they are not being stupid and just clicking join again while being in the room)
     } else throw new WsException('Bad Password');
     return this.findOne(+channel.id); //'+' VIC ;)
