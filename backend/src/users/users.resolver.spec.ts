@@ -4,7 +4,6 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { mockUser } from './entities/user.entity.mock';
 import { MockRepo } from '../tools/memdb.mock';
-import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { ConfigService } from '@nestjs/config';
 import { EntityNotFoundError } from 'typeorm';
@@ -84,31 +83,6 @@ describe('UsersResolver', () => {
     await expect(resolver.findOneByUsername('nobody')).rejects.toThrow(
       EntityNotFoundError,
     );
-  });
-
-  it('should update a users picture', async () => {
-    const newUser = mockRepo.getTestEntity({
-      picture: 'http://test.whoknows.xyz',
-    });
-    const updateUserPictureInput: UpdateUserPictureInput = {
-      picture: newUser.picture,
-    };
-    await expect(
-      resolver.updatePicture(updateUserPictureInput, newUser),
-    ).resolves.toEqual(newUser);
-  });
-
-  it('should not update a users picture if user not exist', async () => {
-    const newUser = mockRepo.getTestEntity({
-      id: 678,
-      picture: 'http://test.whoknows.xyz',
-    });
-    const updateUserPictureInput: UpdateUserPictureInput = {
-      picture: newUser.picture,
-    };
-    await expect(
-      resolver.updatePicture(updateUserPictureInput, newUser),
-    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should update a users username', async () => {
