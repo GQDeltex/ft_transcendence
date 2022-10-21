@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[src/auth/strategy/jwt.strategy.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/strategy/jwt.strategy.ts#L10)
+[src/auth/strategy/jwt.strategy.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L10)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[src/auth/strategy/jwt.strategy.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/strategy/jwt.strategy.ts#L9)
+[src/auth/strategy/jwt.strategy.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L9)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/auth/strategy/jwt.strategy.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/strategy/jwt.strategy.ts#L11)
+[src/auth/strategy/jwt.strategy.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L11)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[src/auth/strategy/jwt.strategy.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/strategy/jwt.strategy.ts#L8)
+[src/auth/strategy/jwt.strategy.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L8)

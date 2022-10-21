@@ -56,7 +56,7 @@ BaseWsExceptionFilter.catch
 
 #### Defined in
 
-[src/prc/BadRequestExceptionFilter.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/BadRequestExceptionFilter.ts#L6)
+[src/prc/BadRequestExceptionFilter.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/BadRequestExceptionFilter.ts#L6)
 
 ___
 

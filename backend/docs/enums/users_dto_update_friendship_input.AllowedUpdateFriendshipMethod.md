@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/users/dto/update-friendship.input.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/dto/update-friendship.input.ts#L7)
+[src/users/dto/update-friendship.input.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/update-friendship.input.ts#L7)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/update-friendship.input.ts:5](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/dto/update-friendship.input.ts#L5)
+[src/users/dto/update-friendship.input.ts:5](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/update-friendship.input.ts#L5)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/update-friendship.input.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/dto/update-friendship.input.ts#L9)
+[src/users/dto/update-friendship.input.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/update-friendship.input.ts#L9)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/update-friendship.input.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/dto/update-friendship.input.ts#L8)
+[src/users/dto/update-friendship.input.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/update-friendship.input.ts#L8)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/users/dto/update-friendship.input.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/dto/update-friendship.input.ts#L6)
+[src/users/dto/update-friendship.input.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/update-friendship.input.ts#L6)

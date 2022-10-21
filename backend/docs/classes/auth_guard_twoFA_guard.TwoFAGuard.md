@@ -46,4 +46,4 @@ CanActivate.canActivate
 
 #### Defined in
 
-[src/auth/guard/twoFA.guard.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/auth/guard/twoFA.guard.ts#L13)
+[src/auth/guard/twoFA.guard.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/guard/twoFA.guard.ts#L13)

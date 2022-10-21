@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:3](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/entities/user.entity.mock.ts#L3)
+[src/users/entities/user.entity.mock.ts:3](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L3)
 
 ## Functions
 
@@ -40,4 +40,4 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/entities/user.entity.mock.ts#L22)
+[src/users/entities/user.entity.mock.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L22)

@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/prc/dto/privmsg.dto.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/dto/privmsg.dto.ts#L8)
+[src/prc/dto/privmsg.dto.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/dto/privmsg.dto.ts#L8)
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 #### Defined in
 
-[src/prc/dto/privmsg.dto.ts:5](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/dto/privmsg.dto.ts#L5)
+[src/prc/dto/privmsg.dto.ts:5](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/dto/privmsg.dto.ts#L5)

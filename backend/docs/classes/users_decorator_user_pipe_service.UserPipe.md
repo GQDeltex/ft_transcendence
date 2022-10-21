@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/users/decorator/user-pipe.service.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/decorator/user-pipe.service.ts#L7)
+[src/users/decorator/user-pipe.service.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/decorator/user-pipe.service.ts#L7)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/users/decorator/user-pipe.service.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/decorator/user-pipe.service.ts#L7)
+[src/users/decorator/user-pipe.service.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/decorator/user-pipe.service.ts#L7)
 
 ## Methods
 
@@ -70,4 +70,4 @@ PipeTransform.transform
 
 #### Defined in
 
-[src/users/decorator/user-pipe.service.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/users/decorator/user-pipe.service.ts#L9)
+[src/users/decorator/user-pipe.service.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/decorator/user-pipe.service.ts#L9)

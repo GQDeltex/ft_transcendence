@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L12)
+[src/prc/channel/channel.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L12)
 
 ## Properties
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L14)
+[src/prc/channel/channel.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L14)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L16)
+[src/prc/channel/channel.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L16)
 
 ## Methods
 
@@ -84,7 +84,7 @@ Returns:
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L50)
+[src/prc/channel/channel.service.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L50)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L19)
+[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L19)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L29)
+[src/prc/channel/channel.service.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L29)
 
 ___
 
@@ -145,4 +145,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/fdce073/backend/src/prc/channel/channel.service.ts#L64)
+[src/prc/channel/channel.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L64)
