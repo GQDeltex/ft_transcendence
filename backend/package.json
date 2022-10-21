@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "format-check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint-check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs --exclude '**/*+(index|.spec|.e2e).ts' --entryPointStrategy expand src"
+    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs --exclude '**/*+(index|.spec|.e2e).ts' --sourceLinkTemplate 'https://github.com/GQDeltex/ft_transcendence/blob/main/{path}#L{line}' --entryPointStrategy expand src"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.1.0",
