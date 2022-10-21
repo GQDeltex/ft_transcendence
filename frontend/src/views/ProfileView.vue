@@ -29,6 +29,14 @@ const logout = async () => {
       <ParentAchievementsComponent class="achievement" />
     </div>
   </div>
+  <form
+    action="http://localhost:8080/users/upload"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <input name="picture" type="file" />
+    <input type="submit" />
+  </form>
 </template>
 
 <style scoped>
