@@ -151,6 +151,22 @@ class UserService {
     if (typeof users === 'undefined') throw new Error('Empty users data');
     return users;
   }
+
+  async changeUsername(username: string) {
+    const { updateUsername } = await graphQLService.mutation(
+      `
+      mutation updateUsername( $username: String! ){
+        updateUsername( username: $username ) {
+          username
+        }
+      }
+      `,
+      { username },
+    );
+    if (typeof updateUsername === 'undefined')
+      throw new Error('Empty users data');
+    return updateUsername;
+  }
 }
 
 export default new UserService();
