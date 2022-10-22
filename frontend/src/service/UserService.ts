@@ -80,6 +80,28 @@ class UserService {
       });
   }
 
+  async uploadPicture(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('picture', file);
+    return axios
+      .post(
+        `http://${import.meta.env.VITE_DOMAIN}:8080/users/upload`,
+        formData,
+        {
+          withCredentials: true,
+        },
+      )
+      .then((res) => {
+        if (typeof res.data.url === 'undefined')
+          throw new Error('Empty picture url.');
+        return res.data.url;
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
+  }
+
   async logout(): Promise<void> {
     await axios
       .get(`http://${import.meta.env.VITE_DOMAIN}:8080/42intra/logout`, {
