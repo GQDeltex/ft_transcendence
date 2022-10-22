@@ -40,7 +40,7 @@ const onClose = () => {
 </script>
 
 <template>
-  <div class="profile">
+  <div v-if="user" class="profile">
     <RoundPictureComponent
       class="picture"
       :picture="user.picture"

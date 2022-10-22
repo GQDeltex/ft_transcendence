@@ -8,7 +8,7 @@ const { user } = inject<{ user: User | null }>('user', {
 </script>
 
 <template>
-  <div class="about">
+  <div v-if="user" class="about">
     <span style="font-size: 2vw">
       About<span style="float: right">(O) Online</span>
     </span>
