@@ -7,7 +7,9 @@ import { useErrorStore } from './store/error';
 import { socket } from './plugin/socket';
 import ModalComponent from './components/globalUse/ModalComponent.vue';
 import NavbarComponent from './components/globalUse/NavbarComponent.vue';
+import { useMessagesStore } from './store/message';
 
+const messagesStore = useMessagesStore();
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 const errorStore = useErrorStore();
@@ -18,6 +20,16 @@ if (isLoggedIn.value && !socket.connected) socket.connect();
 watch(isLoggedIn, (newLogState) => {
   if (newLogState) socket.connect();
   else socket.disconnect();
+});
+
+socket.on('prc', (data) => {
+  console.log('Msg from: ', data);
+  messagesStore.saveMessage(data);
+});
+
+socket.on('status', (status) => {
+  console.log(status.msg);
+  messagesStore.saveMessage(status);
 });
 </script>
 
