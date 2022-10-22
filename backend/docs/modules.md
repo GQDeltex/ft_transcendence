@@ -1,0 +1,46 @@
+[backend](README.md) / Exports
+
+# backend
+
+## Table of contents
+
+### Modules
+
+- [app.module](modules/app_module.md)
+- [auth/auth.module](modules/auth_auth_module.md)
+- [auth/controller/intra42.controller](modules/auth_controller_intra42_controller.md)
+- [auth/controller/twoFA.controller](modules/auth_controller_twoFA_controller.md)
+- [auth/guard/intra42.guard](modules/auth_guard_intra42_guard.md)
+- [auth/guard/jwt.guard](modules/auth_guard_jwt_guard.md)
+- [auth/guard/twoFA.guard](modules/auth_guard_twoFA_guard.md)
+- [auth/guard/wsJwt.guard](modules/auth_guard_wsJwt_guard.md)
+- [auth/service/twoFA.service](modules/auth_service_twoFA_service.md)
+- [auth/strategy/intra42.strategy](modules/auth_strategy_intra42_strategy.md)
+- [auth/strategy/jwt.strategy](modules/auth_strategy_jwt_strategy.md)
+- [health/health.controller](modules/health_health_controller.md)
+- [health/health.module](modules/health_health_module.md)
+- [main](modules/main.md)
+- [prc/BadRequestExceptionFilter](modules/prc_BadRequestExceptionFilter.md)
+- [prc/channel/channel.resolver](modules/prc_channel_channel_resolver.md)
+- [prc/channel/channel.service](modules/prc_channel_channel_service.md)
+- [prc/channel/dto/create-channel.input](modules/prc_channel_dto_create_channel_input.md)
+- [prc/channel/entities/channel.entity](modules/prc_channel_entities_channel_entity.md)
+- [prc/channel/entities/channeluser.entity](modules/prc_channel_entities_channeluser_entity.md)
+- [prc/dto/privmsg.dto](modules/prc_dto_privmsg_dto.md)
+- [prc/message/message](modules/prc_message_message.md)
+- [prc/prc.gateway](modules/prc_prc_gateway.md)
+- [prc/prc.module](modules/prc_prc_module.md)
+- [tools/ExceptionFilter](modules/tools_ExceptionFilter.md)
+- [tools/memdb.mock](modules/tools_memdb_mock.md)
+- [users/decorator/current-jwt-payload.decorator](modules/users_decorator_current_jwt_payload_decorator.md)
+- [users/decorator/current-user.decorator](modules/users_decorator_current_user_decorator.md)
+- [users/decorator/user-pipe.service](modules/users_decorator_user_pipe_service.md)
+- [users/dto/create-user.input](modules/users_dto_create_user_input.md)
+- [users/dto/update-friendship.input](modules/users_dto_update_friendship_input.md)
+- [users/dto/update-userusername.input](modules/users_dto_update_userusername_input.md)
+- [users/entities/user.entity](modules/users_entities_user_entity.md)
+- [users/entities/user.entity.mock](modules/users_entities_user_entity_mock.md)
+- [users/users.controller](modules/users_users_controller.md)
+- [users/users.module](modules/users_users_module.md)
+- [users/users.resolver](modules/users_users_resolver.md)
+- [users/users.service](modules/users_users_service.md)

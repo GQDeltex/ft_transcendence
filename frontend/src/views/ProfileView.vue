@@ -1,13 +1,54 @@
 <script setup lang="ts">
+import { onBeforeMount, provide, ref } from 'vue';
+import type { User } from '@/store/user';
 import { useUserStore } from '@/store/user';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import ParentHistoryComponent from '../components/profile/history/ParentHistoryComponent.vue';
 import ProfileComponent from '../components/profile/profile/ProfileComponent.vue';
 import AboutMeComponent from '../components/profile/aboutMe/AboutMeComponent.vue';
 import ParentAchievementsComponent from '../components/profile/achievement/ParentAchievementsComponent.vue';
+import UserService from '@/service/UserService';
+import { useErrorStore } from '@/store/error';
 
 const router = useRouter();
 const userStore = useUserStore();
+const route = useRoute();
+const errorStore = useErrorStore();
+
+const user = ref<User | null>(null);
+const isMe = ref(false);
+
+const fetchUserData = async (id: number) => {
+  if (id === userStore.id) {
+    user.value = userStore.$state;
+    isMe.value = true;
+  } else {
+    try {
+      user.value = await UserService.findOneById(id);
+    } catch (error) {
+      errorStore.setError((error as Error).message);
+      await router.push({ path: '/' });
+    }
+  }
+};
+
+const file = ref<HTMLInputElement | null>(null);
+
+const uploadPicture = async () => {
+  if (file.value?.files) {
+    await userStore.uploadPicture(file.value.files[0]);
+  }
+};
+
+onBeforeMount(async () => {
+  await fetchUserData(+route.params.id);
+});
+
+onBeforeRouteUpdate((to) => {
+  fetchUserData(+to.params.id);
+});
+
+provide('user', { user, isMe });
 
 const logout = async () => {
   await userStore.logout();
@@ -16,9 +57,9 @@ const logout = async () => {
 </script>
 
 <template>
-  <button class="button" @click="logout">Log out</button>
+  <button v-if="isMe" class="button" @click="logout">Log out</button>
 
-  <div class="profileView">
+  <div v-if="user" class="profileView">
     <ProfileComponent class="profile" />
     <ParentHistoryComponent class="history" />
     <div class="aboutParent">
@@ -26,6 +67,8 @@ const logout = async () => {
       <ParentAchievementsComponent class="achievement" />
     </div>
   </div>
+  <input ref="file" name="picture" type="file" accept="image/*" />
+  <button class="button" @click="uploadPicture" />
 </template>
 
 <style scoped>
@@ -33,16 +76,15 @@ const logout = async () => {
   display: grid;
   margin-left: 5vw;
   margin-right: 5vw;
-  /* max-height: 30vh; */
 }
 
 .profile {
   grid-column: 1 / 6;
   margin: 1px;
 }
+
 .history {
   grid-column: 1 / 4;
-  /* grid-row: 2 / 4; */
   margin: 2px;
 }
 
@@ -50,15 +92,13 @@ const logout = async () => {
   grid-column: 4 / 6;
   grid-row: 2 / 4;
   margin: 1px;
-  /* max-height: 60%; */
 }
 
 .achievement {
-  margin: 1px;
-  margin-top: 4px;
+  margin: 4px 1px 1px;
 }
 
-button {
+.button {
   text-decoration: none;
   border-radius: 20px;
   color: white;

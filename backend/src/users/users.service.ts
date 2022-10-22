@@ -29,6 +29,14 @@ export class UsersService {
       });
   }
 
+  isInChannel(user: User, channel_name: string): boolean {
+    const result = user.channelList?.some(
+      (channelUser) => channelUser.channel_name === channel_name,
+    );
+    if (typeof result === 'undefined' || !result) return false;
+    return true;
+  }
+
   async update2FASecret(id: number, secret: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,
@@ -45,21 +53,22 @@ export class UsersService {
       throw new EntityNotFoundError(User, { id: id });
   }
 
-  findAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userRepository.find({ relations: ['following', 'followers'] });
   }
 
-  findOne(identifier: number | string): Promise<User> {
-    if (typeof identifier == 'number')
-      return this.userRepository.findOneOrFail({
-        where: { id: identifier },
-        relations: ['following', 'followers'],
-      });
-    else
-      return this.userRepository.findOneOrFail({
-        where: { username: identifier },
-        relations: ['following', 'followers'],
-      });
+  async findOne(identifier: number | string): Promise<User> {
+    if (typeof identifier == 'undefined')
+      throw new EntityNotFoundError(User, {});
+
+    let query: { id?: number; username?: string };
+    if (typeof identifier == 'number') query = { id: identifier };
+    else query = { username: identifier };
+
+    return this.userRepository.findOneOrFail({
+      where: query,
+      relations: ['following', 'followers'],
+    });
   }
 
   async updatePicture(id: number, picture: string): Promise<void> {

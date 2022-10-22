@@ -1,48 +1,48 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue';
+import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '../../../plugin/socket';
+import { useMessagesStore } from '@/store/message';
+import { useUserStore } from '@/store/user';
+import { storeToRefs } from 'pinia';
 
+const userStore = useUserStore();
+const messagesStore = useMessagesStore();
 const props = defineProps<{
   chatName: string;
 }>();
 
 let text: Ref<string> = ref('');
-let messages: Ref<
-  {
-    from: { id?: number; username: string };
-    to: { id?: number; username: string };
-    msg: string;
-  }[]
-> = ref([]);
+const { messages } = storeToRefs(messagesStore);
 
-socket.on('prc', (data) => {
-  console.log('Msg from: ', data);
-  messages.value.push(data);
-});
+/*function scrollToBottom() {
+  const container = document.getElementById('container');
+  if (container == null) return;
+  container.scrollTop = container.scrollHeight;
+}*/
 
 function sendMsg() {
   if (text.value == '') return;
   console.log(props.chatName, text.value);
   socket.emit('prc', { to: props.chatName, msg: text.value });
-  messages.value.push({
-    from: { username: 'Me' },
-    to: { username: props.chatName },
+  messagesStore.saveMessage({
+    from: { id: +userStore.id, username: userStore.username },
+    to: { name: props.chatName },
     msg: text.value,
   });
   text.value = '';
 }
 
-onUnmounted(() => socket.off('prc'));
+//onUnmounted(() => socket.off('prc'));
 </script>
 
 <template>
   <div class="parent">
     <span class="chatname">chat: {{ chatName }}</span>
-    <div class="messages">
+    <div id="container" class="messages">
       <span
         v-for="message in messages"
-        :key="`msg_${message.from}_${message.to}_${message.msg}`"
+        :key="`msg_${message.from.username}_${message.to.name}_${message.msg}`"
         >{{ message.from.username }}: {{ message.msg }}<br
       /></span>
     </div>
@@ -78,6 +78,7 @@ onUnmounted(() => socket.off('prc'));
   border-bottom: 1px solid #202020;
   font-size: 1vw;
   padding: 0.5vw;
+  overflow-y: scroll;
 }
 .lower {
   display: flex;

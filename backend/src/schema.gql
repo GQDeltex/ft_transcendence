@@ -1,0 +1,69 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Channel {
+  id: Int!
+  name: String!
+  private: Boolean!
+  userList: [ChannelUser!]!
+}
+
+type ChannelUser {
+  id: Int!
+  user_id: Int!
+  channel_name: String!
+  admin: Boolean!
+  owner: Boolean!
+  ban: Boolean!
+  unbantime: DateTime!
+  mute: Boolean!
+  unmutetime: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  username: String!
+  email: String!
+  picture: String!
+  campus: String!
+  country: String!
+  title: [String!]!
+  twoFAEnable: Boolean!
+  status: String!
+  channelList: [ChannelUser!]
+  friends: [User!]!
+  sentFriendRequests: [User!]!
+  receivedFriendRequests: [User!]!
+}
+
+type Query {
+  users: [User!]!
+  user(id: Int): User!
+  userByName(username: String!): User!
+  userChannelList(username: String!): User!
+  channels: [Channel!]!
+  channel(id: Int!): Channel!
+  channelByName(name: String!): Channel!
+}
+
+type Mutation {
+  updateUsername(username: String!): User!
+  updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
+  joinChannel(name: String!, password: String!): Channel!
+}
+
+enum AllowedUpdateFriendshipMethod {
+  ADD
+  REMOVE
+  ACCEPT
+  DECLINE
+  CANCEL
+}

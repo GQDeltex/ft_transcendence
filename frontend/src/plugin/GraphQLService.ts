@@ -7,6 +7,7 @@ import type { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types'
 import type { OperationVariables } from '@apollo/client/core/types';
 import gql from 'graphql-tag';
 import type { QueryOptions } from '@apollo/client/core/watchQueryOptions';
+import type { MutationOptions } from '@apollo/client/core';
 
 const httpLink = createHttpLink({
   uri: `http://${import.meta.env.VITE_DOMAIN}:8080/graphql`,
@@ -42,6 +43,23 @@ class GraphQLService {
       ...queryOptions,
     });
     if (error) throw new Error(error.message);
+    if (errors && errors.length > 0) throw new Error(errors[0].message);
+    if (!data) throw new Error('Empty data');
+    return data;
+  }
+
+  async mutation(
+    mutation: string,
+    variables: OperationVariables = {},
+    mutationOptions: Partial<MutationOptions> = {},
+  ) {
+    const { data, errors } = await this.apolloClient.mutate({
+      mutation: gql`
+        ${mutation}
+      `,
+      variables,
+      ...mutationOptions,
+    });
     if (errors && errors.length > 0) throw new Error(errors[0].message);
     if (!data) throw new Error('Empty data');
     return data;

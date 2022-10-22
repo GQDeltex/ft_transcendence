@@ -11,7 +11,6 @@ import { UseFilters, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { UpdateUserPictureInput } from './dto/update-userpicture.input';
 import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { TwoFAGuard } from '../auth/guard/twoFA.guard';
 import { UpdateUserFriendshipInput } from './dto/update-friendship.input';
@@ -48,18 +47,6 @@ export class UsersResolver {
   @Query(() => User, { name: 'userChannelList' })
   async findUserChannelList(@Args('username') username: string) {
     return await this.usersService.findUserChannelList(username);
-  }
-
-  @Mutation(() => User)
-  async updatePicture(
-    @Args() updateUserPictureInput: UpdateUserPictureInput,
-    @CurrentJwtPayload() user: JwtPayload,
-  ) {
-    await this.usersService.updatePicture(
-      user.id,
-      updateUserPictureInput.picture,
-    );
-    return this.usersService.findOne(user.id);
   }
 
   @Mutation(() => User)
