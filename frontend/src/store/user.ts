@@ -90,5 +90,12 @@ export const useUserStore = defineStore('user', {
       }
       return '';
     },
+    async uploadPicture(file: File): Promise<void> {
+      try {
+        this.picture = await UserService.uploadPicture(file);
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
   },
 });

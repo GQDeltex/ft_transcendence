@@ -44,10 +44,11 @@ export class UsersController {
     file: Express.Multer.File,
     @CurrentJwtPayload()
     payload: JwtPayload,
-  ): Promise<void> {
+  ) {
     const picture_url = `http://${this.configService.get('DOMAIN')}:8080/${
       file.path
     }`;
     await this.usersService.updatePicture(payload.id, picture_url);
+    return { url: picture_url };
   }
 }

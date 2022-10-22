@@ -32,6 +32,14 @@ const fetchUserData = async (id: number) => {
   }
 };
 
+const file = ref<HTMLInputElement | null>(null);
+
+const uploadPicture = async () => {
+  if (file.value?.files) {
+    await userStore.uploadPicture(file.value.files[0]);
+  }
+};
+
 onBeforeMount(async () => {
   await fetchUserData(+route.params.id);
 });
@@ -59,14 +67,8 @@ const logout = async () => {
       <ParentAchievementsComponent class="achievement" />
     </div>
   </div>
-  <form
-    action="http://localhost:8080/users/upload"
-    method="POST"
-    enctype="multipart/form-data"
-  >
-    <input name="picture" type="file" />
-    <input type="submit" />
-  </form>
+  <input ref="file" name="picture" type="file" accept="image/*" />
+  <button class="button" @click="uploadPicture" />
 </template>
 
 <style scoped>
@@ -96,7 +98,7 @@ const logout = async () => {
   margin: 4px 1px 1px;
 }
 
-button {
+.button {
   text-decoration: none;
   border-radius: 20px;
   color: white;
