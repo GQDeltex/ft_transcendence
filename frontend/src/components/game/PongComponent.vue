@@ -8,7 +8,7 @@
       <div id="henne">0</div>
     </div>
     <div id="ball" class="ball" src="@/assets/sexy-guy-001-modified.png">
-      <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
+      <!-- <img class="ball" src="@/assets/sexy-guy-001-modified.png" /> -->
     </div>
     <div id="playerPad" class="paddle paddle-left"></div>
     <div id="remotePad" class="paddle paddle-right"></div>
@@ -74,7 +74,8 @@ class Vector {
 class Ball extends Element {
   public _shape: Vector;
   private _field: Vector;
-  private _direction: Vector;
+  // private _direction: Vector;
+  public _direction: Vector;
   private _speed: number;
 
   constructor(ballElem: HTMLElement | null, field: Element) {
@@ -92,9 +93,12 @@ class Ball extends Element {
   reset() {
     this.setx(50);
     this.sety(50);
+    // this.setx(92.90000000000163);
+    // this.sety(32.45957996930784);
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
-    // this.speedLimit();
+    // this._direction.x = 1;
+    // this._direction.y = 1.9489355589656974;
   }
 
   getx(): number {
@@ -134,7 +138,7 @@ class Ball extends Element {
   }
 
   step(paddleRects: Array<null | DOMRect>) {
-    this.collision(paddleRects);
+    //move step
     this.setx(
       parseFloat(String(this.getx())) +
         parseFloat(String(this._speed * this._direction.x * 0.001)),
@@ -143,25 +147,34 @@ class Ball extends Element {
       parseFloat(String(this.gety())) +
         parseFloat(String(this._speed * this._direction.y * 0.001)),
     );
-  }
-
-  isCollision(rect1: null | DOMRect, rect2: null | DOMRect): boolean {
-    if (rect1 === null || rect2 === null) return false;
-    return (
-      rect1.left <= rect2.right &&
-      rect1.right >= rect2.left &&
-      rect1.top <= rect2.bottom &&
-      rect1.bottom >= rect2.top
-    );
-  }
-
-  collision(paddleRects: Array<null | DOMRect>) {
-    const rect = super.getRect();
-    if (rect === null) return;
-    if (this.gety() >= 100 - this._shape.y || this.gety() <= 0 + this._shape.y)
+    // vertical reflection
+    if (this.gety() >= 100 - this._shape.y || this.gety() <= 0 + this._shape.y) {
       this._direction.y *= -1;
-    if (paddleRects.some((r) => this.isCollision(r, rect)))
+      this.sety(
+        parseFloat(String(this.gety())) +
+          parseFloat(String(this._speed * this._direction.y * 0.002)),
+      );
+    }
+    // paddle collision
+    const rect : DOMRect | null = super.getRect();
+    if (rect === null) return;
+    if (paddleRects.some((r) => this.isCollision(r, rect))) {
       this._direction.x *= -1;
+      this.setx(
+        parseFloat(String(this.getx())) +
+          parseFloat(String(this._speed * this._direction.x * 0.002)),
+      );
+    }
+  }
+
+  isCollision(padBox: null | DOMRect, ballBox: null | DOMRect): boolean {
+    if (padBox === null || ballBox === null) return false;
+    return (
+      (padBox.left <= ballBox.right &&
+      padBox.right >= ballBox.left) &&
+      (padBox.top <= ballBox.bottom &&
+      padBox.bottom >= ballBox.top)
+    );
   }
 
   public update(delta: number, paddleRects: Array<null | DOMRect>) {
@@ -234,18 +247,16 @@ onMounted(() => {
   const remotePad = new Paddle(document.getElementById('remotePad'), field);
   const playerScore = document.getElementById('player');
   const remoteScore = document.getElementById('henne');
-  // const keyBoard = document.querySelector('.keyboard');
 
   let lastTime: number | null = null;
   var delta: number;
   function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
+      loseCase();
       ball.update(delta, [playerPad.getRect(), remotePad.getRect()]);
-      // remotePad.update(delta, ball.gety() - remotePad.gety() > 0 ? 10 : 1, -10, time);
       remotePad.update(delta, null, time);
       playerPad.update(delta, null, time);
-
       loseCase();
     }
     lastTime = time;
@@ -273,11 +284,27 @@ onMounted(() => {
     if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
       remotePad.changeDir(2, 0);
     }
+
+    // DEBUG
+    document.addEventListener('keyup', (e) => {
+      if (e.repeat) return;
+      if (e.key == 'd') {
+        console.log(ball._direction.x, + " , " + ball._direction.y + " pos " + ball.getx() + "   " + ball.gety());
+      // ball.update(10, [playerPad.getRect(), remotePad.getRect()]);
+     }
+      if (e.key == 'r') {
+        ball.reset();
+        playerPad.sety(50);
+        remotePad.sety(50);
+      }
+    // 1 1.9489355589656974 pos 92.90000000000163   32.45957996930784
+    })
+
   });
 
   function loseCase() {
     if (
-      ball.getx() >= 100 - ball._shape.x &&
+      ball.getx() >= 100 - (2 * ball._shape.x) &&
       playerScore !== null &&
       playerScore.textContent !== null
     ) {
@@ -287,7 +314,7 @@ onMounted(() => {
       remotePad.sety(50);
     }
     if (
-      ball.getx() <= 0 + ball._shape.x &&
+      ball.getx() <= 0 + (2 * ball._shape.x) &&
       remoteScore !== null &&
       remoteScore.textContent !== null
     ) {
