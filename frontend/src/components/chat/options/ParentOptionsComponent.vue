@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
+import ModalUpdatePasswordComponent from './ModalUpdatePassowordComponent.vue';
+
+const modalActive = ref(false);
 
 defineProps<{
   clients: {
@@ -16,6 +19,14 @@ var inchatvar = ref(false);
 var bannedvar = ref(false);
 var adminvar = ref(false);
 var mutedvar = ref(false);
+
+const changePassword = () => {
+  modalActive.value = true;
+};
+
+const onClose = () => {
+  modalActive.value = false;
+};
 
 function bannedfunc() {
   bannedvar.value = !bannedvar.value;
@@ -87,8 +98,12 @@ function mutedfunc() {
         />
       </div>
       <div class="buttonlist">
-        <button class="button">Change Password</button>
-        <button class="button">Leave Chat</button>
+        <span class="Text"
+        >Options
+        <button class="button" @click="changePassword">Change Password</button>
+        <ModalUpdatePasswordComponent v-show="modalActive" @close="onClose" />
+        <!-- <button class="button">Leave Chat</button>-->
+      </span>
       </div>
     </div>
   </div>

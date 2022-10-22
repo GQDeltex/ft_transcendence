@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertResult, Repository } from 'typeorm';
 import { Channel } from './entities/channel.entity';
-import { ChannelUser } from './entities/channeluser.entity';
+import { ChannelUser } from './channel-user/entities/channeluser.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
