@@ -60,7 +60,7 @@ ___
 
 ### uploadFile
 
-▸ **uploadFile**(`file`, `payload`): `Promise`<`void`\>
+▸ **uploadFile**(`file`, `payload`): `Promise`<{ `url`: `string` = picture\_url }\>
 
 #### Parameters
 
@@ -71,7 +71,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`<{ `url`: `string` = picture\_url }\>
 
 #### Defined in
 
