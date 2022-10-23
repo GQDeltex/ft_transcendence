@@ -18,7 +18,9 @@
 - [email](users_entities_user_entity.User.md#email)
 - [firstname](users_entities_user_entity.User.md#firstname)
 - [followers](users_entities_user_entity.User.md#followers)
+- [followers\_id](users_entities_user_entity.User.md#followers_id)
 - [following](users_entities_user_entity.User.md#following)
+- [following\_id](users_entities_user_entity.User.md#following_id)
 - [id](users_entities_user_entity.User.md#id)
 - [lastname](users_entities_user_entity.User.md#lastname)
 - [picture](users_entities_user_entity.User.md#picture)
@@ -28,6 +30,10 @@
 - [twoFAEnable](users_entities_user_entity.User.md#twofaenable)
 - [twoFASecret](users_entities_user_entity.User.md#twofasecret)
 - [username](users_entities_user_entity.User.md#username)
+
+### Methods
+
+- [isInChannel](users_entities_user_entity.User.md#isinchannel)
 
 ## Constructors
 
@@ -43,7 +49,7 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L43)
+[src/users/entities/user.entity.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L44)
 
 ___
 
@@ -53,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:86](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L86)
+[src/users/entities/user.entity.ts:93](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L93)
 
 ___
 
@@ -63,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:47](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L47)
+[src/users/entities/user.entity.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L48)
 
 ___
 
@@ -73,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L35)
+[src/users/entities/user.entity.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L36)
 
 ___
 
@@ -83,27 +89,47 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L22)
+[src/users/entities/user.entity.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L23)
 
 ___
 
 ### followers
 
-• **followers**: [`User`](users_entities_user_entity.User.md)[]
+• `Optional` **followers**: [`User`](users_entities_user_entity.User.md)[]
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:78](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L78)
+[src/users/entities/user.entity.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L82)
+
+___
+
+### followers\_id
+
+• **followers\_id**: ``null`` \| `number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:85](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L85)
 
 ___
 
 ### following
 
-• **following**: [`User`](users_entities_user_entity.User.md)[]
+• `Optional` **following**: [`User`](users_entities_user_entity.User.md)[]
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L72)
+[src/users/entities/user.entity.ts:73](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L73)
+
+___
+
+### following\_id
+
+• **following\_id**: ``null`` \| `number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:76](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L76)
 
 ___
 
@@ -113,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L18)
+[src/users/entities/user.entity.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L19)
 
 ___
 
@@ -123,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L26)
+[src/users/entities/user.entity.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L27)
 
 ___
 
@@ -133,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:39](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L39)
+[src/users/entities/user.entity.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L40)
 
 ___
 
@@ -143,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:62](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L62)
+[src/users/entities/user.entity.ts:63](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L63)
 
 ___
 
@@ -153,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:66](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L66)
+[src/users/entities/user.entity.ts:67](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L67)
 
 ___
 
@@ -163,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L51)
+[src/users/entities/user.entity.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L52)
 
 ___
 
@@ -173,7 +199,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:58](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L58)
+[src/users/entities/user.entity.ts:59](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L59)
 
 ___
 
@@ -183,7 +209,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:54](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L54)
+[src/users/entities/user.entity.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L55)
 
 ___
 
@@ -193,4 +219,24 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L31)
+[src/users/entities/user.entity.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L32)
+
+## Methods
+
+### isInChannel
+
+▸ **isInChannel**(`channelName`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelName` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:95](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L95)

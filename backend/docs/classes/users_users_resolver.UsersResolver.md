@@ -131,7 +131,7 @@ ___
 
 ### friends
 
-▸ **friends**(`user`): `Promise`<[`User`](users_entities_user_entity.User.md)[]\>
+▸ **friends**(`user`): `Promise`<`number`[]\>
 
 #### Parameters
 
@@ -141,7 +141,7 @@ ___
 
 #### Returns
 
-`Promise`<[`User`](users_entities_user_entity.User.md)[]\>
+`Promise`<`number`[]\>
 
 #### Defined in
 
@@ -151,7 +151,7 @@ ___
 
 ### receivedFriendRequests
 
-▸ **receivedFriendRequests**(`user`): `Promise`<[`User`](users_entities_user_entity.User.md)[]\>
+▸ **receivedFriendRequests**(`user`): `Promise`<`number`[]\>
 
 #### Parameters
 
@@ -161,17 +161,17 @@ ___
 
 #### Returns
 
-`Promise`<[`User`](users_entities_user_entity.User.md)[]\>
+`Promise`<`number`[]\>
 
 #### Defined in
 
-[src/users/users.resolver.ts:102](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L102)
+[src/users/users.resolver.ts:95](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L95)
 
 ___
 
 ### sentFriendRequests
 
-▸ **sentFriendRequests**(`user`): `Promise`<[`User`](users_entities_user_entity.User.md)[]\>
+▸ **sentFriendRequests**(`user`): `Promise`<`number`[]\>
 
 #### Parameters
 
@@ -181,11 +181,11 @@ ___
 
 #### Returns
 
-`Promise`<[`User`](users_entities_user_entity.User.md)[]\>
+`Promise`<`number`[]\>
 
 #### Defined in
 
-[src/users/users.resolver.ts:89](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L89)
+[src/users/users.resolver.ts:86](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L86)
 
 ___
 

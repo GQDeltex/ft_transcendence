@@ -22,7 +22,6 @@
 - [findChannelUser](users_users_service.UsersService.md#findchanneluser)
 - [findOne](users_users_service.UsersService.md#findone)
 - [findUserChannelList](users_users_service.UsersService.md#finduserchannellist)
-- [isInChannel](users_users_service.UsersService.md#isinchannel)
 - [update2FAEnable](users_users_service.UsersService.md#update2faenable)
 - [update2FASecret](users_users_service.UsersService.md#update2fasecret)
 - [updateFriendship](users_users_service.UsersService.md#updatefriendship)
@@ -100,7 +99,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:74](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L74)
+[src/users/users.service.ts:68](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L68)
 
 ___
 
@@ -121,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L37)
+[src/users/users.service.ts:39](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L39)
 
 ___
 
@@ -141,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:78](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L78)
+[src/users/users.service.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L72)
 
 ___
 
@@ -165,27 +164,6 @@ ___
 
 ___
 
-### isInChannel
-
-▸ **isInChannel**(`user`, `channel_name`): `boolean`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `user` | [`User`](users_entities_user_entity.User.md) |
-| `channel_name` | `string` |
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[src/users/users.service.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L51)
-
-___
-
 ### update2FAEnable
 
 ▸ **update2FAEnable**(`id`, `enabled`): `Promise`<`void`\>
@@ -203,7 +181,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:66](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L66)
+[src/users/users.service.ts:60](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L60)
 
 ___
 
@@ -224,7 +202,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:58](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L58)
+[src/users/users.service.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L52)
 
 ___
 
@@ -246,7 +224,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:140](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L140)
+[src/users/users.service.ts:129](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L129)
 
 ___
 
@@ -267,7 +245,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:92](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L92)
+[src/users/users.service.ts:81](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L81)
 
 ___
 
@@ -288,7 +266,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:108](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L108)
+[src/users/users.service.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L97)
 
 ___
 
@@ -309,7 +287,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:123](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L123)
+[src/users/users.service.ts:112](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L112)
 
 ___
 
@@ -330,4 +308,4 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:100](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L100)
+[src/users/users.service.ts:89](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L89)
