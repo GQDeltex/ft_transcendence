@@ -38,6 +38,7 @@
 - [users/decorator/current-user.decorator](modules/users_decorator_current_user_decorator.md)
 - [users/decorator/user-pipe.service](modules/users_decorator_user_pipe_service.md)
 - [users/dto/create-user.input](modules/users_dto_create_user_input.md)
+- [users/dto/update-blocking.input](modules/users_dto_update_blocking_input.md)
 - [users/dto/update-friendship.input](modules/users_dto_update_friendship_input.md)
 - [users/dto/update-userusername.input](modules/users_dto_update_userusername_input.md)
 - [users/entities/user.entity](modules/users_entities_user_entity.md)
