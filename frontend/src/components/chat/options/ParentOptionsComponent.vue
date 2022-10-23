@@ -99,11 +99,13 @@ function mutedfunc() {
       </div>
       <div class="buttonlist">
         <span class="Text"
-        >Options
-        <button class="button" @click="changePassword">Change Password</button>
-        <ModalUpdatePasswordComponent v-show="modalActive" @close="onClose" />
-        <!-- <button class="button">Leave Chat</button>-->
-      </span>
+          >Options
+          <button class="button" @click="changePassword">
+            Change Password
+          </button>
+          <ModalUpdatePasswordComponent v-show="modalActive" @close="onClose" />
+          <!-- <button class="button">Leave Chat</button>-->
+        </span>
       </div>
     </div>
   </div>

@@ -6,6 +6,7 @@ type Channel {
   id: Int!
   name: String!
   private: Boolean!
+  password: String!
   userList: [ChannelUser!]!
 }
 
@@ -52,6 +53,7 @@ type Query {
   channels: [Channel!]!
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
+  channelUsers: [ChannelUser!]!
 }
 
 type Mutation {
@@ -59,6 +61,7 @@ type Mutation {
   updateUsername(username: String!): User!
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
   joinChannel(name: String!, password: String!): Channel!
+  updatePassword(channel_name: String!, newPassword: String!): Channel!
 }
 
 enum AllowedUpdateFriendshipMethod {

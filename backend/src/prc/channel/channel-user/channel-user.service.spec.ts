@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MockRepo } from '../../../tools/memdb.mock';
 import { ChannelUserService } from './channel-user.service';
@@ -12,7 +13,11 @@ describe('ChannelUserService', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ChannelUserService, mockRepoChannelUser.getProvider()],
+      providers: [
+        ConfigService,
+        ChannelUserService,
+        mockRepoChannelUser.getProvider()
+      ],
     }).compile();
 
     service = module.get<ChannelUserService>(ChannelUserService);

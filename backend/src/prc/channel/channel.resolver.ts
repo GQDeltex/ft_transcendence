@@ -28,6 +28,9 @@ export class ChannelResolver {
     return this.channelService.findOne(channelname);
   }
 
+  /*
+  It creates a mutation that allows a user to join a channel.
+  */
   @Mutation(() => Channel)
   async joinChannel(
     @Args() createChannelInput: CreateChannelInput,

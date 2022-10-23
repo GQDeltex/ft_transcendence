@@ -3,17 +3,24 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 //import { socket } from '../../../plugin/socket';
 import ChannelUserService from '@/service/ChannelUserService';
+import { useErrorStore } from '@/store/error';
 const emits = defineEmits(['close']);
+const errorStore = useErrorStore();
 
 let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
-function closeOk() {
+async function closeOk() {
   console.log(
     'channelName= ' + channelName.value + ' password= ' + password.value,
   );
-  ChannelUserService.updatePassword(channelName.value, password.value);
-  console.log(channelName.value + ' password is now ' + password.value);
+  try {
+    await ChannelUserService.updatePassword(channelName.value, password.value);
+    console.log(channelName.value + ' password is now ' + password.value);
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+    return;
+  }
   channelName.value = '';
   password.value = '';
   emits('close');
