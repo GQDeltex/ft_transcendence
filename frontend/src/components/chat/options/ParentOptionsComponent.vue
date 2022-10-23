@@ -8,17 +8,17 @@ const modalActive = ref(false);
 defineProps<{
   clients: {
     id: number;
-    title: string;
+    title: [string];
     username: string;
     picture: string;
     status: string;
   }[];
 }>();
 
-const inchatvar = ref(false);
-const bannedvar = ref(false);
-const adminvar = ref(false);
-const mutedvar = ref(false);
+const chatToggle = ref(false);
+const banToggle = ref(false);
+const adminToggle = ref(false);
+const muteToggle = ref(false);
 
 const changePassword = () => {
   modalActive.value = true;
@@ -27,79 +27,39 @@ const changePassword = () => {
 const onClose = () => {
   modalActive.value = false;
 };
-
-function bannedfunc() {
-  bannedvar.value = !bannedvar.value;
-}
-
-function adminfunc() {
-  adminvar.value = !adminvar.value;
-}
-
-function inchatfunc() {
-  inchatvar.value = !inchatvar.value;
-}
-
-function mutedfunc() {
-  mutedvar.value = !mutedvar.value;
-}
 </script>
 
 <template>
   <div class="optionsParent">
-    <span class="headertext">Chat Options</span>
+    <span class="headerText">Chat Options</span>
     <div class="list">
-      <div class="subheader" @click="inchatfunc">In Chat ▾</div>
-      <div v-show="inchatvar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div class="subheader" @click="chatToggle = !chatToggle">In Chat ▾</div>
+      <div v-show="chatToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent :client="client" />
+        </template>
       </div>
-      <div class="subheader" @click="adminfunc">Admins ▾</div>
-      <div v-show="adminvar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div class="subheader" @click="adminToggle = !adminToggle">Admins ▾</div>
+      <div v-show="adminToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent :client="client" />
+        </template>
       </div>
-      <div class="subheader" @click="bannedfunc">Banned ▾</div>
-      <div v-show="bannedvar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div class="subheader" @click="banToggle = !banToggle">Banned ▾</div>
+      <div v-show="banToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent :client="client" />
+        </template>
       </div>
-      <div class="subheader" @click="mutedfunc">Muted ▾</div>
-      <div v-show="mutedvar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div class="subheader" @click="muteToggle = !muteToggle">Muted ▾</div>
+      <div v-show="muteToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent :client="client" />
+        </template>
       </div>
-      <div class="buttonlist">
-        <span class="Text"
-          >Options
+      <div class="buttonList">
+        <span class="Text">
+          Options
           <button class="button" @click="changePassword">
             Change Password
           </button>
@@ -120,10 +80,12 @@ function mutedfunc() {
   height: inherit;
   width: 15vw;
 }
-.headertext {
+
+.headerText {
   font-size: 1vw;
   color: #f8971d;
 }
+
 .list {
   max-height: 1fr;
   overflow-y: scroll;
@@ -141,7 +103,7 @@ function mutedfunc() {
   padding-left: 5%;
 }
 
-.buttonlist {
+.buttonList {
   display: flex;
   flex-direction: column;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ChannelUser } from './entities/channeluser.entity';
+import { ChannelUser } from './entities/channel-user.entity';
 
 @Injectable()
 export class ChannelUserService {

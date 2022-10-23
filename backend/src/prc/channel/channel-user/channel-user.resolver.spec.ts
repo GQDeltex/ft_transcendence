@@ -2,13 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChannelUserResolver } from './channel-user.resolver';
 import { ChannelService } from '../channel.service';
 import { Channel } from '../entities/channel.entity';
-import { ChannelUser } from '../channel-user/entities/channeluser.entity';
+import { ChannelUser } from './entities/channel-user.entity';
 import { MockRepo } from '../../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../../users/entities/user.entity';
 import { UsersService } from '../../../users/users.service';
 import { mockUser } from '../../../users/entities/user.entity.mock';
 import { ChannelUserService } from './channel-user.service';
+import { PrcGateway } from '../../prc.gateway';
 
 describe('ChannelUserResolver', () => {
   let resolver: ChannelUserResolver;
@@ -31,6 +32,7 @@ describe('ChannelUserResolver', () => {
         ChannelUserService,
         ChannelService,
         UsersService,
+        PrcGateway,
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
         mockRepoUser.getProvider(),
@@ -45,6 +47,7 @@ describe('ChannelUserResolver', () => {
     await mockRepoChannelUser.clearRepo();
     await mockRepoUser.clearRepo();
   });
+
   afterAll(async () => {
     await mockRepoChannel.destroyRepo();
     await mockRepoChannelUser.destroyRepo();

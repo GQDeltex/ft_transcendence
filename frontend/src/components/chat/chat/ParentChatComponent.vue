@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import { socket } from '../../../plugin/socket';
+import { socket } from '@/service/socket';
 import { useMessagesStore } from '@/store/message';
 import { useUserStore } from '@/store/user';
 import { storeToRefs } from 'pinia';

@@ -7,7 +7,7 @@ import { MockRepo } from '../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { ChannelService } from './channel/channel.service';
 import { Channel } from './channel/entities/channel.entity';
-import { ChannelUser } from './channel/channel-user/entities/channeluser.entity';
+import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 
 describe('PrcGateway', () => {
   let gateway: PrcGateway;
@@ -17,8 +17,8 @@ describe('PrcGateway', () => {
 
   beforeEach(async () => {
     mockRepoUser = new MockRepo('PrcGateway', User, mockUser);
-    mockRepoChannel = new MockRepo('ChannelService', Channel);
-    mockRepoChannelUser = new MockRepo('ChannelService', ChannelUser);
+    mockRepoChannel = new MockRepo('PrcGateway', Channel);
+    mockRepoChannelUser = new MockRepo('PrcGateway', ChannelUser);
     await mockRepoUser.setupDb();
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();

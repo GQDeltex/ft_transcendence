@@ -46,7 +46,7 @@ export class ChannelUser {
 
   @Column({ nullable: true })
   @Field()
-  unbantime: Date;
+  unbanTime: Date;
 
   @Column({ default: false })
   @Field()
@@ -54,5 +54,5 @@ export class ChannelUser {
 
   @Column({ nullable: true })
   @Field()
-  unmutetime: Date;
+  unmuteTime: Date;
 }

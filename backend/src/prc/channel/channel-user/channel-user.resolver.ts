@@ -4,7 +4,7 @@ import { CurrentJwtPayload } from '../../../users/decorator/current-jwt-payload.
 import { JwtAuthGuard } from '../../../auth/guard/jwt.guard';
 import { TwoFAGuard } from '../../../auth/guard/twoFA.guard';
 import { ChannelUserService } from './channel-user.service';
-import { ChannelUser } from './entities/channeluser.entity';
+import { ChannelUser } from './entities/channel-user.entity';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { UsersService } from '../../../users/users.service';
 import { Channel } from '../entities/channel.entity';

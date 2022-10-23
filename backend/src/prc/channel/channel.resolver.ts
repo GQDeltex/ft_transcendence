@@ -24,8 +24,8 @@ export class ChannelResolver {
   }
 
   @Query(() => Channel, { name: 'channelByName' })
-  findOneByChannelname(@Args('name') channelname: string) {
-    return this.channelService.findOne(channelname);
+  findOneByChannelName(@Args('name') channelName: string) {
+    return this.channelService.findOne(channelName);
   }
 
   /*
@@ -36,7 +36,6 @@ export class ChannelResolver {
     @Args() createChannelInput: CreateChannelInput,
     @CurrentUser() user: User,
   ) {
-    const result = await this.channelService.join(createChannelInput, user);
-    return result;
+    return await this.channelService.join(createChannelInput, user);
   }
 }

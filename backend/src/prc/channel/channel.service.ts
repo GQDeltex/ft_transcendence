@@ -7,7 +7,7 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { Channel } from './entities/channel.entity';
-import { ChannelUser } from './channel-user/entities/channeluser.entity';
+import { ChannelUser } from './channel-user/entities/channel-user.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
@@ -73,7 +73,7 @@ export class ChannelService {
   }
 
   /**
-  1. First, we try to find the channel by its name. If it doesn’t exist, we create it.
+  1. First, we try to find the channel by its name. If it doesn't exist, we create it.
   2. Then, we check if the password is correct. If it is, we add the user to the channel.
   3. If the password is incorrect, we throw an error.
   4. If the user is already in the channel, we throw an error.
@@ -101,7 +101,7 @@ export class ChannelService {
           admin: brandNew,
         });
       } else throw new WsException('Already in Channel');
-      //still needds to rejoin room(if they are not being stupid and just clicking join again while being in the room)
+      //still needs to rejoin room(if they are not being stupid and just clicking join again while being in the room)
     } else throw new WsException('Bad Password');
     return this.findOne(+channel.id); //'+' VIC ;)
   }

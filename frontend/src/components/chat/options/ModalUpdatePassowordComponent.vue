@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-//import { socket } from '../../../plugin/socket';
 import ChannelUserService from '@/service/ChannelUserService';
 import { useErrorStore } from '@/store/error';
 const emits = defineEmits(['close']);
@@ -52,7 +51,7 @@ function closeCancel() {
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 999; /* Sit on top */
+  z-index: 998; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
