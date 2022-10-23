@@ -8,9 +8,20 @@ export type User = {
   username: string;
   title: string[];
   picture: string;
-  twoFAEnable: boolean;
+  twoFAEnable?: boolean;
   require2FAVerify?: boolean;
+  friends?: User[];
+  sentFriendRequests?: User[];
+  receivedFriendRequests?: User[];
 };
+
+export enum AllowedUpdateFriendshipMethod {
+  ADD = 'ADD',
+  REMOVE = 'REMOVE',
+  ACCEPT = 'ACCEPT',
+  DECLINE = 'DECLINE',
+  CANCEL = 'CANCEL',
+}
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -21,6 +32,9 @@ export const useUserStore = defineStore('user', {
     picture: '',
     twoFAEnable: false,
     require2FAVerify: false,
+    friends: [] as User[],
+    sentFriendRequests: [] as User[],
+    receivedFriendRequests: [] as User[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -51,6 +65,9 @@ export const useUserStore = defineStore('user', {
       this.title = user.title;
       this.picture = user.picture;
       this.twoFAEnable = user.twoFAEnable;
+      this.friends = user.friends;
+      this.sentFriendRequests = user.sentFriendRequests;
+      this.receivedFriendRequests = user.receivedFriendRequests;
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -93,6 +110,19 @@ export const useUserStore = defineStore('user', {
     async uploadPicture(file: File): Promise<void> {
       try {
         this.picture = await UserService.uploadPicture(file);
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async updateFriendship(
+      method: AllowedUpdateFriendshipMethod,
+      id: number,
+    ): Promise<void> {
+      try {
+        const user = await UserService.updateFriendship(method, id);
+        this.friends = user.friends;
+        this.sentFriendRequests = user.sentFriendRequests;
+        this.receivedFriendRequests = user.receivedFriendRequests;
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }

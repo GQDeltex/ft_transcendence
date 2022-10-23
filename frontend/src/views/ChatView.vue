@@ -5,12 +5,18 @@ import ParentChannelsComponent from '../components/chat/channels/ParentChannelsC
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
 import { onMounted, ref } from 'vue';
-import UserService from '../service/UserService';
+import UserService from '@/service/UserService';
+import { useErrorStore } from '@/store/error';
 
 const chatName = ref('gucalvi');
 const users = ref([]);
+
 onMounted(async () => {
-  users.value = await UserService.findAll();
+  try {
+    users.value = await UserService.findAll();
+  } catch (error) {
+    useErrorStore().setError((error as Error).message);
+  }
 });
 </script>
 
