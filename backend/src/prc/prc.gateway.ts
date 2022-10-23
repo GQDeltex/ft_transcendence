@@ -31,7 +31,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
-import { ChannelUser } from './channel/entities/channeluser.entity';
+import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 import { Channel } from './channel/entities/channel.entity';
 
 export const CurrentUserFromWs = createParamDecorator(
@@ -99,13 +99,13 @@ export class PrcGateway implements OnGatewayDisconnect {
 
   @SubscribeMessage('newconnection')
   async connect(
-    @CurrentUserFromWs() JWTtoken: JwtPayload,
+    @CurrentUserFromWs() jwtToken: JwtPayload,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Client connected', client.id, JWTtoken.username);
-    await this.usersService.updateSocketId(JWTtoken.id, client.id);
-    await this.usersService.updateStatus(JWTtoken.id, 'online');
-    const user: User = await this.usersService.findOne(JWTtoken.id);
+    console.log('Client connected', client.id, jwtToken.username);
+    await this.usersService.updateSocketId(jwtToken.id, client.id);
+    await this.usersService.updateStatus(jwtToken.id, 'online');
+    const user: User = await this.usersService.findOne(jwtToken.id);
     const channelUsers: ChannelUser[] | undefined = user.channelList;
     if (typeof channelUsers === 'undefined') return;
     channelUsers.forEach((channelUser) => {

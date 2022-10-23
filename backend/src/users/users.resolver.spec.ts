@@ -8,9 +8,9 @@ import { UpdateUserUsernameInput } from './dto/update-userusername.input';
 import { ConfigService } from '@nestjs/config';
 import { EntityNotFoundError } from 'typeorm';
 import { Channel } from '../prc/channel/entities/channel.entity';
-import { ChannelUser } from '../prc/channel/entities/channeluser.entity';
 import { ChannelService } from '../prc/channel/channel.service';
 import { PrcGateway } from '../prc/prc.gateway';
+import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;

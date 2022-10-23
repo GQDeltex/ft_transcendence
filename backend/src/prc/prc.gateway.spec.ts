@@ -7,7 +7,7 @@ import { MockRepo } from '../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { ChannelService } from './channel/channel.service';
 import { Channel } from './channel/entities/channel.entity';
-import { ChannelUser } from './channel/entities/channeluser.entity';
+import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 
 describe('PrcGateway', () => {
   let gateway: PrcGateway;

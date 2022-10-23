@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
 import { UserInputError } from 'apollo-server-express';
 import { PrcGateway } from '../prc/prc.gateway';
+import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +32,20 @@ export class UsersService {
         where: { username: identifier },
         relations: ['channelList'],
       });
+  }
+
+  async findChannelUser(
+    identifier: number | string,
+    channelName: string,
+  ): Promise<ChannelUser> {
+    const result: ChannelUser | undefined = await (
+      await this.findUserChannelList(identifier)
+    ).channelList?.find(
+      (channelUser) => channelUser.channel_name === channelName,
+    );
+    if (typeof result === 'undefined')
+      throw new WsException('User not in ' + channelName);
+    return result;
   }
 
   isInChannel(user: User, channel_name: string): boolean {

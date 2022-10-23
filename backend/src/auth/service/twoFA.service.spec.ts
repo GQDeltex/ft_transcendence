@@ -6,9 +6,9 @@ import { User } from '../../users/entities/user.entity';
 import { mockUser } from '../../users/entities/user.entity.mock';
 import { MockRepo } from '../../tools/memdb.mock';
 import { Channel } from '../../prc/channel/entities/channel.entity';
-import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
 import { PrcGateway } from '../../prc/prc.gateway';
 import { ChannelService } from '../../prc/channel/channel.service';
+import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 
 describe('TwoFAService', () => {
   let service: TwoFAService;

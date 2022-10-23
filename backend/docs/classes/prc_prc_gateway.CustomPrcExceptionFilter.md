@@ -43,7 +43,7 @@ BaseWsExceptionFilter.constructor
 
 | Name | Type |
 | :------ | :------ |
-| `exception` | `WsException` \| `EntityNotFoundError` \| `TokenExpiredError` \| `BadRequestException` |
+| `exception` | `WsException` \| `EntityNotFoundError` \| `BadRequestException` \| `TokenExpiredError` |
 | `host` | `ArgumentsHost` |
 
 #### Returns

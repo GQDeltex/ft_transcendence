@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
+import ModalUpdatePasswordComponent from './ModalUpdatePassowordComponent.vue';
+
+const modalActive = ref(false);
 
 defineProps<{
   clients: {
@@ -16,6 +19,14 @@ const chatToggle = ref(false);
 const banToggle = ref(false);
 const adminToggle = ref(false);
 const muteToggle = ref(false);
+
+const changePassword = () => {
+  modalActive.value = true;
+};
+
+const onClose = () => {
+  modalActive.value = false;
+};
 </script>
 
 <template>
@@ -47,8 +58,14 @@ const muteToggle = ref(false);
         </template>
       </div>
       <div class="buttonList">
-        <button class="button">Change Password</button>
-        <button class="button">Leave Chat</button>
+        <span class="Text">
+          Options
+          <button class="button" @click="changePassword">
+            Change Password
+          </button>
+          <ModalUpdatePasswordComponent v-show="modalActive" @close="onClose" />
+          <!-- <button class="button">Leave Chat</button>-->
+        </span>
       </div>
     </div>
   </div>
