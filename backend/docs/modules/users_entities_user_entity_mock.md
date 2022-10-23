@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L24)
+[src/users/entities/user.entity.mock.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L25)
 
 ## Functions
 
