@@ -335,7 +335,7 @@ onMounted(() => {
 
   function loseCase() {
     if (
-      ball.get_pos_x() >= 100 - ball._shape.x &&
+      ball.get_pos_x() >= 100 - ball._shape.x / 2 &&
       playerScore !== null &&
       playerScore.textContent !== null
     ) {
@@ -345,7 +345,7 @@ onMounted(() => {
       remotePad.sety(50);
     }
     if (
-      ball.get_pos_x() <= 0 + ball._shape.x &&
+      ball.get_pos_x() <= 0 + ball._shape.x / 2 &&
       remoteScore !== null &&
       remoteScore.textContent !== null
     ) {
