@@ -12,10 +12,10 @@ defineProps<{
   }[];
 }>();
 
-var inchatvar = ref(false);
-var bannedvar = ref(false);
-var adminvar = ref(false);
-var mutedvar = ref(false);
+const inchatvar = ref(false);
+const bannedvar = ref(false);
+const adminvar = ref(false);
+const mutedvar = ref(false);
 
 function bannedfunc() {
   bannedvar.value = !bannedvar.value;
