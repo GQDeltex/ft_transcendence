@@ -49,7 +49,7 @@ ___
 
 ### channelList
 
-• `Optional` **channelList**: [`ChannelUser`](prc_channel_entities_channeluser_entity.ChannelUser.md)[]
+• `Optional` **channelList**: [`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)[]
 
 #### Defined in
 
