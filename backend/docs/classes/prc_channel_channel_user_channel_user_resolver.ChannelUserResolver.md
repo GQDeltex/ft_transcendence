@@ -73,11 +73,11 @@ ___
 
 ### findAll
 
-▸ **findAll**(): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)[]\>
+▸ **findAll**(): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
 
 #### Returns
 
-`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)[]\>
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
 
 #### Defined in
 

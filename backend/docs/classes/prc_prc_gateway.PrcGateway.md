@@ -78,13 +78,13 @@ ___
 
 ### connect
 
-▸ **connect**(`JWTtoken`, `client`): `Promise`<`void`\>
+▸ **connect**(`jwtToken`, `client`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JWTtoken` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtToken` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
 
 #### Returns

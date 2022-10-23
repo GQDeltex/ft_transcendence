@@ -23,7 +23,7 @@
 - [prc/BadRequestExceptionFilter](modules/prc_BadRequestExceptionFilter.md)
 - [prc/channel/channel-user/channel-user.resolver](modules/prc_channel_channel_user_channel_user_resolver.md)
 - [prc/channel/channel-user/channel-user.service](modules/prc_channel_channel_user_channel_user_service.md)
-- [prc/channel/channel-user/entities/channeluser.entity](modules/prc_channel_channel_user_entities_channeluser_entity.md)
+- [prc/channel/channel-user/entities/channel-user.entity](modules/prc_channel_channel_user_entities_channel_user_entity.md)
 - [prc/channel/channel.resolver](modules/prc_channel_channel_resolver.md)
 - [prc/channel/channel.service](modules/prc_channel_channel_service.md)
 - [prc/channel/dto/create-channel.input](modules/prc_channel_dto_create_channel_input.md)
