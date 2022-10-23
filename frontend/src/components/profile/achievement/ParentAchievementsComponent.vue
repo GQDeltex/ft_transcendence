@@ -26,6 +26,11 @@ import ChildAchievementComponent from './ChildAchievementComponent.vue';
         text="Lost a Pong game"
         picture=""
       />
+      <ChildAchievementComponent
+        header="Smol PongKing"
+        text="Lost a Pong game twice"
+        picture=""
+      />
     </div>
   </div>
 </template>
@@ -35,7 +40,7 @@ import ChildAchievementComponent from './ChildAchievementComponent.vue';
   display: grid;
   padding: 1vw;
   border: 1px solid grey;
-  max-height: 30vh;
+  max-height: 1fr;
 }
 .achievements {
   max-height: 28vh;
@@ -43,19 +48,16 @@ import ChildAchievementComponent from './ChildAchievementComponent.vue';
 }
 .text {
   font-size: 2vw;
-  /* padding: 1%; */
-  /* grid-column: 1 / 3; */
+  margin-bottom: 1vw;
 }
 .achieve {
   display: flex;
   align-items: center;
   gap: 1vw;
-  /* grid-column: 1 / 2; */
   padding: 1vw;
 }
 
 .infoBox {
-  /* grid-column: 2 / 4; */
   font-size: 2vw;
   color: grey;
 }
@@ -66,7 +68,6 @@ import ChildAchievementComponent from './ChildAchievementComponent.vue';
 
 .logo {
   object-fit: cover;
-  /* grid-column: 1 / 2; */
   object-position: 50% 0%;
   border-radius: 50%;
   border: 1px solid #f8971d;
