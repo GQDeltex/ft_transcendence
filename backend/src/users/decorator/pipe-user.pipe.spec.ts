@@ -8,6 +8,7 @@ import { Channel } from '../../prc/channel/entities/channel.entity';
 import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
 import { PrcGateway } from '../../prc/prc.gateway';
 import { ChannelService } from '../../prc/channel/channel.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('UserPipe', () => {
   let pipe: UserPipe;
@@ -25,6 +26,7 @@ describe('UserPipe', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ConfigService,
         UserPipe,
         UsersService,
         PrcGateway,
