@@ -17,6 +17,7 @@ export const createMockUser = (options: Partial<User> = {}): User => {
   user.status = 'offline';
   user.following_id = [];
   user.followers_id = [];
+  user.channelList = [];
   Object.assign(user, options);
   return user;
 };
