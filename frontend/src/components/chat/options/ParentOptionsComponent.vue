@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
-import ModalUpdatePasswordComponent from './ModalUpdatePassowordComponent.vue';
+import ModalUpdatePasswordComponent from './ModalUpdatePasswordComponent.vue';
+import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
 import type { User } from '@/store/user';
 
 const modalActive = ref(false);
@@ -16,6 +17,10 @@ const adminToggle = ref(false);
 const muteToggle = ref(false);
 
 const changePassword = () => {
+  modalActive.value = true;
+};
+
+const updateAdmin = () => {
   modalActive.value = true;
 };
 
@@ -60,6 +65,8 @@ const onClose = () => {
           </button>
           <ModalUpdatePasswordComponent v-show="modalActive" @close="onClose" />
           <!-- <button class="button">Leave Chat</button>-->
+          <button class="button" @click="updateAdmin">Make Admin</button>
+          <ModalUpdateAdminComponent v-show="modalActive" @close="onClose" />
         </span>
       </div>
     </div>
