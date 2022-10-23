@@ -17,8 +17,8 @@ describe('PrcGateway', () => {
 
   beforeEach(async () => {
     mockRepoUser = new MockRepo('PrcGateway', User, mockUser);
-    mockRepoChannel = new MockRepo('ChannelService', Channel);
-    mockRepoChannelUser = new MockRepo('ChannelService', ChannelUser);
+    mockRepoChannel = new MockRepo('PrcGateway', Channel);
+    mockRepoChannelUser = new MockRepo('PrcGateway', ChannelUser);
     await mockRepoUser.setupDb();
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();

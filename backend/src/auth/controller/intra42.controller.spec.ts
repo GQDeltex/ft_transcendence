@@ -6,28 +6,53 @@ import { User } from '../../users/entities/user.entity';
 import { mockUser } from '../../users/entities/user.entity.mock';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
+import { Channel } from '../../prc/channel/entities/channel.entity';
+import { ChannelUser } from '../../prc/channel/entities/channeluser.entity';
+import { PrcGateway } from '../../prc/prc.gateway';
+import { ChannelService } from '../../prc/channel/channel.service';
 
 describe('Intra42Controller', () => {
   let controller: Intra42Controller;
-  let mockRepo: MockRepo;
+  let mockRepoUser: MockRepo;
+  let mockRepoChannel: MockRepo;
+  let mockRepoChannelUser: MockRepo;
 
   beforeEach(async () => {
-    mockRepo = new MockRepo('Intra42Controller', User, mockUser);
+    mockRepoUser = new MockRepo('Intra42Controller', User, mockUser);
+    mockRepoChannel = new MockRepo('Intra42Controller', Channel);
+    mockRepoChannelUser = new MockRepo('Intra42Controller', ChannelUser);
+    await mockRepoUser.setupDb();
+    await mockRepoChannel.setupDb();
+    await mockRepoChannelUser.setupDb();
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [Intra42Controller],
       providers: [
         JwtService,
         UsersService,
         ConfigService,
-        mockRepo.getProvider(),
+        PrcGateway,
+        ChannelService,
+        mockRepoUser.getProvider(),
+        mockRepoChannel.getProvider(),
+        mockRepoChannelUser.getProvider(),
       ],
     }).compile();
 
     controller = module.get<Intra42Controller>(Intra42Controller);
   });
 
-  afterEach(async () => await mockRepo.clearRepo());
-  afterAll(async () => await mockRepo.destroyRepo());
+  afterEach(async () => {
+    await mockRepoUser.clearRepo();
+    await mockRepoChannel.clearRepo();
+    await mockRepoChannelUser.clearRepo();
+  });
+
+  afterAll(async () => {
+    await mockRepoUser.destroyRepo();
+    await mockRepoChannel.destroyRepo();
+    await mockRepoChannelUser.destroyRepo();
+  });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
