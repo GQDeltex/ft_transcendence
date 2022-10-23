@@ -28,7 +28,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
-import { ChannelUser } from './channel/entities/channeluser.entity';
+import { ChannelUser } from './channel/channel-user/entities/channeluser.entity';
 import { Channel } from './channel/entities/channel.entity';
 
 export const CurrentUserFromWs = createParamDecorator(

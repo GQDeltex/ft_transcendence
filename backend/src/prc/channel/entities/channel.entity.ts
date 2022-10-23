@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ChannelUser } from './channeluser.entity';
+import { ChannelUser } from '../channel-user/entities/channeluser.entity';
 import { OneToMany, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
@@ -17,6 +17,7 @@ export class Channel {
   @Field()
   private: boolean;
 
+  @Field() //REMOVE
   @Column({ default: '' })
   password: string;
 

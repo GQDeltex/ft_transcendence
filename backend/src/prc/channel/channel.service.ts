@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InsertResult, Repository } from 'typeorm';
+import {
+  EntityNotFoundError,
+  InsertResult,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { Channel } from './entities/channel.entity';
-import { ChannelUser } from './entities/channeluser.entity';
+import { ChannelUser } from './channel-user/entities/channeluser.entity';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
@@ -99,5 +104,15 @@ export class ChannelService {
       //still needds to rejoin room(if they are not being stupid and just clicking join again while being in the room)
     } else throw new WsException('Bad Password');
     return this.findOne(+channel.id); //'+' VIC ;)
+  }
+
+  async updatePassword(channelName: string, newPassword: string) {
+    const result: UpdateResult = await this.channelRepository.update(
+      { name: channelName },
+      { password: newPassword },
+    );
+    if (typeof result.affected != 'undefined' && result.affected != 1)
+      throw new EntityNotFoundError(Channel, { name: channelName });
+    return await this.findOne(channelName);
   }
 }

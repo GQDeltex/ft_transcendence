@@ -24,6 +24,7 @@
 - [findOne](prc_channel_channel_service.ChannelService.md#findone)
 - [join](prc_channel_channel_service.ChannelService.md#join)
 - [saveMessage](prc_channel_channel_service.ChannelService.md#savemessage)
+- [updatePassword](prc_channel_channel_service.ChannelService.md#updatepassword)
 
 ## Constructors
 
@@ -36,11 +37,11 @@
 | Name | Type |
 | :------ | :------ |
 | `channelRepository` | `Repository`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\> |
-| `channelUserRepository` | `Repository`<[`ChannelUser`](prc_channel_entities_channeluser_entity.ChannelUser.md)\> |
+| `channelUserRepository` | `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\> |
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L15)
+[src/prc/channel/channel.service.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L20)
 
 ## Properties
 
@@ -50,17 +51,17 @@
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L17)
+[src/prc/channel/channel.service.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L22)
 
 ___
 
 ### channelUserRepository
 
-• `Private` `Readonly` **channelUserRepository**: `Repository`<[`ChannelUser`](prc_channel_entities_channeluser_entity.ChannelUser.md)\>
+• `Private` `Readonly` **channelUserRepository**: `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\>
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L19)
+[src/prc/channel/channel.service.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L24)
 
 ___
 
@@ -70,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L13)
+[src/prc/channel/channel.service.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L18)
 
 ## Methods
 
@@ -97,7 +98,7 @@ Returns:
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L53)
+[src/prc/channel/channel.service.ts:58](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L58)
 
 ___
 
@@ -111,7 +112,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L22)
+[src/prc/channel/channel.service.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L27)
 
 ___
 
@@ -131,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L64)
+[src/prc/channel/channel.service.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L69)
 
 ___
 
@@ -151,7 +152,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L32)
+[src/prc/channel/channel.service.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L37)
 
 ___
 
@@ -178,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:77](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L77)
+[src/prc/channel/channel.service.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L82)
 
 ___
 
@@ -198,4 +199,25 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:60](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L60)
+[src/prc/channel/channel.service.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L65)
+
+___
+
+### updatePassword
+
+▸ **updatePassword**(`channelName`, `newPassword`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelName` | `string` |
+| `newPassword` | `string` |
+
+#### Returns
+
+`Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+#### Defined in
+
+[src/prc/channel/channel.service.ts:109](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L109)

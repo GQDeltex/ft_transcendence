@@ -1,23 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ChannelResolver } from './channel.resolver';
-import { ChannelService } from './channel.service';
-import { Channel } from './entities/channel.entity';
-import { ChannelUser } from './channel-user/entities/channeluser.entity';
-import { MockRepo } from '../../tools/memdb.mock';
+import { ChannelUserResolver } from './channel-user.resolver';
+import { ChannelService } from '../channel.service';
+import { Channel } from '../entities/channel.entity';
+import { ChannelUser } from '../channel-user/entities/channeluser.entity';
+import { MockRepo } from '../../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../../users/entities/user.entity';
-import { UsersService } from '../../users/users.service';
+import { User } from '../../../users/entities/user.entity';
+import { UsersService } from '../../../users/users.service';
+import { mockUser } from '../../../users/entities/user.entity.mock';
+import { ChannelUserService } from './channel-user.service';
 
-describe('ChannelResolver', () => {
-  let resolver: ChannelResolver;
+describe('ChannelUserResolver', () => {
+  let resolver: ChannelUserResolver;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
 
   beforeEach(async () => {
-    mockRepoChannel = new MockRepo('ChannelResolver', Channel);
-    mockRepoChannelUser = new MockRepo('ChannelResolver', ChannelUser);
-    mockRepoUser = new MockRepo('ChannelResolver', User);
+    mockRepoChannel = new MockRepo('ChannelUserResolver', Channel);
+    mockRepoChannelUser = new MockRepo('ChannelUserResolver', ChannelUser);
+    mockRepoUser = new MockRepo('ChannelUserResolver', User, mockUser);
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
     await mockRepoUser.setupDb();
@@ -25,7 +27,8 @@ describe('ChannelResolver', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ConfigService,
-        ChannelResolver,
+        ChannelUserResolver,
+        ChannelUserService,
         ChannelService,
         UsersService,
         mockRepoChannel.getProvider(),
@@ -34,7 +37,7 @@ describe('ChannelResolver', () => {
       ],
     }).compile();
 
-    resolver = module.get<ChannelResolver>(ChannelResolver);
+    resolver = module.get<ChannelUserResolver>(ChannelUserResolver);
   });
 
   afterEach(async () => {

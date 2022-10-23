@@ -120,4 +120,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L31)
+[src/prc/channel/channel.resolver.ts:34](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L34)

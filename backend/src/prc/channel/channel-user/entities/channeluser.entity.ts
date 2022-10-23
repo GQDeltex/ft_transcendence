@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Channel } from './channel.entity';
-import { User } from '../../../users/entities/user.entity';
+import { Channel } from '../../entities/channel.entity';
+import { User } from '../../../../users/entities/user.entity';
 import {
   ManyToOne,
   Column,

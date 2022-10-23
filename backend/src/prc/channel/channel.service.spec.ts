@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChannelService } from './channel.service';
 import { Channel } from './entities/channel.entity';
-import { ChannelUser } from './entities/channeluser.entity';
+import { ChannelUser } from './channel-user/entities/channeluser.entity';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 
