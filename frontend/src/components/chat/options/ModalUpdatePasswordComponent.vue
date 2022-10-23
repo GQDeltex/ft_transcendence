@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-//import { socket } from '../../../plugin/socket';
 import ChannelUserService from '@/service/ChannelUserService';
 import { useErrorStore } from '@/store/error';
 const emits = defineEmits(['close']);

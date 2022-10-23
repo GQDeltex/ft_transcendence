@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentJwtPayload } from '../../../users/decorator/current-jwt-payload.decorator';
 import { JwtAuthGuard } from '../../../auth/guard/jwt.guard';
 import { TwoFAGuard } from '../../../auth/guard/twoFA.guard';
@@ -37,5 +37,33 @@ export class ChannelUserResolver {
     );
     if (!channelUser.owner) throw new WsException('Not Channel Owner');
     return await this.channelService.updatePassword(channel_name, newPassword);
+  }
+
+  @Mutation(() => ChannelUser)
+  async updateAdmin(
+    @CurrentJwtPayload() JwtUser: JwtPayload,
+    @Args('channel_name', { type: () => String }) channel_name: string,
+    @Args('newAdmin', { type: () => Int }) newAdmin: number,
+  ) {
+    const channelUserAdmin: ChannelUser =
+      await this.usersService.findChannelUser(JwtUser.id, channel_name);
+    if (typeof channelUserAdmin === 'undefined')
+      throw new WsException('ChannelUserAdmin undefined');
+    const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
+      newAdmin,
+      channel_name,
+    );
+    if (typeof channelUserNew === 'undefined')
+      throw new WsException('ChannelUserNew undefined');
+    console.log('both users are good');
+    if (!channelUserAdmin.admin)
+      throw new WsException(
+        JwtUser.username + ' is not a Channel Admin on ' + channel_name,
+      );
+    if (channelUserNew.admin)
+      throw new WsException(
+        newAdmin + ' is already an Admin on ' + channel_name,
+      );
+    return await this.channelUserService.updateAdmin(channelUserNew);
   }
 }
