@@ -1,17 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
 import { UserInputError } from 'apollo-server-express';
-import { ChannelUser } from '../prc/channel/channel-user/entities/channeluser.entity';
+import { PrcGateway } from '../prc/prc.gateway';
+import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => PrcGateway))
+    private readonly prcGateway: PrcGateway,
   ) {}
 
   create(createUserInput: CreateUserInput) {
@@ -49,8 +52,7 @@ export class UsersService {
     const result = user.channelList?.some(
       (channelUser) => channelUser.channel_name === channel_name,
     );
-    if (typeof result === 'undefined' || !result) return false;
-    return true;
+    return !(typeof result === 'undefined' || !result);
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {
@@ -217,6 +219,10 @@ export class UsersService {
         (following) => following.id !== friendId,
       );
       await this.userRepository.save(user);
+    }
+
+    if (friend.socketId !== '') {
+      this.prcGateway.server.to(friend.socketId).emit('friendRequest');
     }
   }
 }

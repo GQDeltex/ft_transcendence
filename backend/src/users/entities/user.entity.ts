@@ -8,7 +8,7 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm';
-import { ChannelUser } from '../../prc/channel/channel-user/entities/channeluser.entity';
+import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 
 @ObjectType()
 @Entity()

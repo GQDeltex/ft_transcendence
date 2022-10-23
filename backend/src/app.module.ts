@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { PrcModule } from './prc/prc.module';
 import { User } from './users/entities/user.entity';
-import { ChannelUser } from './prc/channel/channel-user/entities/channeluser.entity';
+import { ChannelUser } from './prc/channel/channel-user/entities/channel-user.entity';
 import { Channel } from './prc/channel/entities/channel.entity';
 import { HealthModule } from './health/health.module';
 import { GraphQLModule } from '@nestjs/graphql';

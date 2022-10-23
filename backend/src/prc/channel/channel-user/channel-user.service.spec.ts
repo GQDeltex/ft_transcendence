@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MockRepo } from '../../../tools/memdb.mock';
 import { ChannelUserService } from './channel-user.service';
-import { ChannelUser } from './entities/channeluser.entity';
+import { ChannelUser } from './entities/channel-user.entity';
 
 describe('ChannelUserService', () => {
   let service: ChannelUserService;
@@ -26,6 +26,7 @@ describe('ChannelUserService', () => {
   afterEach(async () => {
     await mockRepoChannelUser.clearRepo();
   });
+
   afterAll(async () => {
     await mockRepoChannelUser.destroyRepo();
   });

@@ -17,9 +17,9 @@ type ChannelUser {
   admin: Boolean!
   owner: Boolean!
   ban: Boolean!
-  unbantime: DateTime!
+  unbanTime: DateTime!
   mute: Boolean!
-  unmutetime: DateTime!
+  unmuteTime: DateTime!
 }
 
 """

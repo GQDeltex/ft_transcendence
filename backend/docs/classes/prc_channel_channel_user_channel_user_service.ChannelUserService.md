@@ -29,7 +29,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `channelUserRepository` | `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\> |
+| `channelUserRepository` | `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\> |
 
 #### Defined in
 
@@ -39,7 +39,7 @@
 
 ### channelUserRepository
 
-• `Private` `Readonly` **channelUserRepository**: `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\>
+• `Private` `Readonly` **channelUserRepository**: `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Defined in
 
@@ -49,11 +49,11 @@
 
 ### findAll
 
-▸ **findAll**(): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)[]\>
+▸ **findAll**(): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
 
 #### Returns
 
-`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)[]\>
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
 
 #### Defined in
 
@@ -63,7 +63,7 @@ ___
 
 ### findOne
 
-▸ **findOne**(`identifier`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\>
+▸ **findOne**(`identifier`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Parameters
 
@@ -73,7 +73,7 @@ ___
 
 #### Returns
 
-`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\>
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Defined in
 

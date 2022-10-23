@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChannelResolver } from './channel.resolver';
 import { ChannelService } from './channel.service';
 import { Channel } from './entities/channel.entity';
-import { ChannelUser } from './channel-user/entities/channeluser.entity';
+import { ChannelUser } from './channel-user/entities/channel-user.entity';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
+import { PrcGateway } from '../prc.gateway';
 
 describe('ChannelResolver', () => {
   let resolver: ChannelResolver;
@@ -28,6 +29,7 @@ describe('ChannelResolver', () => {
         ChannelResolver,
         ChannelService,
         UsersService,
+        PrcGateway,
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
         mockRepoUser.getProvider(),

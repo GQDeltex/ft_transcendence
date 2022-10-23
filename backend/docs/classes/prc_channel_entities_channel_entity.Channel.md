@@ -68,7 +68,7 @@ ___
 
 ### userList
 
-• **userList**: [`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)[]
+• **userList**: [`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]
 
 #### Defined in
 

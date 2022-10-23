@@ -10,16 +10,15 @@ const props = defineProps<{
   <img
     :style="{ width: size, height: size, 'border-color': borderColor }"
     alt="profile picture"
-    class="ppicture"
+    class="pictureStyle"
     :src="props.picture"
-    :border-color="props.borderColor"
   />
 </template>
 
 <style>
-.ppicture {
+.pictureStyle {
   border-radius: 50%;
-  object-position: 50% 0%;
+  object-position: 50% 0;
   border: 1px solid;
   object-fit: cover;
 }

@@ -37,7 +37,7 @@
 | Name | Type |
 | :------ | :------ |
 | `channelRepository` | `Repository`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\> |
-| `channelUserRepository` | `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\> |
+| `channelUserRepository` | `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\> |
 
 #### Defined in
 
@@ -57,7 +57,7 @@ ___
 
 ### channelUserRepository
 
-• `Private` `Readonly` **channelUserRepository**: `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channeluser_entity.ChannelUser.md)\>
+• `Private` `Readonly` **channelUserRepository**: `Repository`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Defined in
 
@@ -160,7 +160,7 @@ ___
 
 ▸ **join**(`createChannelInput`, `user`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
 
-1. First, we try to find the channel by its name. If it doesn’t exist, we create it.
+1. First, we try to find the channel by its name. If it doesn't exist, we create it.
 2. Then, we check if the password is correct. If it is, we add the user to the channel.
 3. If the password is incorrect, we throw an error.
 4. If the user is already in the channel, we throw an error.
