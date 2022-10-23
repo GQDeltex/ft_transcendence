@@ -127,5 +127,15 @@ export const useUserStore = defineStore('user', {
         useErrorStore().setError((error as Error).message);
       }
     },
+    async fetchFriendRequests(): Promise<void> {
+      try {
+        const user = await UserService.findSelf();
+        this.friends = user.friends;
+        this.sentFriendRequests = user.sentFriendRequests;
+        this.receivedFriendRequests = user.receivedFriendRequests;
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
   },
 });

@@ -18,6 +18,9 @@ import {
   UsePipes,
   ValidationPipe,
   BadRequestException,
+  Injectable,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
@@ -61,6 +64,7 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
   }
 }
 
+@Injectable()
 @UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
@@ -76,6 +80,7 @@ export class PrcGateway implements OnGatewayDisconnect {
   server: Server;
 
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly channelService: ChannelService,
   ) {}
@@ -104,10 +109,10 @@ export class PrcGateway implements OnGatewayDisconnect {
     const channelUsers: ChannelUser[] | undefined = user.channelList;
     if (typeof channelUsers === 'undefined') return;
     channelUsers.forEach((channelUser) => {
-      client.join(channelUser.channel_name),
-        this.channelService
-          .findMessagesForRecipient(channelUser.channel_name)
-          .forEach((message) => client.emit('prc', message));
+      client.join(channelUser.channel_name);
+      this.channelService
+        .findMessagesForRecipient(channelUser.channel_name)
+        .forEach((message) => client.emit('prc', message));
     });
     this.channelService
       .findMessagesForRecipient(user.username)
@@ -115,7 +120,7 @@ export class PrcGateway implements OnGatewayDisconnect {
   }
 
   /**
-    It sends mmessage to a channel or user.
+    It sends message to a channel or user.
   
   Args:
     user: The user who sent the message.

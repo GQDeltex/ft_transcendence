@@ -75,28 +75,28 @@ watch(
   { immediate: true },
 );
 
-const onFriend = () => {
+const onFriend = async () => {
   switch (friendStatus) {
     case friendStatusEnum.NOT_FRIEND:
-      userStore.updateFriendship(
+      await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.ADD,
         props.client.id,
       );
       break;
     case friendStatusEnum.FRIEND:
-      userStore.updateFriendship(
+      await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.REMOVE,
         props.client.id,
       );
       break;
     case friendStatusEnum.REQUEST_SENT:
-      userStore.updateFriendship(
+      await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.CANCEL,
         props.client.id,
       );
       break;
     case friendStatusEnum.REQUEST_RECEIVED:
-      userStore.updateFriendship(
+      await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.ACCEPT,
         props.client.id,
       );
@@ -104,9 +104,9 @@ const onFriend = () => {
   }
 };
 
-const onDecline = () => {
+const onDecline = async () => {
   if (friendStatus === friendStatusEnum.REQUEST_RECEIVED) {
-    userStore.updateFriendship(
+    await userStore.updateFriendship(
       AllowedUpdateFriendshipMethod.DECLINE,
       props.client.id,
     );

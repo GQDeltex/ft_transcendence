@@ -4,19 +4,31 @@ import ParentPeoplesComponent from '../components/chat/peoples/ParentPeoplesComp
 import ParentChannelsComponent from '../components/chat/channels/ParentChannelsComponent.vue';
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
-import { onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import { socket } from '@/service/socket';
+import { useUserStore } from '@/store/user';
 
+const errorStore = useErrorStore();
+const userStore = useUserStore();
 const chatName = ref('gucalvi');
 const users = ref([]);
+
+socket.on('friendRequest', async () => {
+  await userStore.fetchFriendRequests();
+});
 
 onMounted(async () => {
   try {
     users.value = await UserService.findAll();
   } catch (error) {
-    useErrorStore().setError((error as Error).message);
+    errorStore.setError((error as Error).message);
   }
+});
+
+onBeforeUnmount(() => {
+  socket.off('friendRequest');
 });
 </script>
 
@@ -25,7 +37,7 @@ onMounted(async () => {
     <div class="leftSide">
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
       <ParentChannelsComponent class="channelsComp" />
-      <ParentRequestsComponent class="requestsComp" />
+      <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />
     <input v-model="chatName" type="text" class="inputBox" />
