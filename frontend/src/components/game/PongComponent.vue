@@ -69,18 +69,27 @@ class Vector {
     this.x = x;
     this.y = y;
   }
+
+  // keep the direction of a vector, but resize to length of 1
+  unit_vec() {
+    let temp: number = Math.pow(Math.pow(this.x, 2) + Math.pow(this.y, 2), 0.5);
+    this.x /= temp;
+    this.y /= temp;
+  }
 }
 
 class Ball extends Element {
   public _shape: Vector;
   private _field: Vector;
-  // private _direction: Vector;
+  frect: DOMRect | null;
+  // private _direction: Vector; get-set- soon™
   public _direction: Vector;
   private _speed: number;
 
   constructor(ballElem: HTMLElement | null, field: Element) {
     super(ballElem);
     this._field = new Vector(field.getWidth(), field.getHeight());
+    this.frect = field.getRect();
     this._direction = new Vector(0, 0);
     this._speed = 30;
     this._shape = new Vector(
@@ -90,15 +99,21 @@ class Ball extends Element {
     this.reset();
   }
 
+  // later functions depend on pixel values in screen
+  // when resizing the game window changes and is refreshed in this function
+  resize(field: Element) {
+    this.frect = field.getRect();
+  }
+
   reset() {
     this.setx(50);
     this.sety(50);
     // this.setx(92.90000000000163);
     // this.sety(32.45957996930784);
-    this._direction.x = Math.random() > 0.5 ? 1 : -1;
-    this._direction.y = Math.random() * 4 - 2;
-    // this._direction.x = 1;
-    // this._direction.y = 1.9489355589656974;
+    // this._direction.x = Math.random() > 0.5 ? 1 : -1;
+    // this._direction.y = Math.random() * 4 - 2;
+    this._direction.x = 1;
+    this._direction.y = 0;
   }
 
   getx(): number {
@@ -128,15 +143,6 @@ class Ball extends Element {
     else console.log('7 failiure, no object assigned\n');
   }
 
-  speedLimit() {
-    let temp: number = Math.pow(
-      Math.pow(this._direction.x, 2) + Math.pow(this._direction.y, 2),
-      0.5,
-    );
-    this._direction.x /= temp;
-    this._direction.y /= temp;
-  }
-
   step(paddleRects: Array<null | DOMRect>) {
     //move step
     this.setx(
@@ -148,7 +154,10 @@ class Ball extends Element {
         parseFloat(String(this._speed * this._direction.y * 0.001)),
     );
     // vertical reflection
-    if (this.gety() >= 100 - this._shape.y || this.gety() <= 0 + this._shape.y) {
+    if (
+      this.gety() >= 100 - this._shape.y ||
+      this.gety() <= 0 + this._shape.y
+    ) {
       this._direction.y *= -1;
       this.sety(
         parseFloat(String(this.gety())) +
@@ -156,7 +165,7 @@ class Ball extends Element {
       );
     }
     // paddle collision
-    const rect : DOMRect | null = super.getRect();
+    const rect: DOMRect | null = super.getRect();
     if (rect === null) return;
     if (paddleRects.some((r) => this.isCollision(r, rect))) {
       this._direction.x *= -1;
@@ -167,14 +176,28 @@ class Ball extends Element {
     }
   }
 
+  // return the vertical midpoint of an object
+  v_center(r: DOMRect): number {
+    return r.top + (r.bottom - r.top) / 2;
+  }
+
   isCollision(padBox: null | DOMRect, ballBox: null | DOMRect): boolean {
     if (padBox === null || ballBox === null) return false;
-    return (
-      (padBox.left <= ballBox.right &&
-      padBox.right >= ballBox.left) &&
-      (padBox.top <= ballBox.bottom &&
-      padBox.bottom >= ballBox.top)
-    );
+    if (
+      padBox.left <= ballBox.right &&
+      padBox.right >= ballBox.left &&
+      padBox.top <= ballBox.bottom &&
+      padBox.bottom >= ballBox.top
+    ) {
+      this._direction.y =
+        2 *
+        (((this.v_center(ballBox) - padBox.top) /
+          (padBox.bottom - padBox.top)) *
+          2 -
+          1);
+      return true;
+    }
+    return false;
   }
 
   public update(delta: number, paddleRects: Array<null | DOMRect>) {
@@ -284,27 +307,15 @@ onMounted(() => {
     if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
       remotePad.changeDir(2, 0);
     }
-
-    // DEBUG
-    document.addEventListener('keyup', (e) => {
-      if (e.repeat) return;
-      if (e.key == 'd') {
-        console.log(ball._direction.x, + " , " + ball._direction.y + " pos " + ball.getx() + "   " + ball.gety());
-      // ball.update(10, [playerPad.getRect(), remotePad.getRect()]);
-     }
-      if (e.key == 'r') {
-        ball.reset();
-        playerPad.sety(50);
-        remotePad.sety(50);
-      }
-    // 1 1.9489355589656974 pos 92.90000000000163   32.45957996930784
-    })
-
   });
+  window.onresize = function () {
+    console.log('lal');
+    ball.resize(field);
+  };
 
   function loseCase() {
     if (
-      ball.getx() >= 100 - (2 * ball._shape.x) &&
+      ball.getx() >= 100 - 2 * ball._shape.x &&
       playerScore !== null &&
       playerScore.textContent !== null
     ) {
@@ -314,7 +325,7 @@ onMounted(() => {
       remotePad.sety(50);
     }
     if (
-      ball.getx() <= 0 + (2 * ball._shape.x) &&
+      ball.getx() <= 0 + 2 * ball._shape.x &&
       remoteScore !== null &&
       remoteScore.textContent !== null
     ) {
@@ -353,7 +364,7 @@ onMounted(() => {
   top: calc(var(--y) * 1%);
   transform: translate(0%, -50%);
   width: 1%;
-  height: 10%;
+  height: 50%;
 }
 
 .paddle-left {
