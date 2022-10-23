@@ -7,6 +7,8 @@ import { MockRepo } from '../../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../../users/entities/user.entity';
 import { UsersService } from '../../../users/users.service';
+import { mockUser } from '../../../users/entities/user.entity.mock';
+import { ChannelUserService } from './channel-user.service';
 
 describe('ChannelUserResolver', () => {
   let resolver: ChannelUserResolver;
@@ -17,7 +19,7 @@ describe('ChannelUserResolver', () => {
   beforeEach(async () => {
     mockRepoChannel = new MockRepo('ChannelUserResolver', Channel);
     mockRepoChannelUser = new MockRepo('ChannelUserResolver', ChannelUser);
-    mockRepoUser = new MockRepo('ChannelUserResolver', User);
+    mockRepoUser = new MockRepo('ChannelUserResolver', User, mockUser);
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
     await mockRepoUser.setupDb();
@@ -26,6 +28,7 @@ describe('ChannelUserResolver', () => {
       providers: [
         ConfigService,
         ChannelUserResolver,
+        ChannelUserService,
         ChannelService,
         UsersService,
         mockRepoChannel.getProvider(),

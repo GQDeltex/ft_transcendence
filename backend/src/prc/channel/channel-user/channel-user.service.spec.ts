@@ -16,7 +16,7 @@ describe('ChannelUserService', () => {
       providers: [
         ConfigService,
         ChannelUserService,
-        mockRepoChannelUser.getProvider()
+        mockRepoChannelUser.getProvider(),
       ],
     }).compile();
 
