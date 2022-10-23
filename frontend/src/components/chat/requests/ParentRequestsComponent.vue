@@ -2,15 +2,10 @@
 // import ChildRequestComponent from './ChildRequestComponent.vue';
 import FriendRequestComponent from './FriendRequestComponent.vue';
 import { useUserStore } from '@/store/user';
+import type { User } from '@/store/user';
 
 defineProps<{
-  clients: {
-    id: number;
-    title: [string];
-    username: string;
-    picture: string;
-    status: string;
-  }[];
+  clients: User[];
 }>();
 
 const userStore = useUserStore();
@@ -24,9 +19,7 @@ const userStore = useUserStore();
         <FriendRequestComponent
           v-if="
             client.id !== userStore.id &&
-            userStore.receivedFriendRequests.some(
-              (user) => user.id === client.id,
-            )
+            userStore.receivedFriendRequests.includes(client.id)
           "
           :client="client"
         />

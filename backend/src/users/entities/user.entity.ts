@@ -7,6 +7,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryColumn,
+  RelationId,
 } from 'typeorm';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 
@@ -69,13 +70,19 @@ export class User {
     nullable: true,
   })
   @JoinTable()
-  following: User[];
+  following?: User[];
+
+  @RelationId('following')
+  following_id: number[] | null;
 
   @ManyToMany(() => User, (user) => user.following, {
     cascade: true,
     nullable: true,
   })
-  followers: User[];
+  followers?: User[];
+
+  @RelationId('followers')
+  followers_id: number[] | null;
 
   @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
@@ -84,4 +91,11 @@ export class User {
     eager: true,
   })
   channelList?: ChannelUser[];
+
+  public isInChannel(channelName: string): boolean {
+    const result = this.channelList?.some(
+      (channelUser) => channelUser.channel_name === channelName,
+    );
+    return !(typeof result === 'undefined' || !result);
+  }
 }

@@ -7,7 +7,7 @@ export const socket: Socket = io(`http://${import.meta.env.VITE_DOMAIN}:8080`, {
 });
 
 socket.on('connect', function () {
-  socket.emit('newconnection', 'hello');
+  socket.emit('newConnection', 'hello');
   console.log('Socket Connected', socket.id);
 });
 

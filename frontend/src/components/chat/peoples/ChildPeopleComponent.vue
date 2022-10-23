@@ -3,15 +3,10 @@ import { computed, ref, watch } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import { useRouter } from 'vue-router';
 import { AllowedUpdateFriendshipMethod, useUserStore } from '@/store/user';
+import type { User } from '@/store/user';
 
 const props = defineProps<{
-  client: {
-    id: number;
-    title: [string];
-    username: string;
-    picture: string;
-    status: string;
-  };
+  client: User;
 }>();
 
 const router = useRouter();
@@ -53,26 +48,16 @@ watch(
     () => userStore.receivedFriendRequests,
   ],
   () => {
-    if (userStore.friends.some((friend) => friend.id === props.client.id)) {
+    if (userStore.friends.includes(props.client.id))
       friendStatus = friendStatusEnum.FRIEND;
-    } else if (
-      userStore.sentFriendRequests.some(
-        (friend) => friend.id === props.client.id,
-      )
-    ) {
+    else if (userStore.sentFriendRequests.includes(props.client.id))
       friendStatus = friendStatusEnum.REQUEST_SENT;
-    } else if (
-      userStore.receivedFriendRequests.some(
-        (friend) => friend.id === props.client.id,
-      )
-    ) {
+    else if (userStore.receivedFriendRequests.includes(props.client.id))
       friendStatus = friendStatusEnum.REQUEST_RECEIVED;
-    } else {
-      friendStatus = friendStatusEnum.NOT_FRIEND;
-    }
+    else friendStatus = friendStatusEnum.NOT_FRIEND;
     friendText.value = friendStatus;
   },
-  { immediate: true },
+  { deep: true, immediate: true },
 );
 
 const onFriend = async () => {

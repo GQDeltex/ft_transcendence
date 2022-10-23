@@ -22,37 +22,31 @@ export class UsersService {
   }
 
   findUserChannelList(identifier: number | string): Promise<User> {
-    if (typeof identifier == 'number')
+    if (typeof identifier === 'undefined')
+      throw new EntityNotFoundError(User, {});
+
+    if (typeof identifier === 'number')
       return this.userRepository.findOneOrFail({
         where: { id: identifier },
         relations: ['channelList'],
       });
-    else
-      return this.userRepository.findOneOrFail({
-        where: { username: identifier },
-        relations: ['channelList'],
-      });
+    return this.userRepository.findOneOrFail({
+      where: { username: identifier },
+      relations: ['channelList'],
+    });
   }
 
   async findChannelUser(
     identifier: number | string,
     channelName: string,
   ): Promise<ChannelUser> {
-    const result: ChannelUser | undefined = await (
-      await this.findUserChannelList(identifier)
-    ).channelList?.find(
+    const user: User = await this.findUserChannelList(identifier);
+    const channelUser: ChannelUser | undefined = user.channelList?.find(
       (channelUser) => channelUser.channel_name === channelName,
     );
-    if (typeof result === 'undefined')
+    if (typeof channelUser === 'undefined')
       throw new WsException('User not in ' + channelName);
-    return result;
-  }
-
-  isInChannel(user: User, channel_name: string): boolean {
-    const result = user.channelList?.some(
-      (channelUser) => channelUser.channel_name === channel_name,
-    );
-    return !(typeof result === 'undefined' || !result);
+    return channelUser;
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {
@@ -72,21 +66,16 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.userRepository.find({ relations: ['following', 'followers'] });
+    return this.userRepository.find();
   }
 
   async findOne(identifier: number | string): Promise<User> {
-    if (typeof identifier == 'undefined')
+    if (typeof identifier === 'undefined')
       throw new EntityNotFoundError(User, {});
 
-    let query: { id?: number; username?: string };
-    if (typeof identifier == 'number') query = { id: identifier };
-    else query = { username: identifier };
-
-    return this.userRepository.findOneOrFail({
-      where: query,
-      relations: ['following', 'followers'],
-    });
+    if (typeof identifier === 'number')
+      return this.userRepository.findOneByOrFail({ id: identifier });
+    return this.userRepository.findOneByOrFail({ username: identifier });
   }
 
   async updatePicture(id: number, picture: string): Promise<void> {
@@ -144,6 +133,7 @@ export class UsersService {
   ): Promise<void> {
     if (id === friendId)
       throw new UserInputError('You cannot send a friend request to yourself');
+
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: friendId }],
       relations: ['following', 'followers'],
@@ -159,19 +149,19 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.ADD) {
       if (
-        user.following.some((following) => following.id === friendId) ||
-        friend.following.some((following) => following.id === id)
+        user.following?.some((following) => following.id === friendId) ||
+        friend.following?.some((following) => following.id === id)
       )
         throw new UserInputError('Failed to send friend request');
 
-      user.following.push(friend);
+      user.following?.push(friend);
       await this.userRepository.save(user);
     }
 
     if (method === AllowedUpdateFriendshipMethod.REMOVE) {
       if (
-        !user.following.some((following) => following.id === friendId) ||
-        !friend.following.some((following) => following.id === id)
+        !user.following?.some((following) => following.id === friendId) ||
+        !friend.following?.some((following) => following.id === id)
       )
         throw new UserInputError('Failed to remove friend');
 
@@ -186,19 +176,19 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.ACCEPT) {
       if (
-        user.following.some((following) => following.id === friendId) ||
-        !friend.following.some((following) => following.id === id)
+        user.following?.some((following) => following.id === friendId) ||
+        !friend.following?.some((following) => following.id === id)
       ) {
         throw new UserInputError('Failed to accept friend request');
       }
-      user.following.push(friend);
+      user.following?.push(friend);
       await this.userRepository.save(user);
     }
 
     if (method === AllowedUpdateFriendshipMethod.DECLINE) {
       if (
-        user.following.some((following) => following.id === friendId) ||
-        !friend.following.some((following) => following.id === id)
+        user.following?.some((following) => following.id === friendId) ||
+        !friend.following?.some((following) => following.id === id)
       )
         throw new UserInputError('Failed to decline friend request');
 
@@ -210,8 +200,8 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.CANCEL) {
       if (
-        !user.following.some((following) => following.id === friendId) ||
-        friend.following.some((following) => following.id === id)
+        !user.following?.some((following) => following.id === friendId) ||
+        friend.following?.some((following) => following.id === id)
       ) {
         throw new UserInputError('Failed to cancel friend request');
       }
@@ -222,7 +212,10 @@ export class UsersService {
     }
 
     if (friend.socketId !== '') {
-      this.prcGateway.server.to(friend.socketId).emit('friendRequest');
+      this.prcGateway.server.to(friend.socketId).emit('friendRequest', {
+        method: method,
+        id: id,
+      });
     }
   }
 }

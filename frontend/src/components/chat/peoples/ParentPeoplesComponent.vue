@@ -2,15 +2,10 @@
 import ChildPeopleComponent from './ChildPeopleComponent.vue';
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
+import type { User } from '@/store/user';
 
 defineProps<{
-  clients: {
-    id: number;
-    title: [string];
-    username: string;
-    picture: string;
-    status: string;
-  }[];
+  clients: User[];
 }>();
 
 const userStore = useUserStore();
@@ -31,7 +26,7 @@ const peopleToggle = ref(false);
           <ChildPeopleComponent
             v-if="
               client.id !== userStore.id &&
-              userStore.friends.some((friend) => friend.id === client.id)
+              userStore.friends.includes(client.id)
             "
             :client="client"
           />
@@ -45,7 +40,7 @@ const peopleToggle = ref(false);
           <ChildPeopleComponent
             v-if="
               client.id !== userStore.id &&
-              !userStore.friends.some((friend) => friend.id === client.id)
+              !userStore.friends.includes(client.id)
             "
             :client="client"
           />

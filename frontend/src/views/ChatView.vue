@@ -8,16 +8,46 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
-import { useUserStore } from '@/store/user';
+import { AllowedUpdateFriendshipMethod, useUserStore } from '@/store/user';
+import type { User } from '@/store/user';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
 const chatName = ref('gucalvi');
-const users = ref([]);
+const users = ref<User[]>([]);
 
-socket.on('friendRequest', async () => {
-  await userStore.fetchFriendRequests();
-});
+socket.on(
+  'friendRequest',
+  ({ method, id }: { method: AllowedUpdateFriendshipMethod; id: number }) => {
+    switch (method) {
+      case AllowedUpdateFriendshipMethod.ADD:
+        userStore.receivedFriendRequests.push(id);
+        break;
+      case AllowedUpdateFriendshipMethod.REMOVE:
+        userStore.friends = userStore.friends.filter(
+          (friendId) => friendId !== id,
+        );
+        break;
+      case AllowedUpdateFriendshipMethod.ACCEPT:
+        userStore.friends.push(id);
+        userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+          (friendId) => friendId !== id,
+        );
+        break;
+      case AllowedUpdateFriendshipMethod.DECLINE:
+        userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+          (friendId) => friendId !== id,
+        );
+        break;
+      case AllowedUpdateFriendshipMethod.CANCEL:
+        userStore.receivedFriendRequests =
+          userStore.receivedFriendRequests.filter(
+            (friendId) => friendId !== id,
+          );
+        break;
+    }
+  },
+);
 
 onMounted(async () => {
   try {

@@ -74,41 +74,30 @@ export class UsersResolver {
     return this.usersService.findOne(user.id);
   }
 
-  @ResolveField(() => [User])
-  async friends(@Parent() user: User): Promise<User[]> {
-    if (
-      typeof user.following === 'undefined' ||
-      typeof user.followers === 'undefined'
-    )
-      return [];
-    return user.followers.filter((follower) =>
-      user.following.some((following) => following.id === follower.id),
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async friends(@Parent() user: User): Promise<number[]> {
+    return (
+      user.followers_id?.filter((follower) =>
+        user.following_id?.includes(follower),
+      ) ?? []
     );
   }
 
-  @ResolveField(() => [User])
-  async sentFriendRequests(@Parent() user: User): Promise<User[]> {
-    if (
-      typeof user.following === 'undefined' ||
-      typeof user.followers === 'undefined'
-    )
-      return [];
-    return user.following.filter(
-      (following) =>
-        !user.followers.some((follower) => follower.id === following.id),
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async sentFriendRequests(@Parent() user: User): Promise<number[]> {
+    return (
+      user.following_id?.filter(
+        (following) => !user.followers_id?.includes(following),
+      ) ?? []
     );
   }
 
-  @ResolveField(() => [User])
-  async receivedFriendRequests(@Parent() user: User): Promise<User[]> {
-    if (
-      typeof user.following === 'undefined' ||
-      typeof user.followers === 'undefined'
-    )
-      return [];
-    return user.followers.filter(
-      (follower) =>
-        !user.following.some((following) => following.id === follower.id),
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async receivedFriendRequests(@Parent() user: User): Promise<number[]> {
+    return (
+      user.followers_id?.filter(
+        (follower) => !user.following_id?.includes(follower),
+      ) ?? []
     );
   }
 }

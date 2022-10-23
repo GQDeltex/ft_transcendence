@@ -40,9 +40,9 @@ type User {
   twoFAEnable: Boolean!
   status: String!
   channelList: [ChannelUser!]
-  friends: [User!]!
-  sentFriendRequests: [User!]!
-  receivedFriendRequests: [User!]!
+  friends: [Int]!
+  sentFriendRequests: [Int]!
+  receivedFriendRequests: [Int]!
 }
 
 type Query {

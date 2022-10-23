@@ -10,9 +10,10 @@ export type User = {
   picture: string;
   twoFAEnable?: boolean;
   require2FAVerify?: boolean;
-  friends?: User[];
-  sentFriendRequests?: User[];
-  receivedFriendRequests?: User[];
+  status?: string;
+  friends?: number[];
+  sentFriendRequests?: number[];
+  receivedFriendRequests?: number[];
 };
 
 export enum AllowedUpdateFriendshipMethod {
@@ -32,9 +33,9 @@ export const useUserStore = defineStore('user', {
     picture: '',
     twoFAEnable: false,
     require2FAVerify: false,
-    friends: [] as User[],
-    sentFriendRequests: [] as User[],
-    receivedFriendRequests: [] as User[],
+    friends: [] as number[],
+    sentFriendRequests: [] as number[],
+    receivedFriendRequests: [] as number[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -64,10 +65,10 @@ export const useUserStore = defineStore('user', {
       this.username = user.username;
       this.title = user.title;
       this.picture = user.picture;
-      this.twoFAEnable = user.twoFAEnable;
-      this.friends = user.friends;
-      this.sentFriendRequests = user.sentFriendRequests;
-      this.receivedFriendRequests = user.receivedFriendRequests;
+      this.twoFAEnable = user.twoFAEnable ?? false;
+      this.friends = user.friends ?? [];
+      this.sentFriendRequests = user.sentFriendRequests ?? [];
+      this.receivedFriendRequests = user.receivedFriendRequests ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -120,16 +121,6 @@ export const useUserStore = defineStore('user', {
     ): Promise<void> {
       try {
         const user = await UserService.updateFriendship(method, id);
-        this.friends = user.friends;
-        this.sentFriendRequests = user.sentFriendRequests;
-        this.receivedFriendRequests = user.receivedFriendRequests;
-      } catch (error) {
-        useErrorStore().setError((error as Error).message);
-      }
-    },
-    async fetchFriendRequests(): Promise<void> {
-      try {
-        const user = await UserService.findSelf();
         this.friends = user.friends;
         this.sentFriendRequests = user.sentFriendRequests;
         this.receivedFriendRequests = user.receivedFriendRequests;

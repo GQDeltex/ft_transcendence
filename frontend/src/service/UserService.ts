@@ -1,6 +1,6 @@
 import graphQLService from '@/service/GraphQLService';
 import axios from 'axios';
-import type { AllowedUpdateFriendshipMethod } from '@/store/user';
+import type { AllowedUpdateFriendshipMethod, User } from '@/store/user';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -117,7 +117,7 @@ class UserService {
       });
   }
 
-  async findSelf() {
+  async findSelf(): Promise<User> {
     const { user } = await graphQLService.query(
       `
         query {
@@ -127,24 +127,9 @@ class UserService {
             title
             picture
             twoFAEnable
-            friends {
-              id
-              username
-              title
-              picture
-            }
-            sentFriendRequests {
-              id
-              username
-              title
-              picture
-            }
-            receivedFriendRequests {
-              id
-              username
-              title
-              picture
-            }
+            friends
+            sentFriendRequests
+            receivedFriendRequests
           }
         }
       `,
@@ -155,7 +140,7 @@ class UserService {
     return user;
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<User> {
     const { user } = await graphQLService.query(
       `
         query User($id: Int!) {
@@ -173,7 +158,7 @@ class UserService {
     return user;
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const { users } = await graphQLService.query(
       `
         query {
@@ -212,24 +197,9 @@ class UserService {
       `
         mutation updateFriendship($method: AllowedUpdateFriendshipMethod!, $id: Int!) {
           updateFriendship(method: $method, friendId: $id) {
-            friends {
-              id
-              username
-              title
-              picture
-            }
-            sentFriendRequests {
-              id
-              username
-              title
-              picture
-            }
-            receivedFriendRequests {
-              id
-              username
-              title
-              picture
-            }
+            friends
+            sentFriendRequests
+            receivedFriendRequests
           }
         }
       `,
