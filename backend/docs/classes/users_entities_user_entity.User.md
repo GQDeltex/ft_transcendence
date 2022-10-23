@@ -12,6 +12,10 @@
 
 ### Properties
 
+- [blockedBy](users_entities_user_entity.User.md#blockedby)
+- [blockedBy\_id](users_entities_user_entity.User.md#blockedby_id)
+- [blocking](users_entities_user_entity.User.md#blocking)
+- [blocking\_id](users_entities_user_entity.User.md#blocking_id)
 - [campus](users_entities_user_entity.User.md#campus)
 - [channelList](users_entities_user_entity.User.md#channellist)
 - [country](users_entities_user_entity.User.md#country)
@@ -31,6 +35,13 @@
 - [twoFASecret](users_entities_user_entity.User.md#twofasecret)
 - [username](users_entities_user_entity.User.md#username)
 
+### Accessors
+
+- [blocks](users_entities_user_entity.User.md#blocks)
+- [friends](users_entities_user_entity.User.md#friends)
+- [receivedFriendRequests](users_entities_user_entity.User.md#receivedfriendrequests)
+- [sentFriendRequests](users_entities_user_entity.User.md#sentfriendrequests)
+
 ### Methods
 
 - [isInChannel](users_entities_user_entity.User.md#isinchannel)
@@ -42,6 +53,46 @@
 • **new User**()
 
 ## Properties
+
+### blockedBy
+
+• `Optional` **blockedBy**: [`User`](users_entities_user_entity.User.md)[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:100](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L100)
+
+___
+
+### blockedBy\_id
+
+• **blockedBy\_id**: ``null`` \| `number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:103](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L103)
+
+___
+
+### blocking
+
+• `Optional` **blocking**: [`User`](users_entities_user_entity.User.md)[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:91](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L91)
+
+___
+
+### blocking\_id
+
+• **blocking\_id**: ``null`` \| `number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:94](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L94)
+
+___
 
 ### campus
 
@@ -59,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:93](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L93)
+[src/users/entities/user.entity.ts:111](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L111)
 
 ___
 
@@ -221,6 +272,62 @@ ___
 
 [src/users/entities/user.entity.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L32)
 
+## Accessors
+
+### blocks
+
+• `get` **blocks**(): `number`[]
+
+#### Returns
+
+`number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:144](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L144)
+
+___
+
+### friends
+
+• `get` **friends**(): `number`[]
+
+#### Returns
+
+`number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:120](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L120)
+
+___
+
+### receivedFriendRequests
+
+• `get` **receivedFriendRequests**(): `number`[]
+
+#### Returns
+
+`number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:136](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L136)
+
+___
+
+### sentFriendRequests
+
+• `get` **sentFriendRequests**(): `number`[]
+
+#### Returns
+
+`number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:128](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L128)
+
 ## Methods
 
 ### isInChannel
@@ -239,4 +346,4 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:95](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L95)
+[src/users/entities/user.entity.ts:113](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L113)
