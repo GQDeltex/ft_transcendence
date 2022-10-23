@@ -24,16 +24,18 @@ export class ChannelResolver {
   }
 
   @Query(() => Channel, { name: 'channelByName' })
-  findOneByChannelname(@Args('name') channelname: string) {
-    return this.channelService.findOne(channelname);
+  findOneByChannelName(@Args('name') channelName: string) {
+    return this.channelService.findOne(channelName);
   }
 
+  /*
+  It creates a mutation that allows a user to join a channel.
+  */
   @Mutation(() => Channel)
   async joinChannel(
     @Args() createChannelInput: CreateChannelInput,
     @CurrentUser() user: User,
   ) {
-    const result = await this.channelService.join(createChannelInput, user);
-    return result;
+    return await this.channelService.join(createChannelInput, user);
   }
 }

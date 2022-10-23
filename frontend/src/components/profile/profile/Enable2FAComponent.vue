@@ -27,8 +27,8 @@ function closeCancel() {
   <div class="modal">
     <div class="modal-content">
       <div class="qrCode">
-        <img :src="qrCode" />
-        <span class="button cancel" @click="closeCancel()">&times;</span>
+        <img :src="qrCode" alt="qrCode" />
+        <span class="button cancel" @click="closeCancel">&times;</span>
       </div>
       <div class="input">
         <span>Please enter your 2FA code</span>

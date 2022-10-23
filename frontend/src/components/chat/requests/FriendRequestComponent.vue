@@ -1,27 +1,41 @@
 <script setup lang="ts">
-defineProps<{
-  clientId: number;
-  sender: string;
-  request: string;
-  target: string;
+import { AllowedUpdateFriendshipMethod } from '@/store/user';
+import { useUserStore } from '@/store/user';
+
+const props = defineProps<{
+  client: {
+    id: number;
+    title: [string];
+    username: string;
+    picture: string;
+    status: string;
+  };
 }>();
 
+const userStore = useUserStore();
+
 const acceptButton = async () => {
-  console.log('accept button pressed');
+  await userStore.updateFriendship(
+    AllowedUpdateFriendshipMethod.ACCEPT,
+    props.client.id,
+  );
 };
 
 const declineButton = async () => {
-  console.log('decline button pressed');
+  await userStore.updateFriendship(
+    AllowedUpdateFriendshipMethod.DECLINE,
+    props.client.id,
+  );
 };
 </script>
 
 <template>
   <div class="requestParent">
     <div class="infoBox">
+      <img class="picture" alt="user picture" :src="client.picture" />
       <span class="sender">
-        {{ sender }}
-        <span class="requestText">{{ request }}</span>
-        {{ target }}
+        {{ client.username }}
+        <span class="requestText">has send a friend request</span>
       </span>
     </div>
     <div class="buttonBox">
@@ -75,5 +89,15 @@ const declineButton = async () => {
   font-size: 0.8vw;
   border-color: transparent;
   margin-left: 1vw;
+}
+
+.picture {
+  width: 1.5vw;
+  height: 1.5vw;
+  border-radius: 50%;
+  object-position: 50% 0;
+  border: 1px solid;
+  object-fit: cover;
+  margin-right: 0.2vw;
 }
 </style>

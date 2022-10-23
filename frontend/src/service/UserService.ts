@@ -1,5 +1,6 @@
-import graphQLService from '@/plugin/GraphQLService';
+import graphQLService from '@/service/GraphQLService';
 import axios from 'axios';
+import type { AllowedUpdateFriendshipMethod } from '@/store/user';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -125,8 +126,25 @@ class UserService {
             username
             title
             picture
-            status
             twoFAEnable
+            friends {
+              id
+              username
+              title
+              picture
+            }
+            sentFriendRequests {
+              id
+              username
+              title
+              picture
+            }
+            receivedFriendRequests {
+              id
+              username
+              title
+              picture
+            }
           }
         }
       `,
@@ -146,7 +164,6 @@ class UserService {
             username
             title
             picture
-            twoFAEnable
           }
         }
       `,
@@ -188,6 +205,39 @@ class UserService {
     if (typeof updateUsername === 'undefined')
       throw new Error('Empty users data');
     return updateUsername;
+  }
+
+  async updateFriendship(method: AllowedUpdateFriendshipMethod, id: number) {
+    const { updateFriendship } = await graphQLService.mutation(
+      `
+        mutation updateFriendship($method: AllowedUpdateFriendshipMethod!, $id: Int!) {
+          updateFriendship(method: $method, friendId: $id) {
+            friends {
+              id
+              username
+              title
+              picture
+            }
+            sentFriendRequests {
+              id
+              username
+              title
+              picture
+            }
+            receivedFriendRequests {
+              id
+              username
+              title
+              picture
+            }
+          }
+        }
+      `,
+      { method, id },
+    );
+    if (typeof updateFriendship === 'undefined')
+      throw new Error('Empty friends data');
+    return updateFriendship;
   }
 }
 

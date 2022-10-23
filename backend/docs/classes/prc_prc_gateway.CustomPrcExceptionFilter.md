@@ -43,7 +43,7 @@ BaseWsExceptionFilter.constructor
 
 | Name | Type |
 | :------ | :------ |
-| `exception` | `EntityNotFoundError` \| `BadRequestException` \| `WsException` \| `TokenExpiredError` |
+| `exception` | `WsException` \| `EntityNotFoundError` \| `TokenExpiredError` \| `BadRequestException` |
 | `host` | `ArgumentsHost` |
 
 #### Returns
@@ -56,7 +56,7 @@ BaseWsExceptionFilter.catch
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L49)
+[src/prc/prc.gateway.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L52)
 
 ___
 

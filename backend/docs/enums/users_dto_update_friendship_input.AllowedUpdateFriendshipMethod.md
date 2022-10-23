@@ -18,7 +18,7 @@
 
 ### ACCEPT
 
-• **ACCEPT** = ``"accept"``
+• **ACCEPT** = ``"ACCEPT"``
 
 #### Defined in
 
@@ -28,7 +28,7 @@ ___
 
 ### ADD
 
-• **ADD** = ``"add"``
+• **ADD** = ``"ADD"``
 
 #### Defined in
 
@@ -38,7 +38,7 @@ ___
 
 ### CANCEL
 
-• **CANCEL** = ``"cancel"``
+• **CANCEL** = ``"CANCEL"``
 
 #### Defined in
 
@@ -48,7 +48,7 @@ ___
 
 ### DECLINE
 
-• **DECLINE** = ``"decline"``
+• **DECLINE** = ``"DECLINE"``
 
 #### Defined in
 
@@ -58,7 +58,7 @@ ___
 
 ### REMOVE
 
-• **REMOVE** = ``"remove"``
+• **REMOVE** = ``"REMOVE"``
 
 #### Defined in
 

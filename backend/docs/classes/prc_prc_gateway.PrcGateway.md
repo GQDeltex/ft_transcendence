@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:78](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L78)
+[src/prc/prc.gateway.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L82)
 
 ## Properties
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:80](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L80)
+[src/prc/prc.gateway.ts:85](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L85)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:76](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L76)
+[src/prc/prc.gateway.ts:80](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L80)
 
 ___
 
@@ -72,19 +72,19 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:79](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L79)
+[src/prc/prc.gateway.ts:84](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L84)
 
 ## Methods
 
 ### connect
 
-▸ **connect**(`JWTtoken`, `client`): `Promise`<`void`\>
+▸ **connect**(`jwtToken`, `client`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JWTtoken` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtToken` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
 
 #### Returns
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:95](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L95)
+[src/prc/prc.gateway.ts:100](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L100)
 
 ___
 
@@ -117,7 +117,7 @@ OnGatewayDisconnect.handleDisconnect
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:83](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L83)
+[src/prc/prc.gateway.ts:88](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L88)
 
 ___
 
@@ -141,7 +141,7 @@ It creates a new channel and adds the user to it.
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:174](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L174)
+[src/prc/prc.gateway.ts:179](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L179)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 ▸ **prcMessage**(`user`, `to`, `msg`, `client`): `Promise`<`void`\>
 
-It sends mmessage to a channel or user.
+It sends message to a channel or user.
 
 Args:
 user: The user who sent the message.
@@ -174,4 +174,4 @@ Nothing.
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:128](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L128)
+[src/prc/prc.gateway.ts:133](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L133)
