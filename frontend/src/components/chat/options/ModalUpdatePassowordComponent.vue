@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import { socket } from '@/service/socket';
+import ChannelUserService from '@/service/ChannelUserService';
+import { useErrorStore } from '@/store/error';
 const emits = defineEmits(['close']);
+const errorStore = useErrorStore();
 
 let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
-function closeOk() {
+async function closeOk() {
   console.log(
-    'channelName= ' + channelName.value + ' password= ' + password.value,
+    'channelName= ' + channelName.value + ' password= ' + password.value, //DEBUG
   );
-  socket.emit('join', {
-    channel: { name: channelName.value, password: password.value },
-  });
+  try {
+    await ChannelUserService.updatePassword(channelName.value, password.value);
+    console.log(channelName.value + ' password is now ' + password.value); //DEBUG
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
   channelName.value = '';
   password.value = '';
   emits('close');
@@ -30,9 +35,7 @@ function closeCancel() {
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
       <h1>
-        Join / Create Channel<span class="close" @click="closeCancel()"
-          >&times;</span
-        >
+        Change Password<span class="close" @click="closeCancel()">&times;</span>
       </h1>
       <label>Name</label>
       <input v-model="channelName" type="text" />
@@ -48,7 +51,7 @@ function closeCancel() {
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 999; /* Sit on top */
+  z-index: 998; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */

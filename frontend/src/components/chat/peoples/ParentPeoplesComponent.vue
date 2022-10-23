@@ -1,73 +1,64 @@
 <script setup lang="ts">
 import ChildPeopleComponent from './ChildPeopleComponent.vue';
 import { ref } from 'vue';
+import { useUserStore } from '@/store/user';
 
 defineProps<{
   clients: {
     id: number;
-    title: string;
+    title: [string];
     username: string;
     picture: string;
     status: string;
   }[];
 }>();
 
-var friendsvar = ref(false);
-var blockedvar = ref(false);
-var peoplevar = ref(false);
-
-function blockedfunc() {
-  blockedvar.value = !blockedvar.value;
-}
-
-function peoplefunc() {
-  peoplevar.value = !peoplevar.value;
-}
-
-function friendsfunc() {
-  friendsvar.value = !friendsvar.value;
-}
+const userStore = useUserStore();
+const friendToggle = ref(false);
+const blockToggle = ref(false);
+const peopleToggle = ref(false);
 </script>
 
 <template>
   <div class="friendsPeopleParent">
     <span class="text">People</span>
     <div class="scroll">
-      <div class="subheader" @click="friendsfunc">Friends ▾</div>
-      <div v-show="friendsvar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div class="subheader" @click="friendToggle = !friendToggle">
+        Friends ▾
       </div>
-      <div class="subheader" @click="peoplefunc">People ▾</div>
-      <div v-show="peoplevar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div v-show="friendToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent
+            v-if="
+              client.id !== userStore.id &&
+              userStore.friends.some((friend) => friend.id === client.id)
+            "
+            :client="client"
+          />
+        </template>
       </div>
-      <div class="subheader" @click="blockedfunc">Blocked ▾</div>
-      <div v-show="blockedvar" class="people">
-        <ChildPeopleComponent
-          v-for="client in clients"
-          :key="client.id"
-          :client-id="client.id"
-          :title="client.title[0]"
-          :username="client.username"
-          :picture="client.picture"
-          :status="client.status"
-        />
+      <div class="subheader" @click="peopleToggle = !peopleToggle">
+        People ▾
+      </div>
+      <div v-show="peopleToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent
+            v-if="
+              client.id !== userStore.id &&
+              !userStore.friends.some((friend) => friend.id === client.id)
+            "
+            :client="client"
+          />
+        </template>
+      </div>
+      <div class="subheader" @click="blockToggle = !blockToggle">Blocked ▾</div>
+      <div v-show="blockToggle" class="people">
+        <template v-for="client in clients" :key="client.id">
+          <ChildPeopleComponent
+            v-if="client.id !== userStore.id"
+            :client="client"
+          />
+        </template>
       </div>
     </div>
   </div>
@@ -78,7 +69,6 @@ function friendsfunc() {
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
-  padding-bottom: 0.5vw;
   border: 1px solid #202020;
 }
 

@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia';
 import { RouterView } from 'vue-router';
 import { useUserStore } from './store/user';
 import { useErrorStore } from './store/error';
-import { socket } from './plugin/socket';
+import { socket } from './service/socket';
 import ModalComponent from './components/globalUse/ModalComponent.vue';
 import NavbarComponent from './components/globalUse/NavbarComponent.vue';
 import { useMessagesStore } from './store/message';

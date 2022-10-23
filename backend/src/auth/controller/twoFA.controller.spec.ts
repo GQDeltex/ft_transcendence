@@ -7,13 +7,24 @@ import { mockUser } from '../../users/entities/user.entity.mock';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { Channel } from '../../prc/channel/entities/channel.entity';
+import { PrcGateway } from '../../prc/prc.gateway';
+import { ChannelService } from '../../prc/channel/channel.service';
+import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 
 describe('TwoFAController', () => {
   let controller: TwoFAController;
-  let mockRepo: MockRepo;
+  let mockRepoUser: MockRepo;
+  let mockRepoChannel: MockRepo;
+  let mockRepoChannelUser: MockRepo;
 
   beforeEach(async () => {
-    mockRepo = new MockRepo('TwoFAController', User, mockUser);
+    mockRepoUser = new MockRepo('TwoFAController', User, mockUser);
+    mockRepoChannel = new MockRepo('TwoFAController', Channel);
+    mockRepoChannelUser = new MockRepo('TwoFAController', ChannelUser);
+    await mockRepoUser.setupDb();
+    await mockRepoChannel.setupDb();
+    await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TwoFAController],
@@ -22,15 +33,28 @@ describe('TwoFAController', () => {
         UsersService,
         JwtService,
         ConfigService,
-        mockRepo.getProvider(),
+        PrcGateway,
+        ChannelService,
+        mockRepoUser.getProvider(),
+        mockRepoChannel.getProvider(),
+        mockRepoChannelUser.getProvider(),
       ],
     }).compile();
 
     controller = module.get<TwoFAController>(TwoFAController);
   });
 
-  afterEach(async () => await mockRepo.clearRepo());
-  afterAll(async () => await mockRepo.destroyRepo());
+  afterEach(async () => {
+    await mockRepoUser.clearRepo();
+    await mockRepoChannel.clearRepo();
+    await mockRepoChannelUser.clearRepo();
+  });
+
+  afterAll(async () => {
+    await mockRepoUser.destroyRepo();
+    await mockRepoChannel.destroyRepo();
+    await mockRepoChannelUser.destroyRepo();
+  });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();

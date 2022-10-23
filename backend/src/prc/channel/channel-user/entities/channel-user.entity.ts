@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Channel } from './channel.entity';
-import { User } from '../../../users/entities/user.entity';
+import { Channel } from '../../entities/channel.entity';
+import { User } from '../../../../users/entities/user.entity';
 import {
   ManyToOne,
   Column,
@@ -46,7 +46,7 @@ export class ChannelUser {
 
   @Column({ nullable: true })
   @Field()
-  unbantime: Date;
+  unbanTime: Date;
 
   @Column({ default: false })
   @Field()
@@ -54,5 +54,5 @@ export class ChannelUser {
 
   @Column({ nullable: true })
   @Field()
-  unmutetime: Date;
+  unmuteTime: Date;
 }
