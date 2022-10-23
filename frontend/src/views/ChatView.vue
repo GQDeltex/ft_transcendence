@@ -17,7 +17,7 @@ const chatName = ref('gucalvi');
 const users = ref<User[]>([]);
 
 socket.on(
-  'friendRequest',
+  'onFriend',
   ({ method, id }: { method: AllowedUpdateFriendshipMethod; id: number }) => {
     switch (method) {
       case AllowedUpdateFriendshipMethod.ADD:
@@ -58,7 +58,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  socket.off('friendRequest');
+  socket.off('onFriend');
 });
 </script>
 

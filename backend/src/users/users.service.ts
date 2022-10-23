@@ -8,6 +8,7 @@ import { UserInputError } from 'apollo-server-express';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
+import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 
 @Injectable()
 export class UsersService {
@@ -149,8 +150,10 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.ADD) {
       if (
-        user.following?.some((following) => following.id === friendId) ||
-        friend.following?.some((following) => following.id === id)
+        user.following_id?.includes(friendId) ||
+        friend.following_id?.includes(id) ||
+        user.blocking_id?.includes(friendId) ||
+        friend.blocking_id?.includes(id)
       )
         throw new UserInputError('Failed to send friend request');
 
@@ -160,15 +163,15 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.REMOVE) {
       if (
-        !user.following?.some((following) => following.id === friendId) ||
-        !friend.following?.some((following) => following.id === id)
+        !user.following_id?.includes(friendId) ||
+        !friend.following_id?.includes(id)
       )
         throw new UserInputError('Failed to remove friend');
 
-      user.following = user.following.filter(
+      user.following = user.following?.filter(
         (following) => following.id !== friendId,
       );
-      friend.following = friend.following.filter(
+      friend.following = friend.following?.filter(
         (following) => following.id !== id,
       );
       await this.userRepository.save([friend, user]);
@@ -176,8 +179,8 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.ACCEPT) {
       if (
-        user.following?.some((following) => following.id === friendId) ||
-        !friend.following?.some((following) => following.id === id)
+        user.following_id?.includes(friendId) ||
+        !friend.following_id?.includes(id)
       ) {
         throw new UserInputError('Failed to accept friend request');
       }
@@ -187,12 +190,12 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.DECLINE) {
       if (
-        user.following?.some((following) => following.id === friendId) ||
-        !friend.following?.some((following) => following.id === id)
+        user.following_id?.includes(friendId) ||
+        !friend.following_id?.includes(id)
       )
         throw new UserInputError('Failed to decline friend request');
 
-      friend.following = friend.following.filter(
+      friend.following = friend.following?.filter(
         (following) => following.id !== id,
       );
       await this.userRepository.save(friend);
@@ -200,19 +203,74 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.CANCEL) {
       if (
-        !user.following?.some((following) => following.id === friendId) ||
-        friend.following?.some((following) => following.id === id)
+        !user.following_id?.includes(friendId) ||
+        friend.following_id?.includes(id)
       ) {
         throw new UserInputError('Failed to cancel friend request');
       }
-      user.following = user.following.filter(
+      user.following = user.following?.filter(
         (following) => following.id !== friendId,
       );
       await this.userRepository.save(user);
     }
 
     if (friend.socketId !== '') {
-      this.prcGateway.server.to(friend.socketId).emit('friendRequest', {
+      this.prcGateway.server.to(friend.socketId).emit('onFriend', {
+        method: method,
+        id: id,
+      });
+    }
+  }
+
+  async updateBlocking(
+    id: number,
+    method: AllowedUpdateBlockingMethod,
+    userId: number,
+  ): Promise<void> {
+    if (id === userId) throw new UserInputError('You cannot block yourself');
+
+    const users: User[] = await this.userRepository.find({
+      where: [{ id }, { id: userId }],
+      relations: ['following', 'followers', 'blocking', 'blockedBy'],
+    });
+    const user: User | undefined = users.find((user) => user.id === id);
+    const blockedUser: User | undefined = users.find(
+      (user) => user.id === userId,
+    );
+    if (typeof user == 'undefined') {
+      throw new EntityNotFoundError(User, id);
+    }
+    if (typeof blockedUser == 'undefined') {
+      throw new EntityNotFoundError(User, userId);
+    }
+
+    if (method === AllowedUpdateBlockingMethod.BLOCK) {
+      if (user.blocking_id?.includes(userId)) {
+        throw new UserInputError('You already block this user');
+      }
+
+      user.blocking?.push(blockedUser);
+      user.following = user.following?.filter(
+        (following) => following.id !== userId,
+      );
+      blockedUser.following = blockedUser.following?.filter(
+        (following) => following.id !== id,
+      );
+      await this.userRepository.save([user, blockedUser]);
+    }
+
+    if (method === AllowedUpdateBlockingMethod.UNBLOCK) {
+      if (!user.blocking_id?.includes(userId))
+        throw new UserInputError('You already unblock user');
+
+      user.blocking = user.blocking?.filter(
+        (blocking) => blocking.id !== userId,
+      );
+      await this.userRepository.save(user);
+    }
+
+    if (blockedUser.socketId !== '') {
+      this.prcGateway.server.to(blockedUser.socketId).emit('onBlock', {
         method: method,
         id: id,
       });

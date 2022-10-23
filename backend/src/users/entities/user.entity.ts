@@ -84,6 +84,24 @@ export class User {
   @RelationId('followers')
   followers_id: number[] | null;
 
+  @ManyToMany(() => User, (user) => user.blockedBy, {
+    nullable: true,
+  })
+  @JoinTable()
+  blocking?: User[];
+
+  @RelationId('blocking')
+  blocking_id: number[] | null;
+
+  @ManyToMany(() => User, (user) => user.blocking, {
+    cascade: true,
+    nullable: true,
+  })
+  blockedBy?: User[];
+
+  @RelationId('blockedBy')
+  blockedBy_id: number[] | null;
+
   @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
     cascade: true,
@@ -97,5 +115,42 @@ export class User {
       (channelUser) => channelUser.channel_name === channelName,
     );
     return !(typeof result === 'undefined' || !result);
+  }
+
+  public get friends(): number[] {
+    return (
+      this.followers_id?.filter((follower) =>
+        this.following_id?.includes(follower),
+      ) ?? []
+    );
+  }
+
+  public get sentFriendRequests(): number[] {
+    return (
+      this.following_id?.filter(
+        (following) => !this.followers_id?.includes(following),
+      ) ?? []
+    );
+  }
+
+  public get receivedFriendRequests(): number[] {
+    return (
+      this.followers_id?.filter(
+        (follower) => !this.following_id?.includes(follower),
+      ) ?? []
+    );
+  }
+
+  public get blocks(): number[] {
+    if (this.blocking_id === null) return this.blockedBy_id ?? [];
+    if (this.blockedBy_id === null) return this.blocking_id ?? [];
+    return this.blocking_id.concat(
+      this.blockedBy_id.filter(
+        // typescript being gay after all the null assertions it still complains that it can be null
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        (blocked) => this.blocking_id.indexOf(blocked) < 0,
+      ),
+    );
   }
 }
