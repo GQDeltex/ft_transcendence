@@ -35,7 +35,6 @@ onBeforeUnmount(() => {
 });
 
 const UpdateChannels = (input: string) => {
-  console.log('ChatView returnValue: ' + input);
   chatName.value = input;
 };
 </script>
@@ -46,6 +45,7 @@ const UpdateChannels = (input: string) => {
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
       <ParentChannelsComponent
         :channels="channels"
+        :user-id="userStore.id"
         class="channelsComp"
         @update="UpdateChannels"
       />

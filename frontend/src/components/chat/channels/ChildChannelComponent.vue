@@ -1,9 +1,17 @@
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue';
+
+const props = defineProps<{
   channelId: number;
   channelName: string;
   picture: string;
+  selectedChannel: string;
 }>();
+
+const activeChannel = computed(() => {
+  if (props.channelName === props.selectedChannel) return { color: '#f8971d' };
+  else return { color: 'white' };
+});
 </script>
 
 <template>
@@ -14,7 +22,7 @@ defineProps<{
       src="@/assets/pongking_boi.svg"
     />
     <div class="infoBox">
-      <span class="channelName">{{ channelName }}</span>
+      <span class="channelName" :style="activeChannel">{{ channelName }}</span>
     </div>
   </div>
 </template>

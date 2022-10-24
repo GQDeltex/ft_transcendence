@@ -2,17 +2,17 @@
 import ChildChannelComponent from './ChildChannelComponent.vue';
 import ModalChannelComponent from './ModalChannelComponent.vue';
 import { ref } from 'vue';
-import { UniqueTypeNamesRule } from 'graphql';
 const emits = defineEmits(['update']);
 
 defineProps<{
   channels: {
     id: number;
     name: string;
-    private: string;
+    private: boolean;
   }[];
 }>();
 const modalActive = ref(false);
+const selectedChannel = ref('');
 
 const joinNewChannel = () => {
   modalActive.value = true;
@@ -20,11 +20,11 @@ const joinNewChannel = () => {
 
 const onClose = (input: string) => {
   modalActive.value = false;
-  console.log('returnValue:' + input);
   emits('update', input);
 };
 
 const channelSelect = (input: string) => {
+  selectedChannel.value = input;
   emits('update', input);
 };
 </script>
@@ -44,8 +44,9 @@ const channelSelect = (input: string) => {
         :key="channel.id"
         :channel-id="channel.id"
         :channel-name="channel.name"
-        :private="channel.private"
         picture="@/assets/pongking_boi.svg"
+        class="clickable"
+        :selected-channel="selectedChannel"
         @click="channelSelect(channel.name)"
       />
     </div>
@@ -70,6 +71,9 @@ const channelSelect = (input: string) => {
 .list {
   overflow-y: scroll;
   padding-left: 5%;
+}
+
+.clickable {
   cursor: pointer;
 }
 

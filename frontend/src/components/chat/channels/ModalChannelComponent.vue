@@ -8,9 +8,6 @@ let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
 function closeOk() {
-  console.log(
-    'channelName= ' + channelName.value + ' password= ' + password.value,
-  );
   socket.emit('join', {
     channel: { name: channelName.value, password: password.value },
   });

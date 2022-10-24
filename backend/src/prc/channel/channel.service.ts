@@ -28,6 +28,20 @@ export class ChannelService {
     return this.channelRepository.find();
   }
 
+  async findJoined(identifier: number): Promise<Channel[]> {
+    const channels: Channel[] = await this.channelRepository.find();
+    return channels.filter((channel) => {
+      if (channel.private === false) return true;
+      if (
+        channel.userList.some(
+          (channelUser) => channelUser.user_id === identifier,
+        )
+      )
+        return true;
+      return false;
+    });
+  }
+
   /*
   1. First, we’re checking if the identifier is a number or a string.
   2. If it’s a number, we’re using the `findOneOrFail` method to find the channel by its ID.
