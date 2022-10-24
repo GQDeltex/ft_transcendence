@@ -5,10 +5,10 @@
   <div id="feld" class="field">
     <div class="score">
       <div id="player">0</div>
-      <div id="henne">0</div>
+      <div id="remote">0</div>
     </div>
     <div id="ball" class="ball" src="@/assets/sexy-guy-001-modified.png">
-      <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
+      <!-- <img class="ball" src="@/assets/sexy-guy-001-modified.png" /> -->
     </div>
     <div id="playerPad" class="paddle paddle-left"></div>
     <div id="remotePad" class="paddle paddle-right"></div>
@@ -24,41 +24,24 @@ defineProps<{
 
 class Element {
   public _htmlElem: HTMLElement | null;
+  private boundBox: DOMRect | null;
+
   constructor(fieldElem: HTMLElement | null) {
     this._htmlElem = fieldElem;
-  }
-  getWidth(): number {
-    if (this._htmlElem != null)
-      return Number(
-        getComputedStyle(this._htmlElem)
-          .getPropertyValue('width')
-          .substring(
-            0,
-            getComputedStyle(this._htmlElem).getPropertyValue('width').length -
-              2,
-          ),
-      );
-    else console.log('1 failiure, no object assigned\n');
-    return 0;
-  }
-  getHeight(): number {
-    if (this._htmlElem != null)
-      return Number(
-        getComputedStyle(this._htmlElem)
-          .getPropertyValue('height')
-          .substring(
-            0,
-            getComputedStyle(this._htmlElem).getPropertyValue('height').length -
-              2,
-          ),
-      );
-    else console.log('2 failiure, no object assigned\n');
-    return 0;
+    this.boundBox = this.getRect();
   }
   getRect(): DOMRect | null {
     if (this._htmlElem !== null) return this._htmlElem.getBoundingClientRect();
     else console.log('3 failiure, no object assigned\n');
     return null;
+  }
+  getWidth(): number {
+    if (this.boundBox === null) return 42;
+    return Math.abs(this.boundBox.left - this.boundBox.right);
+  }
+  getHeight(): number {
+    if (this.boundBox === null) return 42;
+    return Math.abs(this.boundBox.bottom - this.boundBox.top);
   }
 }
 
@@ -69,35 +52,72 @@ class Vector {
     this.x = x;
     this.y = y;
   }
+
+  // keep the direction of a vector, but resize to length of 1
+  unit_vec() {
+    let temp: number = Math.pow(Math.pow(this.x, 2) + Math.pow(this.y, 2), 0.5);
+    this.x /= temp;
+    this.y /= temp;
+  }
 }
 
 class Ball extends Element {
+  // width and height in % of window
   public _shape: Vector;
-  private _field: Vector;
-  private _direction: Vector;
+  // private _direction: Vector; get-set- soon™
+  public _direction: Vector;
   private _speed: number;
 
-  constructor(ballElem: HTMLElement | null, field: Element) {
+  private invinc = 0;
+  constructor(ballElem: HTMLElement | null, field: null | DOMRect) {
     super(ballElem);
-    this._field = new Vector(field.getWidth(), field.getHeight());
     this._direction = new Vector(0, 0);
-    this._speed = 30;
+    this._speed = 10;
     this._shape = new Vector(
-      (super.getWidth() * 50) / this._field.x,
-      (super.getHeight() * 50) / this._field.y,
+      field !== null
+        ? (super.getWidth() / Math.abs(field.right - field.left)) * 100
+        : 0,
+      field !== null
+        ? (super.getHeight() / Math.abs(field.bottom - field.top)) * 100
+        : 0,
     );
     this.reset();
   }
 
-  reset() {
-    this.setx(50);
-    this.sety(50);
-    this._direction.x = Math.random() > 0.5 ? 1 : -1;
-    this._direction.y = Math.random() * 4 - 2;
-    // this.speedLimit();
+  // later functions depend on pixel values in screen
+  // when resizing the game window changes and is refreshed in this function
+  resize(field: null | DOMRect) {
+    this._shape.x =
+      field !== null
+        ? (super.getWidth() / Math.abs(field.right - field.left)) * 100
+        : 0;
+    this._shape.y =
+      field !== null
+        ? (super.getHeight() / Math.abs(field.bottom - field.top)) * 100
+        : 0;
   }
 
-  getx(): number {
+  reset() {
+    this.set_pos_x(50);
+    this.set_pos_y(50);
+    this._direction.x = Math.random() > 0.5 ? 1 : -1;
+    this._direction.y = Math.random() * 4 - 2;
+    this.invinc = 200;
+  }
+
+  get_dir_x(): number {
+    return this._direction.x;
+  }
+  get_dir_y(): number {
+    return this._direction.y;
+  }
+  set_dir_x(n: number) {
+    this._direction.x = n;
+  }
+  set_dir_y(n: number) {
+    this._direction.y = n;
+  }
+  get_pos_x(): number {
     if (this._htmlElem != null)
       return parseFloat(
         getComputedStyle(this._htmlElem).getPropertyValue('--x'),
@@ -105,12 +125,12 @@ class Ball extends Element {
     else console.log('4 failiure, no object assigned\n');
     return 2147483647;
   }
-  setx(value: number) {
+  set_pos_x(value: number) {
     if (this._htmlElem != null)
       this._htmlElem.style.setProperty('--x', String(value));
     else console.log('5 failiure, no object assigned\n');
   }
-  gety(): number {
+  get_pos_y(): number {
     if (this._htmlElem != null)
       return parseFloat(
         getComputedStyle(this._htmlElem).getPropertyValue('--y'),
@@ -118,50 +138,67 @@ class Ball extends Element {
     else console.log('6 failiure, no object assigned\n');
     return 2147483647;
   }
-  sety(value: number) {
+  set_pos_y(value: number) {
     if (this._htmlElem != null)
       this._htmlElem.style.setProperty('--y', String(value));
     else console.log('7 failiure, no object assigned\n');
   }
 
-  speedLimit() {
-    let temp: number = Math.pow(
-      Math.pow(this._direction.x, 2) + Math.pow(this._direction.y, 2),
-      0.5,
-    );
-    this._direction.x /= temp;
-    this._direction.y /= temp;
-  }
-
   step(paddleRects: Array<null | DOMRect>) {
-    this.collision(paddleRects);
-    this.setx(
-      parseFloat(String(this.getx())) +
+    //move step
+    this.set_pos_x(
+      parseFloat(String(this.get_pos_x())) +
         parseFloat(String(this._speed * this._direction.x * 0.001)),
     );
-    this.sety(
-      parseFloat(String(this.gety())) +
+    this.set_pos_y(
+      parseFloat(String(this.get_pos_y())) +
         parseFloat(String(this._speed * this._direction.y * 0.001)),
     );
-  }
-
-  isCollision(rect1: null | DOMRect, rect2: null | DOMRect): boolean {
-    if (rect1 === null || rect2 === null) return false;
-    return (
-      rect1.left <= rect2.right &&
-      rect1.right >= rect2.left &&
-      rect1.top <= rect2.bottom &&
-      rect1.bottom >= rect2.top
-    );
-  }
-
-  collision(paddleRects: Array<null | DOMRect>) {
-    const rect = super.getRect();
-    if (rect === null) return;
-    if (this.gety() >= 100 - this._shape.y || this.gety() <= 0 + this._shape.y)
+    // vertical reflection
+    if (
+      this.get_pos_y() >= 100 - this._shape.y / 2 ||
+      this.get_pos_y() <= 0 + this._shape.y / 2
+    ) {
       this._direction.y *= -1;
-    if (paddleRects.some((r) => this.isCollision(r, rect)))
+      this.set_pos_y(
+        parseFloat(String(this.get_pos_y())) +
+          parseFloat(String(this._speed * this._direction.y * 0.002)),
+      );
+    }
+    // paddle collision
+    const rect: DOMRect | null = super.getRect();
+    if (rect === null) return;
+    if (
+      this.invinc <= 0 &&
+      paddleRects.some((r) => this.isCollision(r, rect))
+    ) {
+      this.invinc = 200;
       this._direction.x *= -1;
+      this.set_pos_x(
+        parseFloat(String(this.get_pos_x())) +
+          parseFloat(String(this._speed * this._direction.x * 0.002)),
+      );
+    }
+    this.invinc--;
+  }
+
+  isCollision(padBox: null | DOMRect, ballBox: null | DOMRect): boolean {
+    if (padBox === null || ballBox === null) return false;
+    if (
+      padBox.left <= ballBox.right &&
+      padBox.right >= ballBox.left &&
+      padBox.top <= ballBox.bottom &&
+      padBox.bottom >= ballBox.top
+    ) {
+      this._direction.y =
+        2 *
+        (((ballBox.top + (ballBox.bottom - ballBox.top) / 2 - padBox.top) /
+          (padBox.bottom - padBox.top)) *
+          2 -
+          1);
+      return true;
+    }
+    return false;
   }
 
   public update(delta: number, paddleRects: Array<null | DOMRect>) {
@@ -179,14 +216,31 @@ class Paddle extends Element {
   private _shape: Vector;
   private _time = 0;
 
-  constructor(padElement: HTMLElement | null, field: Element) {
+  constructor(padElement: HTMLElement | null, field: null | DOMRect) {
     super(padElement);
     this._direction = new Vector(0, 0);
     this._speed = 10;
     this._shape = new Vector(
-      (super.getWidth() * 50) / field.getWidth(),
-      (super.getHeight() * 50) / field.getHeight(),
+      field !== null
+        ? (super.getWidth() / Math.abs(field.right - field.left)) * 100
+        : 0,
+      field !== null
+        ? (super.getHeight() / Math.abs(field.bottom - field.top)) * 100
+        : 0,
     );
+  }
+
+  // later functions depend on pixel values in screen
+  // when resizing the game window changes and is refreshed in this function
+  resize(rfield: null | DOMRect) {
+    this._shape.x =
+      rfield !== null
+        ? (super.getWidth() / Math.abs(rfield.right - rfield.left)) * 100
+        : 0;
+    this._shape.y =
+      rfield !== null
+        ? (super.getHeight() / Math.abs(rfield.bottom - rfield.top)) * 100
+        : 0;
   }
 
   gety(): number {
@@ -213,11 +267,13 @@ class Paddle extends Element {
     let g: number =
       parseFloat(String(this.gety())) +
       parseFloat(String(this._speed * this._direction.y * 0.001));
-    if (g < 0 + this._shape.y) g = this._shape.y;
-    if (g > 100 - this._shape.y) g = 100 - this._shape.y;
+    if (g < 0 + this._shape.y / 2) g = this._shape.y / 2;
+    if (g > 100 - this._shape.y / 2) g = 100 - this._shape.y / 2;
     this.sety(g);
   }
-  update(delta: number, speed: number | null, time: number) {
+
+  // function to calc the next frame, babysteps for better movement
+  update(delta: number, time: number) {
     this._time = time;
     let i = 0;
     while (i < delta) {
@@ -229,12 +285,17 @@ class Paddle extends Element {
 
 onMounted(() => {
   const field = new Element(document.getElementById('feld'));
-  const ball = new Ball(document.getElementById('ball'), field);
-  const playerPad = new Paddle(document.getElementById('playerPad'), field);
-  const remotePad = new Paddle(document.getElementById('remotePad'), field);
+  const ball = new Ball(document.getElementById('ball'), field.getRect());
+  const playerPad = new Paddle(
+    document.getElementById('playerPad'),
+    field.getRect(),
+  );
+  const remotePad = new Paddle(
+    document.getElementById('remotePad'),
+    field.getRect(),
+  );
   const playerScore = document.getElementById('player');
-  const remoteScore = document.getElementById('henne');
-  // const keyBoard = document.querySelector('.keyboard');
+  const remoteScore = document.getElementById('remote');
 
   let lastTime: number | null = null;
   var delta: number;
@@ -242,10 +303,8 @@ onMounted(() => {
     if (lastTime != null) {
       delta = time - lastTime;
       ball.update(delta, [playerPad.getRect(), remotePad.getRect()]);
-      // remotePad.update(delta, ball.gety() - remotePad.gety() > 0 ? 10 : 1, -10, time);
-      remotePad.update(delta, null, time);
-      playerPad.update(delta, null, time);
-
+      remotePad.update(delta, time);
+      playerPad.update(delta, time);
       loseCase();
     }
     lastTime = time;
@@ -274,10 +333,16 @@ onMounted(() => {
       remotePad.changeDir(2, 0);
     }
   });
+  window.onresize = function () {
+    console.log('lal');
+    ball.resize(field.getRect());
+    playerPad.resize(field.getRect());
+    remotePad.resize(field.getRect());
+  };
 
   function loseCase() {
     if (
-      ball.getx() >= 100 - ball._shape.x &&
+      ball.get_pos_x() >= 100 - ball._shape.x / 2 &&
       playerScore !== null &&
       playerScore.textContent !== null
     ) {
@@ -287,7 +352,7 @@ onMounted(() => {
       remotePad.sety(50);
     }
     if (
-      ball.getx() <= 0 + ball._shape.x &&
+      ball.get_pos_x() <= 0 + ball._shape.x / 2 &&
       remoteScore !== null &&
       remoteScore.textContent !== null
     ) {
@@ -326,7 +391,7 @@ onMounted(() => {
   top: calc(var(--y) * 1%);
   transform: translate(0%, -50%);
   width: 1%;
-  height: 10%;
+  height: 30%;
 }
 
 .paddle-left {
@@ -343,7 +408,7 @@ onMounted(() => {
   background-color: #fff;
   left: calc(var(--x) * 1%);
   top: calc(var(--y) * 1%);
-  border-radius: 80%;
+  border-radius: 50%;
   transform: translate(-50%, -50%);
   width: 4vh;
   height: 4vh;
