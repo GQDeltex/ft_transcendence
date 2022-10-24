@@ -13,6 +13,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -53,8 +54,8 @@ import { join } from 'path';
     AuthModule,
     PrcModule,
     HealthModule,
+    GameModule,
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}
