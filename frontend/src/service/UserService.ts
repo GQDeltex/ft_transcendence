@@ -1,6 +1,10 @@
 import graphQLService from '@/service/GraphQLService';
 import axios from 'axios';
-import type { AllowedUpdateFriendshipMethod, User } from '@/store/user';
+import type {
+  AllowedUpdateBlockingMethod,
+  AllowedUpdateFriendshipMethod,
+  User,
+} from '@/store/user';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -130,6 +134,7 @@ class UserService {
             friends
             sentFriendRequests
             receivedFriendRequests
+            blocks
           }
         }
       `,
@@ -211,6 +216,28 @@ class UserService {
     if (typeof updateFriendship === 'undefined')
       throw new Error('Empty friends data');
     return updateFriendship;
+  }
+
+  async updateBlocking(
+    method: AllowedUpdateBlockingMethod,
+    id: number,
+  ): Promise<Partial<User>> {
+    const { updateBlocking } = await graphQLService.mutation(
+      `
+        mutation updateBlocking($method: AllowedUpdateBlockingMethod!, $id: Int!) {
+          updateBlocking(method: $method, userId: $id) {
+            friends
+            sentFriendRequests
+            receivedFriendRequests
+            blocks
+          }
+        }
+      `,
+      { method, id },
+    );
+    if (typeof updateBlocking === 'undefined')
+      throw new Error('Empty blocking data');
+    return updateBlocking;
   }
 }
 

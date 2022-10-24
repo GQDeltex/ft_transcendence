@@ -40,7 +40,8 @@ const peopleToggle = ref(false);
           <ChildPeopleComponent
             v-if="
               client.id !== userStore.id &&
-              !userStore.friends.includes(client.id)
+              !userStore.friends.includes(client.id) &&
+              !userStore.blocks.includes(client.id)
             "
             :client="client"
           />
@@ -50,7 +51,9 @@ const peopleToggle = ref(false);
       <div v-show="blockToggle" class="people">
         <template v-for="client in clients" :key="client.id">
           <ChildPeopleComponent
-            v-if="client.id !== userStore.id"
+            v-if="
+              client.id !== userStore.id && userStore.blocks.includes(client.id)
+            "
             :client="client"
           />
         </template>

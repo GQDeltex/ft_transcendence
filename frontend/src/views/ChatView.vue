@@ -8,7 +8,11 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
-import { AllowedUpdateFriendshipMethod, useUserStore } from '@/store/user';
+import {
+  AllowedUpdateBlockingMethod,
+  AllowedUpdateFriendshipMethod,
+  useUserStore,
+} from '@/store/user';
 import type { User } from '@/store/user';
 
 const errorStore = useErrorStore();
@@ -40,6 +44,25 @@ socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
     case AllowedUpdateFriendshipMethod.CANCEL:
       userStore.receivedFriendRequests =
         userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+  }
+});
+
+socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateBlockingMethod.BLOCK:
+      userStore.blocks.push(id);
+      userStore.friends = userStore.friends.filter(
+        (friendId) => friendId !== id,
+      );
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      userStore.receivedFriendRequests =
+        userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+    case AllowedUpdateBlockingMethod.UNBLOCK:
+      userStore.blocks = userStore.blocks.filter((userId) => userId !== id);
       break;
   }
 });

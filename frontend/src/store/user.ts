@@ -14,6 +14,7 @@ export type User = {
   friends?: number[];
   sentFriendRequests?: number[];
   receivedFriendRequests?: number[];
+  blocks?: number[];
 };
 
 export enum AllowedUpdateFriendshipMethod {
@@ -22,6 +23,11 @@ export enum AllowedUpdateFriendshipMethod {
   ACCEPT = 'ACCEPT',
   DECLINE = 'DECLINE',
   CANCEL = 'CANCEL',
+}
+
+export enum AllowedUpdateBlockingMethod {
+  BLOCK = 'BLOCK',
+  UNBLOCK = 'UNBLOCK',
 }
 
 export const useUserStore = defineStore('user', {
@@ -36,6 +42,7 @@ export const useUserStore = defineStore('user', {
     friends: [] as number[],
     sentFriendRequests: [] as number[],
     receivedFriendRequests: [] as number[],
+    blocks: [] as number[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -69,6 +76,7 @@ export const useUserStore = defineStore('user', {
       this.friends = user.friends ?? [];
       this.sentFriendRequests = user.sentFriendRequests ?? [];
       this.receivedFriendRequests = user.receivedFriendRequests ?? [];
+      this.blocks = user.blocks ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -127,6 +135,23 @@ export const useUserStore = defineStore('user', {
         this.friends = user.friends ?? [];
         this.sentFriendRequests = user.sentFriendRequests ?? [];
         this.receivedFriendRequests = user.receivedFriendRequests ?? [];
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async updateBlocking(
+      method: AllowedUpdateBlockingMethod,
+      id: number,
+    ): Promise<void> {
+      try {
+        const user: Partial<User> = await UserService.updateBlocking(
+          method,
+          id,
+        );
+        this.friends = user.friends ?? [];
+        this.sentFriendRequests = user.sentFriendRequests ?? [];
+        this.receivedFriendRequests = user.receivedFriendRequests ?? [];
+        this.blocks = user.blocks ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }

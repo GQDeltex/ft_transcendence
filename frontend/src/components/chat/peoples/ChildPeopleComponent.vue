@@ -2,8 +2,12 @@
 import { computed, ref, watch } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import { useRouter } from 'vue-router';
-import { AllowedUpdateFriendshipMethod, useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
+import {
+  AllowedUpdateBlockingMethod,
+  AllowedUpdateFriendshipMethod,
+  useUserStore,
+} from '@/store/user';
 
 const props = defineProps<{
   client: User;
@@ -37,9 +41,16 @@ enum friendStatusEnum {
   REQUEST_RECEIVED = 'Accept friend request',
 }
 
+enum blockStatusEnum {
+  BLOCKED = 'Unblock',
+  NOT_BLOCKED = 'Block',
+}
+
 const toggle = ref(false);
 const friendText = ref<friendStatusEnum>(friendStatusEnum.NOT_FRIEND);
 let friendStatus = friendStatusEnum.NOT_FRIEND;
+const blockText = ref<blockStatusEnum>(blockStatusEnum.NOT_BLOCKED);
+let blockStatus = blockStatusEnum.NOT_BLOCKED;
 
 watch(
   [
@@ -56,6 +67,17 @@ watch(
       friendStatus = friendStatusEnum.REQUEST_RECEIVED;
     else friendStatus = friendStatusEnum.NOT_FRIEND;
     friendText.value = friendStatus;
+  },
+  { deep: true, immediate: true },
+);
+
+watch(
+  () => userStore.blocks,
+  () => {
+    if (userStore.blocks.includes(props.client.id))
+      blockStatus = blockStatusEnum.BLOCKED;
+    else blockStatus = blockStatusEnum.NOT_BLOCKED;
+    blockText.value = blockStatus;
   },
   { deep: true, immediate: true },
 );
@@ -98,8 +120,21 @@ const onDecline = async () => {
   }
 };
 
-const onBlock = () => {
-  console.log('onBlock');
+const onBlock = async () => {
+  switch (blockStatus) {
+    case blockStatusEnum.NOT_BLOCKED:
+      await userStore.updateBlocking(
+        AllowedUpdateBlockingMethod.BLOCK,
+        props.client.id,
+      );
+      break;
+    case blockStatusEnum.BLOCKED:
+      await userStore.updateBlocking(
+        AllowedUpdateBlockingMethod.UNBLOCK,
+        props.client.id,
+      );
+      break;
+  }
 };
 
 const onInvite = () => {
@@ -128,15 +163,24 @@ const onProfile = async () => {
     </div>
   </div>
   <div v-show="toggle" class="popup">
-    <button class="butt" @click="onFriend">{{ friendText }}</button>
     <button
-      v-show="friendText === friendStatusEnum.REQUEST_RECEIVED"
+      v-show="blockStatus === blockStatusEnum.NOT_BLOCKED"
+      class="butt"
+      @click="onFriend"
+    >
+      {{ friendText }}
+    </button>
+    <button
+      v-show="
+        friendText === friendStatusEnum.REQUEST_RECEIVED &&
+        blockStatus === blockStatusEnum.NOT_BLOCKED
+      "
       class="butt"
       @click="onDecline"
     >
       Decline friend request
     </button>
-    <button class="butt" @click="onBlock">Block</button>
+    <button class="butt" @click="onBlock">{{ blockText }}</button>
     <button class="butt" @click="onInvite">Invite to Game</button>
     <button class="butt" @click="onProfile">Show Profile</button>
   </div>
