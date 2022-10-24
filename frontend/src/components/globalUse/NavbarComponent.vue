@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { useUserStore } from '../../store/user';
+import { useUserStore } from '@/store/user';
 import RoundPictureComponent from './RoundPictureComponent.vue';
 
 const userStore = useUserStore();
@@ -19,8 +19,8 @@ const userStore = useUserStore();
     </router-link>
   </div>
   <div class="column2">
-    <router-link :to="`/profile/${userStore.username}`" class="columncontent">
-      <span>{{ userStore.title }} {{ userStore.username }}</span>
+    <router-link :to="`/profile/${userStore.id}`" class="columncontent">
+      <span>{{ userStore.title[0] }} {{ userStore.username }}</span>
       <RoundPictureComponent
         :picture="userStore.picture"
         size="50px"

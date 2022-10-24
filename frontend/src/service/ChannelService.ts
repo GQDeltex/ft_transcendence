@@ -1,4 +1,4 @@
-import graphQLService from '@/plugin/GraphQLService';
+import graphQLService from './GraphQLService';
 
 class ChannelService {
   async findAll() {

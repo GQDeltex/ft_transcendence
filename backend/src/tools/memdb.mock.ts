@@ -3,7 +3,7 @@ import { Repository, DataSource, DataSourceOptions } from 'typeorm';
 import { createDatabase, dropDatabase } from 'typeorm-extension';
 import { User } from '../users/entities/user.entity';
 import { Channel } from '../prc/channel/entities/channel.entity';
-import { ChannelUser } from '../prc/channel/entities/channeluser.entity';
+import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 
 export class MockRepo {
   private options: any = {};

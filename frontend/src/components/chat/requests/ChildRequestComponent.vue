@@ -19,9 +19,10 @@ const declineButton = async () => {
   <div class="requestParent">
     <div class="infoBox">
       <span class="sender">
-        {{ sender }} <span class="requestText">{{ request }}</span>
-        {{ target }}</span
-      >
+        {{ sender }}
+        <span class="requestText">{{ request }}</span>
+        {{ target }}
+      </span>
     </div>
     <div class="buttonBox">
       <button class="acceptButton" @click="acceptButton">Accept</button>
@@ -51,8 +52,7 @@ const declineButton = async () => {
 
 .buttonBox {
   display: flex;
-  padding: 0.2vw;
-  padding-bottom: 0.5vw;
+  padding: 0.2vw 0.2vw 0.5vw;
 }
 
 .acceptButton {

@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
 import { UserInputError } from 'apollo-server-express';
+import { PrcGateway } from '../prc/prc.gateway';
+import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => PrcGateway))
+    private readonly prcGateway: PrcGateway,
   ) {}
 
   create(createUserInput: CreateUserInput) {
@@ -29,12 +34,25 @@ export class UsersService {
       });
   }
 
+  async findChannelUser(
+    identifier: number | string,
+    channelName: string,
+  ): Promise<ChannelUser> {
+    const result: ChannelUser | undefined = await (
+      await this.findUserChannelList(identifier)
+    ).channelList?.find(
+      (channelUser) => channelUser.channel_name === channelName,
+    );
+    if (typeof result === 'undefined')
+      throw new WsException(identifier + ' not in ' + channelName);
+    return result;
+  }
+
   isInChannel(user: User, channel_name: string): boolean {
     const result = user.channelList?.some(
       (channelUser) => channelUser.channel_name === channel_name,
     );
-    if (typeof result === 'undefined' || !result) return false;
-    return true;
+    return !(typeof result === 'undefined' || !result);
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {
@@ -201,6 +219,10 @@ export class UsersService {
         (following) => following.id !== friendId,
       );
       await this.userRepository.save(user);
+    }
+
+    if (friend.socketId !== '') {
+      this.prcGateway.server.to(friend.socketId).emit('friendRequest');
     }
   }
 }

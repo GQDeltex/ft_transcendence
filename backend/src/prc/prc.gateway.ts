@@ -18,6 +18,9 @@ import {
   UsePipes,
   ValidationPipe,
   BadRequestException,
+  Injectable,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
@@ -28,7 +31,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
-import { ChannelUser } from './channel/entities/channeluser.entity';
+import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 import { Channel } from './channel/entities/channel.entity';
 
 export const CurrentUserFromWs = createParamDecorator(
@@ -61,6 +64,7 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
   }
 }
 
+@Injectable()
 @UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
@@ -76,6 +80,7 @@ export class PrcGateway implements OnGatewayDisconnect {
   server: Server;
 
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly channelService: ChannelService,
   ) {}
@@ -94,20 +99,37 @@ export class PrcGateway implements OnGatewayDisconnect {
 
   @SubscribeMessage('newconnection')
   async connect(
-    @CurrentUserFromWs() JWTtoken: JwtPayload,
+    @CurrentUserFromWs() jwtToken: JwtPayload,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Client connected', client.id, JWTtoken.username);
-    await this.usersService.updateSocketId(JWTtoken.id, client.id);
-    await this.usersService.updateStatus(JWTtoken.id, 'online');
-    const user: User = await this.usersService.findOne(JWTtoken.id);
+    console.log('Client connected', client.id, jwtToken.username);
+    await this.usersService.updateSocketId(jwtToken.id, client.id);
+    await this.usersService.updateStatus(jwtToken.id, 'online');
+    const user: User = await this.usersService.findOne(jwtToken.id);
     const channelUsers: ChannelUser[] | undefined = user.channelList;
     if (typeof channelUsers === 'undefined') return;
-    channelUsers.forEach((channelUser) =>
-      client.join(channelUser.channel_name),
-    );
+    channelUsers.forEach((channelUser) => {
+      client.join(channelUser.channel_name);
+      this.channelService
+        .findMessagesForRecipient(channelUser.channel_name)
+        .forEach((message) => client.emit('prc', message));
+    });
+    this.channelService
+      .findMessagesForRecipient(user.username)
+      .forEach((message) => client.emit('prc', message));
   }
 
+  /**
+    It sends message to a channel or user.
+  
+  Args:
+    user: The user who sent the message.
+    to: The recipient of the message.
+    msg: The message that was sent.
+    client: The socket that sent the message.
+  Returns:
+    Nothing.
+  */
   @SubscribeMessage('prc')
   async prcMessage(
     @CurrentUserFromWs() user: JwtPayload,
@@ -116,6 +138,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
+
     console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
     let recipient: User | Channel;
     if (to[0] == '#' || to[0] == '&')
@@ -123,9 +146,17 @@ export class PrcGateway implements OnGatewayDisconnect {
     else recipient = await this.usersService.findOne(to);
     const sender: User = await this.usersService.findOne(user.id);
     let recClient;
+    const message = {
+      from: { id: sender.id, username: sender.username },
+      to: { name: to },
+      msg: msg,
+    };
     if (recipient instanceof User) {
-      if (recipient.socketId == '')
-        throw new WsException('Recipient socketId empty');
+      if (recipient.socketId == '') {
+        //throw new WsException('Recipient socketId empty');
+        this.channelService.saveMessage(message);
+        return;
+      }
       const sockets = await this.server.in(recipient.socketId).fetchSockets();
       if (sockets.length < 1)
         throw new WsException('Could not find Recipients socket');
@@ -137,10 +168,14 @@ export class PrcGateway implements OnGatewayDisconnect {
         );
       recClient = client.to(recipient.name);
     }
-    recClient.emit('prc', { from: user, to: recipient, msg: msg });
+    recClient.emit('prc', message);
+    this.channelService.saveMessage(message);
     console.log('Sent message!');
   }
 
+  /**
+  It creates a new channel and adds the user to it.
+  */
   @SubscribeMessage('join')
   async joinChannel(
     @CurrentUserFromWs() user: JwtPayload,
@@ -152,9 +187,16 @@ export class PrcGateway implements OnGatewayDisconnect {
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
-    client.broadcast
-      .to(channel.name)
-      .emit('status', sender.username + ' has joined your channel.');
+    const message = {
+      from: { id: -1, username: '' },
+      to: { name: channel.name },
+      msg: sender.username + ' has joined your channel.',
+    };
+    //this.channelService.saveMessage(message);
+    client.broadcast.to(channel.name).emit('status', message);
+    this.channelService
+      .findMessagesForRecipient(channel.name)
+      .forEach((message) => client.emit('prc', message));
     console.log(`Join success from ${user.username} for ${channelInput.name}`); // DEBUG
   }
 }

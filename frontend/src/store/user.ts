@@ -2,15 +2,39 @@ import { defineStore } from 'pinia';
 import UserService from '@/service/UserService';
 import { useErrorStore } from './error';
 
+export type User = {
+  isLogged?: boolean;
+  id: number;
+  username: string;
+  title: string[];
+  picture: string;
+  twoFAEnable?: boolean;
+  require2FAVerify?: boolean;
+  friends?: User[];
+  sentFriendRequests?: User[];
+  receivedFriendRequests?: User[];
+};
+
+export enum AllowedUpdateFriendshipMethod {
+  ADD = 'ADD',
+  REMOVE = 'REMOVE',
+  ACCEPT = 'ACCEPT',
+  DECLINE = 'DECLINE',
+  CANCEL = 'CANCEL',
+}
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
-    id: '',
+    id: -1,
     username: '',
-    title: '',
+    title: [''],
     picture: '',
     twoFAEnable: false,
     require2FAVerify: false,
+    friends: [] as User[],
+    sentFriendRequests: [] as User[],
+    receivedFriendRequests: [] as User[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -38,12 +62,15 @@ export const useUserStore = defineStore('user', {
       this.isLoggedIn = true;
       this.id = user.id;
       this.username = user.username;
-      this.title = user.title[0];
+      this.title = user.title;
       this.picture = user.picture;
       this.twoFAEnable = user.twoFAEnable;
+      this.friends = user.friends;
+      this.sentFriendRequests = user.sentFriendRequests;
+      this.receivedFriendRequests = user.receivedFriendRequests;
     },
     async logout(): Promise<void> {
-      if (this.isLoggedIn || this.id !== '') {
+      if (this.isLoggedIn || this.id > 0) {
         try {
           this.$reset();
           await UserService.logout();
@@ -79,6 +106,36 @@ export const useUserStore = defineStore('user', {
         useErrorStore().setError((error as Error).message);
       }
       return '';
+    },
+    async uploadPicture(file: File): Promise<void> {
+      try {
+        this.picture = await UserService.uploadPicture(file);
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async updateFriendship(
+      method: AllowedUpdateFriendshipMethod,
+      id: number,
+    ): Promise<void> {
+      try {
+        const user = await UserService.updateFriendship(method, id);
+        this.friends = user.friends;
+        this.sentFriendRequests = user.sentFriendRequests;
+        this.receivedFriendRequests = user.receivedFriendRequests;
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async fetchFriendRequests(): Promise<void> {
+      try {
+        const user = await UserService.findSelf();
+        this.friends = user.friends;
+        this.sentFriendRequests = user.sentFriendRequests;
+        this.receivedFriendRequests = user.receivedFriendRequests;
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
     },
   },
 });
