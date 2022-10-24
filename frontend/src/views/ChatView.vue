@@ -33,13 +33,22 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   socket.off('friendRequest');
 });
+
+const UpdateChannels = (input: string) => {
+  console.log('ChatView returnValue: ' + input);
+  chatName.value = input;
+};
 </script>
 
 <template>
   <div class="chatViewParent">
     <div class="leftSide">
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
-      <ParentChannelsComponent :channels="channels" class="channelsComp" />
+      <ParentChannelsComponent
+        :channels="channels"
+        class="channelsComp"
+        @update="UpdateChannels"
+      />
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />
