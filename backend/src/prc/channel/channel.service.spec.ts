@@ -9,7 +9,6 @@ import { User } from '../../users/entities/user.entity';
 import { mockUser, mockUser2 } from '../../users/entities/user.entity.mock';
 import { UsersService } from '../../users/users.service';
 import { PrcGateway } from '../prc.gateway';
-import { async } from 'rxjs';
 
 describe('ChannelService', () => {
   let channelService: ChannelService;

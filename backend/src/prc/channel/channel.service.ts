@@ -85,12 +85,12 @@ export class ChannelService {
     try {
       channel = await this.findOne(createChannelInput.name);
     } catch (Error) {
-      console.log(createChannelInput.name + ' created');
+      //console.log(createChannelInput.name + ' created'); DEBUG
       channel = await this.findOne(await this.create(createChannelInput));
       brandNew = true;
     }
     if (createChannelInput.password === channel.password) {
-      console.log('Good Password');
+      //console.log('Good Password'); DEBUG
       if (
         !channel.userList.some((channelUser) => channelUser.user.id === user.id)
       ) {

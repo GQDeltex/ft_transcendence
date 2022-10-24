@@ -62,4 +62,8 @@ test:
 	$(DC) exec $(BACK_NAME) npm run test
 	-@osascript -e "set Volume 0"
 
+recv: clean volume dev
+
+done: norm test
+
 .PHONY: all prod dev stop clean fclean redev reprod norm front back volume
