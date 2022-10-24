@@ -7,12 +7,16 @@ import { MockRepo } from '../../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../../users/entities/user.entity';
 import { UsersService } from '../../../users/users.service';
-import { mockUser } from '../../../users/entities/user.entity.mock';
+import { mockUser, mockUser2 } from '../../../users/entities/user.entity.mock';
 import { ChannelUserService } from './channel-user.service';
 import { PrcGateway } from '../../prc.gateway';
+import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
+import { WsException } from '@nestjs/websockets';
+import { ChannelResolver } from '../channel.resolver';
 
 describe('ChannelUserResolver', () => {
-  let resolver: ChannelUserResolver;
+  let channelUserResolver: ChannelUserResolver;
+  let channelResolver: ChannelResolver;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -20,7 +24,10 @@ describe('ChannelUserResolver', () => {
   beforeEach(async () => {
     mockRepoChannel = new MockRepo('ChannelUserResolver', Channel);
     mockRepoChannelUser = new MockRepo('ChannelUserResolver', ChannelUser);
-    mockRepoUser = new MockRepo('ChannelUserResolver', User, mockUser);
+    mockRepoUser = new MockRepo('ChannelUserResolver', User, [
+      mockUser,
+      mockUser2,
+    ]);
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
     await mockRepoUser.setupDb();
@@ -33,28 +40,59 @@ describe('ChannelUserResolver', () => {
         ChannelService,
         UsersService,
         PrcGateway,
+        ChannelResolver,
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
         mockRepoUser.getProvider(),
       ],
     }).compile();
 
-    resolver = module.get<ChannelUserResolver>(ChannelUserResolver);
+    channelUserResolver = module.get<ChannelUserResolver>(ChannelUserResolver);
+    channelResolver = module.get<ChannelResolver>(ChannelResolver);
   });
 
   afterEach(async () => {
-    await mockRepoChannel.clearRepo();
     await mockRepoChannelUser.clearRepo();
+    await mockRepoChannel.clearRepo();
     await mockRepoUser.clearRepo();
   });
 
   afterAll(async () => {
     await mockRepoChannel.destroyRepo();
-    await mockRepoChannelUser.destroyRepo();
     await mockRepoUser.destroyRepo();
+    await mockRepoChannelUser.destroyRepo();
   });
 
   it('should be defined', () => {
-    expect(resolver).toBeDefined();
+    expect(channelUserResolver).toBeDefined();
+  });
+
+  it('should not update admin because requester not on channel', async () => {
+    const oldAdmin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const newAdmin: User = mockUser2;
+    await expect(
+      channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+    ).rejects.toThrow(WsException);
+  });
+  //oldAdmin.username + ' is not a Channel Admin on #test'
+  it('should not update admin because newAdmin not on channel', async () => {
+    const oldAdmin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const newAdmin: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+    ).rejects.toThrow(newAdmin.id + ' not in #test');
   });
 });

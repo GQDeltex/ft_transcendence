@@ -19,6 +19,25 @@ export const mockUser: User = {
   channelList: [],
 };
 
+export const mockUser2: User = {
+  id: 9865,
+  username: 'president',
+  picture: 'https://example.com',
+  firstname: 'mr',
+  lastname: 'enneh',
+  email: 'henneforpresident@gmail.com',
+  country: 'United States',
+  campus: 'TroubleMaker',
+  title: [''],
+  twoFASecret: null,
+  twoFAEnable: false,
+  socketId: '',
+  status: 'offline',
+  following: [],
+  followers: [],
+  channelList: [],
+};
+
 export const createMockUser = (options: Partial<User> = {}): User => ({
   id: 12345,
   username: 'test',
