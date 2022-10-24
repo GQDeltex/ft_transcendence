@@ -67,26 +67,26 @@ const onClose = () => {
         </template>
       </div>
       <div class="buttonList">
-        <span class="Text">
-          Options
-        </span>
+        <span class="Text"> Options </span>
         <span>
           <button class="button" @click="changePassword">
             Change Password
           </button>
-          <ModalUpdatePasswordComponent v-show="passModalActive" @close="onClose" />
-        </span>
-       <span>
-          <!-- <button class="button">Leave Chat</button>-->
-          <button class="button" @click="updateAdmin">
-            Make Admin
-          </button>
-          <ModalUpdateAdminComponent v-show="adminModalActive" @close="onClose" />
+          <ModalUpdatePasswordComponent
+            v-show="passModalActive"
+            @close="onClose"
+          />
         </span>
         <span>
-          <button class="button" @click="banUser">
-            Ban User
-          </button>
+          <!-- <button class="button">Leave Chat</button>-->
+          <button class="button" @click="updateAdmin">Make Admin</button>
+          <ModalUpdateAdminComponent
+            v-show="adminModalActive"
+            @close="onClose"
+          />
+        </span>
+        <span>
+          <button class="button" @click="banUser">Ban User</button>
           <ModalBanUserComponent v-show="banModalActive" @close="onClose" />
         </span>
       </div>

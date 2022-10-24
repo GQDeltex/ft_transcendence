@@ -14,7 +14,7 @@ async function closeOk() {
     'channelName= ' + channelName.value + ' admin= ' + banUser.value, //DEBUG
   );
   try {
-    await ChannelUserService.updateAdmin(channelName.value, +banUser.value);
+    await ChannelUserService.banUser(channelName.value, +banUser.value);
     console.log(channelName.value + ' admin is now ' + banUser.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
@@ -34,15 +34,11 @@ function closeCancel() {
 <template>
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
-      <h1>
-        Ban User<span class="close" @click="closeCancel()"
-          >&times;</span
-        >
-      </h1>
+      <h1>Ban User<span class="close" @click="closeCancel()">&times;</span></h1>
       <label>Channel Name</label>
       <input v-model="channelName" type="text" />
       <label>User to ban</label>
-      <input v-model="admin" type="username" />
+      <input v-model="banUser" type="username" />
       <br />
       <button class="ok" @click="closeOk()">OK</button>
     </div>

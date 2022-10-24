@@ -38,8 +38,8 @@ class ChannelUserService {
   async banUser(channel_name: string, banUser: number) {
     const updatedChannelUser = await graphQLService.mutation(
       `
-            mutation updateAdmin( $channel_name: String!, $banUser: Int! ){
-              updateAdmin ( channel_name: $channel_name, banUser: $banUser ){
+            mutation banUser( $channel_name: String!, $banUser: Int! ){
+              banUser ( channel_name: $channel_name, banUser: $banUser ){
                 id
                 ban
                 unbanTime
