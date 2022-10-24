@@ -120,10 +120,13 @@ export const useUserStore = defineStore('user', {
       id: number,
     ): Promise<void> {
       try {
-        const user = await UserService.updateFriendship(method, id);
-        this.friends = user.friends;
-        this.sentFriendRequests = user.sentFriendRequests;
-        this.receivedFriendRequests = user.receivedFriendRequests;
+        const user: Partial<User> = await UserService.updateFriendship(
+          method,
+          id,
+        );
+        this.friends = user.friends ?? [];
+        this.sentFriendRequests = user.sentFriendRequests ?? [];
+        this.receivedFriendRequests = user.receivedFriendRequests ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }

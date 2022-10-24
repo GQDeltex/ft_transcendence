@@ -192,7 +192,10 @@ class UserService {
     return updateUsername;
   }
 
-  async updateFriendship(method: AllowedUpdateFriendshipMethod, id: number) {
+  async updateFriendship(
+    method: AllowedUpdateFriendshipMethod,
+    id: number,
+  ): Promise<Partial<User>> {
     const { updateFriendship } = await graphQLService.mutation(
       `
         mutation updateFriendship($method: AllowedUpdateFriendshipMethod!, $id: Int!) {

@@ -16,38 +16,33 @@ const userStore = useUserStore();
 const chatName = ref('gucalvi');
 const users = ref<User[]>([]);
 
-socket.on(
-  'onFriend',
-  ({ method, id }: { method: AllowedUpdateFriendshipMethod; id: number }) => {
-    switch (method) {
-      case AllowedUpdateFriendshipMethod.ADD:
-        userStore.receivedFriendRequests.push(id);
-        break;
-      case AllowedUpdateFriendshipMethod.REMOVE:
-        userStore.friends = userStore.friends.filter(
-          (friendId) => friendId !== id,
-        );
-        break;
-      case AllowedUpdateFriendshipMethod.ACCEPT:
-        userStore.friends.push(id);
-        userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
-          (friendId) => friendId !== id,
-        );
-        break;
-      case AllowedUpdateFriendshipMethod.DECLINE:
-        userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
-          (friendId) => friendId !== id,
-        );
-        break;
-      case AllowedUpdateFriendshipMethod.CANCEL:
-        userStore.receivedFriendRequests =
-          userStore.receivedFriendRequests.filter(
-            (friendId) => friendId !== id,
-          );
-        break;
-    }
-  },
-);
+socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateFriendshipMethod.ADD:
+      userStore.receivedFriendRequests.push(id);
+      break;
+    case AllowedUpdateFriendshipMethod.REMOVE:
+      userStore.friends = userStore.friends.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.ACCEPT:
+      userStore.friends.push(id);
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.DECLINE:
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.CANCEL:
+      userStore.receivedFriendRequests =
+        userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+  }
+});
 
 onMounted(async () => {
   try {

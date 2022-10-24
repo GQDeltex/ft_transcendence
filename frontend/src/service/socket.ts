@@ -4,6 +4,7 @@ import { useErrorStore } from '@/store/error';
 export const socket: Socket = io(`http://${import.meta.env.VITE_DOMAIN}:8080`, {
   autoConnect: false,
   withCredentials: true,
+  transports: ['websocket'],
 });
 
 socket.on('connect', function () {
@@ -17,6 +18,6 @@ socket.on('exception', function (data) {
   errorStore.setError(data.message);
 });
 
-socket.on('disconnect', function () {
-  console.log('Socket Disconnected');
+socket.on('disconnect', function (reason) {
+  console.log('Socket disconnected because of ' + reason);
 });
