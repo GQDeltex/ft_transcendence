@@ -7,6 +7,7 @@
 ### Variables
 
 - [mockUser](users_entities_user_entity_mock.md#mockuser)
+- [mockUser2](users_entities_user_entity_mock.md#mockuser2)
 
 ### Functions
 
@@ -21,6 +22,16 @@
 #### Defined in
 
 [src/users/entities/user.entity.mock.ts:3](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L3)
+
+___
+
+### mockUser2
+
+• `Const` **mockUser2**: [`User`](../classes/users_entities_user_entity.User.md)
+
+#### Defined in
+
+[src/users/entities/user.entity.mock.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L22)
 
 ## Functions
 
@@ -40,4 +51,4 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L22)
+[src/users/entities/user.entity.mock.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L41)

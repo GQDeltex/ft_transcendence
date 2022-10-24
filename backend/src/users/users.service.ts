@@ -44,7 +44,7 @@ export class UsersService {
       (channelUser) => channelUser.channel_name === channelName,
     );
     if (typeof result === 'undefined')
-      throw new WsException('User not in ' + channelName);
+      throw new WsException(identifier + ' not in ' + channelName);
     return result;
   }
 
