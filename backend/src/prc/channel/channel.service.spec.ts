@@ -5,6 +5,8 @@ import { ChannelUser } from './channel-user/entities/channel-user.entity';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { QueryFailedError } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { mockUser2 } from '../../users/entities/user.entity.mock';
 
 describe('ChannelService', () => {
   let service: ChannelService;
@@ -33,6 +35,7 @@ describe('ChannelService', () => {
     await mockRepoChannel.clearRepo();
     await mockRepoChannelUser.clearRepo();
   });
+
   afterAll(async () => {
     await mockRepoChannel.destroyRepo();
     await mockRepoChannelUser.destroyRepo();
@@ -55,5 +58,32 @@ describe('ChannelService', () => {
     expect(service.create({ name: '#test1', password: '' })).resolves.toEqual(
       expect.any(Number),
     );
+  });
+
+  it('should create a channel using join', () => {
+    let newUser: User = mockUser2;
+    expect(service.join({ name: '#test1', password: '' }, newUser)).resolves.toEqual(
+      expect.any(Number),
+    );
+  });
+
+  it('should make user owner on newly created channel', () => {
+    let newUser: User = mockUser2
+  });
+
+  it('should not join if bad password', () => {
+    
+  });
+
+  it('should be unable to join if already on channel', () => {
+    
+  });
+
+  it('should not make user owner/admin on join', () => {
+    
+  });
+
+  it('should join channel', () => {
+    
   });
 });

@@ -35,7 +35,4 @@ describe('ChannelUserService', () => {
     expect(service).toBeDefined();
   });
 
-  //it('should not update admin because requester not admin on channel',)
-
-  //it('should update admin')
 });
