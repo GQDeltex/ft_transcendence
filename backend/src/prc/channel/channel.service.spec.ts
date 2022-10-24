@@ -4,6 +4,7 @@ import { Channel } from './entities/channel.entity';
 import { ChannelUser } from './channel-user/entities/channel-user.entity';
 import { MockRepo } from '../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
+import { QueryFailedError } from 'typeorm';
 
 describe('ChannelService', () => {
   let service: ChannelService;
@@ -39,5 +40,20 @@ describe('ChannelService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should not create channel due to duplicate', () => {
+    expect(
+      service.create({ name: '#test1', password: '' }),
+    ).resolves.not.toThrow();
+    expect(service.create({ name: '#test1', password: '' })).rejects.toThrow(
+      QueryFailedError,
+    );
+  });
+
+  it('should create a channel', () => {
+    expect(service.create({ name: '#test1', password: '' })).resolves.toEqual(
+      expect.any(Number),
+    );
   });
 });

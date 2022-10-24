@@ -55,7 +55,7 @@ export class ChannelService {
   Returns:
     The id of the newly created channel.
   */
-  async create(createChannelInput: CreateChannelInput) {
+  async create(createChannelInput: CreateChannelInput): Promise<number> {
     const result: InsertResult = await this.channelRepository.insert(
       createChannelInput,
     );
