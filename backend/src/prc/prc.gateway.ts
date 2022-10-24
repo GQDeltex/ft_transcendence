@@ -97,7 +97,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('newconnection')
+  @SubscribeMessage('newConnection')
   async connect(
     @CurrentUserFromWs() jwtToken: JwtPayload,
     @ConnectedSocket() client: Socket,
@@ -162,7 +162,7 @@ export class PrcGateway implements OnGatewayDisconnect {
         throw new WsException('Could not find Recipients socket');
       recClient = sockets[0];
     } else {
-      if (!this.usersService.isInChannel(sender, to))
+      if (!sender.isInChannel(to))
         throw new WsException(
           'Recipient not found ###DEBUG Sender not on channel',
         );

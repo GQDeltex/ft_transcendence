@@ -9,16 +9,67 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
-import { useUserStore } from '@/store/user';
+import {
+  AllowedUpdateBlockingMethod,
+  AllowedUpdateFriendshipMethod,
+  useUserStore,
+} from '@/store/user';
+import type { User } from '@/store/user';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
 const chatName = ref('gucalvi');
-const users = ref([]);
+
+const users = ref<User[]>([]);
 const channels = ref([]);
 
-socket.on('friendRequest', async () => {
-  await userStore.fetchFriendRequests();
+socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateFriendshipMethod.ADD:
+      userStore.receivedFriendRequests.push(id);
+      break;
+    case AllowedUpdateFriendshipMethod.REMOVE:
+      userStore.friends = userStore.friends.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.ACCEPT:
+      userStore.friends.push(id);
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.DECLINE:
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.CANCEL:
+      userStore.receivedFriendRequests =
+        userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+  }
+});
+
+socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateBlockingMethod.BLOCK:
+      userStore.blockedBy.push(id);
+      userStore.friends = userStore.friends.filter(
+        (friendId) => friendId !== id,
+      );
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      userStore.receivedFriendRequests =
+        userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+    case AllowedUpdateBlockingMethod.UNBLOCK:
+      userStore.blockedBy = userStore.blockedBy.filter(
+        (userId) => userId !== id,
+      );
+      break;
+  }
 });
 
 onMounted(async () => {
@@ -31,7 +82,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  socket.off('friendRequest');
+  socket.off('onFriend');
 });
 
 const UpdateChannels = (input: string) => {

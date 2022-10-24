@@ -120,6 +120,11 @@ export class ChannelService {
     return this.findOne(+channel.id); //'+' VIC ;)
   }
 
+  /**
+  1. First, we’re using the `update` method to update the password of the channel.
+  2. Then, we’re using the `findOne` method to get the updated channel.
+  3. Finally, we’re returning the updated channel.
+  */
   async updatePassword(channelName: string, newPassword: string) {
     const result: UpdateResult = await this.channelRepository.update(
       { name: channelName },

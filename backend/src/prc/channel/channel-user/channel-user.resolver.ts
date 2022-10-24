@@ -55,7 +55,7 @@ export class ChannelUserResolver {
     );
     if (typeof channelUserNew === 'undefined')
       throw new WsException('ChannelUserNew undefined');
-    console.log('both users are good');
+    console.log('both users are good'); //DEBUG
     if (!channelUserAdmin.admin)
       throw new WsException(
         JwtUser.username + ' is not a Channel Admin on ' + channel_name,
