@@ -7,6 +7,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryColumn,
+  RelationId,
 } from 'typeorm';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 
@@ -69,13 +70,37 @@ export class User {
     nullable: true,
   })
   @JoinTable()
-  following: User[];
+  following?: User[];
+
+  @RelationId('following')
+  following_id: number[] | null;
 
   @ManyToMany(() => User, (user) => user.following, {
     cascade: true,
     nullable: true,
   })
-  followers: User[];
+  followers?: User[];
+
+  @RelationId('followers')
+  followers_id: number[] | null;
+
+  @ManyToMany(() => User, (user) => user.blockedBy, {
+    nullable: true,
+  })
+  @JoinTable()
+  blocking?: User[];
+
+  @RelationId('blocking')
+  blocking_id: number[] | null;
+
+  @ManyToMany(() => User, (user) => user.blocking, {
+    cascade: true,
+    nullable: true,
+  })
+  blockedBy?: User[];
+
+  @RelationId('blockedBy')
+  blockedBy_id: number[] | null;
 
   @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
@@ -84,4 +109,35 @@ export class User {
     eager: true,
   })
   channelList?: ChannelUser[];
+
+  public isInChannel(channelName: string): boolean {
+    const result = this.channelList?.some(
+      (channelUser) => channelUser.channel_name === channelName,
+    );
+    return !(typeof result === 'undefined' || !result);
+  }
+
+  public get friends(): number[] {
+    return (
+      this.followers_id?.filter((follower) =>
+        this.following_id?.includes(follower),
+      ) ?? []
+    );
+  }
+
+  public get sentFriendRequests(): number[] {
+    return (
+      this.following_id?.filter(
+        (following) => !this.followers_id?.includes(following),
+      ) ?? []
+    );
+  }
+
+  public get receivedFriendRequests(): number[] {
+    return (
+      this.followers_id?.filter(
+        (follower) => !this.following_id?.includes(follower),
+      ) ?? []
+    );
+  }
 }
