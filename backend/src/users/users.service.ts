@@ -152,8 +152,7 @@ export class UsersService {
       if (
         user.following_id?.includes(friendId) ||
         friend.following_id?.includes(id) ||
-        user.blocking_id?.includes(friendId) ||
-        friend.blocking_id?.includes(id)
+        user.blocking_id?.includes(friendId)
       )
         throw new UserInputError('Failed to send friend request');
 

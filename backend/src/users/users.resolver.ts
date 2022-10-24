@@ -101,6 +101,11 @@ export class UsersResolver {
 
   @ResolveField(() => [Int], { nullable: 'items' })
   async blocks(@Parent() user: User): Promise<number[]> {
-    return user.blocks;
+    return user.blocking_id ?? [];
+  }
+
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async blockedBy(@Parent() user: User): Promise<number[]> {
+    return user.blockedBy_id ?? [];
   }
 }

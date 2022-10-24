@@ -135,6 +135,7 @@ class UserService {
             sentFriendRequests
             receivedFriendRequests
             blocks
+            blockedBy
           }
         }
       `,
@@ -230,6 +231,7 @@ class UserService {
             sentFriendRequests
             receivedFriendRequests
             blocks
+            blockedBy
           }
         }
       `,

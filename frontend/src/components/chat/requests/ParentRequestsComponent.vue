@@ -19,7 +19,8 @@ const userStore = useUserStore();
         <FriendRequestComponent
           v-if="
             client.id !== userStore.id &&
-            userStore.receivedFriendRequests.includes(client.id)
+            userStore.receivedFriendRequests.includes(client.id) &&
+            !userStore.blocks.includes(client.id)
           "
           :client="client"
         />

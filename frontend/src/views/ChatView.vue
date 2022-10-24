@@ -51,7 +51,7 @@ socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
 socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
     case AllowedUpdateBlockingMethod.BLOCK:
-      userStore.blocks.push(id);
+      userStore.blockedBy.push(id);
       userStore.friends = userStore.friends.filter(
         (friendId) => friendId !== id,
       );
@@ -62,7 +62,9 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
         userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
       break;
     case AllowedUpdateBlockingMethod.UNBLOCK:
-      userStore.blocks = userStore.blocks.filter((userId) => userId !== id);
+      userStore.blockedBy = userStore.blockedBy.filter(
+        (userId) => userId !== id,
+      );
       break;
   }
 });

@@ -15,6 +15,7 @@ export type User = {
   sentFriendRequests?: number[];
   receivedFriendRequests?: number[];
   blocks?: number[];
+  blockedBy?: number[];
 };
 
 export enum AllowedUpdateFriendshipMethod {
@@ -43,6 +44,7 @@ export const useUserStore = defineStore('user', {
     sentFriendRequests: [] as number[],
     receivedFriendRequests: [] as number[],
     blocks: [] as number[],
+    blockedBy: [] as number[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -77,6 +79,7 @@ export const useUserStore = defineStore('user', {
       this.sentFriendRequests = user.sentFriendRequests ?? [];
       this.receivedFriendRequests = user.receivedFriendRequests ?? [];
       this.blocks = user.blocks ?? [];
+      this.blockedBy = user.blockedBy ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -152,6 +155,7 @@ export const useUserStore = defineStore('user', {
         this.sentFriendRequests = user.sentFriendRequests ?? [];
         this.receivedFriendRequests = user.receivedFriendRequests ?? [];
         this.blocks = user.blocks ?? [];
+        this.blockedBy = user.blockedBy ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }

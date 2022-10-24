@@ -140,17 +140,4 @@ export class User {
       ) ?? []
     );
   }
-
-  public get blocks(): number[] {
-    if (this.blocking_id === null) return this.blockedBy_id ?? [];
-    if (this.blockedBy_id === null) return this.blocking_id ?? [];
-    return this.blocking_id.concat(
-      this.blockedBy_id.filter(
-        // typescript being gay after all the null assertions it still complains that it can be null
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        (blocked) => this.blocking_id.indexOf(blocked) < 0,
-      ),
-    );
-  }
 }
