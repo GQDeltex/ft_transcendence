@@ -10,9 +10,12 @@ export type User = {
   picture: string;
   twoFAEnable?: boolean;
   require2FAVerify?: boolean;
-  friends?: User[];
-  sentFriendRequests?: User[];
-  receivedFriendRequests?: User[];
+  status?: string;
+  friends?: number[];
+  sentFriendRequests?: number[];
+  receivedFriendRequests?: number[];
+  blocks?: number[];
+  blockedBy?: number[];
 };
 
 export enum AllowedUpdateFriendshipMethod {
@@ -21,6 +24,11 @@ export enum AllowedUpdateFriendshipMethod {
   ACCEPT = 'ACCEPT',
   DECLINE = 'DECLINE',
   CANCEL = 'CANCEL',
+}
+
+export enum AllowedUpdateBlockingMethod {
+  BLOCK = 'BLOCK',
+  UNBLOCK = 'UNBLOCK',
 }
 
 export const useUserStore = defineStore('user', {
@@ -32,9 +40,11 @@ export const useUserStore = defineStore('user', {
     picture: '',
     twoFAEnable: false,
     require2FAVerify: false,
-    friends: [] as User[],
-    sentFriendRequests: [] as User[],
-    receivedFriendRequests: [] as User[],
+    friends: [] as number[],
+    sentFriendRequests: [] as number[],
+    receivedFriendRequests: [] as number[],
+    blocks: [] as number[],
+    blockedBy: [] as number[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -64,10 +74,12 @@ export const useUserStore = defineStore('user', {
       this.username = user.username;
       this.title = user.title;
       this.picture = user.picture;
-      this.twoFAEnable = user.twoFAEnable;
-      this.friends = user.friends;
-      this.sentFriendRequests = user.sentFriendRequests;
-      this.receivedFriendRequests = user.receivedFriendRequests;
+      this.twoFAEnable = user.twoFAEnable ?? false;
+      this.friends = user.friends ?? [];
+      this.sentFriendRequests = user.sentFriendRequests ?? [];
+      this.receivedFriendRequests = user.receivedFriendRequests ?? [];
+      this.blocks = user.blocks ?? [];
+      this.blockedBy = user.blockedBy ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -119,20 +131,31 @@ export const useUserStore = defineStore('user', {
       id: number,
     ): Promise<void> {
       try {
-        const user = await UserService.updateFriendship(method, id);
-        this.friends = user.friends;
-        this.sentFriendRequests = user.sentFriendRequests;
-        this.receivedFriendRequests = user.receivedFriendRequests;
+        const user: Partial<User> = await UserService.updateFriendship(
+          method,
+          id,
+        );
+        this.friends = user.friends ?? [];
+        this.sentFriendRequests = user.sentFriendRequests ?? [];
+        this.receivedFriendRequests = user.receivedFriendRequests ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }
     },
-    async fetchFriendRequests(): Promise<void> {
+    async updateBlocking(
+      method: AllowedUpdateBlockingMethod,
+      id: number,
+    ): Promise<void> {
       try {
-        const user = await UserService.findSelf();
-        this.friends = user.friends;
-        this.sentFriendRequests = user.sentFriendRequests;
-        this.receivedFriendRequests = user.receivedFriendRequests;
+        const user: Partial<User> = await UserService.updateBlocking(
+          method,
+          id,
+        );
+        this.friends = user.friends ?? [];
+        this.sentFriendRequests = user.sentFriendRequests ?? [];
+        this.receivedFriendRequests = user.receivedFriendRequests ?? [];
+        this.blocks = user.blocks ?? [];
+        this.blockedBy = user.blockedBy ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }
