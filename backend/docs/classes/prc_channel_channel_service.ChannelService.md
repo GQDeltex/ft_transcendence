@@ -207,6 +207,10 @@ ___
 
 ▸ **updatePassword**(`channelName`, `newPassword`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
 
+1. First, we’re using the `update` method to update the password of the channel.
+2. Then, we’re using the `findOne` method to get the updated channel.
+3. Finally, we’re returning the updated channel.
+
 #### Parameters
 
 | Name | Type |
@@ -220,4 +224,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:109](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L109)
+[src/prc/channel/channel.service.ts:114](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L114)

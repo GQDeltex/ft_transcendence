@@ -8,6 +8,7 @@ import { UserInputError } from 'apollo-server-express';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
+import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 
 @Injectable()
 export class UsersService {
@@ -22,37 +23,31 @@ export class UsersService {
   }
 
   findUserChannelList(identifier: number | string): Promise<User> {
-    if (typeof identifier == 'number')
+    if (typeof identifier === 'undefined')
+      throw new EntityNotFoundError(User, {});
+
+    if (typeof identifier === 'number')
       return this.userRepository.findOneOrFail({
         where: { id: identifier },
         relations: ['channelList'],
       });
-    else
-      return this.userRepository.findOneOrFail({
-        where: { username: identifier },
-        relations: ['channelList'],
-      });
+    return this.userRepository.findOneOrFail({
+      where: { username: identifier },
+      relations: ['channelList'],
+    });
   }
 
   async findChannelUser(
     identifier: number | string,
     channelName: string,
   ): Promise<ChannelUser> {
-    const result: ChannelUser | undefined = await (
-      await this.findUserChannelList(identifier)
-    ).channelList?.find(
+    const user: User = await this.findUserChannelList(identifier);
+    const channelUser: ChannelUser | undefined = user.channelList?.find(
       (channelUser) => channelUser.channel_name === channelName,
     );
-    if (typeof result === 'undefined')
+    if (typeof channelUser === 'undefined')
       throw new WsException(identifier + ' not in ' + channelName);
-    return result;
-  }
-
-  isInChannel(user: User, channel_name: string): boolean {
-    const result = user.channelList?.some(
-      (channelUser) => channelUser.channel_name === channel_name,
-    );
-    return !(typeof result === 'undefined' || !result);
+    return channelUser;
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {
@@ -72,21 +67,16 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.userRepository.find({ relations: ['following', 'followers'] });
+    return this.userRepository.find();
   }
 
   async findOne(identifier: number | string): Promise<User> {
-    if (typeof identifier == 'undefined')
+    if (typeof identifier === 'undefined')
       throw new EntityNotFoundError(User, {});
 
-    let query: { id?: number; username?: string };
-    if (typeof identifier == 'number') query = { id: identifier };
-    else query = { username: identifier };
-
-    return this.userRepository.findOneOrFail({
-      where: query,
-      relations: ['following', 'followers'],
-    });
+    if (typeof identifier === 'number')
+      return this.userRepository.findOneByOrFail({ id: identifier });
+    return this.userRepository.findOneByOrFail({ username: identifier });
   }
 
   async updatePicture(id: number, picture: string): Promise<void> {
@@ -144,6 +134,7 @@ export class UsersService {
   ): Promise<void> {
     if (id === friendId)
       throw new UserInputError('You cannot send a friend request to yourself');
+
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: friendId }],
       relations: ['following', 'followers'],
@@ -159,26 +150,27 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.ADD) {
       if (
-        user.following.some((following) => following.id === friendId) ||
-        friend.following.some((following) => following.id === id)
+        user.following_id?.includes(friendId) ||
+        friend.following_id?.includes(id) ||
+        user.blocking_id?.includes(friendId)
       )
         throw new UserInputError('Failed to send friend request');
 
-      user.following.push(friend);
+      user.following?.push(friend);
       await this.userRepository.save(user);
     }
 
     if (method === AllowedUpdateFriendshipMethod.REMOVE) {
       if (
-        !user.following.some((following) => following.id === friendId) ||
-        !friend.following.some((following) => following.id === id)
+        !user.following_id?.includes(friendId) ||
+        !friend.following_id?.includes(id)
       )
         throw new UserInputError('Failed to remove friend');
 
-      user.following = user.following.filter(
+      user.following = user.following?.filter(
         (following) => following.id !== friendId,
       );
-      friend.following = friend.following.filter(
+      friend.following = friend.following?.filter(
         (following) => following.id !== id,
       );
       await this.userRepository.save([friend, user]);
@@ -186,23 +178,23 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.ACCEPT) {
       if (
-        user.following.some((following) => following.id === friendId) ||
-        !friend.following.some((following) => following.id === id)
+        user.following_id?.includes(friendId) ||
+        !friend.following_id?.includes(id)
       ) {
         throw new UserInputError('Failed to accept friend request');
       }
-      user.following.push(friend);
+      user.following?.push(friend);
       await this.userRepository.save(user);
     }
 
     if (method === AllowedUpdateFriendshipMethod.DECLINE) {
       if (
-        user.following.some((following) => following.id === friendId) ||
-        !friend.following.some((following) => following.id === id)
+        user.following_id?.includes(friendId) ||
+        !friend.following_id?.includes(id)
       )
         throw new UserInputError('Failed to decline friend request');
 
-      friend.following = friend.following.filter(
+      friend.following = friend.following?.filter(
         (following) => following.id !== id,
       );
       await this.userRepository.save(friend);
@@ -210,19 +202,77 @@ export class UsersService {
 
     if (method === AllowedUpdateFriendshipMethod.CANCEL) {
       if (
-        !user.following.some((following) => following.id === friendId) ||
-        friend.following.some((following) => following.id === id)
+        !user.following_id?.includes(friendId) ||
+        friend.following_id?.includes(id)
       ) {
         throw new UserInputError('Failed to cancel friend request');
       }
-      user.following = user.following.filter(
+      user.following = user.following?.filter(
         (following) => following.id !== friendId,
       );
       await this.userRepository.save(user);
     }
 
     if (friend.socketId !== '') {
-      this.prcGateway.server.to(friend.socketId).emit('friendRequest');
+      this.prcGateway.server.to(friend.socketId).emit('onFriend', {
+        method: method as string,
+        id: id,
+      });
+    }
+  }
+
+  async updateBlocking(
+    id: number,
+    method: AllowedUpdateBlockingMethod,
+    userId: number,
+  ): Promise<void> {
+    if (id === userId) throw new UserInputError('You cannot block yourself');
+
+    const users: User[] = await this.userRepository.find({
+      where: [{ id }, { id: userId }],
+      relations: ['following', 'followers', 'blocking', 'blockedBy'],
+    });
+    const user: User | undefined = users.find((user) => user.id === id);
+    const blockedUser: User | undefined = users.find(
+      (user) => user.id === userId,
+    );
+    if (typeof user == 'undefined') {
+      throw new EntityNotFoundError(User, id);
+    }
+    if (typeof blockedUser == 'undefined') {
+      throw new EntityNotFoundError(User, userId);
+    }
+
+    if (method === AllowedUpdateBlockingMethod.BLOCK) {
+      if (user.blocking_id?.includes(userId)) {
+        throw new UserInputError('You already block this user');
+      }
+
+      user.blocking?.push(blockedUser);
+      user.following = user.following?.filter(
+        (following) => following.id !== userId,
+      );
+      blockedUser.following = blockedUser.following?.filter(
+        (following) => following.id !== id,
+      );
+      await this.userRepository.save([user, blockedUser]);
+    }
+
+    if (method === AllowedUpdateBlockingMethod.UNBLOCK) {
+      if (!user.blocking_id?.includes(userId))
+        throw new UserInputError('You already unblock user');
+
+      user.blocking = user.blocking?.filter(
+        (blocking) => blocking.id !== userId,
+      );
+      await this.userRepository.save(user);
+    }
+
+    if (blockedUser.socketId !== '') {
+      this.prcGateway.server.to(blockedUser.socketId).emit('onBlock', {
+        method: method as string,
+        id: id,
+      });
     }
   }
 }

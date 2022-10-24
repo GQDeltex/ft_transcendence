@@ -3,17 +3,12 @@ import { ref } from 'vue';
 import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
 import ModalUpdatePasswordComponent from './ModalUpdatePasswordComponent.vue';
 import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
+import type { User } from '@/store/user';
 
 const modalActive = ref(false);
 
 defineProps<{
-  clients: {
-    id: number;
-    title: [string];
-    username: string;
-    picture: string;
-    status: string;
-  }[];
+  clients: User[];
 }>();
 
 const chatToggle = ref(false);

@@ -40,9 +40,11 @@ type User {
   twoFAEnable: Boolean!
   status: String!
   channelList: [ChannelUser!]
-  friends: [User!]!
-  sentFriendRequests: [User!]!
-  receivedFriendRequests: [User!]!
+  friends: [Int]!
+  sentFriendRequests: [Int]!
+  receivedFriendRequests: [Int]!
+  blocks: [Int]!
+  blockedBy: [Int]!
 }
 
 type Query {
@@ -59,6 +61,7 @@ type Query {
 type Mutation {
   updateUsername(username: String!): User!
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
+  updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
   joinChannel(name: String!, password: String!): Channel!
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
@@ -70,4 +73,9 @@ enum AllowedUpdateFriendshipMethod {
   ACCEPT
   DECLINE
   CANCEL
+}
+
+enum AllowedUpdateBlockingMethod {
+  BLOCK
+  UNBLOCK
 }
