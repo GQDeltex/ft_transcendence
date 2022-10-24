@@ -37,7 +37,6 @@
 
 ### Accessors
 
-- [blocks](users_entities_user_entity.User.md#blocks)
 - [friends](users_entities_user_entity.User.md#friends)
 - [receivedFriendRequests](users_entities_user_entity.User.md#receivedfriendrequests)
 - [sentFriendRequests](users_entities_user_entity.User.md#sentfriendrequests)
@@ -273,20 +272,6 @@ ___
 [src/users/entities/user.entity.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L32)
 
 ## Accessors
-
-### blocks
-
-• `get` **blocks**(): `number`[]
-
-#### Returns
-
-`number`[]
-
-#### Defined in
-
-[src/users/entities/user.entity.ts:144](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L144)
-
-___
 
 ### friends
 
