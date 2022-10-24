@@ -67,7 +67,7 @@ describe('ChannelUserResolver', () => {
     expect(channelUserResolver).toBeDefined();
   });
 
-  it('should not update admin because requester not on channel', async () => {
+  it('should not update admin because oldAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       username: mockUser.username,
       email: mockUser.email,
@@ -79,7 +79,7 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
     ).rejects.toThrow(WsException);
   });
-  //oldAdmin.username + ' is not a Channel Admin on #test'
+
   it('should not update admin because newAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       username: mockUser.username,
@@ -94,5 +94,24 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
     ).rejects.toThrow(newAdmin.id + ' not in #test');
+  });
+
+  it('should not update admin because oldAdmin is not an admin on channel', async () => {
+    const oldAdmin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const newAdmin: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, newAdmin),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+    ).rejects.toThrow(oldAdmin.username + ' is not a Channel Admin on #test');
   });
 });
