@@ -34,3 +34,14 @@ export const mockUser: User = createMockUser({
   country: 'United States',
   campus: 'Unicorns 4 Lyfe',
 });
+
+export const mockUser2: User = createMockUser({
+  id: 9865,
+  username: 'president',
+  picture: 'https://example.com',
+  firstname: 'mr',
+  lastname: 'henneh',
+  email: 'henneforpresident@gmail.com',
+  country: 'United States',
+  campus: 'TroubleMaker',
+});
