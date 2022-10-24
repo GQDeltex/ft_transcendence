@@ -114,4 +114,23 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
     ).rejects.toThrow(oldAdmin.username + ' is not a Channel Admin on #test');
   });
+
+  it('should update newAdmin to admin', async () => {
+    const oldAdmin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const newAdmin: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, newAdmin),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+    ).resolves.not.toThrow();
+  });
 });
