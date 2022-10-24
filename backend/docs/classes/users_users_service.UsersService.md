@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:225](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L225)
+[src/users/users.service.ts:224](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L224)
 
 ___
 

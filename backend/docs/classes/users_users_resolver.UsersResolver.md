@@ -16,6 +16,7 @@
 
 ### Methods
 
+- [blockedBy](users_users_resolver.UsersResolver.md#blockedby)
 - [blocks](users_users_resolver.UsersResolver.md#blocks)
 - [findAll](users_users_resolver.UsersResolver.md#findall)
 - [findOneById](users_users_resolver.UsersResolver.md#findonebyid)
@@ -55,6 +56,26 @@
 [src/users/users.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L26)
 
 ## Methods
+
+### blockedBy
+
+▸ **blockedBy**(`user`): `Promise`<`number`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `user` | [`User`](users_entities_user_entity.User.md) |
+
+#### Returns
+
+`Promise`<`number`[]\>
+
+#### Defined in
+
+[src/users/users.resolver.ts:107](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L107)
+
+___
 
 ### blocks
 
