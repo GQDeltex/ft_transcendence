@@ -48,6 +48,7 @@ norm:
 	$(DC) exec $(FRONT_NAME) npm run type-check
 	$(DC) exec $(BACK_NAME) npm run format
 	$(DC) exec $(BACK_NAME) npm run lint
+	-@osascript -e "set Volume 0"
 
 front:
 	$(DC) exec $(FRONT_NAME) /bin/sh
@@ -59,5 +60,6 @@ test:
 	-@osascript -e "set Volume 2"
 	-@python3 -m webbrowser https://www.youtube.com/watch?v=Ur1XtSyjbxM
 	$(DC) exec $(BACK_NAME) npm run test
+	-@osascript -e "set Volume 0"
 
 .PHONY: all prod dev stop clean fclean redev reprod norm front back volume
