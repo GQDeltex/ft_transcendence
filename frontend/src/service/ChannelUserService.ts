@@ -34,6 +34,24 @@ class ChannelUserService {
       throw new Error('Not able to update admin');
     return updatedChannelUser;
   }
+
+  async banUser(channel_name: string, banUser: number) {
+    const updatedChannelUser = await graphQLService.mutation(
+      `
+            mutation updateAdmin( $channel_name: String!, $banUser: Int! ){
+              updateAdmin ( channel_name: $channel_name, banUser: $banUser ){
+                id
+                ban
+                unbanTime
+              }
+            }
+            `,
+      { channel_name, banUser },
+    );
+    if (typeof updatedChannelUser === 'undefined')
+      throw new Error('Not able to ban User');
+    return updatedChannelUser;
+  }
 }
 
 export default new ChannelUserService();
