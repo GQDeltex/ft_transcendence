@@ -68,10 +68,11 @@ class Ball extends Element {
   public _direction: Vector;
   private _speed: number;
 
+  private invinc = 0;
   constructor(ballElem: HTMLElement | null, field: null | DOMRect) {
     super(ballElem);
     this._direction = new Vector(0, 0);
-    this._speed = 30;
+    this._speed = 10;
     this._shape = new Vector(
       field !== null
         ? (super.getWidth() / Math.abs(field.right - field.left)) * 100
@@ -101,6 +102,7 @@ class Ball extends Element {
     this.set_pos_y(50);
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
+    this.invinc = 200;
   }
 
   get_dir_x(): number {
@@ -166,13 +168,18 @@ class Ball extends Element {
     // paddle collision
     const rect: DOMRect | null = super.getRect();
     if (rect === null) return;
-    if (paddleRects.some((r) => this.isCollision(r, rect))) {
+    if (
+      this.invinc <= 0 &&
+      paddleRects.some((r) => this.isCollision(r, rect))
+    ) {
+      this.invinc = 200;
       this._direction.x *= -1;
       this.set_pos_x(
         parseFloat(String(this.get_pos_x())) +
           parseFloat(String(this._speed * this._direction.x * 0.002)),
       );
     }
+    this.invinc--;
   }
 
   isCollision(padBox: null | DOMRect, ballBox: null | DOMRect): boolean {
