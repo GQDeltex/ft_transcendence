@@ -159,7 +159,7 @@ export class UsersService {
       searchOptions,
       {
         status,
-        lastLoggedIn: status === 'online' ? new Date() : undefined,
+        lastLoggedIn: status === 'online' ? new Date(Date.now()) : undefined,
       },
     );
     if (typeof result.affected != 'undefined' && result.affected < 1)
