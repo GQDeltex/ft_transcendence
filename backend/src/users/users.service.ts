@@ -8,6 +8,7 @@ import { UserInputError } from 'apollo-server-express';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
+import { QueryFailedError } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -17,8 +18,25 @@ export class UsersService {
     private readonly prcGateway: PrcGateway,
   ) {}
 
-  create(createUserInput: CreateUserInput) {
-    return this.userRepository.insert(createUserInput);
+  async create(createUserInput: CreateUserInput): Promise<void> {
+    try {
+      await this.userRepository.insert(createUserInput);
+    } catch (error) {
+      if (!(error instanceof QueryFailedError)) return Promise.reject(error);
+      const existingUser: User | null = await this.userRepository.findOne({
+        where: { username: createUserInput.username },
+      });
+      if (existingUser == null) return Promise.reject(error);
+      if (existingUser.id == createUserInput.id) return Promise.reject(error);
+      const rx = /^(.*)([0-9]*)$/;
+      const rxParts = rx.exec(existingUser.username);
+      if (rxParts == null)
+        return Promise.reject(new Error('Addition of number failed'));
+      if (rxParts[2] == '') createUserInput.username += '1';
+      else createUserInput.username = rxParts[1] + (Number(rxParts[2]) + 1);
+      await this.userRepository.insert(createUserInput);
+    }
+    return Promise.resolve();
   }
 
   findUserChannelList(identifier: number | string): Promise<User> {
