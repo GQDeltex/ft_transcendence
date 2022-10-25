@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L27)
+[src/users/entities/user.entity.mock.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L31)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L38)
+[src/users/entities/user.entity.mock.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L43)
 
 ## Functions
 

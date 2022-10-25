@@ -5,12 +5,19 @@ import { useErrorStore } from './error';
 export type User = {
   isLogged?: boolean;
   id: number;
+  intra: string;
+  firstname: string;
+  lastname: string;
   username: string;
   title: string[];
   picture: string;
+  campus: string;
+  country: string;
+  coalition: string;
+  status?: string;
+  lastLoggedIn?: number;
   twoFAEnable?: boolean;
   require2FAVerify?: boolean;
-  status?: string;
   friends?: number[];
   sentFriendRequests?: number[];
   receivedFriendRequests?: number[];
@@ -44,9 +51,17 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
     id: -1,
+    intra: '',
+    firstname: '',
+    lastname: '',
     username: '',
     title: [''],
     picture: '',
+    campus: '',
+    country: '',
+    coalition: '',
+    status: '',
+    lastLoggedIn: 0,
     twoFAEnable: false,
     require2FAVerify: false,
     friends: [] as number[],
@@ -81,9 +96,17 @@ export const useUserStore = defineStore('user', {
       const user = await UserService.findSelf();
       this.isLoggedIn = true;
       this.id = user.id;
+      this.intra = user.intra;
+      this.firstname = user.firstname;
+      this.lastname = user.lastname;
       this.username = user.username;
       this.title = user.title;
       this.picture = user.picture;
+      this.campus = user.campus;
+      this.country = user.country;
+      this.coalition = user.coalition;
+      this.status = user.status ?? '';
+      this.lastLoggedIn = user.lastLoggedIn ?? 0;
       this.twoFAEnable = user.twoFAEnable ?? false;
       this.friends = user.friends ?? [];
       this.sentFriendRequests = user.sentFriendRequests ?? [];

@@ -10,7 +10,7 @@ import { UsersService } from '../../../users/users.service';
 import { mockUser, mockUser2 } from '../../../users/entities/user.entity.mock';
 import { ChannelUserService } from './channel-user.service';
 import { PrcGateway } from '../../prc.gateway';
-import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
+import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 import { HttpModule } from '@nestjs/axios';
@@ -18,6 +18,7 @@ import { HttpModule } from '@nestjs/axios';
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
   let channelResolver: ChannelResolver;
+  let channelUserService: ChannelUserService;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -49,6 +50,7 @@ describe('ChannelUserResolver', () => {
       ],
     }).compile();
 
+    channelUserService = module.get<ChannelUserService>(ChannelUserService);
     channelUserResolver = module.get<ChannelUserResolver>(ChannelUserResolver);
     channelResolver = module.get<ChannelResolver>(ChannelResolver);
   });
@@ -77,9 +79,8 @@ describe('ChannelUserResolver', () => {
       email: mockUser.email,
       isAuthenticated: true,
     };
-    const newAdmin: User = mockUser2;
     await expect(
-      channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+      channelUserResolver.updateAdmin(oldAdmin, '#test', mockUser2.id),
     ).rejects.toThrow(WsException);
   });
 
@@ -186,9 +187,8 @@ describe('ChannelUserResolver', () => {
       email: mockUser.email,
       isAuthenticated: true,
     };
-    const banUser: User = mockUser2;
     await expect(
-      channelUserResolver.updateBan(admin, '#test', banUser.id),
+      channelUserResolver.updateBan(admin, '#test', mockUser2.id),
     ).rejects.toThrow(WsException);
   });
 
@@ -226,6 +226,7 @@ describe('ChannelUserResolver', () => {
   });
 
   it('should ban user', async () => {
+    jest.useFakeTimers({ legacyFakeTimers: true });
     const admin: JwtPayload = {
       id: mockUser.id,
       email: mockUser.email,
@@ -241,5 +242,7 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
+    jest.runAllTimers();
+    jest.useRealTimers();
   });
 });

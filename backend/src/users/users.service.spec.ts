@@ -225,11 +225,19 @@ describe('UsersService', () => {
   });
 
   it('should update the status', async () => {
-    const newUser: User = mockRepoUser.getTestEntity({ status: 'online' });
+    const mockDate = new Date();
+    const spy = jest
+      .spyOn(global.Date, 'now')
+      .mockImplementation(() => mockDate.valueOf());
+    const newUser: User = mockRepoUser.getTestEntity({
+      status: 'online',
+      lastLoggedIn: mockDate,
+    });
     await expect(
       service.updateStatus(newUser.id, newUser.status),
     ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+    spy.mockRestore();
   });
 
   it('should not change status if not exists', async () => {
@@ -239,11 +247,19 @@ describe('UsersService', () => {
   });
 
   it('should update the status via socket-id', async () => {
-    const newUser: User = mockRepoUser.getTestEntity({ status: 'online' });
+    const mockDate = new Date();
+    const spy = jest
+      .spyOn(global.Date, 'now')
+      .mockImplementation(() => mockDate.valueOf());
+    const newUser: User = mockRepoUser.getTestEntity({
+      status: 'online',
+      lastLoggedIn: mockDate,
+    });
     await expect(
       service.updateStatus(newUser.socketId, newUser.status),
     ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+    spy.mockRestore();
   });
 
   it('should not update the status via socket-id if not exists', async () => {
