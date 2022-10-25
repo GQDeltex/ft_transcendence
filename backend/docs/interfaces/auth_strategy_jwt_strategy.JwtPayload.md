@@ -8,10 +8,21 @@
 
 ### Properties
 
+- [email](auth_strategy_jwt_strategy.JwtPayload.md#email)
 - [id](auth_strategy_jwt_strategy.JwtPayload.md#id)
 - [isAuthenticated](auth_strategy_jwt_strategy.JwtPayload.md#isauthenticated)
 
 ## Properties
+
+### email
+
+• **email**: `string`
+
+#### Defined in
+
+[src/auth/strategy/jwt.strategy.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L9)
+
+___
 
 ### id
 
@@ -29,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/auth/strategy/jwt.strategy.ts:9](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L9)
+[src/auth/strategy/jwt.strategy.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/strategy/jwt.strategy.ts#L10)
