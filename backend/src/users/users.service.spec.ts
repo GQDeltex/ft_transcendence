@@ -106,6 +106,26 @@ describe('UsersService', () => {
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
   });
 
+  it('should create a user with number if username exists', async () => {
+    const newerUser: User = mockRepoUser.getTestEntity({
+      username: 'othertestuser',
+      id: 85432,
+    });
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+    newerUser.id = 94623;
+    newerUser.username = 'othertestuser';
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser1';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+    newerUser.id = 74362;
+    newerUser.username = 'othertestuser';
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser2';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+  });
+
   it('should change the username', async () => {
     const newUser: User = mockRepoUser.getTestEntity({ username: 'test2' });
     await expect(
