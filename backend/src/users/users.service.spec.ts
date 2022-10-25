@@ -10,6 +10,7 @@ import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
+import { HttpService } from '@nestjs/axios';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -29,6 +30,7 @@ describe('UsersService', () => {
       providers: [
         ConfigService,
         UsersService,
+        HttpService,
         PrcGateway,
         ChannelService,
         mockRepoUser.getProvider(),

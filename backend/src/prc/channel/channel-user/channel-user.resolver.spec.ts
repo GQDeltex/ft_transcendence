@@ -13,6 +13,7 @@ import { PrcGateway } from '../../prc.gateway';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
+import { HttpService } from '@nestjs/axios';
 
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
@@ -39,6 +40,7 @@ describe('ChannelUserResolver', () => {
         ChannelUserService,
         ChannelService,
         UsersService,
+        HttpService,
         PrcGateway,
         ChannelResolver,
         mockRepoChannel.getProvider(),
