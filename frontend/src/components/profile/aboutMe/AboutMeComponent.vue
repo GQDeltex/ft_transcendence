@@ -15,7 +15,7 @@ const capitalize = (str: string) => {
   <div v-if="user" class="about">
     <span style="font-size: 2vw">
       About
-      <span style="float: right">{{ capitalize(user.status) }}</span>
+      <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
     </span>
     <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
@@ -32,9 +32,9 @@ const capitalize = (str: string) => {
       Last Login:
       <span class="info">
         {{
-          new Date(user.lastLoggedIn).toLocaleTimeString() +
+          new Date(user.lastLoggedIn ?? 0).toLocaleTimeString() +
           ' ' +
-          new Date(user.lastLoggedIn).toLocaleDateString()
+          new Date(user.lastLoggedIn ?? 0).toLocaleDateString()
         }}
       </span>
       <br />
