@@ -11,6 +11,7 @@ import { Channel } from '../prc/channel/entities/channel.entity';
 import { ChannelService } from '../prc/channel/channel.service';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { HttpModule } from '@nestjs/axios';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
@@ -27,6 +28,7 @@ describe('UsersResolver', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         UsersResolver,
         UsersService,
@@ -67,9 +69,8 @@ describe('UsersResolver', () => {
   it('should find self by id in jwt token', async () => {
     await expect(
       resolver.findOneById(undefined, {
-        username: 'test',
         id: mockRepoUser.getTestEntity().id,
-        email: 'test@example.com',
+        email: mockRepoUser.getTestEntity().email,
         isAuthenticated: true,
       }),
     ).resolves.toEqual(mockRepoUser.getTestEntity());
@@ -78,9 +79,8 @@ describe('UsersResolver', () => {
   it('should find user by id', async () => {
     await expect(
       resolver.findOneById(84364, {
-        username: 'test',
         id: 12345,
-        email: 'test@example.com',
+        email: mockRepoUser.getTestEntity().email,
         isAuthenticated: true,
       }),
     ).resolves.toEqual(mockRepoUser.getTestEntity());
@@ -89,9 +89,8 @@ describe('UsersResolver', () => {
   it('should not find non-existing user by id', async () => {
     await expect(
       resolver.findOneById(76439, {
-        username: 'test',
         id: 12345,
-        email: 'test@example.com',
+        email: mockRepoUser.getTestEntity().email,
         isAuthenticated: true,
       }),
     ).rejects.toThrow(EntityNotFoundError);

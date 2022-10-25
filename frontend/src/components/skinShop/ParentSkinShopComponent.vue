@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import PayButtonComponent from '@/components/skinShop/PayPalButtonComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
+import type { Item } from '@/store/user';
 
 defineProps<{
-  itemId: string;
-  itemImg: string;
-  itemName: string;
+  item: Item;
 }>();
 </script>
 
 <template>
   <div class="parent">
     <RoundPictureComponent
-      :picture="itemImg"
+      :picture="item.picture"
       size="100px"
       border-color="transparent"
     />
-    <span class="item-name">{{ itemName }}</span>
-    <span class="item-price">7$</span>
-    <PayButtonComponent :id="itemId" price="7" />
+    <span class="item-name">{{ item.name }}</span>
+    <span class="item-price">{{ item.price }}€</span>
+    <PayButtonComponent :item="item" />
   </div>
 </template>
 
@@ -32,12 +31,14 @@ defineProps<{
   border-bottom: 1px solid gray;
   padding: 10px;
 }
+
 .item-name {
   text-decoration: none;
   color: grey;
   width: 50%;
   padding: 10px;
 }
+
 .item-price {
   text-decoration: none;
   color: gray;

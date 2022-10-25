@@ -5,19 +5,13 @@ import {
   MessageBody,
   ConnectedSocket,
   WsException,
-  BaseWsExceptionFilter,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import {
   UseGuards,
-  createParamDecorator,
-  ExecutionContext,
   UseFilters,
-  Catch,
-  ArgumentsHost,
   UsePipes,
   ValidationPipe,
-  BadRequestException,
   Injectable,
   forwardRef,
   Inject,
@@ -26,43 +20,13 @@ import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
-import { EntityNotFoundError } from 'typeorm';
-import { TokenExpiredError } from 'jsonwebtoken';
 import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 import { Channel } from './channel/entities/channel.entity';
-
-export const CurrentUserFromWs = createParamDecorator(
-  (data: string, ctx: ExecutionContext) => {
-    const client = ctx.switchToWs().getClient<Socket>();
-    const user = client.data.user;
-
-    if (!user) {
-      return null;
-    }
-
-    return data ? user[data] : user; // extract a specific property only if specified or get a user object
-  },
-);
-
-@Catch(WsException, EntityNotFoundError, TokenExpiredError, BadRequestException)
-export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
-  catch(
-    exception:
-      | WsException
-      | EntityNotFoundError
-      | TokenExpiredError
-      | BadRequestException,
-    host: ArgumentsHost,
-  ) {
-    // For some reason this throws an 'Error' again?
-    //super.catch(exception, host);
-    const client = host.switchToWs().getClient<Socket>();
-    client.emit('exception', { status: 'error', message: exception.message });
-  }
-}
+import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
+import { CurrentUserFromWs } from '../tools/UserFromWs';
 
 @Injectable()
 @UsePipes(new ValidationPipe())
@@ -102,7 +66,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @CurrentUserFromWs() jwtToken: JwtPayload,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Client connected', client.id, jwtToken.username);
+    console.log('Client connected', client.id, jwtToken.id);
     await this.usersService.updateSocketId(jwtToken.id, client.id);
     await this.usersService.updateStatus(jwtToken.id, 'online');
     const user: User = await this.usersService.findOne(jwtToken.id);
@@ -121,7 +85,7 @@ export class PrcGateway implements OnGatewayDisconnect {
 
   /**
     It sends message to a channel or user.
-  
+
   Args:
     user: The user who sent the message.
     to: The recipient of the message.
@@ -139,7 +103,7 @@ export class PrcGateway implements OnGatewayDisconnect {
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
 
-    console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
+    console.log(`Message from ${user.id}(${client.id}) to ${to}: ${msg}`);
     let recipient: User | Channel;
     if (to[0] == '#' || to[0] == '&')
       recipient = await this.channelService.findOne(to);
@@ -183,7 +147,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @MessageBody('channel') channelInput: CreateChannelInput,
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
-    console.log(`Join attempt from ${user.username} for ${channelInput.name}`); //DEBUG
+    console.log(`Join attempt from ${user.id} for ${channelInput.name}`); //DEBUG
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
@@ -197,6 +161,6 @@ export class PrcGateway implements OnGatewayDisconnect {
     this.channelService
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
-    console.log(`Join success from ${user.username} for ${channelInput.name}`); // DEBUG
+    console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
   }
 }

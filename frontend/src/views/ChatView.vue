@@ -83,6 +83,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   socket.off('onFriend');
+  socket.off('onBlock');
 });
 
 const UpdateChannels = (input: string) => {

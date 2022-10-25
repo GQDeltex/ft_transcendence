@@ -14,6 +14,7 @@ import { Response } from 'express';
 import { JwtAuthGuard } from '../guard/jwt.guard';
 import { TwoFAGuard } from '../guard/twoFA.guard';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from '../strategy/jwt.strategy';
 
 @Controller('2fa')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -64,11 +65,10 @@ export class TwoFAController {
     try {
       return await this.twoFAService.verify2FA(req.user.id, code).then(() => {
         const jwt_token = this.jwtService.sign({
-          username: req.user.username,
           id: req.user.id,
           email: req.user.email,
           isAuthenticated: true,
-        });
+        } as JwtPayload);
 
         res.cookie('jwt', jwt_token, { httpOnly: true });
         return { isAuthenticated: true };

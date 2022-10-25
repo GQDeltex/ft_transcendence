@@ -5,7 +5,6 @@ import { Strategy } from 'passport-jwt';
 import { Request } from 'express';
 
 export interface JwtPayload {
-  username: string;
   id: number;
   email: string;
   isAuthenticated: boolean;

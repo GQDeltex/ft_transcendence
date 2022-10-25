@@ -13,6 +13,7 @@ import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { EntityNotFoundError } from 'typeorm';
 import { CreateUserInput } from '../../users/dto/create-user.input';
+import { JwtPayload } from '../strategy/jwt.strategy';
 
 @Controller('42intra')
 export class Intra42Controller {
@@ -45,11 +46,10 @@ export class Intra42Controller {
     }
 
     const jwt_token = this.jwtService.sign({
-      username: user.username,
       id: user.id,
       email: user.email,
       isAuthenticated: !user.twoFAEnable,
-    });
+    } as JwtPayload);
 
     res.cookie('jwt', jwt_token, { httpOnly: true });
     return { isAuthenticated: !user.twoFAEnable };
