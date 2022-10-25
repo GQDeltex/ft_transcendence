@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { CreateUserInput } from '../../users/dto/create-user.input';
@@ -30,6 +30,7 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
       username: profile.username,
       firstname: profile.name.givenName,
       lastname: profile.name.familyName,
+      intra: profile.username,
       email: profile.emails[0].value,
       picture: profile._json.image_url,
       campus: profile._json.campus[0].name,

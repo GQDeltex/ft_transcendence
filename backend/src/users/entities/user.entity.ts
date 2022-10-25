@@ -27,6 +27,10 @@ export class User {
   lastname: string;
 
   @Field()
+  @Column()
+  intra: string;
+
+  @Field()
   @Column({ unique: true })
   @Index()
   username: string;

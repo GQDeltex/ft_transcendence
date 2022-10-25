@@ -127,7 +127,12 @@ class UserService {
         query {
           user {
             id
+            firstname
+            lastname
+            intra
             username
+            campus
+            country
             title
             picture
             twoFAEnable

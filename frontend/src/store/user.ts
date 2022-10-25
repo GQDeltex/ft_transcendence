@@ -5,7 +5,12 @@ import { useErrorStore } from './error';
 export type User = {
   isLogged?: boolean;
   id: number;
+  firstname: string;
+  lastname: string;
+  intra: string;
   username: string;
+  campus: string;
+  country: string;
   title: string[];
   picture: string;
   twoFAEnable?: boolean;
@@ -35,6 +40,11 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
     id: -1,
+    firstname: '',
+    lastname: '',
+    intra: '',
+    campus: '',
+    country: '',
     username: '',
     title: [''],
     picture: '',
@@ -71,7 +81,12 @@ export const useUserStore = defineStore('user', {
       const user = await UserService.findSelf();
       this.isLoggedIn = true;
       this.id = user.id;
+      this.firstname = user.firstname.split(' ')[0];
+      this.lastname = user.lastname;
+      this.intra = user.intra;
       this.username = user.username;
+      this.campus = user.campus;
+      this.country = user.country;
       this.title = user.title;
       this.picture = user.picture;
       this.twoFAEnable = user.twoFAEnable ?? false;

@@ -14,6 +14,9 @@ export class CreateUserInput {
   lastname: string;
 
   @Field()
+  intra: string;
+
+  @Field()
   @IsNotEmpty()
   username: string;
 
