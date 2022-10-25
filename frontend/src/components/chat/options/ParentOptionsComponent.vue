@@ -89,6 +89,9 @@ const onClose = () => {
           <button class="button" @click="banUser">Ban User</button>
           <ModalBanUserComponent v-show="banModalActive" @close="onClose" />
         </span>
+        <span>
+          <button class="button" onclick="window.open('https://www.youtube.com/watch?v=PTvTLvkiAbI&ab_channel=ExtensiveMusicOld','_blank')"> Touch enneh's tralala</button>
+        </span>
       </div>
     </div>
   </div>
