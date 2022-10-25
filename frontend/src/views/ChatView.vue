@@ -4,6 +4,7 @@ import ParentPeoplesComponent from '../components/chat/peoples/ParentPeoplesComp
 import ParentChannelsComponent from '../components/chat/channels/ParentChannelsComponent.vue';
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
+import ChannelService from '../service/ChannelService';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
@@ -18,7 +19,9 @@ import type { User } from '@/store/user';
 const errorStore = useErrorStore();
 const userStore = useUserStore();
 const chatName = ref('gucalvi');
+
 const users = ref<User[]>([]);
+const channels = ref([]);
 
 socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
@@ -72,6 +75,7 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
 onMounted(async () => {
   try {
     users.value = await UserService.findAll();
+    channels.value = await ChannelService.findAll();
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -79,14 +83,24 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   socket.off('onFriend');
+  socket.off('onBlock');
 });
+
+const UpdateChannels = (input: string) => {
+  chatName.value = input;
+};
 </script>
 
 <template>
   <div class="chatViewParent">
     <div class="leftSide">
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
-      <ParentChannelsComponent class="channelsComp" />
+      <ParentChannelsComponent
+        :channels="channels"
+        :user-id="userStore.id"
+        class="channelsComp"
+        @update="UpdateChannels"
+      />
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />

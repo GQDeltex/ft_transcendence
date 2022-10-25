@@ -81,6 +81,7 @@ export class User {
 
   @ManyToMany(() => User, (user) => user.following, {
     cascade: true,
+    onDelete: 'CASCADE',
     nullable: true,
   })
   followers?: User[];
@@ -99,6 +100,7 @@ export class User {
 
   @ManyToMany(() => User, (user) => user.blocking, {
     cascade: true,
+    onDelete: 'CASCADE',
     nullable: true,
   })
   blockedBy?: User[];
@@ -113,6 +115,10 @@ export class User {
     eager: true,
   })
   channelList?: ChannelUser[];
+
+  @Field(() => [Int])
+  @Column({ type: 'integer', array: true, default: [] })
+  inventory: number[];
 
   public isInChannel(channelName: string): boolean {
     const result = this.channelList?.some(

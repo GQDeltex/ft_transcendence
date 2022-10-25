@@ -2,18 +2,16 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '@/service/socket';
-const emits = defineEmits(['close']);
+const emits = defineEmits(['close', 'update']);
 
 let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
 function closeOk() {
-  console.log(
-    'channelName= ' + channelName.value + ' password= ' + password.value,
-  );
   socket.emit('join', {
     channel: { name: channelName.value, password: password.value },
   });
+  emits('update', channelName.value);
   channelName.value = '';
   password.value = '';
   emits('close');
@@ -48,7 +46,7 @@ function closeCancel() {
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 999; /* Sit on top */
+  z-index: 800; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
