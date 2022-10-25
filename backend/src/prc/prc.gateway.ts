@@ -102,7 +102,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @CurrentUserFromWs() jwtToken: JwtPayload,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Client connected', client.id, jwtToken.username);
+    console.log('Client connected', client.id, jwtToken.id);
     await this.usersService.updateSocketId(jwtToken.id, client.id);
     await this.usersService.updateStatus(jwtToken.id, 'online');
     const user: User = await this.usersService.findOne(jwtToken.id);
@@ -121,7 +121,7 @@ export class PrcGateway implements OnGatewayDisconnect {
 
   /**
     It sends message to a channel or user.
-  
+
   Args:
     user: The user who sent the message.
     to: The recipient of the message.
@@ -139,7 +139,7 @@ export class PrcGateway implements OnGatewayDisconnect {
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
 
-    console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
+    console.log(`Message from ${user.id}(${client.id}) to ${to}: ${msg}`);
     let recipient: User | Channel;
     if (to[0] == '#' || to[0] == '&')
       recipient = await this.channelService.findOne(to);
@@ -183,7 +183,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @MessageBody('channel') channelInput: CreateChannelInput,
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
-    console.log(`Join attempt from ${user.username} for ${channelInput.name}`); //DEBUG
+    console.log(`Join attempt from ${user.id} for ${channelInput.name}`); //DEBUG
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
@@ -197,6 +197,6 @@ export class PrcGateway implements OnGatewayDisconnect {
     this.channelService
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
-    console.log(`Join success from ${user.username} for ${channelInput.name}`); // DEBUG
+    console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
   }
 }

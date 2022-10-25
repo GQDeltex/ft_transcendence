@@ -67,9 +67,7 @@ describe('UsersResolver', () => {
   it('should find self by id in jwt token', async () => {
     await expect(
       resolver.findOneById(undefined, {
-        username: 'test',
         id: mockRepoUser.getTestEntity().id,
-        email: 'test@example.com',
         isAuthenticated: true,
       }),
     ).resolves.toEqual(mockRepoUser.getTestEntity());
@@ -78,9 +76,7 @@ describe('UsersResolver', () => {
   it('should find user by id', async () => {
     await expect(
       resolver.findOneById(84364, {
-        username: 'test',
         id: 12345,
-        email: 'test@example.com',
         isAuthenticated: true,
       }),
     ).resolves.toEqual(mockRepoUser.getTestEntity());
@@ -89,9 +85,7 @@ describe('UsersResolver', () => {
   it('should not find non-existing user by id', async () => {
     await expect(
       resolver.findOneById(76439, {
-        username: 'test',
         id: 12345,
-        email: 'test@example.com',
         isAuthenticated: true,
       }),
     ).rejects.toThrow(EntityNotFoundError);
