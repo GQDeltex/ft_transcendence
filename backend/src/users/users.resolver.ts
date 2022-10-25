@@ -18,6 +18,7 @@ import { CurrentJwtPayload } from './decorator/current-jwt-payload.decorator';
 import { JwtPayload } from '../auth/strategy/jwt.strategy';
 import { AllExceptionFilter } from '../tools/ExceptionFilter';
 import { UpdateUserBlockingInput } from './dto/update-blocking.input';
+import itemList, { Item } from './entities/item.entity';
 
 @UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
@@ -82,6 +83,19 @@ export class UsersResolver {
   ): Promise<User> {
     await this.usersService.updateBlocking(user.id, args.method, args.userId);
     return this.usersService.findOne(user.id);
+  }
+
+  @Query(() => [Item])
+  getItems(): Item[] {
+    return itemList;
+  }
+
+  @Mutation(() => User)
+  async updateInventory(
+    @CurrentJwtPayload() user: JwtPayload,
+    @Args('orderId', { type: () => String }) orderId: string,
+  ): Promise<User> {
+    return this.usersService.updateInventory(user.id, orderId);
   }
 
   @ResolveField(() => [Int], { nullable: 'items' })
