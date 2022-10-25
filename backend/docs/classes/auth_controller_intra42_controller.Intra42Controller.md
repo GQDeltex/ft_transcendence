@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L19)
+[src/auth/controller/intra42.controller.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L20)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L20)
+[src/auth/controller/intra42.controller.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L21)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L21)
+[src/auth/controller/intra42.controller.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L22)
 
 ## Methods
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L30)
+[src/auth/controller/intra42.controller.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L31)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L24)
+[src/auth/controller/intra42.controller.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L25)
 
 ___
 

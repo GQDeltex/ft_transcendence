@@ -9,6 +9,7 @@ import { Channel } from '../prc/channel/entities/channel.entity';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { HttpModule } from '@nestjs/axios';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -25,6 +26,7 @@ describe('UsersController', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         UsersService,
         ConfigService,

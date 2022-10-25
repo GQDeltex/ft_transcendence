@@ -58,7 +58,7 @@ export class ChannelUserResolver {
     //console.log('both users are good'); //DEBUG
     if (!channelUserAdmin.admin)
       throw new WsException(
-        JwtUser.username + ' is not a Channel Admin on ' + channel_name,
+        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
       );
     if (channelUserNew.admin)
       throw new WsException(
@@ -88,7 +88,7 @@ export class ChannelUserResolver {
     //console.log('both users are good'); //DEBUG
     if (!channelBanUser.admin)
       throw new WsException(
-        JwtUser.username + ' is not a Channel Admin on ' + channel_name,
+        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
       );
     if (channelUserNew.admin)
       throw new WsException(banUser + ' is already banned on ' + channel_name);
