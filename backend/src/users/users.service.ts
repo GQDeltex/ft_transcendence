@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
-import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
+import { EntityNotFoundError, Repository, UpdateResult, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
 import { UserInputError } from 'apollo-server-express';
@@ -23,17 +23,26 @@ export class UsersService {
       await this.userRepository.insert(createUserInput);
     } catch (error) {
       if (!(error instanceof QueryFailedError)) return Promise.reject(error);
-      const existingUser: User | null = await this.userRepository.findOne({
-        where: { username: createUserInput.username },
+      const existingUsers: User[] = await this.userRepository.find({
+        // This Like might me susceptible to SQL Injection attacts.
+        // https://github.com/typeorm/typeorm/issues/7784 says it should be fine.
+        // And the data is coming from Intra... So... It should be fine... I guess?
+        where: { username: Like(`${createUserInput.username}%`) },
       });
-      if (existingUser == null) return Promise.reject(error);
-      if (existingUser.id == createUserInput.id) return Promise.reject(error);
-      const rx = /^(.*)([0-9]*)$/;
-      const rxParts = rx.exec(existingUser.username);
-      if (rxParts == null)
-        return Promise.reject(new Error('Addition of number failed'));
-      if (rxParts[2] == '') createUserInput.username += '1';
-      else createUserInput.username = rxParts[1] + (Number(rxParts[2]) + 1);
+      if (existingUsers.length == 0) return Promise.reject(error);
+      let highestNumber = 0;
+      for (const existingUser of existingUsers) {
+        if (existingUser.id == createUserInput.id) return Promise.reject(error);
+        const rx = /^(\D*)([0-9]*)$/;
+        const rxParts = rx.exec(existingUser.username);
+        if (rxParts == null) continue;
+        if (rxParts[2] == '') continue;
+        if (Number(rxParts[2]) > highestNumber) {
+          createUserInput.username = rxParts[1] + (Number(rxParts[2]) + 1);
+          highestNumber = Number(rxParts[2]);
+        }
+      }
+      if (highestNumber == 0) createUserInput.username += '1';
       await this.userRepository.insert(createUserInput);
     }
     return Promise.resolve();

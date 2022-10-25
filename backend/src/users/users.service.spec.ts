@@ -105,12 +105,21 @@ describe('UsersService', () => {
 
   it('should create a user with number if username exists', async () => {
     const newerUser: User = mockRepoUser.getTestEntity({
-      username: mockRepoUser.getTestEntity().username,
+      username: 'othertestuser',
       id: 85432,
     });
     await expect(service.create(newerUser)).resolves.not.toThrow();
-    // Somehow here the original newerUser get modified. I really don't know why
-    // I hate the fact that JS never does deep copies. It's annoying...
+    newerUser.username = 'othertestuser';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+    newerUser.id = 94623;
+    newerUser.username = 'othertestuser';
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser1';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+    newerUser.id = 74362;
+    newerUser.username = 'othertestuser';
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser2';
     await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
   });
 
