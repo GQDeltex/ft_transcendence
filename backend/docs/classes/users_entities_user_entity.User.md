@@ -26,6 +26,7 @@
 - [following](users_entities_user_entity.User.md#following)
 - [following\_id](users_entities_user_entity.User.md#following_id)
 - [id](users_entities_user_entity.User.md#id)
+- [inventory](users_entities_user_entity.User.md#inventory)
 - [lastname](users_entities_user_entity.User.md#lastname)
 - [picture](users_entities_user_entity.User.md#picture)
 - [socketId](users_entities_user_entity.User.md#socketid)
@@ -193,6 +194,16 @@ ___
 
 ___
 
+### inventory
+
+• **inventory**: `number`[]
+
+#### Defined in
+
+[src/users/entities/user.entity.ts:115](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L115)
+
+___
+
 ### lastname
 
 • **lastname**: `string`
@@ -283,7 +294,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:120](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L120)
+[src/users/entities/user.entity.ts:124](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L124)
 
 ___
 
@@ -297,7 +308,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:136](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L136)
+[src/users/entities/user.entity.ts:140](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L140)
 
 ___
 
@@ -311,7 +322,7 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:128](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L128)
+[src/users/entities/user.entity.ts:132](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L132)
 
 ## Methods
 
@@ -331,4 +342,4 @@ ___
 
 #### Defined in
 
-[src/users/entities/user.entity.ts:113](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L113)
+[src/users/entities/user.entity.ts:117](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.ts#L117)

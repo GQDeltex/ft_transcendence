@@ -12,11 +12,14 @@
 
 ### Properties
 
+- [configService](users_users_service.UsersService.md#configservice)
+- [httpService](users_users_service.UsersService.md#httpservice)
 - [prcGateway](users_users_service.UsersService.md#prcgateway)
 - [userRepository](users_users_service.UsersService.md#userrepository)
 
 ### Methods
 
+- [checkValidOrderId](users_users_service.UsersService.md#checkvalidorderid)
 - [create](users_users_service.UsersService.md#create)
 - [findAll](users_users_service.UsersService.md#findall)
 - [findChannelUser](users_users_service.UsersService.md#findchanneluser)
@@ -26,6 +29,7 @@
 - [update2FASecret](users_users_service.UsersService.md#update2fasecret)
 - [updateBlocking](users_users_service.UsersService.md#updateblocking)
 - [updateFriendship](users_users_service.UsersService.md#updatefriendship)
+- [updateInventory](users_users_service.UsersService.md#updateinventory)
 - [updatePicture](users_users_service.UsersService.md#updatepicture)
 - [updateSocketId](users_users_service.UsersService.md#updatesocketid)
 - [updateStatus](users_users_service.UsersService.md#updatestatus)
@@ -35,7 +39,7 @@
 
 ### constructor
 
-• **new UsersService**(`userRepository`, `prcGateway`)
+• **new UsersService**(`userRepository`, `prcGateway`, `configService`, `httpService`)
 
 #### Parameters
 
@@ -43,12 +47,34 @@
 | :------ | :------ |
 | `userRepository` | `Repository`<[`User`](users_entities_user_entity.User.md)\> |
 | `prcGateway` | [`PrcGateway`](prc_prc_gateway.PrcGateway.md) |
+| `configService` | `ConfigService`<`Record`<`string`, `unknown`\>, ``false``\> |
+| `httpService` | `HttpService` |
 
 #### Defined in
 
-[src/users/users.service.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L15)
+[src/users/users.service.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L24)
 
 ## Properties
+
+### configService
+
+• `Private` `Readonly` **configService**: `ConfigService`<`Record`<`string`, `unknown`\>, ``false``\>
+
+#### Defined in
+
+[src/users/users.service.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L28)
+
+___
+
+### httpService
+
+• `Private` `Readonly` **httpService**: `HttpService`
+
+#### Defined in
+
+[src/users/users.service.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L29)
+
+___
 
 ### prcGateway
 
@@ -56,7 +82,7 @@
 
 #### Defined in
 
-[src/users/users.service.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L18)
+[src/users/users.service.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L27)
 
 ___
 
@@ -66,9 +92,30 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L16)
+[src/users/users.service.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L25)
 
 ## Methods
+
+### checkValidOrderId
+
+▸ `Private` **checkValidOrderId**(`id`, `orderId`): `Promise`<`number`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `orderId` | `string` |
+
+#### Returns
+
+`Promise`<`number`\>
+
+#### Defined in
+
+[src/users/users.service.ts:291](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L291)
+
+___
 
 ### create
 
@@ -86,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L21)
+[src/users/users.service.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L32)
 
 ___
 
@@ -100,7 +147,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L69)
+[src/users/users.service.ts:80](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L80)
 
 ___
 
@@ -121,7 +168,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L40)
+[src/users/users.service.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L51)
 
 ___
 
@@ -141,7 +188,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:73](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L73)
+[src/users/users.service.ts:84](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L84)
 
 ___
 
@@ -161,7 +208,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L25)
+[src/users/users.service.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L36)
 
 ___
 
@@ -182,7 +229,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:61](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L61)
+[src/users/users.service.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L72)
 
 ___
 
@@ -203,7 +250,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L53)
+[src/users/users.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L64)
 
 ___
 
@@ -225,7 +272,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:224](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L224)
+[src/users/users.service.ts:235](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L235)
 
 ___
 
@@ -247,7 +294,28 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:130](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L130)
+[src/users/users.service.ts:141](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L141)
+
+___
+
+### updateInventory
+
+▸ **updateInventory**(`id`, `orderId`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `orderId` | `string` |
+
+#### Returns
+
+`Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Defined in
+
+[src/users/users.service.ts:330](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L330)
 
 ___
 
@@ -268,7 +336,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L82)
+[src/users/users.service.ts:93](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L93)
 
 ___
 
@@ -289,7 +357,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:98](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L98)
+[src/users/users.service.ts:109](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L109)
 
 ___
 
@@ -310,7 +378,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:113](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L113)
+[src/users/users.service.ts:124](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L124)
 
 ___
 
@@ -331,4 +399,4 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:90](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L90)
+[src/users/users.service.ts:101](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L101)
