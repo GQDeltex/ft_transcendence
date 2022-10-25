@@ -136,7 +136,9 @@ class UserService {
             picture
             campus
             country
+            coalition
             status
+            lastLoggedIn
             twoFAEnable
             friends
             sentFriendRequests
@@ -168,7 +170,9 @@ class UserService {
             picture
             campus
             country
+            coalition
             status
+            lastLoggedIn
           }
         }
       `,
@@ -192,7 +196,9 @@ class UserService {
             picture
             campus
             country
+            coalition
             status
+            lastLoggedIn
           }
         }
       `,

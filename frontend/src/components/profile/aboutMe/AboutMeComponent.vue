@@ -27,9 +27,16 @@ const capitalize = (str: string) => {
       <br />
       Intra login: <span class="info">{{ user.intra }}</span>
       <br />
-      Coalition: <span class="info">Castra</span>
+      Coalition: <span class="info">{{ user.coalition }}</span>
       <br />
-      Last Login: <span class="info">14.10.2022</span>
+      Last Login:
+      <span class="info">
+        {{
+          new Date(user.lastLoggedIn).toLocaleTimeString() +
+          ' ' +
+          new Date(user.lastLoggedIn).toLocaleDateString()
+        }}
+      </span>
       <br />
       Campus: <span class="info">{{ user.campus }}, {{ user.country }}</span>
     </div>

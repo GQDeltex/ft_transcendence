@@ -14,12 +14,15 @@ import { UsersService } from '../../users/users.service';
 import { EntityNotFoundError } from 'typeorm';
 import { CreateUserInput } from '../../users/dto/create-user.input';
 import { JwtPayload } from '../strategy/jwt.strategy';
+import { HttpService } from '@nestjs/axios';
+import { catchError, lastValueFrom } from 'rxjs';
 
 @Controller('42intra')
 export class Intra42Controller {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly httpService: HttpService,
   ) {}
 
   @Get('login')
@@ -39,6 +42,10 @@ export class Intra42Controller {
       user = await this.usersService.findOne(+user.id);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
+        user.coalition = await this.fetchCoalition(
+          +user.id,
+          req.user.accessToken,
+        );
         await this.usersService.create(user);
       } else {
         throw error;
@@ -58,5 +65,33 @@ export class Intra42Controller {
   @Get('logout')
   logout(@Res({ passthrough: true }) res: Response): void {
     res.clearCookie('jwt', { httpOnly: true });
+  }
+
+  private async fetchCoalition(
+    userId: number,
+    accessToken: string,
+  ): Promise<string> {
+    const { data } = await lastValueFrom(
+      this.httpService
+        .get(`https://api.intra.42.fr/v2/users/${userId}/coalitions`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .pipe(
+          catchError((error) => {
+            if (typeof error.response === 'undefined')
+              throw new BadRequestException(error.response?.data);
+            else throw new BadRequestException(error.message);
+          }),
+        ),
+    );
+    if (data.length < 1 || typeof data[0].image_url === 'undefined')
+      return 'Fluvius';
+    const coalition = data[0].image_url
+      .replace(/^.*[\\\/]/, '')
+      .replace(/\.[^/.]+$/, '');
+    if (coalition.length === 0) return 'Fluvius';
+    return coalition;
   }
 }

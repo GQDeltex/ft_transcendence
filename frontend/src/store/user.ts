@@ -13,7 +13,9 @@ export type User = {
   picture: string;
   campus: string;
   country: string;
+  coalition: string;
   status?: string;
+  lastLoggedIn?: number;
   twoFAEnable?: boolean;
   require2FAVerify?: boolean;
   friends?: number[];
@@ -57,7 +59,9 @@ export const useUserStore = defineStore('user', {
     picture: '',
     campus: '',
     country: '',
+    coalition: '',
     status: '',
+    lastLoggedIn: 0,
     twoFAEnable: false,
     require2FAVerify: false,
     friends: [] as number[],
@@ -100,7 +104,9 @@ export const useUserStore = defineStore('user', {
       this.picture = user.picture;
       this.campus = user.campus;
       this.country = user.country;
+      this.coalition = user.coalition;
       this.status = user.status ?? '';
+      this.lastLoggedIn = user.lastLoggedIn ?? 0;
       this.twoFAEnable = user.twoFAEnable ?? false;
       this.friends = user.friends ?? [];
       this.sentFriendRequests = user.sentFriendRequests ?? [];

@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLTimestamp, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -20,6 +20,14 @@ export class User {
 
   @Field()
   @Column()
+  email: string;
+
+  @Field()
+  @Column()
+  intra: string;
+
+  @Field()
+  @Column()
   firstname: string;
 
   @Field()
@@ -27,21 +35,21 @@ export class User {
   lastname: string;
 
   @Field()
-  @Column()
-  intra: string;
-
-  @Field()
   @Column({ unique: true })
   @Index()
   username: string;
 
-  @Field()
-  @Column()
-  email: string;
+  @Field(() => [String])
+  @Column({ type: String, array: true, nullable: true })
+  title: string[];
 
   @Field()
   @Column()
   picture: string;
+
+  @Field()
+  @Column({ default: 'Fluvius' })
+  coalition: string;
 
   @Field()
   @Column()
@@ -51,9 +59,17 @@ export class User {
   @Column()
   country: string;
 
-  @Field(() => [String])
-  @Column({ type: String, array: true, nullable: true })
-  title: string[];
+  @Field(() => [Int])
+  @Column({ type: 'integer', array: true, default: [] })
+  inventory: number[];
+
+  @Field()
+  @Column({ default: 'offline' })
+  status: string;
+
+  @Field(() => GraphQLTimestamp)
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  lastLoggedIn: Date;
 
   @Column({ type: String, nullable: true })
   twoFASecret!: string | null;
@@ -61,14 +77,6 @@ export class User {
   @Field(() => Boolean)
   @Column({ default: false })
   twoFAEnable: boolean;
-
-  @Column({ default: '' })
-  @Index()
-  socketId: string;
-
-  @Field()
-  @Column({ default: 'offline' })
-  status: string;
 
   @ManyToMany(() => User, (user) => user.followers, {
     nullable: true,
@@ -116,9 +124,9 @@ export class User {
   })
   channelList?: ChannelUser[];
 
-  @Field(() => [Int])
-  @Column({ type: 'integer', array: true, default: [] })
-  inventory: number[];
+  @Column({ default: '' })
+  @Index()
+  socketId: string;
 
   public isInChannel(channelName: string): boolean {
     const result = this.channelList?.some(
