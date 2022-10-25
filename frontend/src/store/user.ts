@@ -21,6 +21,15 @@ export type User = {
   receivedFriendRequests?: number[];
   blocks?: number[];
   blockedBy?: number[];
+  inventory?: number[];
+};
+
+export type Item = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  picture: string;
 };
 
 export enum AllowedUpdateFriendshipMethod {
@@ -55,6 +64,7 @@ export const useUserStore = defineStore('user', {
     receivedFriendRequests: [] as number[],
     blocks: [] as number[],
     blockedBy: [] as number[],
+    inventory: [] as number[],
   }),
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
@@ -95,6 +105,7 @@ export const useUserStore = defineStore('user', {
       this.receivedFriendRequests = user.receivedFriendRequests ?? [];
       this.blocks = user.blocks ?? [];
       this.blockedBy = user.blockedBy ?? [];
+      this.inventory = user.inventory ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -171,6 +182,14 @@ export const useUserStore = defineStore('user', {
         this.receivedFriendRequests = user.receivedFriendRequests ?? [];
         this.blocks = user.blocks ?? [];
         this.blockedBy = user.blockedBy ?? [];
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async updateInventory(orderId: string): Promise<void> {
+      try {
+        const user: Partial<User> = await UserService.updateInventory(orderId);
+        this.inventory = user.inventory ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }

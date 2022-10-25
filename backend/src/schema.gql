@@ -17,15 +17,15 @@ type ChannelUser {
   admin: Boolean!
   owner: Boolean!
   ban: Boolean!
-  unbanTime: DateTime!
+  unbanTime: Timestamp
   mute: Boolean!
-  unmuteTime: DateTime!
+  unmuteTime: Timestamp
 }
 
 """
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
-scalar DateTime
+scalar Timestamp
 
 type User {
   id: Int!
@@ -41,6 +41,7 @@ type User {
   twoFAEnable: Boolean!
   status: String!
   channelList: [ChannelUser!]
+  inventory: [Int!]!
   friends: [Int]!
   sentFriendRequests: [Int]!
   receivedFriendRequests: [Int]!
@@ -48,11 +49,20 @@ type User {
   blockedBy: [Int]!
 }
 
+type Item {
+  id: Int!
+  name: String!
+  description: String!
+  price: Float!
+  picture: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int): User!
   userByName(username: String!): User!
   userChannelList(username: String!): User!
+  getItems: [Item!]!
   channels: [Channel!]!
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
@@ -63,9 +73,11 @@ type Mutation {
   updateUsername(username: String!): User!
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
   updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
+  updateInventory(orderId: String!): User!
   joinChannel(name: String!, password: String!): Channel!
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
+  updateBan(channel_name: String!, banUser: Int!): ChannelUser!
 }
 
 enum AllowedUpdateFriendshipMethod {

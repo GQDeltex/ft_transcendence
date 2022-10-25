@@ -36,4 +36,16 @@ export class ChannelUserService {
       throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
     return await this.findOne(channelUser.id);
   }
+
+  async updateBan(channelUser: ChannelUser): Promise<ChannelUser> {
+    const newTime = new Date();
+    newTime.setMilliseconds(newTime.getMilliseconds() + 30000);
+    const result: UpdateResult = await this.channelUserRepository.update(
+      { id: channelUser.id },
+      { ban: true, unbanTime: newTime },
+    ); //Is it possible to search by the channelUser? if not, only send channelUser.id to this function to save mem
+    if (typeof result.affected != 'undefined' && result.affected != 1)
+      throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
+    return await this.findOne(channelUser.id);
+  }
 }
