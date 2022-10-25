@@ -84,7 +84,7 @@ export class ChannelUserResolver {
       channel_name,
     );
     if (typeof channelUserNew === 'undefined')
-      throw new WsException('channelBanUser undefined');
+      throw new WsException('channelBanUserNew undefined');
     //console.log('both users are good'); //DEBUG
     if (!channelBanUser.admin)
       throw new WsException(
