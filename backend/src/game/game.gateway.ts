@@ -12,10 +12,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { WsJwt2FAAuthGuard } from 'src/auth/guard/wsJwt.guard';
-import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
-import { CustomPrcExceptionFilter } from 'src/tools/ExceptionFilter';
-import { CurrentUserFromWs } from 'src/tools/UserFromWs';
+import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
+import { JwtPayload } from '../auth/strategy/jwt.strategy';
+import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
+import { CurrentUserFromWs } from '../tools/UserFromWs';
 
 @UsePipes(new ValidationPipe())
 @WebSocketGateway({
