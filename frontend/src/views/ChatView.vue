@@ -79,6 +79,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   socket.off('onFriend');
+  socket.off('onBlock');
 });
 </script>
 

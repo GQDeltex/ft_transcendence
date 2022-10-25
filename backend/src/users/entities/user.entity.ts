@@ -110,6 +110,10 @@ export class User {
   })
   channelList?: ChannelUser[];
 
+  @Field(() => [Int])
+  @Column({ type: 'integer', array: true, default: [] })
+  inventory: number[];
+
   public isInChannel(channelName: string): boolean {
     const result = this.channelList?.some(
       (channelUser) => channelUser.channel_name === channelName,
