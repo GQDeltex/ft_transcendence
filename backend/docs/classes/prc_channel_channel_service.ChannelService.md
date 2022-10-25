@@ -20,6 +20,7 @@
 
 - [create](prc_channel_channel_service.ChannelService.md#create)
 - [findAll](prc_channel_channel_service.ChannelService.md#findall)
+- [findJoined](prc_channel_channel_service.ChannelService.md#findjoined)
 - [findMessagesForRecipient](prc_channel_channel_service.ChannelService.md#findmessagesforrecipient)
 - [findOne](prc_channel_channel_service.ChannelService.md#findone)
 - [join](prc_channel_channel_service.ChannelService.md#join)
@@ -98,7 +99,7 @@ Returns:
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:58](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L58)
+[src/prc/channel/channel.service.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L72)
 
 ___
 
@@ -113,6 +114,26 @@ ___
 #### Defined in
 
 [src/prc/channel/channel.service.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L27)
+
+___
+
+### findJoined
+
+▸ **findJoined**(`identifier`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | `number` |
+
+#### Returns
+
+`Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)[]\>
+
+#### Defined in
+
+[src/prc/channel/channel.service.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L31)
 
 ___
 
@@ -132,7 +153,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L69)
+[src/prc/channel/channel.service.ts:83](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L83)
 
 ___
 
@@ -152,7 +173,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L37)
+[src/prc/channel/channel.service.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L51)
 
 ___
 
@@ -179,7 +200,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L82)
+[src/prc/channel/channel.service.ts:96](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L96)
 
 ___
 
@@ -199,13 +220,17 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L65)
+[src/prc/channel/channel.service.ts:79](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L79)
 
 ___
 
 ### updatePassword
 
 ▸ **updatePassword**(`channelName`, `newPassword`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+1. First, we’re using the `update` method to update the password of the channel.
+2. Then, we’re using the `findOne` method to get the updated channel.
+3. Finally, we’re returning the updated channel.
 
 #### Parameters
 
@@ -220,4 +245,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:109](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L109)
+[src/prc/channel/channel.service.ts:128](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L128)

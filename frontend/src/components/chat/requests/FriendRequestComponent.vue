@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { AllowedUpdateFriendshipMethod } from '@/store/user';
-import { useUserStore } from '@/store/user';
+import type { User } from '@/store/user';
+import { useUserStore, AllowedUpdateFriendshipMethod } from '@/store/user';
 
 const props = defineProps<{
-  client: {
-    id: number;
-    title: [string];
-    username: string;
-    picture: string;
-    status: string;
-  };
+  client: User;
 }>();
 
 const userStore = useUserStore();

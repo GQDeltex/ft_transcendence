@@ -17,6 +17,7 @@ import { UpdateUserFriendshipInput } from './dto/update-friendship.input';
 import { CurrentJwtPayload } from './decorator/current-jwt-payload.decorator';
 import { JwtPayload } from '../auth/strategy/jwt.strategy';
 import { AllExceptionFilter } from '../tools/ExceptionFilter';
+import { UpdateUserBlockingInput } from './dto/update-blocking.input';
 
 @UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
@@ -74,41 +75,37 @@ export class UsersResolver {
     return this.usersService.findOne(user.id);
   }
 
-  @ResolveField(() => [User])
-  async friends(@Parent() user: User): Promise<User[]> {
-    if (
-      typeof user.following === 'undefined' ||
-      typeof user.followers === 'undefined'
-    )
-      return [];
-    return user.followers.filter((follower) =>
-      user.following.some((following) => following.id === follower.id),
-    );
+  @Mutation(() => User)
+  async updateBlocking(
+    @CurrentJwtPayload() user: JwtPayload,
+    @Args() args: UpdateUserBlockingInput,
+  ): Promise<User> {
+    await this.usersService.updateBlocking(user.id, args.method, args.userId);
+    return this.usersService.findOne(user.id);
   }
 
-  @ResolveField(() => [User])
-  async sentFriendRequests(@Parent() user: User): Promise<User[]> {
-    if (
-      typeof user.following === 'undefined' ||
-      typeof user.followers === 'undefined'
-    )
-      return [];
-    return user.following.filter(
-      (following) =>
-        !user.followers.some((follower) => follower.id === following.id),
-    );
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async friends(@Parent() user: User): Promise<number[]> {
+    return user.friends;
   }
 
-  @ResolveField(() => [User])
-  async receivedFriendRequests(@Parent() user: User): Promise<User[]> {
-    if (
-      typeof user.following === 'undefined' ||
-      typeof user.followers === 'undefined'
-    )
-      return [];
-    return user.followers.filter(
-      (follower) =>
-        !user.following.some((following) => following.id === follower.id),
-    );
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async sentFriendRequests(@Parent() user: User): Promise<number[]> {
+    return user.sentFriendRequests;
+  }
+
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async receivedFriendRequests(@Parent() user: User): Promise<number[]> {
+    return user.receivedFriendRequests;
+  }
+
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async blocks(@Parent() user: User): Promise<number[]> {
+    return user.blocking_id ?? [];
+  }
+
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async blockedBy(@Parent() user: User): Promise<number[]> {
+    return user.blockedBy_id ?? [];
   }
 }

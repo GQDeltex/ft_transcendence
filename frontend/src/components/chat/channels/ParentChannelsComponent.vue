@@ -2,15 +2,30 @@
 import ChildChannelComponent from './ChildChannelComponent.vue';
 import ModalChannelComponent from './ModalChannelComponent.vue';
 import { ref } from 'vue';
+const emits = defineEmits(['update']);
 
+defineProps<{
+  channels: {
+    id: number;
+    name: string;
+    private: boolean;
+  }[];
+}>();
 const modalActive = ref(false);
+const selectedChannel = ref('');
 
 const joinNewChannel = () => {
   modalActive.value = true;
 };
 
-const onClose = () => {
+const onClose = (input: string) => {
   modalActive.value = false;
+  emits('update', input);
+};
+
+const channelSelect = (input: string) => {
+  selectedChannel.value = input;
+  emits('update', input);
 };
 </script>
 
@@ -21,50 +36,18 @@ const onClose = () => {
       <button class="button" @click="joinNewChannel">
         Join / Create Channel
       </button>
-      <ModalChannelComponent v-show="modalActive" @close="onClose" />
+      <ModalChannelComponent v-show="modalActive" @update="onClose" />
     </span>
     <div class="list">
       <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="devOps"
+        v-for="channel in channels"
+        :key="channel.id"
+        :channel-id="channel.id"
+        :channel-name="channel.name"
         picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="chitChat"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="42Wolfsburg"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="examPrep"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="ThisAndThat"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="SecretChannel"
-        picture="@/assets/pongking_boi.svg"
-      />
-      <ChildChannelComponent
-        key="4242"
-        :client-id="4242"
-        channel-name="StaffOnly!"
-        picture="@/assets/pongking_boi.svg"
+        class="clickable"
+        :selected-channel="selectedChannel"
+        @click="channelSelect(channel.name)"
       />
     </div>
   </div>
@@ -88,6 +71,10 @@ const onClose = () => {
 .list {
   overflow-y: scroll;
   padding-left: 5%;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 button {

@@ -33,6 +33,9 @@ import { join } from 'path';
         origin: `http://${process.env.DOMAIN}`,
         credentials: true,
       },
+      buildSchemaOptions: {
+        dateScalarMode: 'timestamp',
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

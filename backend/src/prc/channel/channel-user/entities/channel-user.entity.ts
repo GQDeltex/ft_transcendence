@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { GraphQLTimestamp, ObjectType, Field, Int } from '@nestjs/graphql';
 import { Channel } from '../../entities/channel.entity';
 import { User } from '../../../../users/entities/user.entity';
 import {
@@ -44,15 +44,15 @@ export class ChannelUser {
   @Field()
   ban: boolean;
 
-  @Column({ nullable: true })
-  @Field()
-  unbanTime: Date;
+  @Column({ type: 'timestamptz', nullable: true })
+  @Field(() => GraphQLTimestamp, { nullable: true })
+  unbanTime: Date | null;
 
   @Column({ default: false })
   @Field()
   mute: boolean;
 
-  @Column({ nullable: true })
-  @Field()
-  unmuteTime: Date;
+  @Column({ type: 'timestamptz', nullable: true })
+  @Field(() => GraphQLTimestamp, { nullable: true })
+  unmuteTime: Date | null;
 }

@@ -9,6 +9,7 @@ import { Channel } from '../prc/channel/entities/channel.entity';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -247,5 +248,52 @@ describe('UsersService', () => {
     await expect(service.updateStatus('98zh3f09', 'online')).rejects.toThrow(
       EntityNotFoundError,
     );
+  });
+
+  it('should block user', async () => {
+    const user: User = mockRepoUser.getTestEntity({ blocking_id: [696969] });
+    const newUser = createMockUser({
+      id: 696969,
+      username: 'test696969',
+    });
+    await expect(service.create(newUser)).resolves.not.toThrow();
+    await expect(
+      service.updateBlocking(
+        user.id,
+        AllowedUpdateBlockingMethod.BLOCK,
+        newUser.id,
+      ),
+    ).resolves.not.toThrow();
+    user.blocking_id = [newUser.id];
+    newUser.blockedBy_id = [user.id];
+    await expect(service.findOne(user.id)).resolves.toEqual(user);
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should unblock user', async () => {
+    const user: User = mockRepoUser.getTestEntity();
+    const newUser = createMockUser({
+      id: 696969,
+      username: 'test696969',
+    });
+    await expect(service.create(newUser)).resolves.not.toThrow();
+    await expect(
+      service.updateBlocking(
+        user.id,
+        AllowedUpdateBlockingMethod.BLOCK,
+        newUser.id,
+      ),
+    ).resolves.not.toThrow();
+    await expect(
+      service.updateBlocking(
+        user.id,
+        AllowedUpdateBlockingMethod.UNBLOCK,
+        newUser.id,
+      ),
+    ).resolves.not.toThrow();
+    user.blocking_id = [];
+    newUser.blockedBy_id = [];
+    await expect(service.findOne(user.id)).resolves.toEqual(user);
+    await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
   });
 });

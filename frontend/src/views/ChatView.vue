@@ -4,39 +4,102 @@ import ParentPeoplesComponent from '../components/chat/peoples/ParentPeoplesComp
 import ParentChannelsComponent from '../components/chat/channels/ParentChannelsComponent.vue';
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
+import ChannelService from '../service/ChannelService';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
-import { useUserStore } from '@/store/user';
+import {
+  AllowedUpdateBlockingMethod,
+  AllowedUpdateFriendshipMethod,
+  useUserStore,
+} from '@/store/user';
+import type { User } from '@/store/user';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
 const chatName = ref('gucalvi');
-const users = ref([]);
 
-socket.on('friendRequest', async () => {
-  await userStore.fetchFriendRequests();
+const users = ref<User[]>([]);
+const channels = ref([]);
+
+socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateFriendshipMethod.ADD:
+      userStore.receivedFriendRequests.push(id);
+      break;
+    case AllowedUpdateFriendshipMethod.REMOVE:
+      userStore.friends = userStore.friends.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.ACCEPT:
+      userStore.friends.push(id);
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.DECLINE:
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      break;
+    case AllowedUpdateFriendshipMethod.CANCEL:
+      userStore.receivedFriendRequests =
+        userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+  }
+});
+
+socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateBlockingMethod.BLOCK:
+      userStore.blockedBy.push(id);
+      userStore.friends = userStore.friends.filter(
+        (friendId) => friendId !== id,
+      );
+      userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
+        (friendId) => friendId !== id,
+      );
+      userStore.receivedFriendRequests =
+        userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      break;
+    case AllowedUpdateBlockingMethod.UNBLOCK:
+      userStore.blockedBy = userStore.blockedBy.filter(
+        (userId) => userId !== id,
+      );
+      break;
+  }
 });
 
 onMounted(async () => {
   try {
     users.value = await UserService.findAll();
+    channels.value = await ChannelService.findAll();
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
 });
 
 onBeforeUnmount(() => {
-  socket.off('friendRequest');
+  socket.off('onFriend');
 });
+
+const UpdateChannels = (input: string) => {
+  chatName.value = input;
+};
 </script>
 
 <template>
   <div class="chatViewParent">
     <div class="leftSide">
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
-      <ParentChannelsComponent class="channelsComp" />
+      <ParentChannelsComponent
+        :channels="channels"
+        :user-id="userStore.id"
+        class="channelsComp"
+        @update="UpdateChannels"
+      />
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
     <ParentChatComponent :chat-name="chatName" class="chatChatComp" />

@@ -28,6 +28,20 @@ export class ChannelService {
     return this.channelRepository.find();
   }
 
+  async findJoined(identifier: number): Promise<Channel[]> {
+    const channels: Channel[] = await this.channelRepository.find();
+    return channels.filter((channel) => {
+      if (channel.private === false) return true;
+      if (
+        channel.userList.some(
+          (channelUser) => channelUser.user_id === identifier,
+        )
+      )
+        return true;
+      return false;
+    });
+  }
+
   /*
   1. First, we’re checking if the identifier is a number or a string.
   2. If it’s a number, we’re using the `findOneOrFail` method to find the channel by its ID.
@@ -55,7 +69,7 @@ export class ChannelService {
   Returns:
     The id of the newly created channel.
   */
-  async create(createChannelInput: CreateChannelInput) {
+  async create(createChannelInput: CreateChannelInput): Promise<number> {
     const result: InsertResult = await this.channelRepository.insert(
       createChannelInput,
     );
@@ -85,12 +99,12 @@ export class ChannelService {
     try {
       channel = await this.findOne(createChannelInput.name);
     } catch (Error) {
-      console.log('New Channel created');
+      //console.log(createChannelInput.name + ' created'); DEBUG
       channel = await this.findOne(await this.create(createChannelInput));
       brandNew = true;
     }
     if (createChannelInput.password === channel.password) {
-      console.log('Good Password');
+      //console.log('Good Password'); DEBUG
       if (
         !channel.userList.some((channelUser) => channelUser.user.id === user.id)
       ) {
@@ -106,6 +120,11 @@ export class ChannelService {
     return this.findOne(+channel.id); //'+' VIC ;)
   }
 
+  /**
+  1. First, we’re using the `update` method to update the password of the channel.
+  2. Then, we’re using the `findOne` method to get the updated channel.
+  3. Finally, we’re returning the updated channel.
+  */
   async updatePassword(channelName: string, newPassword: string) {
     const result: UpdateResult = await this.channelRepository.update(
       { name: channelName },

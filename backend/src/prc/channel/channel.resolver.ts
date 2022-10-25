@@ -7,6 +7,8 @@ import { ChannelService } from './channel.service';
 import { CreateChannelInput } from './dto/create-channel.input';
 import { Channel } from './entities/channel.entity';
 import { TwoFAGuard } from '../../auth/guard/twoFA.guard';
+import { CurrentJwtPayload } from '../../users/decorator/current-jwt-payload.decorator';
+import { JwtPayload } from '../../auth/strategy/jwt.strategy';
 
 @Resolver(() => Channel)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
@@ -14,8 +16,8 @@ export class ChannelResolver {
   constructor(private readonly channelService: ChannelService) {}
 
   @Query(() => [Channel], { name: 'channels' })
-  findAll() {
-    return this.channelService.findAll();
+  findAll(@CurrentJwtPayload() user: JwtPayload) {
+    return this.channelService.findJoined(user.id);
   }
 
   @Query(() => Channel, { name: 'channel' })
