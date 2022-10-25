@@ -6,8 +6,8 @@ type Channel {
   id: Int!
   name: String!
   private: Boolean!
-  password: String!
   userList: [ChannelUser!]!
+  password: Boolean!
 }
 
 type ChannelUser {

@@ -17,7 +17,6 @@ export class Channel {
   @Field()
   private: boolean;
 
-  @Field() //REMOVE
   @Column({ default: '' })
   password: string;
 
