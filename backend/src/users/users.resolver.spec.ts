@@ -68,6 +68,7 @@ describe('UsersResolver', () => {
     await expect(
       resolver.findOneById(undefined, {
         id: mockRepoUser.getTestEntity().id,
+        email: mockRepoUser.getTestEntity().email,
         isAuthenticated: true,
       }),
     ).resolves.toEqual(mockRepoUser.getTestEntity());
@@ -77,6 +78,7 @@ describe('UsersResolver', () => {
     await expect(
       resolver.findOneById(84364, {
         id: 12345,
+        email: mockRepoUser.getTestEntity().email,
         isAuthenticated: true,
       }),
     ).resolves.toEqual(mockRepoUser.getTestEntity());
@@ -86,6 +88,7 @@ describe('UsersResolver', () => {
     await expect(
       resolver.findOneById(76439, {
         id: 12345,
+        email: mockRepoUser.getTestEntity().email,
         isAuthenticated: true,
       }),
     ).rejects.toThrow(EntityNotFoundError);

@@ -72,6 +72,7 @@ describe('ChannelUserResolver', () => {
   it('should not update admin because oldAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       id: mockUser.id,
+      email: mockUser.email,
       isAuthenticated: true,
     };
     const newAdmin: User = mockUser2;
@@ -83,6 +84,7 @@ describe('ChannelUserResolver', () => {
   it('should not update admin because newAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const newAdmin: User = mockUser2;
@@ -97,6 +99,7 @@ describe('ChannelUserResolver', () => {
   it('should not update admin because oldAdmin is not an admin on channel', async () => {
     const oldAdmin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const newAdmin: User = mockUser2;
@@ -114,6 +117,7 @@ describe('ChannelUserResolver', () => {
   it('should update newAdmin to admin', async () => {
     const oldAdmin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const newAdmin: User = mockUser2;
@@ -132,6 +136,7 @@ describe('ChannelUserResolver', () => {
   it('should not change password because user not on channel', async () => {
     const JwtUser: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const name = '#test';
@@ -143,6 +148,7 @@ describe('ChannelUserResolver', () => {
   it('should not update password because user not channel owner', async () => {
     const JwtUser: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const name = '#test';
@@ -160,6 +166,7 @@ describe('ChannelUserResolver', () => {
   it('should update password', async () => {
     const JwtUser: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const name = '#test';
@@ -174,6 +181,7 @@ describe('ChannelUserResolver', () => {
   it('should not ban user because admin is not on channel', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const banUser: User = mockUser2;
@@ -185,6 +193,7 @@ describe('ChannelUserResolver', () => {
   it('should not ban user because user to be banned is not on channel', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const banUser: User = mockUser2;
@@ -199,6 +208,7 @@ describe('ChannelUserResolver', () => {
   it('should not ban user because admin is not an admin on channel', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const banUser: User = mockUser2;
@@ -216,6 +226,7 @@ describe('ChannelUserResolver', () => {
   it('should ban user', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
+      email: mockRepoUser.getTestEntity().email,
       isAuthenticated: true,
     };
     const banUser: User = mockUser2;
