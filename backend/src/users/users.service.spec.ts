@@ -233,7 +233,7 @@ describe('UsersService', () => {
   });
 
   it('should block user', async () => {
-    const user: User = mockRepoUser.getTestEntity({ blocking_id: [696969] });
+    const user: User = mockRepoUser.getTestEntity();
     const newUser = createMockUser({
       id: 696969,
       username: 'test696969',

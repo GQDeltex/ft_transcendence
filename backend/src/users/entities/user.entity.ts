@@ -77,6 +77,7 @@ export class User {
 
   @ManyToMany(() => User, (user) => user.following, {
     cascade: true,
+    onDelete: 'CASCADE',
     nullable: true,
   })
   followers?: User[];
@@ -95,6 +96,7 @@ export class User {
 
   @ManyToMany(() => User, (user) => user.blocking, {
     cascade: true,
+    onDelete: 'CASCADE',
     nullable: true,
   })
   blockedBy?: User[];
