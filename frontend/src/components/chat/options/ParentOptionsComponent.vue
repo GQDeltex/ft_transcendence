@@ -3,9 +3,12 @@ import { ref } from 'vue';
 import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
 import ModalUpdatePasswordComponent from './ModalUpdatePasswordComponent.vue';
 import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
+import ModalBanUserComponent from './ModalBanUserComponent.vue';
 import type { User } from '@/store/user';
 
-const modalActive = ref(false);
+const passModalActive = ref(false);
+const adminModalActive = ref(false);
+const banModalActive = ref(false);
 
 defineProps<{
   clients: User[];
@@ -17,15 +20,21 @@ const adminToggle = ref(false);
 const muteToggle = ref(false);
 
 const changePassword = () => {
-  modalActive.value = true;
+  passModalActive.value = true;
 };
 
 const updateAdmin = () => {
-  modalActive.value = true;
+  adminModalActive.value = true;
+};
+
+const banUser = () => {
+  banModalActive.value = true;
 };
 
 const onClose = () => {
-  modalActive.value = false;
+  passModalActive.value = false;
+  adminModalActive.value = false;
+  banModalActive.value = false;
 };
 </script>
 
@@ -58,15 +67,27 @@ const onClose = () => {
         </template>
       </div>
       <div class="buttonList">
-        <span class="Text">
-          Options
+        <span class="Text"> Options </span>
+        <span>
           <button class="button" @click="changePassword">
             Change Password
           </button>
-          <ModalUpdatePasswordComponent v-show="modalActive" @close="onClose" />
+          <ModalUpdatePasswordComponent
+            v-show="passModalActive"
+            @close="onClose"
+          />
+        </span>
+        <span>
           <!-- <button class="button">Leave Chat</button>-->
           <button class="button" @click="updateAdmin">Make Admin</button>
-          <ModalUpdateAdminComponent v-show="modalActive" @close="onClose" />
+          <ModalUpdateAdminComponent
+            v-show="adminModalActive"
+            @close="onClose"
+          />
+        </span>
+        <span>
+          <button class="button" @click="banUser">Ban User</button>
+          <ModalBanUserComponent v-show="banModalActive" @close="onClose" />
         </span>
       </div>
     </div>
