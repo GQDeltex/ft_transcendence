@@ -17,6 +17,7 @@
 - [email](users_dto_create_user_input.CreateUserInput.md#email)
 - [firstname](users_dto_create_user_input.CreateUserInput.md#firstname)
 - [id](users_dto_create_user_input.CreateUserInput.md#id)
+- [intra](users_dto_create_user_input.CreateUserInput.md#intra)
 - [lastname](users_dto_create_user_input.CreateUserInput.md#lastname)
 - [picture](users_dto_create_user_input.CreateUserInput.md#picture)
 - [title](users_dto_create_user_input.CreateUserInput.md#title)
@@ -37,7 +38,7 @@
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L29)
+[src/users/dto/create-user.input.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L32)
 
 ___
 
@@ -47,7 +48,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L32)
+[src/users/dto/create-user.input.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L35)
 
 ___
 
@@ -57,7 +58,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L22)
+[src/users/dto/create-user.input.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L25)
 
 ___
 
@@ -81,6 +82,16 @@ ___
 
 ___
 
+### intra
+
+• **intra**: `string`
+
+#### Defined in
+
+[src/users/dto/create-user.input.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L17)
+
+___
+
 ### lastname
 
 • **lastname**: `string`
@@ -97,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L26)
+[src/users/dto/create-user.input.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L29)
 
 ___
 
@@ -107,7 +118,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L38)
+[src/users/dto/create-user.input.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L41)
 
 ___
 
@@ -117,7 +128,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L35)
+[src/users/dto/create-user.input.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L38)
 
 ___
 
@@ -127,4 +138,4 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L18)
+[src/users/dto/create-user.input.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L21)
