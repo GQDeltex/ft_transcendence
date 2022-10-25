@@ -19,6 +19,7 @@
 - [findAll](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findall)
 - [findOne](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findone)
 - [updateAdmin](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateadmin)
+- [updateBan](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateban)
 
 ## Constructors
 
@@ -99,3 +100,23 @@ ___
 #### Defined in
 
 [src/prc/channel/channel-user/channel-user.service.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L30)
+
+___
+
+### updateBan
+
+▸ **updateBan**(`channelUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelUser` | [`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md) |
+
+#### Returns
+
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+
+#### Defined in
+
+[src/prc/channel/channel-user/channel-user.service.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L40)

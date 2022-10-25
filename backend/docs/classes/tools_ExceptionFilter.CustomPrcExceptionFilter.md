@@ -1,8 +1,8 @@
-[backend](../README.md) / [Exports](../modules.md) / [prc/prc.gateway](../modules/prc_prc_gateway.md) / CustomPrcExceptionFilter
+[backend](../README.md) / [Exports](../modules.md) / [tools/ExceptionFilter](../modules/tools_ExceptionFilter.md) / CustomPrcExceptionFilter
 
 # Class: CustomPrcExceptionFilter
 
-[prc/prc.gateway](../modules/prc_prc_gateway.md).CustomPrcExceptionFilter
+[tools/ExceptionFilter](../modules/tools_ExceptionFilter.md).CustomPrcExceptionFilter
 
 ## Hierarchy
 
@@ -14,14 +14,14 @@
 
 ### Constructors
 
-- [constructor](prc_prc_gateway.CustomPrcExceptionFilter.md#constructor)
+- [constructor](tools_ExceptionFilter.CustomPrcExceptionFilter.md#constructor)
 
 ### Methods
 
-- [catch](prc_prc_gateway.CustomPrcExceptionFilter.md#catch)
-- [handleError](prc_prc_gateway.CustomPrcExceptionFilter.md#handleerror)
-- [handleUnknownError](prc_prc_gateway.CustomPrcExceptionFilter.md#handleunknownerror)
-- [isExceptionObject](prc_prc_gateway.CustomPrcExceptionFilter.md#isexceptionobject)
+- [catch](tools_ExceptionFilter.CustomPrcExceptionFilter.md#catch)
+- [handleError](tools_ExceptionFilter.CustomPrcExceptionFilter.md#handleerror)
+- [handleUnknownError](tools_ExceptionFilter.CustomPrcExceptionFilter.md#handleunknownerror)
+- [isExceptionObject](tools_ExceptionFilter.CustomPrcExceptionFilter.md#isexceptionobject)
 
 ## Constructors
 
@@ -56,7 +56,7 @@ BaseWsExceptionFilter.catch
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L52)
+[src/tools/ExceptionFilter.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/tools/ExceptionFilter.ts#L43)
 
 ___
 

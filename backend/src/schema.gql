@@ -17,15 +17,15 @@ type ChannelUser {
   admin: Boolean!
   owner: Boolean!
   ban: Boolean!
-  unbanTime: DateTime!
+  unbanTime: Timestamp
   mute: Boolean!
-  unmuteTime: DateTime!
+  unmuteTime: Timestamp
 }
 
 """
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
-scalar DateTime
+scalar Timestamp
 
 type User {
   id: Int!
@@ -76,6 +76,7 @@ type Mutation {
   joinChannel(name: String!, password: String!): Channel!
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
+  updateBan(channel_name: String!, banUser: Int!): ChannelUser!
 }
 
 enum AllowedUpdateFriendshipMethod {
