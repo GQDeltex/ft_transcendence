@@ -287,7 +287,7 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).rejects.toThrow(`${admin.id} is not a Channel Admin on #test`);
   });
-
+  jest.useFakeTimers();
   it('should mute user', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
@@ -304,5 +304,6 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).resolves.not.toThrow();
+    jest.advanceTimersByTime(30 * 1000);
   });
 });

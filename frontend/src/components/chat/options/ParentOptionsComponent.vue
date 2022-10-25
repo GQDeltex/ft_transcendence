@@ -4,11 +4,13 @@ import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
 import ModalUpdatePasswordComponent from './ModalUpdatePasswordComponent.vue';
 import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
 import ModalBanUserComponent from './ModalBanUserComponent.vue';
+import ModalMuteUserComponent from './ModalMuteUserComponent.vue';
 import type { User } from '@/store/user';
 
 const passModalActive = ref(false);
 const adminModalActive = ref(false);
 const banModalActive = ref(false);
+const muteModalActive = ref(false);
 
 defineProps<{
   clients: User[];
@@ -31,10 +33,15 @@ const banUser = () => {
   banModalActive.value = true;
 };
 
+const muteUser = () => {
+  muteModalActive.value = true;
+};
+
 const onClose = () => {
   passModalActive.value = false;
   adminModalActive.value = false;
   banModalActive.value = false;
+  muteModalActive.value = false;
 };
 </script>
 
@@ -88,6 +95,10 @@ const onClose = () => {
         <span>
           <button class="button" @click="banUser">Ban User</button>
           <ModalBanUserComponent v-show="banModalActive" @close="onClose" />
+        </span>
+        <span>
+          <button class="button" @click="muteUser">Mute User</button>
+          <ModalMuteUserComponent v-show="muteModalActive" @close="onClose" />
         </span>
       </div>
     </div>
