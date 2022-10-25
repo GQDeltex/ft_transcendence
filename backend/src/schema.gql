@@ -40,6 +40,7 @@ type User {
   twoFAEnable: Boolean!
   status: String!
   channelList: [ChannelUser!]
+  inventory: [Int!]!
   friends: [Int]!
   sentFriendRequests: [Int]!
   receivedFriendRequests: [Int]!
@@ -47,11 +48,20 @@ type User {
   blockedBy: [Int]!
 }
 
+type Item {
+  id: Int!
+  name: String!
+  description: String!
+  price: Float!
+  picture: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int): User!
   userByName(username: String!): User!
   userChannelList(username: String!): User!
+  getItems: [Item!]!
   channels: [Channel!]!
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
@@ -62,6 +72,7 @@ type Mutation {
   updateUsername(username: String!): User!
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
   updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
+  updateInventory(orderId: String!): User!
   joinChannel(name: String!, password: String!): Channel!
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!

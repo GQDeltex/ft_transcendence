@@ -46,6 +46,7 @@
 - [users/dto/update-blocking.input](modules/users_dto_update_blocking_input.md)
 - [users/dto/update-friendship.input](modules/users_dto_update_friendship_input.md)
 - [users/dto/update-userusername.input](modules/users_dto_update_userusername_input.md)
+- [users/entities/item.entity](modules/users_entities_item_entity.md)
 - [users/entities/user.entity](modules/users_entities_user_entity.md)
 - [users/entities/user.entity.mock](modules/users_entities_user_entity_mock.md)
 - [users/users.controller](modules/users_users_controller.md)

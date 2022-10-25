@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
@@ -9,6 +14,10 @@ import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
+import { HttpService } from '@nestjs/axios';
+import { catchError, lastValueFrom } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
+import itemList from './entities/item.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +25,8 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(forwardRef(() => PrcGateway))
     private readonly prcGateway: PrcGateway,
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
   ) {}
 
   create(createUserInput: CreateUserInput) {
@@ -274,5 +285,55 @@ export class UsersService {
         id: id,
       });
     }
+  }
+
+  // https://developer.paypal.com/docs/api/orders/v2/#orders_get
+  private async checkValidOrderId(
+    id: number,
+    orderId: string,
+  ): Promise<number> {
+    const { data } = await lastValueFrom(
+      this.httpService
+        .get('https://api-m.sandbox.paypal.com/v2/checkout/orders/' + orderId, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Basic ' +
+              Buffer.from(
+                this.configService.get('PAYPAL_CLIENT_ID') +
+                  ':' +
+                  this.configService.get('PAYPAL_SECRET'),
+              ).toString('base64'),
+          },
+        })
+        .pipe(
+          catchError((error) => {
+            if (typeof error.response === 'undefined')
+              throw new BadRequestException(error.response?.data);
+            else throw new BadRequestException(error.message);
+          }),
+        ),
+    );
+    if (data.status !== 'COMPLETED')
+      throw new UserInputError('Order is not completed');
+    const itemId = +data.purchase_units[0].reference_id;
+    if (
+      +data.purchase_units[0].amount.value !== itemList[itemId].price ||
+      data.purchase_units[0].amount.currency_code !== 'EUR'
+    )
+      throw new UserInputError('Item price is wrong');
+    if (+data.purchase_units[0].custom_id !== id)
+      throw new UserInputError('User id is wrong');
+    return itemId;
+  }
+
+  async updateInventory(id: number, orderId: string): Promise<User> {
+    const user: User = await this.findOne(id);
+    const itemId = await this.checkValidOrderId(id, orderId);
+    if (user.inventory.includes(itemId))
+      throw new UserInputError('You already have this item');
+    user.inventory.push(itemId);
+    await this.userRepository.save(user);
+    return user;
   }
 }
