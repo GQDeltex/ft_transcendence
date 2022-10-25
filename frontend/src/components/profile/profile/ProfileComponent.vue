@@ -5,11 +5,13 @@ import { inject, nextTick, ref, watch } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
 import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
+import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
-const modalActive = ref(false);
+const modalChangeUsername = ref(false);
+const modalChangePicture = ref(false);
 
 const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
   user: null,
@@ -41,12 +43,23 @@ const onClose = () => {
 
 <template>
   <div v-if="user" class="profile">
-    <RoundPictureComponent
-      class="picture"
-      :picture="user.picture"
-      size="10vw"
-      border-color="white"
-    />
+    <div class="parentPicture">
+      <RoundPictureComponent
+        class="picture"
+        :picture="user.picture"
+        size="10vw"
+        border-color="white"
+      />
+      <img
+        v-if="isMe"
+        alt="pen"
+        class="pen"
+        title="Change picture"
+        src="@/assets/pen.png"
+        @click="modalChangePicture = true"
+      />
+      <span v-else class="noPen">no</span>
+    </div>
     <div class="infoBox">
       <span class="title">{{ user.title[0] }}</span>
       <br />
@@ -58,14 +71,19 @@ const onClose = () => {
           class="pen"
           title="Change username"
           src="@/assets/pen.png"
-          @click="modalActive = true"
+          @click="modalChangeUsername = true"
         />
+        <img v-else class="noPen" />
       </div>
       <ModalChangeUsernameComponent
-        v-show="modalActive"
+        v-show="modalChangeUsername"
         :user-id="user.id"
         :input-username="user.username"
-        @close="modalActive = false"
+        @close="modalChangeUsername = false"
+      />
+      <ModalChangePictureComponent
+        v-show="modalChangePicture"
+        @close="modalChangePicture = false"
       />
       <br />
       <span class="campus">Wolfsburg, Germany</span>
@@ -128,7 +146,7 @@ const onClose = () => {
   grid-column: 2 / 3;
 }
 
-.picture {
+.parentPicture {
   grid-column: 1 / 2;
 }
 
@@ -215,5 +233,14 @@ input:checked + .slider:before {
 .pen {
   height: 1.5vw;
   width: 1.5vw;
+  cursor: pointer;
+}
+
+.noPen {
+  position: relative;
+  border-radius: 50%;
+  height: 1.5vw;
+  width: 1.5vw;
+  color: red;
 }
 </style>

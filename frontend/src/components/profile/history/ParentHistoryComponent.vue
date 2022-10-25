@@ -15,8 +15,7 @@ import UserPlayedGameComponent from '../../globalUse/UserPlayedGameComponent.vue
 .frame {
   border: 1px solid #202020;
   padding: 1vw;
-  /* height: 85vh; */
-  max-height: 50%;
+  max-height: inherit;
   overflow-y: scroll;
 }
 </style>

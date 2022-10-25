@@ -12,8 +12,8 @@ const { user } = inject<{ user: User | null }>('user', {
     <span style="font-size: 2vw">
       About<span style="float: right">(O) Online</span>
     </span>
-    <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
+      <p class="moreAbout">+ Tell us about yourself</p>
       User name: <span class="info">{{ user.username }}</span>
       <br />
       First name: <span class="info">{{ user.username }}</span>
@@ -35,16 +35,19 @@ const { user } = inject<{ user: User | null }>('user', {
 .about {
   padding: 1vw;
   border: 1px solid grey;
+  max-height: 20vh;
 }
 
 .moreAbout {
-  font-size: 2vw;
+  font-size: 1.5vw;
   color: #f8971d;
 }
 
 .infoBox {
-  font-size: 2vw;
+  font-size: 1.5vw;
   color: grey;
+  /* max-height:15vh; */
+  overflow-y: scroll;
 }
 
 .info {
