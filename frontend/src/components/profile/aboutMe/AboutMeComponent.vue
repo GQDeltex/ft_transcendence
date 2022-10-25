@@ -2,9 +2,9 @@
 import { inject } from 'vue';
 import type { User } from '../../../store/user';
 
-  const { user } = inject<{ user: User | null }>('user', {
-    user: null,
-  });
+const { user } = inject<{ user: User | null }>('user', {
+  user: null,
+});
 </script>
 
 <template>
