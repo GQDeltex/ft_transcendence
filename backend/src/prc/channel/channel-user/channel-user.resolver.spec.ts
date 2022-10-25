@@ -65,10 +65,12 @@ describe('ChannelUserResolver', () => {
     await mockRepoChannelUser.destroyRepo();
   });
 
+  //DEFINE
   it('should be defined', () => {
     expect(channelUserResolver).toBeDefined();
   });
 
+  //ADMIN
   it('should not update admin because oldAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       username: mockUser.username,
@@ -134,5 +136,54 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
     ).resolves.not.toThrow();
+  });
+
+  //PASSWORD
+  it('should not change password because user not on channel', async () => {
+    const JwtUser: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const name = '#test';
+    await expect(
+      channelUserResolver.updatePassword(JwtUser, name, 'new'),
+    ).rejects.toThrow(JwtUser.id + ' not in ' + name);
+  });
+
+  it('should not update password because user not channel owner', async () => {
+    const JwtUser: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const name = '#test';
+    await expect(
+      channelResolver.joinChannel({ name: name, password: '' }, mockUser2),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: name, password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updatePassword(JwtUser, name, 'new'),
+    ).rejects.toThrow('Not Channel Owner');
+  });
+
+  it('should update password', async () => {
+    const JwtUser: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const name = '#test';
+    await expect(
+      channelResolver.joinChannel({ name: name, password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updatePassword(JwtUser, name, 'new'),
+    ).resolves.toEqual(expect.any(Channel));
   });
 });
