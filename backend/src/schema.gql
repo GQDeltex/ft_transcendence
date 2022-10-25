@@ -29,18 +29,21 @@ scalar Timestamp
 
 type User {
   id: Int!
+  email: String!
+  intra: String!
   firstname: String!
   lastname: String!
   username: String!
-  email: String!
+  title: [String!]!
   picture: String!
+  coalition: String!
   campus: String!
   country: String!
-  title: [String!]!
-  twoFAEnable: Boolean!
-  status: String!
-  channelList: [ChannelUser!]
   inventory: [Int!]!
+  status: String!
+  lastLoggedIn: Timestamp!
+  twoFAEnable: Boolean!
+  channelList: [ChannelUser!]
   friends: [Int]!
   sentFriendRequests: [Int]!
   receivedFriendRequests: [Int]!

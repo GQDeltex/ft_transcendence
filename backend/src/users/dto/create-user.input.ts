@@ -8,6 +8,13 @@ export class CreateUserInput {
   id: number;
 
   @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  intra: string;
+
+  @Field()
   firstname: string;
 
   @Field()
@@ -17,9 +24,8 @@ export class CreateUserInput {
   @IsNotEmpty()
   username: string;
 
-  @Field()
-  @IsEmail()
-  email: string;
+  @Field(() => [String])
+  title: string[];
 
   @Field()
   @IsUrl()
@@ -32,8 +38,8 @@ export class CreateUserInput {
   country: string;
 
   @Field()
-  twoFAEnable: boolean;
+  coalition: string;
 
-  @Field(() => [String])
-  title: string[];
+  @Field()
+  twoFAEnable: boolean;
 }

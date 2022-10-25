@@ -36,7 +36,7 @@ export class UsersService {
     } catch (error) {
       if (!(error instanceof QueryFailedError)) return Promise.reject(error);
       const existingUsers: User[] = await this.userRepository.find({
-        // This Like might me susceptible to SQL Injection attacts.
+        // This Like might be susceptible to SQL Injection attacks.
         // https://github.com/typeorm/typeorm/issues/7784 says it should be fine.
         // And the data is coming from Intra... So... It should be fine... I guess?
         where: { username: Like(`${createUserInput.username}%`) },
@@ -159,6 +159,7 @@ export class UsersService {
       searchOptions,
       {
         status,
+        lastLoggedIn: status === 'online' ? new Date(Date.now()) : undefined,
       },
     );
     if (typeof result.affected != 'undefined' && result.affected < 1)
