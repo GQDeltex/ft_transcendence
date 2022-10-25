@@ -10,6 +10,7 @@ import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
+import { HttpModule } from '@nestjs/axios';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -26,6 +27,7 @@ describe('UsersService', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         ConfigService,
         UsersService,
@@ -231,7 +233,7 @@ describe('UsersService', () => {
   });
 
   it('should block user', async () => {
-    const user: User = mockRepoUser.getTestEntity({ blocking_id: [696969] });
+    const user: User = mockRepoUser.getTestEntity();
     const newUser = createMockUser({
       id: 696969,
       username: 'test696969',

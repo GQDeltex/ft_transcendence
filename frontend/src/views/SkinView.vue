@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import SkinShopComponent from '../components/skinShop/ParentSkinShopComponent.vue';
-import sexy_guy_001_modified from '../assets/sexy-guy-001-modified.png';
-import even_sexier_guy_001_modified from '../assets/even-sexier-guy-001-modified.png';
-import sexiest_guy_001_modified from '../assets/sexiest-guy-001-modified.png';
+import type { Item } from '@/store/user';
+import { onMounted, ref } from 'vue';
+import UserService from '@/service/UserService';
+import { useErrorStore } from '@/store/error';
+
+const errorStore = useErrorStore();
+const items = ref<Item[]>([]);
+
+onMounted(async () => {
+  try {
+    items.value = await UserService.getItems();
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
+});
 </script>
 
 <template>
@@ -11,66 +23,9 @@ import sexiest_guy_001_modified from '../assets/sexiest-guy-001-modified.png';
     <button class="button button-wide">Maps</button>
     <button class="button">Sounds</button>
   </div>
-  <SkinShopComponent
-    item-id="shop-item-1"
-    item-name="Avatar"
-    :item-img="sexy_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-2"
-    item-name="Sexy Avatar"
-    :item-img="even_sexier_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-3"
-    item-name="Even sexier Avatar"
-    :item-img="sexiest_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-4"
-    item-name="Avatar"
-    :item-img="sexy_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-5"
-    item-name="Sexy Avatar"
-    :item-img="even_sexier_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-6"
-    item-name="Even sexier Avatar"
-    :item-img="sexiest_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-7"
-    item-name="Avatar"
-    :item-img="sexy_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-8"
-    item-name="Sexy Avatar"
-    :item-img="even_sexier_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-9"
-    item-name="Even sexier Avatar"
-    :item-img="sexiest_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-10"
-    item-name="Avatar"
-    :item-img="sexy_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-11"
-    item-name="Sexy Avatar"
-    :item-img="even_sexier_guy_001_modified"
-  />
-  <SkinShopComponent
-    item-id="shop-item-12"
-    item-name="Even sexier Avatar"
-    :item-img="sexiest_guy_001_modified"
-  />
+  <template v-for="item in items" :key="item.id">
+    <SkinShopComponent :item="item" />
+  </template>
 </template>
 
 <style scoped>
@@ -83,6 +38,7 @@ import sexiest_guy_001_modified from '../assets/sexiest-guy-001-modified.png';
   align-items: center;
   border-bottom: 1px solid grey;
 }
+
 .button {
   height: 40px;
   width: 25%;
@@ -93,6 +49,7 @@ import sexiest_guy_001_modified from '../assets/sexiest-guy-001-modified.png';
   padding: 10px;
   margin: 20px;
 }
+
 .button-wide {
   width: 40%;
 }

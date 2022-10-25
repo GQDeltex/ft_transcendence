@@ -1,8 +1,3 @@
-<template>
-  <div v-if="!paid" :id="id" class="paypal-button"></div>
-  <div v-else class="confirmation">Order complete!</div>
-</template>
-
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import type {
@@ -11,20 +6,46 @@ import type {
   OnApproveActions,
   OnApproveData,
 } from '@paypal/paypal-js';
+import { useErrorStore } from '@/store/error';
+import { useUserStore } from '@/store/user';
+import type { Item } from '@/store/user';
 
-const props = defineProps({
-  price: {
-    type: String,
-    default: '0.69',
-    required: true,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  item: Item;
+}>();
+const paypalButtonId = `paypal-button-${props.item.id}`;
 
-const paid = ref(false);
+const errorStore = useErrorStore();
+const userStore = useUserStore();
+const owned = ref(userStore.inventory.includes(props.item.id));
+
+const createOrder = async (
+  data: CreateOrderData,
+  actions: CreateOrderActions,
+) => {
+  return actions.order.create({
+    purchase_units: [
+      {
+        reference_id: String(props.item.id),
+        custom_id: String(userStore.id),
+        amount: {
+          value: String(props.item.price),
+        },
+      },
+    ],
+  });
+};
+
+const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
+  return actions.order?.capture().then(async () => {
+    owned.value = true;
+    await userStore.updateInventory(data.orderID);
+  });
+};
+
+const onError = () => {
+  errorStore.setError('Something went wrong with the payment.');
+};
 
 const paypalButton = window.paypal?.Buttons?.({
   style: {
@@ -33,50 +54,33 @@ const paypalButton = window.paypal?.Buttons?.({
     tagline: false,
     height: 40,
   },
-  createOrder: createOrder,
-  onApprove: onApprove,
+  createOrder,
+  onApprove,
+  onError,
 });
 
-async function createOrder(
-  data: CreateOrderData,
-  actions: CreateOrderActions,
-): Promise<string> {
-  console.log('Creating order...');
-  return actions.order.create({
-    purchase_units: [
-      {
-        reference_id: '1',
-        amount: {
-          value: props.price,
-        },
-      },
-    ],
-  });
-}
-
-async function onApprove(
-  data: OnApproveData,
-  actions: OnApproveActions,
-): Promise<void> {
-  console.log('Order approved...');
-  return actions.order?.capture().then(() => {
-    paid.value = true;
-    console.log('Order complete!');
-  });
-}
-
-onMounted(() => {
-  paypalButton?.render('#' + props.id).catch((err) => {
-    console.log(err);
-  });
+onMounted(async () => {
+  try {
+    await paypalButton?.render('#' + paypalButtonId);
+  } catch {
+    /* ignored */
+  }
 });
 
-onUnmounted(() => {
-  paypalButton?.close().catch((err) => {
-    console.log(err);
-  });
+onUnmounted(async () => {
+  try {
+    await paypalButton?.close();
+  } catch {
+    /* ignored */
+  }
+  document.getElementById(paypalButtonId)?.remove();
 });
 </script>
+
+<template>
+  <div v-show="!owned" :id="paypalButtonId" class="paypal-button"></div>
+  <div v-show="owned" class="confirmation">You owned this!</div>
+</template>
 
 <style scoped>
 .paypal-button {
@@ -84,6 +88,7 @@ onUnmounted(() => {
   justify-content: center;
   margin: 30px 0;
 }
+
 .confirmation {
   display: flex;
   justify-content: center;

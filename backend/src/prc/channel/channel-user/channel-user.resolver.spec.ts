@@ -13,6 +13,7 @@ import { PrcGateway } from '../../prc.gateway';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
+import { HttpModule } from '@nestjs/axios';
 
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
@@ -33,6 +34,7 @@ describe('ChannelUserResolver', () => {
     await mockRepoUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         ConfigService,
         ChannelUserResolver,

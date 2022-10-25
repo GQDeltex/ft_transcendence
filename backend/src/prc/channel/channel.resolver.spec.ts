@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { PrcGateway } from '../prc.gateway';
+import { HttpModule } from '@nestjs/axios';
 
 describe('ChannelResolver', () => {
   let resolver: ChannelResolver;
@@ -24,6 +25,7 @@ describe('ChannelResolver', () => {
     await mockRepoUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         ConfigService,
         ChannelResolver,
