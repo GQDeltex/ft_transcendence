@@ -1,4 +1,4 @@
-import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { CreateUserInput } from '../../users/dto/create-user.input';

@@ -7,7 +7,7 @@ export const createMockUser = (options: Partial<User> = {}): User => {
   user.picture = 'https://example.com';
   user.firstname = 'test';
   user.lastname = 'person';
-  user.intra = 'logname';
+  user.intra = 'logName';
   user.email = 'test@example.com';
   user.country = 'Germany';
   user.campus = 'Berlin';
@@ -31,7 +31,7 @@ export const mockUser: User = createMockUser({
   picture: 'https://example.com',
   firstname: 'nobody',
   lastname: 'knows',
-  intra: 'lognames',
+  intra: 'logName',
   email: 'nobody@example.com',
   country: 'United States',
   campus: 'Unicorns 4 Lyfe',
@@ -43,7 +43,7 @@ export const mockUser2: User = createMockUser({
   picture: 'https://example.com',
   firstname: 'mr',
   lastname: 'henneh',
-  intra: 'lognames',
+  intra: 'logName',
   email: 'henneforpresident@gmail.com',
   country: 'United States',
   campus: 'TroubleMaker',

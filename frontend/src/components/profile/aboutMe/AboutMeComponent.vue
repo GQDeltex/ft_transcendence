@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { inject } from 'vue';
-import type { User } from '../../../store/user';
+import type { User } from '@/store/user';
 
 const { user } = inject<{ user: User | null }>('user', {
   user: null,
 });
+
+const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 </script>
 
 <template>
   <div v-if="user" class="about">
     <span style="font-size: 2vw">
-      About<span style="float: right">(O) Online</span>
+      About
+      <span style="float: right">{{ capitalize(user.status) }}</span>
     </span>
     <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">

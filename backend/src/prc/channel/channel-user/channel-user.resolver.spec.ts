@@ -10,7 +10,7 @@ import { UsersService } from '../../../users/users.service';
 import { mockUser, mockUser2 } from '../../../users/entities/user.entity.mock';
 import { ChannelUserService } from './channel-user.service';
 import { PrcGateway } from '../../prc.gateway';
-import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
+import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 
@@ -76,9 +76,8 @@ describe('ChannelUserResolver', () => {
       id: mockUser.id,
       isAuthenticated: true,
     };
-    const newAdmin: User = mockUser2;
     await expect(
-      channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+      channelUserResolver.updateAdmin(oldAdmin, '#test', mockUser2.id),
     ).rejects.toThrow(WsException);
   });
 

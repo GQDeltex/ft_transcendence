@@ -5,17 +5,17 @@ import { useErrorStore } from './error';
 export type User = {
   isLogged?: boolean;
   id: number;
+  intra: string;
   firstname: string;
   lastname: string;
-  intra: string;
   username: string;
-  campus: string;
-  country: string;
   title: string[];
   picture: string;
+  campus: string;
+  country: string;
+  status?: string;
   twoFAEnable?: boolean;
   require2FAVerify?: boolean;
-  status?: string;
   friends?: number[];
   sentFriendRequests?: number[];
   receivedFriendRequests?: number[];
@@ -40,14 +40,15 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
     id: -1,
+    intra: '',
     firstname: '',
     lastname: '',
-    intra: '',
-    campus: '',
-    country: '',
     username: '',
     title: [''],
     picture: '',
+    campus: '',
+    country: '',
+    status: '',
     twoFAEnable: false,
     require2FAVerify: false,
     friends: [] as number[],
@@ -81,14 +82,15 @@ export const useUserStore = defineStore('user', {
       const user = await UserService.findSelf();
       this.isLoggedIn = true;
       this.id = user.id;
-      this.firstname = user.firstname.split(' ')[0];
-      this.lastname = user.lastname;
       this.intra = user.intra;
+      this.firstname = user.firstname;
+      this.lastname = user.lastname;
       this.username = user.username;
-      this.campus = user.campus;
-      this.country = user.country;
       this.title = user.title;
       this.picture = user.picture;
+      this.campus = user.campus;
+      this.country = user.country;
+      this.status = user.status ?? '';
       this.twoFAEnable = user.twoFAEnable ?? false;
       this.friends = user.friends ?? [];
       this.sentFriendRequests = user.sentFriendRequests ?? [];
