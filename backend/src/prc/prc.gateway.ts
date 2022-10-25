@@ -5,19 +5,13 @@ import {
   MessageBody,
   ConnectedSocket,
   WsException,
-  BaseWsExceptionFilter,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import {
   UseGuards,
-  createParamDecorator,
-  ExecutionContext,
   UseFilters,
-  Catch,
-  ArgumentsHost,
   UsePipes,
   ValidationPipe,
-  BadRequestException,
   Injectable,
   forwardRef,
   Inject,
@@ -26,43 +20,13 @@ import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
-import { EntityNotFoundError } from 'typeorm';
-import { TokenExpiredError } from 'jsonwebtoken';
 import { CreateChannelInput } from './channel/dto/create-channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 import { Channel } from './channel/entities/channel.entity';
-
-export const CurrentUserFromWs = createParamDecorator(
-  (data: string, ctx: ExecutionContext) => {
-    const client = ctx.switchToWs().getClient<Socket>();
-    const user = client.data.user;
-
-    if (!user) {
-      return null;
-    }
-
-    return data ? user[data] : user; // extract a specific property only if specified or get a user object
-  },
-);
-
-@Catch(WsException, EntityNotFoundError, TokenExpiredError, BadRequestException)
-export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
-  catch(
-    exception:
-      | WsException
-      | EntityNotFoundError
-      | TokenExpiredError
-      | BadRequestException,
-    host: ArgumentsHost,
-  ) {
-    // For some reason this throws an 'Error' again?
-    //super.catch(exception, host);
-    const client = host.switchToWs().getClient<Socket>();
-    client.emit('exception', { status: 'error', message: exception.message });
-  }
-}
+import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
+import { CurrentUserFromWs } from '../tools/UserFromWs';
 
 @Injectable()
 @UsePipes(new ValidationPipe())
