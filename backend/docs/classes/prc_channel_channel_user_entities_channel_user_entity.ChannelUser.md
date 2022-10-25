@@ -104,7 +104,7 @@ ___
 
 ### unbanTime
 
-• **unbanTime**: `Date`
+• **unbanTime**: ``null`` \| `Date`
 
 #### Defined in
 
@@ -114,7 +114,7 @@ ___
 
 ### unmuteTime
 
-• **unmuteTime**: `Date`
+• **unmuteTime**: ``null`` \| `Date`
 
 #### Defined in
 

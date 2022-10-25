@@ -1,25 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import { socket } from '@/service/socket';
-const emits = defineEmits(['close', 'update']);
+import ChannelUserService from '@/service/ChannelUserService';
+import { useErrorStore } from '@/store/error';
+const emits = defineEmits(['close']);
+const errorStore = useErrorStore();
 
 let channelName: Ref<string> = ref('');
-let password: Ref<string> = ref('');
+let banUser: Ref<string> = ref('');
 
-function closeOk() {
-  socket.emit('join', {
-    channel: { name: channelName.value, password: password.value },
-  });
-  emits('update', channelName.value);
+async function closeOk() {
+  console.log(
+    'channelName= ' + channelName.value + ' admin= ' + banUser.value, //DEBUG
+  );
+  try {
+    await ChannelUserService.banUser(channelName.value, +banUser.value);
+    console.log(channelName.value + ' admin is now ' + banUser.value); //DEBUG
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
   channelName.value = '';
-  password.value = '';
+  banUser.value = '';
   emits('close');
 }
 
 function closeCancel() {
   channelName.value = '';
-  password.value = '';
+  banUser.value = '';
   emits('close');
 }
 </script>
@@ -27,15 +34,11 @@ function closeCancel() {
 <template>
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
-      <h1>
-        Join / Create Channel<span class="close" @click="closeCancel()"
-          >&times;</span
-        >
-      </h1>
-      <label>Name</label>
+      <h1>Ban User<span class="close" @click="closeCancel()">&times;</span></h1>
+      <label>Channel Name</label>
       <input v-model="channelName" type="text" />
-      <label>Password</label>
-      <input v-model="password" type="password" />
+      <label>User to ban</label>
+      <input v-model="banUser" type="username" />
       <br />
       <button class="ok" @click="closeOk()">OK</button>
     </div>
@@ -46,7 +49,7 @@ function closeCancel() {
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 800; /* Sit on top */
+  z-index: 999; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */

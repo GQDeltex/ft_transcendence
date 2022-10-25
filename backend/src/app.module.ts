@@ -34,6 +34,9 @@ import { GameModule } from './game/game.module';
         origin: `http://${process.env.DOMAIN}`,
         credentials: true,
       },
+      buildSchemaOptions: {
+        dateScalarMode: 'timestamp',
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
