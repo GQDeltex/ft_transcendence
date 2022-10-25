@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/users/users.service.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L15)
+[src/users/users.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L16)
 
 ## Properties
 
@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[src/users/users.service.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L18)
+[src/users/users.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L19)
 
 ___
 
@@ -66,13 +66,13 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L16)
+[src/users/users.service.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L17)
 
 ## Methods
 
 ### create
 
-▸ **create**(`createUserInput`): `Promise`<`InsertResult`\>
+▸ **create**(`createUserInput`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -82,11 +82,11 @@ ___
 
 #### Returns
 
-`Promise`<`InsertResult`\>
+`Promise`<`void`\>
 
 #### Defined in
 
-[src/users/users.service.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L21)
+[src/users/users.service.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L22)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L69)
+[src/users/users.service.ts:96](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L96)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L40)
+[src/users/users.service.ts:67](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L67)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:73](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L73)
+[src/users/users.service.ts:100](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L100)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L25)
+[src/users/users.service.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L52)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:61](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L61)
+[src/users/users.service.ts:88](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L88)
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L53)
+[src/users/users.service.ts:80](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L80)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:224](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L224)
+[src/users/users.service.ts:251](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L251)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:130](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L130)
+[src/users/users.service.ts:157](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L157)
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L82)
+[src/users/users.service.ts:109](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L109)
 
 ___
 
@@ -289,7 +289,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:98](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L98)
+[src/users/users.service.ts:125](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L125)
 
 ___
 
@@ -310,7 +310,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:113](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L113)
+[src/users/users.service.ts:140](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L140)
 
 ___
 
@@ -331,4 +331,4 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:90](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L90)
+[src/users/users.service.ts:117](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L117)
