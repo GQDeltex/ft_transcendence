@@ -48,4 +48,24 @@ export class ChannelUserService {
       throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
     return await this.findOne(channelUser.id);
   }
+
+  async unmute(channelUserID: number): Promise<void> {
+    const result: UpdateResult = await this.channelUserRepository.update(
+      { id: channelUserID },
+      { mute: false },
+    );
+    if (typeof result.affected != 'undefined' && result.affected != 1)
+      throw new EntityNotFoundError(ChannelUser, { id: channelUserID });
+  }
+
+  async updateMute(channelUser: ChannelUser): Promise<ChannelUser> {
+    const result: UpdateResult = await this.channelUserRepository.update(
+      { id: channelUser.id },
+      { mute: true },
+    );
+    if (typeof result.affected != 'undefined' && result.affected != 1)
+      throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
+    setTimeout(() => this.unmute(channelUser.id), 30 * 1000);
+    return await this.findOne(channelUser.id);
+  }
 }

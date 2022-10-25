@@ -242,4 +242,67 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
   });
+
+  it('should not mute user because admin is not on channel', async () => {
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const muteUser: User = mockUser2;
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).rejects.toThrow(WsException);
+  });
+
+  it('should not ban user because user to be muted is not on channel', async () => {
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const muteUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).rejects.toThrow(muteUser.id + ' not in #test');
+  });
+
+  it('should not mute user because admin is not an admin on channel', async () => {
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const muteUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, muteUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).rejects.toThrow(`${admin.id} is not a Channel Admin on #test`);
+  });
+
+  it('should mute user', async () => {
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const muteUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, muteUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).resolves.not.toThrow();
+  });
 });
