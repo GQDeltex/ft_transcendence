@@ -17,15 +17,8 @@ type ChannelUser {
   admin: Boolean!
   owner: Boolean!
   ban: Boolean!
-  unbanTime: Timestamp
   mute: Boolean!
-  unmuteTime: Timestamp
 }
-
-"""
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
-"""
-scalar Timestamp
 
 type User {
   id: Int!
@@ -50,6 +43,11 @@ type User {
   blocks: [Int]!
   blockedBy: [Int]!
 }
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
 
 type Item {
   id: Int!

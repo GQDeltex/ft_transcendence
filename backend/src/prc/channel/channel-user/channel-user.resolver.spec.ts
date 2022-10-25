@@ -18,6 +18,7 @@ import { HttpModule } from '@nestjs/axios';
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
   let channelResolver: ChannelResolver;
+  let channelUserService: ChannelUserService;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -49,6 +50,7 @@ describe('ChannelUserResolver', () => {
       ],
     }).compile();
 
+    channelUserService = module.get<ChannelUserService>(ChannelUserService);
     channelUserResolver = module.get<ChannelUserResolver>(ChannelUserResolver);
     channelResolver = module.get<ChannelResolver>(ChannelResolver);
   });
@@ -185,9 +187,8 @@ describe('ChannelUserResolver', () => {
       email: mockUser.email,
       isAuthenticated: true,
     };
-    const banUser: User = mockUser2;
     await expect(
-      channelUserResolver.updateBan(admin, '#test', banUser.id),
+      channelUserResolver.updateBan(admin, '#test', mockUser2.id),
     ).rejects.toThrow(WsException);
   });
 
@@ -225,6 +226,7 @@ describe('ChannelUserResolver', () => {
   });
 
   it('should ban user', async () => {
+    jest.useFakeTimers({ legacyFakeTimers: true });
     const admin: JwtPayload = {
       id: mockUser.id,
       email: mockUser.email,
@@ -240,5 +242,7 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
+    jest.runAllTimers();
+    jest.useRealTimers();
   });
 });

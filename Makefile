@@ -62,5 +62,6 @@ test:
 recv: clean volume dev
 
 done: norm test
+	-@osascript -e "set Volume 0"
 
 .PHONY: all prod dev stop clean fclean redev reprod norm front back volume
