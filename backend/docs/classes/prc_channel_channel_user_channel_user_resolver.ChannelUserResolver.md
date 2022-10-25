@@ -20,6 +20,7 @@
 
 - [findAll](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#findall)
 - [updateAdmin](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updateadmin)
+- [updateBan](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updateban)
 - [updatePassword](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updatepassword)
 
 ## Constructors
@@ -105,6 +106,28 @@ ___
 #### Defined in
 
 [src/prc/channel/channel-user/channel-user.resolver.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L42)
+
+___
+
+### updateBan
+
+▸ **updateBan**(`JwtUser`, `channel_name`, `banUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `JwtUser` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `channel_name` | `string` |
+| `banUser` | `number` |
+
+#### Returns
+
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+
+#### Defined in
+
+[src/prc/channel/channel-user/channel-user.resolver.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L70)
 
 ___
 

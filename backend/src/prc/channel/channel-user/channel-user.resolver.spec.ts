@@ -63,10 +63,12 @@ describe('ChannelUserResolver', () => {
     await mockRepoChannelUser.destroyRepo();
   });
 
+  //DEFINE
   it('should be defined', () => {
     expect(channelUserResolver).toBeDefined();
   });
 
+  //ADMIN
   it('should not update admin because oldAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       username: mockUser.username,
@@ -131,6 +133,122 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
+    ).resolves.not.toThrow();
+  });
+
+  //PASSWORD
+  it('should not change password because user not on channel', async () => {
+    const JwtUser: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const name = '#test';
+    await expect(
+      channelUserResolver.updatePassword(JwtUser, name, 'new'),
+    ).rejects.toThrow(JwtUser.id + ' not in ' + name);
+  });
+
+  it('should not update password because user not channel owner', async () => {
+    const JwtUser: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const name = '#test';
+    await expect(
+      channelResolver.joinChannel({ name: name, password: '' }, mockUser2),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: name, password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updatePassword(JwtUser, name, 'new'),
+    ).rejects.toThrow('Not Channel Owner');
+  });
+
+  it('should update password', async () => {
+    const JwtUser: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const name = '#test';
+    await expect(
+      channelResolver.joinChannel({ name: name, password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updatePassword(JwtUser, name, 'new'),
+    ).resolves.toEqual(expect.any(Channel));
+  });
+
+  it('should not ban user because admin is not on channel', async () => {
+    const admin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const banUser: User = mockUser2;
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).rejects.toThrow(WsException);
+  });
+
+  it('should not ban user because user to be banned is not on channel', async () => {
+    const admin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const banUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).rejects.toThrow(banUser.id + ' not in #test');
+  });
+
+  it('should not ban user because admin is not an admin on channel', async () => {
+    const admin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const banUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, banUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).rejects.toThrow(admin.username + ' is not a Channel Admin on #test');
+  });
+
+  it('should ban user', async () => {
+    const admin: JwtPayload = {
+      username: mockUser.username,
+      email: mockUser.email,
+      id: mockUser.id,
+      isAuthenticated: true,
+    };
+    const banUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, banUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
   });
 });

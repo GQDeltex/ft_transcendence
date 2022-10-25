@@ -69,7 +69,7 @@ export class ChannelService {
   Returns:
     The id of the newly created channel.
   */
-  async create(createChannelInput: CreateChannelInput) {
+  async create(createChannelInput: CreateChannelInput): Promise<number> {
     const result: InsertResult = await this.channelRepository.insert(
       createChannelInput,
     );
@@ -99,12 +99,12 @@ export class ChannelService {
     try {
       channel = await this.findOne(createChannelInput.name);
     } catch (Error) {
-      console.log('New Channel created');
+      //console.log(createChannelInput.name + ' created'); DEBUG
       channel = await this.findOne(await this.create(createChannelInput));
       brandNew = true;
     }
     if (createChannelInput.password === channel.password) {
-      console.log('Good Password');
+      //console.log('Good Password'); DEBUG
       if (
         !channel.userList.some((channelUser) => channelUser.user.id === user.id)
       ) {
