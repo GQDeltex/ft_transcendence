@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L14)
+[src/prc/channel/channel.resolver.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L16)
 
 ## Properties
 
@@ -45,13 +45,19 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L14)
+[src/prc/channel/channel.resolver.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L16)
 
 ## Methods
 
 ### findAll
 
-▸ **findAll**(): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)[]\>
+▸ **findAll**(`user`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 
 #### Returns
 
@@ -59,7 +65,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L16)
+[src/prc/channel/channel.resolver.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L18)
 
 ___
 
@@ -79,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L26)
+[src/prc/channel/channel.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L28)
 
 ___
 
@@ -99,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L21)
+[src/prc/channel/channel.resolver.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L23)
 
 ___
 
@@ -120,4 +126,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:34](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L34)
+[src/prc/channel/channel.resolver.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L36)
