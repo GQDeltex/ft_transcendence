@@ -10,7 +10,7 @@ import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
-import { HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -27,10 +27,10 @@ describe('UsersService', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         ConfigService,
         UsersService,
-        HttpService,
         PrcGateway,
         ChannelService,
         mockRepoUser.getProvider(),

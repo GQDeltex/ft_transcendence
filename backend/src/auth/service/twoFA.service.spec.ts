@@ -9,7 +9,7 @@ import { Channel } from '../../prc/channel/entities/channel.entity';
 import { PrcGateway } from '../../prc/prc.gateway';
 import { ChannelService } from '../../prc/channel/channel.service';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
-import { HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 
 describe('TwoFAService', () => {
   let service: TwoFAService;
@@ -26,10 +26,10 @@ describe('TwoFAService', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         TwoFAService,
         UsersService,
-        HttpService,
         ConfigService,
         PrcGateway,
         ChannelService,
