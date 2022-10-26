@@ -18,8 +18,8 @@
 
 - [findAll](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findall)
 - [findOne](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findone)
-- [unmute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unmute)
 - [unban](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unban)
+- [unmute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unmute)
 - [updateAdmin](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateadmin)
 - [updateBan](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateban)
 - [updateMute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updatemute)
@@ -86,9 +86,6 @@ ___
 
 ___
 
-### unmute
-
-▸ **unmute**(`channelUserID`): `Promise`<`void`\>
 ### unban
 
 ▸ **unban**(`channelUserID`): `Promise`<`void`\>
@@ -104,7 +101,28 @@ ___
 `Promise`<`void`\>
 
 #### Defined in
+
 [src/prc/channel/channel-user/channel-user.service.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L40)
+
+___
+
+### unmute
+
+▸ **unmute**(`channelUserID`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelUserID` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/prc/channel/channel-user/channel-user.service.ts:60](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L60)
 
 ___
 
@@ -144,7 +162,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L40)
+[src/prc/channel/channel-user/channel-user.service.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L49)
 
 ___
 
@@ -164,4 +182,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:61](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L61)
+[src/prc/channel/channel-user/channel-user.service.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L69)
