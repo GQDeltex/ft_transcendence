@@ -17,6 +17,8 @@
 - [auth/service/twoFA.service](modules/auth_service_twoFA_service.md)
 - [auth/strategy/intra42.strategy](modules/auth_strategy_intra42_strategy.md)
 - [auth/strategy/jwt.strategy](modules/auth_strategy_jwt_strategy.md)
+- [game/entities/game.entity](modules/game_entities_game_entity.md)
+- [game/entities/queuedplayer.entity](modules/game_entities_queuedplayer_entity.md)
 - [game/game.gateway](modules/game_game_gateway.md)
 - [game/game.module](modules/game_game_module.md)
 - [game/game.resolver](modules/game_game_resolver.md)
