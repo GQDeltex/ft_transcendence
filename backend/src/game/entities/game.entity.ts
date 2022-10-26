@@ -16,11 +16,11 @@ export class Game {
   id: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false, eager: true })
   player1: User;
 
   @Field(() => User)
-  @ManyToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false, eager: true })
   player2: User;
 
   @Field(() => Int)

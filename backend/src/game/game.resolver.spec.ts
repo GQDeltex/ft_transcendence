@@ -2,29 +2,33 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GameResolver } from './game.resolver';
 import { GameService } from './game.service';
 import { Game } from './entities/game.entity';
-import { MockRepo } from '../tools/memdb.mock';
+import { mockGame } from './entities/game.entity.mock';
+import { User } from '../users/entities/user.entity';
+import { mockUser } from '../users/entities/user.entity.mock';
+import { MockDB } from '../tools/memdbv2.mock';
 
 describe('GameResolver', () => {
   let resolver: GameResolver;
-  let mockRepoGame: MockRepo;
+  let mockDB: MockDB;
 
   beforeEach(async () => {
-    mockRepoGame = new MockRepo('GameResolver', Game);
-    await mockRepoGame.setupDb();
+    mockDB = await new MockDB('GameService').setupDB();
+    await mockDB.prefillDB(User, [mockUser]);
+    await mockDB.prefillDB(Game, [mockGame]);
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GameResolver, GameService, mockRepoGame.getProvider()],
+      providers: [GameResolver, GameService, await mockDB.getProvider(Game)],
     }).compile();
 
     resolver = module.get<GameResolver>(GameResolver);
   });
 
   afterEach(async () => {
-    await mockRepoGame.clearRepo();
+    await mockDB.destroySource();
   });
 
   afterAll(async () => {
-    await mockRepoGame.destroyRepo();
+    await mockDB.destroyDB();
   });
 
   it('should be defined', () => {
