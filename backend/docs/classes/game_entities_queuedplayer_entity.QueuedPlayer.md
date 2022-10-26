@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/game/entities/queuedplayer.entity.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L10)
+[src/game/entities/queuedplayer.entity.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L7)
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 #### Defined in
 
-[src/game/entities/queuedplayer.entity.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L14)
+[src/game/entities/queuedplayer.entity.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L10)
