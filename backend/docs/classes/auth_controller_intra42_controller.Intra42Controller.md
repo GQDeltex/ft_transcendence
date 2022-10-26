@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L70)
+[src/auth/controller/intra42.controller.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L72)
 
 ___
 
@@ -145,4 +145,4 @@ ___
 
 #### Defined in
 
-[src/auth/controller/intra42.controller.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L65)
+[src/auth/controller/intra42.controller.ts:67](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/auth/controller/intra42.controller.ts#L67)
