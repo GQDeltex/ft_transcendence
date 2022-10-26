@@ -242,6 +242,34 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).rejects.toThrow(`${banUser.id} is already banned on #test`);
+    jest.runAllTimers();
+    jest.useRealTimers();
+  });
+
+  it('should unban user after ban time elapsed', async () => {
+    jest.useFakeTimers({ legacyFakeTimers: true });
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const banUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, banUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).resolves.not.toThrow();
+    jest.runAllTimers();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).resolves.not.toThrow();
     jest.runAllTimers();
     jest.useRealTimers();
   });
