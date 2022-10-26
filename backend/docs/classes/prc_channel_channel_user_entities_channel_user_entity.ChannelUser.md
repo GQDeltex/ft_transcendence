@@ -19,8 +19,6 @@
 - [id](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#id)
 - [mute](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#mute)
 - [owner](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#owner)
-- [unbanTime](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#unbantime)
-- [unmuteTime](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#unmutetime)
 - [user](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#user)
 - [user\_id](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md#user_id)
 
@@ -88,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L53)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L49)
 
 ___
 
@@ -99,26 +97,6 @@ ___
 #### Defined in
 
 [src/prc/channel/channel-user/entities/channel-user.entity.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L41)
-
-___
-
-### unbanTime
-
-• **unbanTime**: ``null`` \| `Date`
-
-#### Defined in
-
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L49)
-
-___
-
-### unmuteTime
-
-• **unmuteTime**: ``null`` \| `Date`
-
-#### Defined in
-
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:57](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L57)
 
 ___
 

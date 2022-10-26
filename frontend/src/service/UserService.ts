@@ -128,9 +128,17 @@ class UserService {
         query {
           user {
             id
+            intra
+            firstname
+            lastname
             username
             title
             picture
+            campus
+            country
+            coalition
+            status
+            lastLoggedIn
             twoFAEnable
             friends
             sentFriendRequests
@@ -154,9 +162,17 @@ class UserService {
         query User($id: Int!) {
           user(id: $id) {
             id
+            intra
+            firstname
+            lastname
             username
             title
             picture
+            campus
+            country
+            coalition
+            status
+            lastLoggedIn
           }
         }
       `,
@@ -172,10 +188,17 @@ class UserService {
         query {
           users {
             id
+            intra
+            firstname
+            lastname
             username
             title
             picture
+            campus
+            country
+            coalition
             status
+            lastLoggedIn
           }
         }
       `,

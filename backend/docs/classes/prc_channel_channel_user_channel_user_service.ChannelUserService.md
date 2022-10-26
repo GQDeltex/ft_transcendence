@@ -19,6 +19,7 @@
 - [findAll](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findall)
 - [findOne](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findone)
 - [unmute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unmute)
+- [unban](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unban)
 - [updateAdmin](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateadmin)
 - [updateBan](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateban)
 - [updateMute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updatemute)
@@ -88,6 +89,9 @@ ___
 ### unmute
 
 ▸ **unmute**(`channelUserID`): `Promise`<`void`\>
+### unban
+
+▸ **unban**(`channelUserID`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -100,8 +104,7 @@ ___
 `Promise`<`void`\>
 
 #### Defined in
-
-[src/prc/channel/channel-user/channel-user.service.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L52)
+[src/prc/channel/channel-user/channel-user.service.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L40)
 
 ___
 
