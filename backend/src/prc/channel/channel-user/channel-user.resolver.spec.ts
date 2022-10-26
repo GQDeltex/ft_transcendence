@@ -18,7 +18,6 @@ import { HttpModule } from '@nestjs/axios';
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
   let channelResolver: ChannelResolver;
-  let channelUserService: ChannelUserService;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -50,7 +49,6 @@ describe('ChannelUserResolver', () => {
       ],
     }).compile();
 
-    channelUserService = module.get<ChannelUserService>(ChannelUserService);
     channelUserResolver = module.get<ChannelUserResolver>(ChannelUserResolver);
     channelResolver = module.get<ChannelResolver>(ChannelResolver);
   });

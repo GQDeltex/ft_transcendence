@@ -12,7 +12,7 @@ describe('GameResolver', () => {
   let mockDB: MockDB;
 
   beforeEach(async () => {
-    mockDB = await new MockDB('GameService').setupDB();
+    mockDB = await new MockDB('GameResolver').setupDB();
     await mockDB.prefillDB(User, [mockUser]);
     await mockDB.prefillDB(Game, [mockGame]);
 
