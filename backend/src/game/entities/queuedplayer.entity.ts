@@ -4,7 +4,7 @@ import { User } from '../../users/entities/user.entity';
 
 @ObjectType()
 @Entity()
-export class Game {
+export class QueuedPlayer {
   @PrimaryGeneratedColumn({ type: 'int' })
   @Field(() => Int)
   id: number;
