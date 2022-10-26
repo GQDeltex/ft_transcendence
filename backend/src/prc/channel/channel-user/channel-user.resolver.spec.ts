@@ -14,6 +14,7 @@ import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 import { HttpModule } from '@nestjs/axios';
+import { userInfo } from 'os';
 
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
@@ -290,8 +291,9 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).rejects.toThrow(`${admin.id} is not a Channel Admin on #test`);
   });
-  jest.useFakeTimers();
+
   it('should mute user', async () => {
+    jest.useFakeTimers({ legacyFakeTimers: true });
     const admin: JwtPayload = {
       id: mockUser.id,
       email: mockUser.email,
@@ -307,6 +309,35 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).resolves.not.toThrow();
-    jest.advanceTimersByTime(30 * 1000);
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).rejects.toThrow(`${muteUser.id} is already muted on #test`);
+    jest.runAllTimers();
+    jest.useRealTimers();
+  });
+
+  it('should unmute user after mute time elapsed', async () => {
+    jest.useFakeTimers({ legacyFakeTimers: true });
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const muteUser: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, muteUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).resolves.not.toThrow();
+    jest.runAllTimers();
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+    ).resolves.not.toThrow();
+    jest.runAllTimers();
+    jest.useRealTimers();
   });
 });
