@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 export interface Message {
-  from: { id: number; username: string };
+  from: { id: number; name: string };
   to: { id?: number; name: string };
   msg: string;
 }

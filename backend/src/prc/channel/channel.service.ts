@@ -12,6 +12,7 @@ import { CreateChannelInput } from './channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
 import { Message } from '../message/message';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChannelService {
@@ -59,15 +60,19 @@ export class ChannelService {
 
   /**
   Create a new channel.
-  
+
   Args:
     createChannelInput: The input for the createChannel method.
   Returns:
     The id of the newly created channel.
   */
   async create(createChannelInput: CreateChannelInput): Promise<number> {
+    let passwdHash = createChannelInput.password;
+    if (createChannelInput.password != '') {
+      passwdHash = await bcrypt.hash(createChannelInput.password, 10);
+    }
     const result: InsertResult = await this.channelRepository.insert(
-      createChannelInput,
+      Object.assign(createChannelInput, { password: passwdHash }),
     );
     return +result.identifiers[0].id;
   }
@@ -78,7 +83,7 @@ export class ChannelService {
 
   findMessagesForRecipient(recipient: string) {
     return this.messages.filter(
-      ({ from, to }) => from.username === recipient || to.name === recipient,
+      ({ from, to }) => from.name === recipient || to.name === recipient,
     );
   }
 
@@ -92,6 +97,7 @@ export class ChannelService {
   async join(createChannelInput: CreateChannelInput, user: User) {
     let channel: Channel;
     let brandNew = false;
+    const userPassword = createChannelInput.password;
     try {
       channel = await this.findOne(createChannelInput.name);
     } catch (Error) {
@@ -99,7 +105,11 @@ export class ChannelService {
       channel = await this.findOne(await this.create(createChannelInput));
       brandNew = true;
     }
-    if (createChannelInput.password === channel.password) {
+    let passwordsAreEqual = true;
+    if (channel.password != '') {
+      passwordsAreEqual = await bcrypt.compare(userPassword, channel.password);
+    }
+    if (passwordsAreEqual == true) {
       //console.log('Good Password'); DEBUG
       if (
         !channel.userList.some((channelUser) => channelUser.user.id === user.id)
@@ -183,9 +193,13 @@ export class ChannelService {
   3. Finally, we’re returning the updated channel.
   */
   async updatePassword(channelName: string, newPassword: string) {
+    let passwdHash = newPassword;
+    if (newPassword != '') {
+      passwdHash = await bcrypt.hash(newPassword, 10);
+    }
     const result: UpdateResult = await this.channelRepository.update(
       { name: channelName },
-      { password: newPassword },
+      { password: passwdHash },
     );
     if (typeof result.affected != 'undefined' && result.affected != 1)
       throw new EntityNotFoundError(Channel, { name: channelName });

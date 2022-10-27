@@ -77,10 +77,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       client.join(channelUser.channel_name);
       this.channelService
         .findMessagesForRecipient(channelUser.channel_name)
+        .filter(({ to }) => to.name.startsWith('#'))
         .forEach((message) => client.emit('prc', message));
     });
     this.channelService
       .findMessagesForRecipient(user.username)
+      .filter(({ to }) => !to.name.startsWith('#'))
       .forEach((message) => client.emit('prc', message));
   }
 
@@ -112,7 +114,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     const sender: User = await this.usersService.findOne(user.id);
     let recClient;
     const message = {
-      from: { id: sender.id, username: sender.username },
+      from: { id: sender.id, name: sender.username },
       to: { name: to },
       msg: msg,
     };
@@ -153,7 +155,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
     const message = {
-      from: { id: -1, username: '' },
+      from: { id: -1, name: '' },
       to: { name: channel.name },
       msg: sender.username + ' has joined your channel.',
     };

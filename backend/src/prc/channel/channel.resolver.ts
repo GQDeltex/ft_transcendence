@@ -1,5 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { CurrentUser } from '../../users/decorator/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt.guard';
@@ -28,6 +36,11 @@ export class ChannelResolver {
   @Query(() => Channel, { name: 'channelByName' })
   findOneByChannelName(@Args('name') channelName: string) {
     return this.channelService.findOne(channelName);
+  }
+
+  @ResolveField('password', () => Boolean)
+  async hasPassword(@Parent() channel: Channel): Promise<boolean> {
+    return channel.password != '';
   }
 
   /*

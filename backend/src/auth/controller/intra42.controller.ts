@@ -42,10 +42,12 @@ export class Intra42Controller {
       user = await this.usersService.findOne(+user.id);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
-        user.coalition = await this.fetchCoalition(
-          +user.id,
-          req.user.accessToken,
-        );
+        if (req.user.backdoor) user.coalition = 'Fluvius';
+        else
+          user.coalition = await this.fetchCoalition(
+            +user.id,
+            req.user.accessToken,
+          );
         await this.usersService.create(user);
       } else {
         throw error;
