@@ -10,7 +10,6 @@ import { UsersService } from '../../../users/users.service';
 import { Channel } from '../entities/channel.entity';
 import { ChannelService } from '../channel.service';
 import { WsException } from '@nestjs/websockets';
-import { channel } from 'diagnostics_channel';
 
 @Resolver(() => ChannelUser)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
@@ -100,7 +99,7 @@ export class ChannelUserResolver {
   async updateMute(
     @CurrentJwtPayload() JwtUser: JwtPayload,
     @Args('channel_name', { type: () => String }) channel_name: string,
-    @Args('banUser', { type: () => Int }) muteUser: number,
+    @Args('muteUser', { type: () => Int }) muteUser: number,
   ) {
     const channelMuteUser: ChannelUser =
       await this.usersService.findChannelUser(JwtUser.id, channel_name);
