@@ -26,7 +26,7 @@ function sendMsg() {
   console.log(props.chatName, text.value);
   socket.emit('prc', { to: props.chatName, msg: text.value });
   messagesStore.saveMessage({
-    from: { id: +userStore.id, username: userStore.username },
+    from: { id: +userStore.id, name: userStore.username },
     to: { name: props.chatName },
     msg: text.value,
   });
@@ -42,8 +42,8 @@ function sendMsg() {
     <div id="container" class="messages">
       <span
         v-for="message in messages"
-        :key="`msg_${message.from.username}_${message.to.name}_${message.msg}`"
-        >{{ message.from.username }}: {{ message.msg }}<br
+        :key="`msg_${message.from.name}_${message.to.name}_${message.msg}`"
+        >{{ message.from.name }}: {{ message.msg }}<br
       /></span>
     </div>
     <div class="lower">
