@@ -90,7 +90,7 @@ export class ChannelUserResolver {
       throw new WsException(
         JwtUser.id + ' is not a Channel Admin on ' + channel_name,
       );
-    if (channelUserNew.admin)
+    if (channelUserNew.ban)
       throw new WsException(banUser + ' is already banned on ' + channel_name);
     return await this.channelUserService.updateBan(channelUserNew);
   }
