@@ -6,6 +6,10 @@ function join_queue() {
 function leave_queue() {
   socket.emit('queue', { event: 'LEAVE' });
 }
+
+socket.on('Game', () => {
+  console.log('ich will ein spiel mit dir spielen');
+});
 </script>
 
 <template>

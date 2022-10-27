@@ -1,4 +1,6 @@
 import {
+  forwardRef,
+  Inject,
   UseFilters,
   UseGuards,
   UsePipes,
@@ -10,12 +12,14 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { JwtPayload } from '../auth/strategy/jwt.strategy';
 import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
 import { CurrentUserFromWs } from '../tools/UserFromWs';
+import { Game } from './entities/game.entity';
 import { GameService } from './game.service';
 
 @UsePipes(new ValidationPipe())
@@ -31,7 +35,10 @@ import { GameService } from './game.service';
 export class GameGateway {
   @WebSocketServer()
   server: Server;
-  constructor(private readonly gameService: GameService) {}
+  constructor(
+    @Inject(forwardRef(() => GameService))
+    private readonly gameService: GameService,
+  ) {}
 
   @SubscribeMessage('message')
   handleMessage(
@@ -54,5 +61,20 @@ export class GameGateway {
     } else if (event === 'LEAVE') {
       await this.gameService.dequeuePlayer(jwtPayload.id);
     }
+  }
+  async startGame(game: Game) {
+    const p1sockets = await this.server
+      .in(game.player1.socketId)
+      .fetchSockets();
+    if (p1sockets.length < 1)
+      throw new WsException('Could not find Recipients socket');
+    const p2sockets = await this.server
+      .in(game.player2.socketId)
+      .fetchSockets();
+    if (p2sockets.length < 1)
+      throw new WsException('Could not find Recipients socket');
+
+    p1sockets[0].emit('Game');
+    p2sockets[0].emit('Game');
   }
 }

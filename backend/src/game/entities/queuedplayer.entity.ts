@@ -1,10 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class QueuedPlayer {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @Column({ type: 'int', unique: true })
+  @OneToOne(() => User, { eager: true, cascade: true, nullable: false })
+  @JoinColumn({ name: 'playerId' })
+  user: User;
+
+  @Column()
   playerId: number;
 }
