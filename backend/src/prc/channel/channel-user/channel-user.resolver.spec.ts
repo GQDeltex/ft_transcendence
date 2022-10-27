@@ -14,7 +14,6 @@ import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 import { HttpModule } from '@nestjs/axios';
-import { userInfo } from 'os';
 
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
