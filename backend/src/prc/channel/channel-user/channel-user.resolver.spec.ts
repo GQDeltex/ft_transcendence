@@ -243,6 +243,7 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
     jest.runAllTimers();
+    jest.clearAllTimers();
     jest.useRealTimers();
   });
 
@@ -312,6 +313,7 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).rejects.toThrow(`${muteUser.id} is already muted on #test`);
     jest.runAllTimers();
+    jest.clearAllTimers();
     jest.useRealTimers();
   });
 
@@ -337,6 +339,7 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).resolves.not.toThrow();
     jest.runAllTimers();
+    jest.clearAllTimers();
     jest.useRealTimers();
   });
 });
