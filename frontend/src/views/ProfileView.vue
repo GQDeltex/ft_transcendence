@@ -32,14 +32,6 @@ const fetchUserData = async (id: number) => {
   }
 };
 
-const file = ref<HTMLInputElement | null>(null);
-
-const uploadPicture = async () => {
-  if (file.value?.files) {
-    await userStore.uploadPicture(file.value.files[0]);
-  }
-};
-
 onBeforeMount(async () => {
   await fetchUserData(+route.params.id);
 });
@@ -58,52 +50,57 @@ const logout = async () => {
 
 <template>
   <button v-if="isMe" class="button" @click="logout">Log out</button>
-
-  <div v-if="user" class="profileView">
+  <div v-if="user" class="profileViewParent">
     <ProfileComponent class="profile" />
-    <ParentHistoryComponent class="history" />
-    <div class="aboutParent">
-      <AboutMeComponent />
-      <ParentAchievementsComponent class="achievement" />
+    <div class="lowerPart">
+      <ParentHistoryComponent class="history" />
+      <div class="aboutParent">
+        <AboutMeComponent class="aboutMe" />
+        <ParentAchievementsComponent class="achievement" />
+      </div>
     </div>
   </div>
-  <input ref="file" name="picture" type="file" accept="image/*" />
-  <button class="button" @click="uploadPicture" />
 </template>
 
 <style scoped>
-.profileView {
+.profileViewParent {
   display: grid;
-  margin-left: 5vw;
-  margin-right: 5vw;
+  grid-gap: 0.5%;
+  justify-content: center;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 1vw;
+  width: 90%;
+  height: 70vh;
 }
 
-.profile {
-  grid-column: 1 / 6;
-  margin: 1px;
-}
-
-.history {
-  grid-column: 1 / 4;
-  margin: 2px;
+.lowerPart {
+  display: grid;
+  max-height: 50vh;
+  grid-auto-flow: column;
 }
 
 .aboutParent {
-  grid-column: 4 / 6;
-  grid-row: 2 / 4;
-  margin: 1px;
+  display: grid;
+  grid-column: 2 / 3;
 }
 
 .achievement {
-  margin: 4px 1px 1px;
+  grid-row: 2 / 3;
+  max-height: 30vh;
 }
 
 .button {
   text-decoration: none;
-  border-radius: 20px;
+  border-radius: 25px;
   color: white;
   background-color: #f8971d;
-  padding: 10px;
   cursor: pointer;
+  float: right;
+  font-size: 1vw;
+}
+.aboutMe {
+  grid-row: 1 / 2;
+  height: 20vh;
 }
 </style>
