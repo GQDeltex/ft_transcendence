@@ -6,8 +6,8 @@ type Channel {
   id: Int!
   name: String!
   private: Boolean!
-  password: String!
   userList: [ChannelUser!]!
+  password: Boolean!
 }
 
 type ChannelUser {
@@ -17,28 +17,25 @@ type ChannelUser {
   admin: Boolean!
   owner: Boolean!
   ban: Boolean!
-  unbanTime: Timestamp
   mute: Boolean!
-  unmuteTime: Timestamp
 }
-
-"""
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
-"""
-scalar Timestamp
 
 type User {
   id: Int!
+  email: String!
+  intra: String!
   firstname: String!
   lastname: String!
   username: String!
-  email: String!
+  title: [String!]!
   picture: String!
+  coalition: String!
   campus: String!
   country: String!
-  title: [String!]!
-  twoFAEnable: Boolean!
+  inventory: [Int!]!
   status: String!
+  lastLoggedIn: Timestamp!
+  twoFAEnable: Boolean!
   channelList: [ChannelUser!]
   friends: [Int]!
   sentFriendRequests: [Int]!
@@ -47,25 +44,52 @@ type User {
   blockedBy: [Int]!
 }
 
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type Item {
+  id: Int!
+  name: String!
+  description: String!
+  price: Float!
+  picture: String!
+}
+
+type Game {
+  id: Int!
+  player1: User!
+  player2: User!
+  score1: Int!
+  score2: Int!
+  state: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int): User!
   userByName(username: String!): User!
   userChannelList(username: String!): User!
+  getItems: [Item!]!
   channels: [Channel!]!
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
   channelUsers: [ChannelUser!]!
+  games(state: String): [Game!]!
+  game(id: Int!): Game!
 }
 
 type Mutation {
   updateUsername(username: String!): User!
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
   updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
+  updateInventory(orderId: String!): User!
   joinChannel(name: String!, password: String!): Channel!
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
   updateBan(channel_name: String!, banUser: Int!): ChannelUser!
+  updateMute(channel_name: String!, banUser: Int!): ChannelUser!
 }
 
 enum AllowedUpdateFriendshipMethod {

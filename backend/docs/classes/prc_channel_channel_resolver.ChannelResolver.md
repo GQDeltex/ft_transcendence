@@ -19,6 +19,7 @@
 - [findAll](prc_channel_channel_resolver.ChannelResolver.md#findall)
 - [findOneByChannelName](prc_channel_channel_resolver.ChannelResolver.md#findonebychannelname)
 - [findOneById](prc_channel_channel_resolver.ChannelResolver.md#findonebyid)
+- [hasPassword](prc_channel_channel_resolver.ChannelResolver.md#haspassword)
 - [joinChannel](prc_channel_channel_resolver.ChannelResolver.md#joinchannel)
 
 ## Constructors
@@ -35,7 +36,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L16)
+[src/prc/channel/channel.resolver.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L24)
 
 ## Properties
 
@@ -45,7 +46,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L16)
+[src/prc/channel/channel.resolver.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L24)
 
 ## Methods
 
@@ -65,7 +66,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L18)
+[src/prc/channel/channel.resolver.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L26)
 
 ___
 
@@ -85,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L28)
+[src/prc/channel/channel.resolver.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L36)
 
 ___
 
@@ -105,7 +106,27 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L23)
+[src/prc/channel/channel.resolver.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L31)
+
+___
+
+### hasPassword
+
+▸ **hasPassword**(`channel`): `Promise`<`boolean`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channel` | [`Channel`](prc_channel_entities_channel_entity.Channel.md) |
+
+#### Returns
+
+`Promise`<`boolean`\>
+
+#### Defined in
+
+[src/prc/channel/channel.resolver.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L41)
 
 ___
 
@@ -126,4 +147,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L36)
+[src/prc/channel/channel.resolver.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L49)

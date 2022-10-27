@@ -58,7 +58,7 @@ export class ChannelUserResolver {
     //console.log('both users are good'); //DEBUG
     if (!channelUserAdmin.admin)
       throw new WsException(
-        JwtUser.username + ' is not a Channel Admin on ' + channel_name,
+        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
       );
     if (channelUserNew.admin)
       throw new WsException(
@@ -88,10 +88,36 @@ export class ChannelUserResolver {
     //console.log('both users are good'); //DEBUG
     if (!channelBanUser.admin)
       throw new WsException(
-        JwtUser.username + ' is not a Channel Admin on ' + channel_name,
+        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
       );
-    if (channelUserNew.admin)
+    if (channelUserNew.ban)
       throw new WsException(banUser + ' is already banned on ' + channel_name);
     return await this.channelUserService.updateBan(channelUserNew);
+  }
+
+  @Mutation(() => ChannelUser)
+  async updateMute(
+    @CurrentJwtPayload() JwtUser: JwtPayload,
+    @Args('channel_name', { type: () => String }) channel_name: string,
+    @Args('muteUser', { type: () => Int }) muteUser: number,
+  ) {
+    const channelMuteUser: ChannelUser =
+      await this.usersService.findChannelUser(JwtUser.id, channel_name);
+    if (typeof channelMuteUser === 'undefined')
+      throw new WsException('channelMuteUser undefined');
+    const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
+      muteUser,
+      channel_name,
+    );
+    if (typeof channelUserNew === 'undefined')
+      throw new WsException('channelMuteUserNew undefined');
+    //console.log('both users are good'); //DEBUG
+    if (!channelMuteUser.admin)
+      throw new WsException(
+        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
+      );
+    if (channelUserNew.mute)
+      throw new WsException(muteUser + ' is already muted on ' + channel_name);
+    return await this.channelUserService.updateMute(channelUserNew);
   }
 }

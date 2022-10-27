@@ -10,6 +10,7 @@ import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
+import { HttpModule } from '@nestjs/axios';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -26,6 +27,7 @@ describe('UsersService', () => {
     await mockRepoChannelUser.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         ConfigService,
         UsersService,
@@ -102,6 +104,26 @@ describe('UsersService', () => {
     const newerUser: User = createMockUser({ id: testUser.id });
     await expect(service.create(newerUser)).rejects.toThrow(QueryFailedError);
     await expect(service.findOne(testUser.id)).resolves.toEqual(testUser);
+  });
+
+  it('should create a user with number if username exists', async () => {
+    const newerUser: User = mockRepoUser.getTestEntity({
+      username: 'othertestuser',
+      id: 85432,
+    });
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+    newerUser.id = 94623;
+    newerUser.username = 'othertestuser';
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser1';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
+    newerUser.id = 74362;
+    newerUser.username = 'othertestuser';
+    await expect(service.create(newerUser)).resolves.not.toThrow();
+    newerUser.username = 'othertestuser2';
+    await expect(service.findOne(newerUser.id)).resolves.toEqual(newerUser);
   });
 
   it('should change the username', async () => {
@@ -203,11 +225,19 @@ describe('UsersService', () => {
   });
 
   it('should update the status', async () => {
-    const newUser: User = mockRepoUser.getTestEntity({ status: 'online' });
+    const mockDate = new Date();
+    const spy = jest
+      .spyOn(global.Date, 'now')
+      .mockImplementation(() => mockDate.valueOf());
+    const newUser: User = mockRepoUser.getTestEntity({
+      status: 'online',
+      lastLoggedIn: mockDate,
+    });
     await expect(
       service.updateStatus(newUser.id, newUser.status),
     ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+    spy.mockRestore();
   });
 
   it('should not change status if not exists', async () => {
@@ -217,11 +247,19 @@ describe('UsersService', () => {
   });
 
   it('should update the status via socket-id', async () => {
-    const newUser: User = mockRepoUser.getTestEntity({ status: 'online' });
+    const mockDate = new Date();
+    const spy = jest
+      .spyOn(global.Date, 'now')
+      .mockImplementation(() => mockDate.valueOf());
+    const newUser: User = mockRepoUser.getTestEntity({
+      status: 'online',
+      lastLoggedIn: mockDate,
+    });
     await expect(
       service.updateStatus(newUser.socketId, newUser.status),
     ).resolves.not.toThrow();
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+    spy.mockRestore();
   });
 
   it('should not update the status via socket-id if not exists', async () => {
@@ -231,7 +269,7 @@ describe('UsersService', () => {
   });
 
   it('should block user', async () => {
-    const user: User = mockRepoUser.getTestEntity({ blocking_id: [696969] });
+    const user: User = mockRepoUser.getTestEntity();
     const newUser = createMockUser({
       id: 696969,
       username: 'test696969',

@@ -13,6 +13,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { GameModule } from './game/game.module';
+import { Game } from './game/entities/game.entity';
+import { QueuedPlayer } from './game/entities/queuedplayer.entity';
 
 @Module({
   imports: [
@@ -46,7 +49,7 @@ import { join } from 'path';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Channel, ChannelUser],
+        entities: [User, Channel, ChannelUser, Game, QueuedPlayer],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -56,8 +59,8 @@ import { join } from 'path';
     AuthModule,
     PrcModule,
     HealthModule,
+    GameModule,
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}

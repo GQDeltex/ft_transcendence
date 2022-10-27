@@ -3,6 +3,7 @@ import axios from 'axios';
 import type {
   AllowedUpdateBlockingMethod,
   AllowedUpdateFriendshipMethod,
+  Item,
   User,
 } from '@/store/user';
 
@@ -127,15 +128,24 @@ class UserService {
         query {
           user {
             id
+            intra
+            firstname
+            lastname
             username
             title
             picture
+            campus
+            country
+            coalition
+            status
+            lastLoggedIn
             twoFAEnable
             friends
             sentFriendRequests
             receivedFriendRequests
             blocks
             blockedBy
+            inventory
           }
         }
       `,
@@ -152,9 +162,17 @@ class UserService {
         query User($id: Int!) {
           user(id: $id) {
             id
+            intra
+            firstname
+            lastname
             username
             title
             picture
+            campus
+            country
+            coalition
+            status
+            lastLoggedIn
           }
         }
       `,
@@ -170,10 +188,17 @@ class UserService {
         query {
           users {
             id
+            intra
+            firstname
+            lastname
             username
             title
             picture
+            campus
+            country
+            coalition
             status
+            lastLoggedIn
           }
         }
       `,
@@ -240,6 +265,40 @@ class UserService {
     if (typeof updateBlocking === 'undefined')
       throw new Error('Empty blocking data');
     return updateBlocking;
+  }
+
+  async getItems(): Promise<Item[]> {
+    const { getItems } = await graphQLService.query(
+      `
+        query {
+          getItems {
+            id
+            name
+            description
+            price
+            picture
+          }
+        }
+      `,
+    );
+    if (typeof getItems === 'undefined') throw new Error('Empty items data');
+    return getItems;
+  }
+
+  async updateInventory(orderId: string): Promise<Partial<User>> {
+    const { updateInventory } = await graphQLService.mutation(
+      `
+        mutation updateInventory($orderId: String!) {
+          updateInventory(orderId: $orderId) {
+            inventory
+          }
+        }
+      `,
+      { orderId },
+    );
+    if (typeof updateInventory === 'undefined')
+      throw new Error('Empty inventory data');
+    return updateInventory;
   }
 }
 

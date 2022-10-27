@@ -21,7 +21,9 @@ export class Intra42OAuthGuard extends AuthGuard('intra42') {
       req.user = mockUser;
       req.user.id = +id;
       req.user.username = `anon_${id}`;
-      req.user.picture = 'https://cdn.intra.42.fr/users/gucalvi.jpg';
+      req.user.picture =
+        'https://cdn.intra.42.fr/users/aef7f64aafa9be9cb3f74af9c19af839/gucalvi.jpg';
+      req.user.backdoor = true;
       return true;
     }
 
