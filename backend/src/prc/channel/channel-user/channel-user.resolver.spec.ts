@@ -270,7 +270,7 @@ describe('ChannelUserResolver', () => {
     ).rejects.toThrow(WsException);
   });
 
-  it('should not ban user because user to be muted is not on channel', async () => {
+  it('should not mute user because user to be muted is not on channel', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
       email: mockUser.email,
@@ -317,13 +317,20 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelResolver.joinChannel({ name: '#test', password: '' }, muteUser),
     ).resolves.not.toThrow();
+    const channelUserNew: ChannelUser = await usersService.findChannelUser(
+      muteUser.id,
+      '#test',
+    );
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).resolves.not.toThrow();
+    jest.clearAllTimers();
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).rejects.toThrow(`${muteUser.id} is already muted on #test`);
-    jest.clearAllTimers();
+    await expect(
+      channelUserService.unmute(channelUserNew.id),
+    ).resolves.not.toThrow();
     jest.useRealTimers();
   });
 });
