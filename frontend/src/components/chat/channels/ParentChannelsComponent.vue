@@ -36,7 +36,7 @@ const channelSelect = (input: string) => {
       <button class="button" @click="joinNewChannel">
         Join / Create Channel
       </button>
-      <ModalChannelComponent v-show="modalActive" @update="onClose" />
+      <ModalChannelComponent v-show="modalActive" @close="onClose" />
     </span>
     <div class="list">
       <ChildChannelComponent
