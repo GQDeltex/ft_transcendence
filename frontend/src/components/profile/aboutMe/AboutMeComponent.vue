@@ -17,7 +17,6 @@ const capitalize = (str: string) => {
       About
       <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
     </span>
-    <p class="moreAbout">+ Tell us about yourself</p>
     <div class="infoBox">
       User name: <span class="info">{{ user.username }}</span>
       <br />
@@ -47,16 +46,20 @@ const capitalize = (str: string) => {
 .about {
   padding: 1vw;
   border: 1px solid grey;
-}
-
-.moreAbout {
-  font-size: 2vw;
-  color: #f8971d;
+  display: flex;
+  flex-direction: column;
+  /* max-height: inherit; */
+  /* max-height: 20vh; */
+  /* height: 1fr; */
+  /* min-height: 20vh; */
 }
 
 .infoBox {
-  font-size: 2vw;
+  font-size: 1.5vw;
   color: grey;
+  /* max-height: inherit; */
+  /* max-height: 1fr; */
+  overflow-y: scroll;
 }
 
 .info {
