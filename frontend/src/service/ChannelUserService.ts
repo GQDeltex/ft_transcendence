@@ -52,6 +52,22 @@ class ChannelUserService {
       throw new Error('Not able to ban User');
     return updatedChannelUser;
   }
-}
 
+  async muteUser(channel_name: string, muteUser: number) {
+    const updatedChannelUser = await graphQLService.mutation(
+      `
+              mutation updateMute( $channel_name: String!, $muteUser: Int! ){
+                updateMute ( channel_name: $channel_name, muteUser: $muteUser ){
+                  id
+                  mute
+                }
+              }
+              `,
+      { channel_name, muteUser },
+    );
+    if (typeof updatedChannelUser === 'undefined')
+      throw new Error('Not able to mute User');
+    return updatedChannelUser;
+  }
+}
 export default new ChannelUserService();
