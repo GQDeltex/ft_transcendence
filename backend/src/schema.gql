@@ -75,6 +75,7 @@ type Mutation {
   updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
   updateInventory(orderId: String!): User!
   joinChannel(name: String!, password: String!): Channel!
+  leaveChannel(name: String!): Channel
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
   updateBan(channel_name: String!, banUser: Int!): ChannelUser!

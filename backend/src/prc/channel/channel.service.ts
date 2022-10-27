@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Channel } from './entities/channel.entity';
 import { ChannelUser } from './channel-user/entities/channel-user.entity';
-import { CreateChannelInput } from './dto/create-channel.input';
+import { CreateChannelInput } from './channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
 import { Message } from '../message/message';
@@ -31,14 +31,10 @@ export class ChannelService {
   async findJoined(identifier: number): Promise<Channel[]> {
     const channels: Channel[] = await this.channelRepository.find();
     return channels.filter((channel) => {
-      if (channel.private === false) return true;
-      if (
-        channel.userList.some(
-          (channelUser) => channelUser.user_id === identifier,
-        )
-      )
-        return true;
-      return false;
+      if (!channel.private) return true;
+      return channel.userList.some(
+        (channelUser) => channelUser.user_id === identifier,
+      );
     });
   }
 
@@ -118,6 +114,67 @@ export class ChannelService {
       //still needs to rejoin room(if they are not being stupid and just clicking join again while being in the room)
     } else throw new WsException('Bad Password');
     return this.findOne(+channel.id); //'+' VIC ;)
+  }
+
+  async leave(channelName: string, user: User): Promise<Channel | null> {
+    const channel: Channel = await this.findOne(channelName);
+    const channelUser: ChannelUser | undefined = channel.userList.find(
+      (channelUser) => channelUser.user_id === user.id,
+    );
+    if (typeof channelUser === 'undefined')
+      throw new WsException("Can't leave a channel you're not in");
+    if (channelUser.ban || channelUser.mute)
+      throw new WsException("Can't leave because you're muted or banned");
+
+    if (channelUser.owner && channel.userList.length > 1) {
+      let newOwner: ChannelUser | undefined;
+      const userList: ChannelUser[] = channel.userList.filter(
+        (channelUser) => channelUser.user_id !== user.id,
+      );
+      // First admin that isn't muted or banned
+      newOwner = userList.find(
+        (channelUser) =>
+          channelUser.admin && !channelUser.mute && !channelUser.ban,
+      );
+      // First admin that is muted but not banned
+      if (typeof newOwner === 'undefined') {
+        newOwner = userList.find(
+          (channelUser) =>
+            channelUser.admin && channelUser.mute && !channelUser.ban,
+        );
+      }
+      // First admin that is muted and banned
+      if (typeof newOwner === 'undefined') {
+        newOwner = userList.find((channelUser) => channelUser.admin);
+      }
+      // First user that isn't muted or banned
+      if (typeof newOwner === 'undefined') {
+        newOwner = userList.find(
+          (channelUser) => !channelUser.mute && !channelUser.ban,
+        );
+      }
+      // First user that is muted but not banned
+      if (typeof newOwner === 'undefined') {
+        newOwner = userList.find(
+          (channelUser) => channelUser.mute && !channelUser.ban,
+        );
+      }
+      // First user that is muted and banned
+      if (typeof newOwner === 'undefined') {
+        newOwner = userList[0];
+      }
+      // Update new owner
+      await this.channelUserRepository.update(
+        { id: newOwner.id },
+        { owner: true },
+      );
+    }
+    await this.channelUserRepository.delete({ id: channelUser.id });
+    if (channel.userList.length === 1) {
+      await this.channelRepository.delete({ id: channel.id });
+      return null;
+    }
+    return this.findOne(channel.id);
   }
 
   /**

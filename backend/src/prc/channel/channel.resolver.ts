@@ -4,7 +4,7 @@ import { CurrentUser } from '../../users/decorator/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt.guard';
 import { ChannelService } from './channel.service';
-import { CreateChannelInput } from './dto/create-channel.input';
+import { CreateChannelInput, LeaveChannelInput } from './channel.input';
 import { Channel } from './entities/channel.entity';
 import { TwoFAGuard } from '../../auth/guard/twoFA.guard';
 import { CurrentJwtPayload } from '../../users/decorator/current-jwt-payload.decorator';
@@ -39,5 +39,13 @@ export class ChannelResolver {
     @CurrentUser() user: User,
   ) {
     return await this.channelService.join(createChannelInput, user);
+  }
+
+  @Mutation(() => Channel, { nullable: true })
+  async leaveChannel(
+    @Args() leaveChannelInput: LeaveChannelInput,
+    @CurrentUser() user: User,
+  ): Promise<Channel | null> {
+    return await this.channelService.leave(leaveChannelInput.name, user);
   }
 }

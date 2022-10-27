@@ -55,7 +55,6 @@ export class ChannelUserResolver {
     );
     if (typeof channelUserNew === 'undefined')
       throw new WsException('ChannelUserNew undefined');
-    //console.log('both users are good'); //DEBUG
     if (!channelUserAdmin.admin)
       throw new WsException(
         JwtUser.id + ' is not a Channel Admin on ' + channel_name,
@@ -85,7 +84,6 @@ export class ChannelUserResolver {
     );
     if (typeof channelUserNew === 'undefined')
       throw new WsException('channelBanUserNew undefined');
-    //console.log('both users are good'); //DEBUG
     if (!channelBanUser.admin)
       throw new WsException(
         JwtUser.id + ' is not a Channel Admin on ' + channel_name,
