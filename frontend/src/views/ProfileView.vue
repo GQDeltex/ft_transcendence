@@ -53,9 +53,9 @@ const logout = async () => {
   <div v-if="user" class="profileViewParent">
     <ProfileComponent class="profile" />
     <div class="lowerPart">
-      <ParentHistoryComponent />
+      <ParentHistoryComponent class="history" />
       <div class="aboutParent">
-        <AboutMeComponent />
+        <AboutMeComponent class="aboutMe" />
         <ParentAchievementsComponent class="achievement" />
       </div>
     </div>
@@ -79,31 +79,15 @@ const logout = async () => {
   max-height: 50vh;
   grid-auto-flow: column;
 }
-.profile {
-  /* grid-column: 1 / 6; */
-  /* margin: 1px; */
-}
-
-.history {
-  /* display: grid; */
-  /* grid-column: 1 / 4;
-  grid-row: 2 / 3; */
-  /* margin: 1px;
-  height: inherit; */
-  /* grid-auto-rows: 1fr; */
-}
 
 .aboutParent {
   display: grid;
-  /* grid-column: 4 / 6; */
-  /* grid-row: 2 / 3; */
-  /* margin: 1px; */
-  /* grid-auto-rows: 1fr; */
-  height: inherit;
+  grid-column: 2 / 3;
 }
 
 .achievement {
-  /* margin-top: 1px; */
+  grid-row: 2 / 3;
+  max-height: 30vh;
 }
 
 .button {
@@ -111,9 +95,12 @@ const logout = async () => {
   border-radius: 25px;
   color: white;
   background-color: #f8971d;
-  /* padding: 1%; */
   cursor: pointer;
   float: right;
   font-size: 1vw;
+}
+.aboutMe {
+  grid-row: 1 / 2;
+  height: 20vh;
 }
 </style>

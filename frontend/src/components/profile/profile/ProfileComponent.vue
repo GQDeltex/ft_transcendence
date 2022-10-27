@@ -58,7 +58,6 @@ const onClose = () => {
         src="@/assets/pen.png"
         @click="modalChangePicture = true"
       />
-      <span v-else class="noPen">no</span>
     </div>
     <div class="infoBox">
       <span class="title">{{ user.title[0] }}</span>
@@ -73,7 +72,6 @@ const onClose = () => {
           src="@/assets/pen.png"
           @click="modalChangeUsername = true"
         />
-        <img v-else class="noPen" />
       </div>
       <ModalChangeUsernameComponent
         v-show="modalChangeUsername"

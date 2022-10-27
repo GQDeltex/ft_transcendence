@@ -13,7 +13,6 @@ const { user } = inject<{ user: User | null }>('user', {
       About<span style="float: right">(O) Online</span>
     </span>
     <div class="infoBox">
-      <p class="moreAbout">+ Tell us about yourself</p>
       User name: <span class="info">{{ user.username }}</span>
       <br />
       First name: <span class="info">{{ user.username }}</span>
@@ -35,18 +34,19 @@ const { user } = inject<{ user: User | null }>('user', {
 .about {
   padding: 1vw;
   border: 1px solid grey;
-  max-height: 20vh;
-}
-
-.moreAbout {
-  font-size: 1.5vw;
-  color: #f8971d;
+  display: flex;
+  flex-direction: column;
+  /* max-height: inherit; */
+  /* max-height: 20vh; */
+  /* height: 1fr; */
+  /* min-height: 20vh; */
 }
 
 .infoBox {
   font-size: 1.5vw;
   color: grey;
-  /* max-height:15vh; */
+  /* max-height: inherit; */
+  /* max-height: 1fr; */
   overflow-y: scroll;
 }
 
