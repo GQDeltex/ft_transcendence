@@ -264,9 +264,8 @@ describe('ChannelUserResolver', () => {
       email: mockUser.email,
       isAuthenticated: true,
     };
-    const muteUser: User = mockUser2;
     await expect(
-      channelUserResolver.updateMute(admin, '#test', muteUser.id),
+      channelUserResolver.updateMute(admin, '#test', mockUser2.id),
     ).rejects.toThrow(WsException);
   });
 

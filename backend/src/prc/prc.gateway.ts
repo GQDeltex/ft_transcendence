@@ -113,7 +113,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     else recipient = await this.usersService.findOne(to);
     const sender: User = await this.usersService.findOne(user.id);
     let recClient;
-    const message = {
+    const message: Message = {
       from: { id: sender.id, name: sender.username },
       to: { name: to },
       msg: msg,
@@ -154,7 +154,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
-    const message = {
+    const message: Message = {
       from: { id: -1, name: '' },
       to: { name: channel.name },
       msg: sender.username + ' has joined your channel.',
@@ -181,7 +181,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     client.leave(leaveChannelInput.name);
     if (channel === null) return;
     const leaveMessage: Message = {
-      from: { id: -1, username: '' },
+      from: { id: -1, name: '' },
       to: { name: leaveChannelInput.name },
       msg: user.username + ' has left your channel.',
     };

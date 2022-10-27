@@ -109,8 +109,7 @@ export class ChannelService {
     if (channel.password != '') {
       passwordsAreEqual = await bcrypt.compare(userPassword, channel.password);
     }
-    if (passwordsAreEqual == true) {
-      //console.log('Good Password'); DEBUG
+    if (passwordsAreEqual) {
       if (
         !channel.userList.some((channelUser) => channelUser.user.id === user.id)
       ) {
