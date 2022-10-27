@@ -19,6 +19,7 @@ describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
   let channelResolver: ChannelResolver;
   let channelUserService: ChannelUserService;
+  let usersService: UsersService;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -50,9 +51,10 @@ describe('ChannelUserResolver', () => {
       ],
     }).compile();
 
-    channelUserService = module.get<ChannelUserService>(ChannelUserService);
     channelUserResolver = module.get<ChannelUserResolver>(ChannelUserResolver);
     channelResolver = module.get<ChannelResolver>(ChannelResolver);
+    channelUserService = module.get<ChannelUserService>(ChannelUserService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
   afterEach(async () => {
@@ -239,11 +241,20 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelResolver.joinChannel({ name: '#test', password: '' }, banUser),
     ).resolves.not.toThrow();
+    const channelUserNew: ChannelUser = await usersService.findChannelUser(
+      banUser.id,
+      '#test',
+    );
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
-    jest.runAllTimers();
     jest.clearAllTimers();
+    await expect(
+      channelUserResolver.updateBan(admin, '#test', banUser.id),
+    ).rejects.toThrow(`${banUser.id} is already banned on #test`);
+    await expect(
+      channelUserService.unban(channelUserNew.id),
+    ).resolves.not.toThrow();
     jest.useRealTimers();
   });
 
@@ -312,33 +323,6 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).rejects.toThrow(`${muteUser.id} is already muted on #test`);
-    jest.runAllTimers();
-    jest.clearAllTimers();
-    jest.useRealTimers();
-  });
-
-  it('should unmute user after mute time elapsed', async () => {
-    jest.useFakeTimers({ legacyFakeTimers: true });
-    const admin: JwtPayload = {
-      id: mockUser.id,
-      email: mockUser.email,
-      isAuthenticated: true,
-    };
-    const muteUser: User = mockUser2;
-    await expect(
-      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
-    ).resolves.not.toThrow();
-    await expect(
-      channelResolver.joinChannel({ name: '#test', password: '' }, muteUser),
-    ).resolves.not.toThrow();
-    await expect(
-      channelUserResolver.updateMute(admin, '#test', muteUser.id),
-    ).resolves.not.toThrow();
-    jest.runAllTimers();
-    await expect(
-      channelUserResolver.updateMute(admin, '#test', muteUser.id),
-    ).resolves.not.toThrow();
-    jest.runAllTimers();
     jest.clearAllTimers();
     jest.useRealTimers();
   });

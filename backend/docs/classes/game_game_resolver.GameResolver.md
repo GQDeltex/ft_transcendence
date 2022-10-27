@@ -14,6 +14,11 @@
 
 - [gameService](game_game_resolver.GameResolver.md#gameservice)
 
+### Methods
+
+- [findAll](game_game_resolver.GameResolver.md#findall)
+- [findOne](game_game_resolver.GameResolver.md#findone)
+
 ## Constructors
 
 ### constructor
@@ -28,7 +33,7 @@
 
 #### Defined in
 
-[src/game/game.resolver.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L6)
+[src/game/game.resolver.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L11)
 
 ## Properties
 
@@ -38,4 +43,44 @@
 
 #### Defined in
 
-[src/game/game.resolver.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L6)
+[src/game/game.resolver.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L11)
+
+## Methods
+
+### findAll
+
+▸ **findAll**(`searchState`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `searchState` | [`GameState`](../enums/game_entities_game_entity.GameState.md) |
+
+#### Returns
+
+`Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
+
+#### Defined in
+
+[src/game/game.resolver.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L13)
+
+___
+
+### findOne
+
+▸ **findOne**(`id`): `Promise`<[`Game`](game_entities_game_entity.Game.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+`Promise`<[`Game`](game_entities_game_entity.Game.md)\>
+
+#### Defined in
+
+[src/game/game.resolver.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L18)
