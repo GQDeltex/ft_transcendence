@@ -6,8 +6,8 @@ type Channel {
   id: Int!
   name: String!
   private: Boolean!
-  password: String!
   userList: [ChannelUser!]!
+  password: Boolean!
 }
 
 type ChannelUser {
@@ -57,6 +57,15 @@ type Item {
   picture: String!
 }
 
+type Game {
+  id: Int!
+  player1: User!
+  player2: User!
+  score1: Int!
+  score2: Int!
+  state: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int): User!
@@ -67,6 +76,8 @@ type Query {
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
   channelUsers: [ChannelUser!]!
+  games(state: String): [Game!]!
+  game(id: Int!): Game!
 }
 
 type Mutation {

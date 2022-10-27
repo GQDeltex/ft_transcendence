@@ -4,6 +4,8 @@ import { createDatabase, dropDatabase } from 'typeorm-extension';
 import { User } from '../users/entities/user.entity';
 import { Channel } from '../prc/channel/entities/channel.entity';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { Game } from '../game/entities/game.entity';
+import { QueuedPlayer } from '../game/entities/queuedplayer.entity';
 
 export class MockRepo {
   private options: any = {};
@@ -23,7 +25,7 @@ export class MockRepo {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: `${this.key}_testing_db`,
-      entities: [User, ChannelUser, Channel],
+      entities: [User, ChannelUser, Channel, Game, QueuedPlayer],
       synchronize: true,
       logging: 'all',
     };
