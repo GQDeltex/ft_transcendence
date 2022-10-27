@@ -8,8 +8,12 @@ export class Ball extends Element {
   private _speed: number;
 
   private invinc = 0;
-  constructor(ballElem: HTMLElement | null, field: null | DOMRect) {
-    super(ballElem);
+  constructor(
+    ballElem: HTMLElement | null,
+    field: null | DOMRect,
+    gameId: number,
+  ) {
+    super(ballElem, gameId);
     this._direction = new Vector(0, 0);
     this._speed = 30;
     this._shape = new Vector(

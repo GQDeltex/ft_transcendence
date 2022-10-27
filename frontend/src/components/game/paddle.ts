@@ -7,8 +7,12 @@ export class Paddle extends Element {
   private _shape: Vector;
   private _time = 0;
 
-  constructor(padElement: HTMLElement | null, field: null | DOMRect) {
-    super(padElement);
+  constructor(
+    padElement: HTMLElement | null,
+    field: null | DOMRect,
+    gameId: number,
+  ) {
+    super(padElement, gameId);
     this._direction = new Vector(0, 0);
     this._speed = 10;
     this._shape = new Vector(
@@ -49,8 +53,9 @@ export class Paddle extends Element {
     if (this._direction.y === dir) return;
     this._direction.y = dir;
     if (id == 'r') {
-      socket.emit('message', {
+      socket.emit('gameData', {
         changeDir: dir,
+        gameId: this._gameId,
       });
     }
   }

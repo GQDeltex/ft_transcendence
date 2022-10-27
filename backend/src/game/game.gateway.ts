@@ -40,14 +40,17 @@ export class GameGateway {
     private readonly gameService: GameService,
   ) {}
 
-  @SubscribeMessage('message')
+  @SubscribeMessage('gameData')
   handleMessage(
     @ConnectedSocket() client: Socket,
     @CurrentUserFromWs() jwtPayload: JwtPayload,
-    @MessageBody() to: unknown,
+    @MessageBody('changeDir') changeDir: number,
+    @MessageBody('gameId') gameId: number,
   ) {
-    console.log(to);
-    client.emit('message', to);
+    console.log(`&${gameId}`, { changeDir, from: jwtPayload.id });
+    client
+      .to(`&${gameId}`)
+      .emit('gameData', { changeDir, from: jwtPayload.id });
   }
 
   @SubscribeMessage('queue')
@@ -74,7 +77,17 @@ export class GameGateway {
     if (p2sockets.length < 1)
       throw new WsException('Could not find Recipients socket');
 
-    p1sockets[0].emit('Game');
-    p2sockets[0].emit('Game');
+    p1sockets[0].emit('Game', {
+      gameId: game.id,
+      player1Id: game.player1.id,
+      player2Id: game.player2.id,
+    });
+    p2sockets[0].emit('Game', {
+      gameId: game.id,
+      player1Id: game.player1.id,
+      player2Id: game.player2.id,
+    });
+    p1sockets[0].join(`&${game.id}`);
+    p2sockets[0].join(`&${game.id}`);
   }
 }

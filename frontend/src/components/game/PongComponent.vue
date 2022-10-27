@@ -22,22 +22,29 @@ import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
 
-defineProps<{
-  game: string;
+const props = defineProps<{
+  gameId: number;
 }>();
 
 onMounted(() => {
-  const field = new Element(document.getElementById('feld'));
-  const ball = new Ball(document.getElementById('ball'), field.getRect());
+  console.log(props.gameId);
+  const field = new Element(document.getElementById('feld'), props.gameId);
+  const ball = new Ball(
+    document.getElementById('ball'),
+    field.getRect(),
+    props.gameId,
+  );
   const playerScore = document.getElementById('player');
   const remoteScore = document.getElementById('remote');
   const playerPad = new Paddle(
     document.getElementById('playerPad'),
     field.getRect(),
+    props.gameId,
   );
   let remotePad = new Paddle(
     document.getElementById('remotePad'),
     field.getRect(),
+    props.gameId,
   );
 
   let lastTime: number | null = null;
@@ -79,11 +86,6 @@ onMounted(() => {
 
   document.addEventListener('keydown', (e) => {
     if (e.repeat) return;
-    if (e.key == 'w') {
-      playerPad.changeDir('p', -10);
-    } else if (e.key == 's') {
-      playerPad.changeDir('p', 10);
-    }
     if (e.code == 'ArrowUp') {
       remotePad.changeDir('r', -10);
     } else if (e.code == 'ArrowDown') {
@@ -93,28 +95,32 @@ onMounted(() => {
 
   document.addEventListener('keyup', (e) => {
     if (e.repeat) return;
-    if (e.key == 'w' || e.key == 's') {
-      playerPad.changeDir('p', 0);
-    }
     if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
       remotePad.changeDir('r', 0);
     }
   });
 
-  socket.on('message', (e) => {
+  socket.on('gameData', (e) => {
     playerPad.changeDir('p', e.changeDir);
+    console.log(e);
   });
 
   window.onresize = function () {
-    const pField = new Element(document.getElementById('feld'));
-    const pBall = new Ball(document.getElementById('ball'), field.getRect());
+    const pField = new Element(document.getElementById('feld'), props.gameId);
+    const pBall = new Ball(
+      document.getElementById('ball'),
+      field.getRect(),
+      props.gameId,
+    );
     const pPlay = new Paddle(
       document.getElementById('player'),
       field.getRect(),
+      props.gameId,
     );
     const pRemo = new Paddle(
       document.getElementById('remote'),
       field.getRect(),
+      props.gameId,
     );
 
     ball.reeesize(pField.getRect(), pBall.getRect());
