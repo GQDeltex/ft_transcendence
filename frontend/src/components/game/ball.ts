@@ -42,7 +42,7 @@ export class Ball extends Element {
     this.set_pos_y(50);
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
-    this.invinc = 200;
+    this.invinc = 350;
   }
 
   get_dir_x(): number {
@@ -112,7 +112,7 @@ export class Ball extends Element {
       this.invinc <= 0 &&
       paddleRects.some((r) => this.isCollision(r, rect))
     ) {
-      this.invinc = 200;
+      this.invinc = 350;
       this._direction.x *= -1;
       this.set_pos_x(
         parseFloat(String(this.get_pos_x())) +

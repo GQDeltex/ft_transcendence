@@ -5,9 +5,10 @@ import { GameGateway } from './game.gateway';
 import { Game } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Game, QueuedPlayer])],
+  imports: [TypeOrmModule.forFeature([Game, QueuedPlayer]), UsersModule],
   providers: [GameResolver, GameService, GameGateway],
 })
 export class GameModule {}

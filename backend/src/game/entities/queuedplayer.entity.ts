@@ -1,11 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class QueuedPlayer {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @ManyToOne(() => User, { nullable: false })
-  player1: User;
+  @Column({ type: 'int', unique: true })
+  playerId: number;
 }

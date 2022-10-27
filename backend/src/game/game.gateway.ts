@@ -16,6 +16,7 @@ import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { JwtPayload } from '../auth/strategy/jwt.strategy';
 import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
 import { CurrentUserFromWs } from '../tools/UserFromWs';
+import { GameService } from './game.service';
 
 @UsePipes(new ValidationPipe())
 @WebSocketGateway({
@@ -30,14 +31,28 @@ import { CurrentUserFromWs } from '../tools/UserFromWs';
 export class GameGateway {
   @WebSocketServer()
   server: Server;
+  constructor(private readonly gameService: GameService) {}
 
   @SubscribeMessage('message')
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @CurrentUserFromWs() jwtToken: JwtPayload,
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
     @MessageBody() to: unknown,
   ) {
     console.log(to);
     client.emit('message', to);
+  }
+
+  @SubscribeMessage('queue')
+  async handleQueueIn(
+    @ConnectedSocket() client: Socket,
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @MessageBody('event') event: string,
+  ) {
+    if (event === 'JOIN') {
+      await this.gameService.queuePlayer(jwtPayload.id);
+    } else if (event === 'LEAVE') {
+      await this.gameService.dequeuePlayer(jwtPayload.id);
+    }
   }
 }

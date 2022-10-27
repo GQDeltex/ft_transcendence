@@ -89,7 +89,7 @@ type Mutation {
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
   updateBan(channel_name: String!, banUser: Int!): ChannelUser!
-  updateMute(channel_name: String!, banUser: Int!): ChannelUser!
+  updateMute(channel_name: String!, muteUser: Int!): ChannelUser!
 }
 
 enum AllowedUpdateFriendshipMethod {
