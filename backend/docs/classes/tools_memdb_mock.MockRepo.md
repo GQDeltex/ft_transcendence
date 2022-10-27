@@ -25,6 +25,7 @@
 - [clearRepo](tools_memdb_mock.MockRepo.md#clearrepo)
 - [destroyRepo](tools_memdb_mock.MockRepo.md#destroyrepo)
 - [getProvider](tools_memdb_mock.MockRepo.md#getprovider)
+- [getRepo](tools_memdb_mock.MockRepo.md#getrepo)
 - [getTestEntity](tools_memdb_mock.MockRepo.md#gettestentity)
 - [setupDb](tools_memdb_mock.MockRepo.md#setupdb)
 
@@ -162,6 +163,20 @@ ___
 #### Defined in
 
 [src/tools/memdb.mock.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/tools/memdb.mock.ts#L50)
+
+___
+
+### getRepo
+
+▸ **getRepo**(): `Repository`<`any`\>
+
+#### Returns
+
+`Repository`<`any`\>
+
+#### Defined in
+
+[src/tools/memdb.mock.ts:81](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/tools/memdb.mock.ts#L81)
 
 ___
 
