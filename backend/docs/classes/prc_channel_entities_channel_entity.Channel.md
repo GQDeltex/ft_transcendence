@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/entities/channel.entity.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/entities/channel.entity.ts#L22)
+[src/prc/channel/entities/channel.entity.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/entities/channel.entity.ts#L21)
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/entities/channel.entity.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/entities/channel.entity.ts#L30)
+[src/prc/channel/entities/channel.entity.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/entities/channel.entity.ts#L29)
