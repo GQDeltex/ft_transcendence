@@ -124,7 +124,7 @@ ___
 
 ### joinChannel
 
-▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<`void`\>
+▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private }\>
 
 It creates a new channel and adds the user to it.
 
@@ -138,7 +138,7 @@ It creates a new channel and adds the user to it.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private }\>
 
 #### Defined in
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:170](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L170)
+[src/prc/prc.gateway.ts:171](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L171)
 
 ___
 

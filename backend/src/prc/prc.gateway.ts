@@ -148,7 +148,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     @CurrentUserFromWs() user: JwtPayload,
     @ConnectedSocket() client: Socket,
     @MessageBody('channel') channelInput: CreateChannelInput,
-  ): Promise<void> {
+  ) {
     if (typeof user == 'undefined') throw new WsException('Not connected');
     console.log(`Join attempt from ${user.id} for ${channelInput.name}`); //DEBUG
     const sender: User = await this.usersService.findOne(user.id);
@@ -165,6 +165,7 @@ export class PrcGateway implements OnGatewayDisconnect {
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
     console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
+    return { id: channel.id, name: channel.name, private: channel.private };
   }
 
   @SubscribeMessage('leave')
