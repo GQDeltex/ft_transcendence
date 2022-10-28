@@ -33,7 +33,7 @@
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `username` | `string` |
+| `name` | `string` |
 
 #### Defined in
 

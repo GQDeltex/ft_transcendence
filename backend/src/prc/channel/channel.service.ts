@@ -87,7 +87,7 @@ export class ChannelService {
 
   findMessagesForRecipient(recipient: string) {
     return this.messages.filter(
-      ({ from, to }) => from.username === recipient || to.name === recipient,
+      ({ from, to }) => from.name === recipient || to.name === recipient,
     );
   }
 
