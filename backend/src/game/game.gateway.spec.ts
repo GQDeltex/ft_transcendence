@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { GameService } from './game.service';
 import { GameGateway } from './game.gateway';
 
 describe('GameGateway', () => {

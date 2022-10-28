@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GameResolver } from './game.resolver';
 import { GameService } from './game.service';
 import { Game } from './entities/game.entity';
+import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { mockGame } from './entities/game.entity.mock';
 import { User } from '../users/entities/user.entity';
 import { mockUser } from '../users/entities/user.entity.mock';
@@ -17,7 +18,12 @@ describe('GameResolver', () => {
     await mockDB.prefillDB(Game, [mockGame]);
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GameResolver, GameService, await mockDB.getProvider(Game)],
+      providers: [
+        GameResolver,
+        GameService,
+        await mockDB.getProvider(Game),
+        await mockDB.getProvider(QueuedPlayer),
+      ],
     }).compile();
 
     resolver = module.get<GameResolver>(GameResolver);

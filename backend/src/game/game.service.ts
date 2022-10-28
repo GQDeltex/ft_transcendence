@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { Repository } from 'typeorm';
 import { Game, GameState } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
