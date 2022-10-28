@@ -6,16 +6,21 @@ import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
 import ModalBanUserComponent from './ModalBanUserComponent.vue';
 import ModalMuteUserComponent from './ModalMuteUserComponent.vue';
 import type { User } from '@/store/user';
-import ModalLeaveComponent from './ModalLeaveComponent.vue';
+import { useErrorStore } from '@/store/error';
+import { socket } from '@/service/socket';
+import ChannelService from '@/service/ChannelService';
+import type { Channel } from '@/store/message';
 
 const passModalActive = ref(false);
 const adminModalActive = ref(false);
 const banModalActive = ref(false);
 const muteModalActive = ref(false);
-const leaveModalActive = ref(false);
+const emits = defineEmits(['leave', 'updatePublic']);
+const errorStore = useErrorStore();
 
-defineProps<{
+const props = defineProps<{
   clients: User[];
+  currentChannel: Channel;
 }>();
 
 const chatToggle = ref(false);
@@ -23,8 +28,17 @@ const banToggle = ref(false);
 const adminToggle = ref(false);
 const muteToggle = ref(false);
 
+const isPrivate = ref(props.currentChannel.private);
+
 const leave = () => {
-  leaveModalActive.value = true;
+  try {
+    socket.emit('leave', {
+      channel: { name: props.currentChannel.name },
+    });
+    emits('leave', props.currentChannel.name);
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
 };
 
 const changePassword = () => {
@@ -43,12 +57,24 @@ const muteUser = () => {
   muteModalActive.value = true;
 };
 
+const makePublic = async () => {
+  try {
+    const updatedChannel: Channel = await ChannelService.updatePublic(
+      props.currentChannel.name,
+      !props.currentChannel.private,
+    );
+    isPrivate.value = updatedChannel.private;
+    emits('updatePublic', updatedChannel);
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
+};
+
 const onClose = () => {
   passModalActive.value = false;
   adminModalActive.value = false;
   banModalActive.value = false;
   muteModalActive.value = false;
-  leaveModalActive.value = false;
 };
 </script>
 
@@ -93,7 +119,6 @@ const onClose = () => {
         </span>
         <span>
           <button class="button" @click="leave">Leave Chat</button>
-          <ModalLeaveComponent v-show="leaveModalActive" @close="onClose" />
         </span>
         <span>
           <button class="button" @click="updateAdmin">Make Admin</button>
@@ -109,6 +134,11 @@ const onClose = () => {
         <span>
           <button class="button" @click="muteUser">Mute User</button>
           <ModalMuteUserComponent v-show="muteModalActive" @close="onClose" />
+        </span>
+        <span>
+          <button class="button" @click="makePublic">
+            Make {{ isPrivate ? 'Public' : 'Private' }}
+          </button>
         </span>
       </div>
     </div>
