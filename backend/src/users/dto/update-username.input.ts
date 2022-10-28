@@ -6,6 +6,6 @@ export class UpdateUsernameInput {
   @IsNotEmpty()
   @Field()
   @Length(1, 42)
-  @Matches('^[a-zA-Z0-9\\_\\-\\.]+$')
+  @Matches('^[a-zA-Z0-9\\_\\-]+$')
   username: string;
 }
