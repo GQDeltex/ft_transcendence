@@ -165,7 +165,7 @@ export class PrcGateway implements OnGatewayDisconnect {
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
     console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
-    return ({ id: channel.id, name: channel.name, private: channel.private });
+    return { id: channel.id, name: channel.name, private: channel.private };
   }
 
   @SubscribeMessage('leave')
