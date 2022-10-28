@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { mockUser } from './entities/user.entity.mock';
 import { MockRepo } from '../tools/memdb.mock';
-import { UpdateUserUsernameInput } from './dto/update-userusername.input';
+import { UpdateUsernameInput } from './dto/update-username.input';
 import { ConfigService } from '@nestjs/config';
 import { EntityNotFoundError } from 'typeorm';
 import { Channel } from '../prc/channel/entities/channel.entity';
@@ -110,7 +110,7 @@ describe('UsersResolver', () => {
 
   it('should update a users username', async () => {
     const newUser = mockRepoUser.getTestEntity({ username: 'testUser' });
-    const updateUserUsernameInput: UpdateUserUsernameInput = {
+    const updateUserUsernameInput: UpdateUsernameInput = {
       username: newUser.username,
     };
     await expect(
@@ -122,7 +122,7 @@ describe('UsersResolver', () => {
     const newUser = mockRepoUser.getTestEntity({
       id: 8974632,
     });
-    const updateUserUsernameInput: UpdateUserUsernameInput = {
+    const updateUserUsernameInput: UpdateUsernameInput = {
       username: 'nothingTwice',
     };
     await expect(
