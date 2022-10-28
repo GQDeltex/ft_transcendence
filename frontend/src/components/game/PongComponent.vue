@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '../../service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
@@ -24,11 +24,16 @@ import { Paddle } from './paddle';
 
 const remoteScore = ref(0);
 const playerScore = ref(0);
+const gameLoader = ref(true);
 
 const props = defineProps<{
   gameId: number;
   priority: boolean;
 }>();
+
+onUnmounted(() => {
+  gameLoader.value = false;
+});
 
 onMounted(() => {
   console.log(props.gameId);
@@ -61,7 +66,7 @@ onMounted(() => {
       if (props.priority) loseCase();
     }
     lastTime = time;
-    window.requestAnimationFrame(pupdate);
+    if (gameLoader.value) window.requestAnimationFrame(pupdate);
   }
 
   function loseCase() {

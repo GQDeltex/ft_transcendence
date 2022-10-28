@@ -16,10 +16,14 @@ function leave_queue() {
 
 // playerIDs to check validity of messages for streaming implementation later™
 socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
+  if (gameId < 0) {
+    displayState.value = true;
+    return;
+  }
+  displayState.value = false;
   console.log('ich will ein spiel mit dir spielen');
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
-  displayState.value = false;
 });
 </script>
 

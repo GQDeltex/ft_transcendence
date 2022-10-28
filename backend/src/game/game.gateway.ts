@@ -49,6 +49,11 @@ export class GameGateway {
     @MessageBody('name') name: number,
     @MessageBody('gameId') gameId: number,
   ) {
+    if (typeof score !== 'undefined' && (score[0] >= 10 || score[1] >= 10)) {
+      this.gameService.EndGame(gameId, score);
+      client.to(`&${gameId}`).emit('Game', { gameId: -1 });
+      client.emit('Game', { gameId: -1 });
+    }
     console.log(`&${gameId}`, { changeDir, from: jwtPayload.id });
     client
       .to(`&${gameId}`)
