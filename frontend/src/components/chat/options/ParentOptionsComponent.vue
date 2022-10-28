@@ -6,11 +6,13 @@ import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
 import ModalBanUserComponent from './ModalBanUserComponent.vue';
 import ModalMuteUserComponent from './ModalMuteUserComponent.vue';
 import type { User } from '@/store/user';
+import ModalLeaveComponent from './ModalLeaveComponent.vue';
 
 const passModalActive = ref(false);
 const adminModalActive = ref(false);
 const banModalActive = ref(false);
 const muteModalActive = ref(false);
+const leaveModalActive = ref(false);
 
 defineProps<{
   clients: User[];
@@ -20,6 +22,10 @@ const chatToggle = ref(false);
 const banToggle = ref(false);
 const adminToggle = ref(false);
 const muteToggle = ref(false);
+
+const leave = () => {
+  leaveModalActive.value = true;
+};
 
 const changePassword = () => {
   passModalActive.value = true;
@@ -42,6 +48,7 @@ const onClose = () => {
   adminModalActive.value = false;
   banModalActive.value = false;
   muteModalActive.value = false;
+  leaveModalActive.value = false;
 };
 </script>
 
@@ -85,7 +92,10 @@ const onClose = () => {
           />
         </span>
         <span>
-          <!-- <button class="button">Leave Chat</button>-->
+          <button class="button" @click="leave">Leave Chat</button>
+          <ModalLeaveComponent v-show="leaveModalActive" @close="onClose" />
+        </span>
+        <span>
           <button class="button" @click="updateAdmin">Make Admin</button>
           <ModalUpdateAdminComponent
             v-show="adminModalActive"
