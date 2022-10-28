@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
   <div id="feld" class="field">
     <div class="score">
-      <div id="player">0</div>
-      <div id="remote">0</div>
+      <div id="player">{{ playerScore }}</div>
+      <div id="remote">{{ remoteScore }}</div>
     </div>
     <div id="ball" class="ball" src="@/assets/sexy-guy-001-modified.png">
       <!-- <img class="ball" src="@/assets/sexy-guy-001-modified.png" /> -->
@@ -16,11 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { socket } from '../../service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
+
+const remoteScore = ref(0);
+const playerScore = ref(0);
 
 const props = defineProps<{
   gameId: number;
@@ -36,8 +39,6 @@ onMounted(() => {
     props.gameId,
     props.priority,
   );
-  const playerScore = document.getElementById('player');
-  const remoteScore = document.getElementById('remote');
   const playerPad = new Paddle(
     document.getElementById('playerPad'),
     field.getRect(),
@@ -54,33 +55,25 @@ onMounted(() => {
   function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
-      ball.update(delta, [playerPad.getRect(), remotePad.getRect()]);
+      ball.update(delta, remotePad.getRect());
       remotePad.update(delta, time);
       playerPad.update(delta, time);
-      loseCase();
+      if (props.priority) loseCase();
     }
     lastTime = time;
     window.requestAnimationFrame(pupdate);
   }
 
   function loseCase() {
-    if (
-      ball.get_pos_x() >= 100 + ball._shape.x / 2 &&
-      playerScore !== null &&
-      playerScore.textContent !== null
-    ) {
-      playerScore.textContent = String(parseInt(playerScore.textContent) + 1);
-      ball.reset();
+    if (ball.get_pos_x() >= 100 + ball._shape.x / 2) {
+      playerScore.value++;
+      ball.reset([playerScore.value, remoteScore.value]);
       playerPad.sety(50);
       remotePad.sety(50);
     }
-    if (
-      ball.get_pos_x() <= 0 - ball._shape.x / 2 &&
-      remoteScore !== null &&
-      remoteScore.textContent !== null
-    ) {
-      remoteScore.textContent = String(parseInt(remoteScore.textContent) + 1);
-      ball.reset();
+    if (ball.get_pos_x() <= 0 - ball._shape.x / 2) {
+      remoteScore.value++;
+      ball.reset([playerScore.value, remoteScore.value]);
       playerPad.sety(50);
       remotePad.sety(50);
     }
@@ -106,6 +99,12 @@ onMounted(() => {
     console.log(e);
     if (e.name === 'opponent') playerPad.changeDir(e.changeDir, true);
     if (e.name === 'ball') ball.changeDir(e.changeDir);
+    if (typeof e.score != 'undefined') {
+      remoteScore.value = e.score[0];
+      playerScore.value = e.score[1];
+      playerPad.sety(50);
+      remotePad.sety(50);
+    }
   });
 
   window.onresize = function () {
@@ -153,7 +152,7 @@ onMounted(() => {
   top: calc(var(--y) * 1%);
   transform: translate(0%, -50%);
   width: 1%;
-  height: 30%;
+  height: 20%;
 }
 
 .paddle-left {
