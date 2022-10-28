@@ -1,5 +1,11 @@
 import { defineStore } from 'pinia';
 
+export type Channel = {
+  id: number;
+  name: string;
+  private: boolean;
+};
+
 export interface Message {
   from: { id: number; name: string };
   to: { id?: number; name: string };
