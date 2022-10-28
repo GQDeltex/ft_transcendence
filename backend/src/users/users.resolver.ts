@@ -11,7 +11,7 @@ import { UseFilters, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { UpdateUserUsernameInput } from './dto/update-userusername.input';
+import { UpdateUsernameInput } from './dto/update-username.input';
 import { TwoFAGuard } from '../auth/guard/twoFA.guard';
 import { UpdateUserFriendshipInput } from './dto/update-friendship.input';
 import { CurrentJwtPayload } from './decorator/current-jwt-payload.decorator';
@@ -53,7 +53,7 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async updateUsername(
-    @Args() updateUserUsernameInput: UpdateUserUsernameInput,
+    @Args() updateUserUsernameInput: UpdateUsernameInput,
     @CurrentJwtPayload() user: JwtPayload,
   ) {
     await this.usersService.updateUsername(
