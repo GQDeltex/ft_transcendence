@@ -20,13 +20,14 @@ import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
-import { CreateChannelInput } from './channel/dto/create-channel.input';
+import { CreateChannelInput, LeaveChannelInput } from './channel/channel.input';
 import { ChannelService } from './channel/channel.service';
 import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
 import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 import { Channel } from './channel/entities/channel.entity';
 import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
 import { CurrentUserFromWs } from '../tools/UserFromWs';
+import { Message } from './message/message';
 
 @Injectable()
 @UsePipes(new ValidationPipe())
@@ -112,7 +113,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     else recipient = await this.usersService.findOne(to);
     const sender: User = await this.usersService.findOne(user.id);
     let recClient;
-    const message = {
+    const message: Message = {
       from: { id: sender.id, name: sender.username },
       to: { name: to },
       msg: msg,
@@ -153,7 +154,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
-    const message = {
+    const message: Message = {
       from: { id: -1, name: '' },
       to: { name: channel.name },
       msg: sender.username + ' has joined your channel.',
@@ -164,5 +165,26 @@ export class PrcGateway implements OnGatewayDisconnect {
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
     console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
+  }
+
+  @SubscribeMessage('leave')
+  async leaveChannel(
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @ConnectedSocket() client: Socket,
+    @MessageBody('channel') leaveChannelInput: LeaveChannelInput,
+  ): Promise<void> {
+    const user: User = await this.usersService.findOne(jwtPayload.id);
+    const channel: Channel | null = await this.channelService.leave(
+      leaveChannelInput.name,
+      user,
+    );
+    client.leave(leaveChannelInput.name);
+    if (channel === null) return;
+    const leaveMessage: Message = {
+      from: { id: -1, name: '' },
+      to: { name: leaveChannelInput.name },
+      msg: user.username + ' has left your channel.',
+    };
+    client.broadcast.to(leaveChannelInput.name).emit('status', leaveMessage);
   }
 }

@@ -13,3 +13,13 @@ export class CreateChannelInput {
   @Field()
   password: string;
 }
+
+@ArgsType()
+export class LeaveChannelInput {
+  @Field()
+  @IsNotEmpty()
+  @IsAscii()
+  @Length(2, 42)
+  @Matches('^[#&][a-zA-Z0-9\\_\\-\\.]+$')
+  name: string;
+}
