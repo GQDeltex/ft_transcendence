@@ -24,6 +24,7 @@ import { Paddle } from './paddle';
 
 const props = defineProps<{
   gameId: number;
+  priority: boolean;
 }>();
 
 onMounted(() => {
@@ -33,6 +34,7 @@ onMounted(() => {
     document.getElementById('ball'),
     field.getRect(),
     props.gameId,
+    props.priority,
   );
   const playerScore = document.getElementById('player');
   const remoteScore = document.getElementById('remote');
@@ -87,22 +89,23 @@ onMounted(() => {
   document.addEventListener('keydown', (e) => {
     if (e.repeat) return;
     if (e.code == 'ArrowUp') {
-      remotePad.changeDir('r', -10);
+      remotePad.changeDir(-10);
     } else if (e.code == 'ArrowDown') {
-      remotePad.changeDir('r', 10);
+      remotePad.changeDir(10);
     }
   });
 
   document.addEventListener('keyup', (e) => {
     if (e.repeat) return;
     if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir('r', 0);
+      remotePad.changeDir(0);
     }
   });
 
   socket.on('gameData', (e) => {
-    playerPad.changeDir('p', e.changeDir);
     console.log(e);
+    if (e.name === 'opponent') playerPad.changeDir(e.changeDir, true);
+    if (e.name === 'ball') ball.changeDir(e.changeDir);
   });
 
   window.onresize = function () {
@@ -111,6 +114,7 @@ onMounted(() => {
       document.getElementById('ball'),
       field.getRect(),
       props.gameId,
+      props.priority,
     );
     const pPlay = new Paddle(
       document.getElementById('player'),

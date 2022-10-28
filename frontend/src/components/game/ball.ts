@@ -1,3 +1,4 @@
+import { socket } from '@/service/socket';
 import { Element, Vector } from './element';
 
 export class Ball extends Element {
@@ -6,14 +7,17 @@ export class Ball extends Element {
   // private _direction: Vector; get-set- soon™
   public _direction: Vector;
   private _speed: number;
+  private _priority: boolean;
 
   private invinc = 0;
   constructor(
     ballElem: HTMLElement | null,
     field: null | DOMRect,
     gameId: number,
+    priority: boolean,
   ) {
     super(ballElem, gameId);
+    this._priority = priority;
     this._direction = new Vector(0, 0);
     this._speed = 30;
     this._shape = new Vector(
@@ -46,7 +50,35 @@ export class Ball extends Element {
     this.set_pos_y(50);
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
+    if (this._priority) {
+      socket.emit('gameData', {
+        changeDir: [
+          -this._direction.x,
+          this._direction.y,
+          this.get_pos_x(),
+          this.get_pos_y(),
+        ],
+        name: 'ball',
+        gameId: this._gameId,
+      });
+    }
     this.invinc = 350;
+  }
+
+  changeDir(dir: number[]) {
+    if (!(typeof dir[2] === 'undefined' || typeof dir[2] === 'undefined')) {
+      this.set_pos_x(dir[2]);
+      this.set_pos_y(dir[3]);
+    }
+    this._direction.x = dir[0];
+    this._direction.y = dir[1];
+    if (this._priority) {
+      socket.emit('gameData', {
+        changeDir: dir,
+        name: 'ball',
+        gameId: this._gameId,
+      });
+    }
   }
 
   get_dir_x(): number {
@@ -122,6 +154,18 @@ export class Ball extends Element {
         parseFloat(String(this.get_pos_x())) +
           parseFloat(String(this._speed * this._direction.x * 0.002)),
       );
+      if (this._priority) {
+        socket.emit('gameData', {
+          changeDir: [
+            -this._direction.x,
+            this._direction.y,
+            100 - this.get_pos_x(),
+            this.get_pos_y(),
+          ],
+          name: 'ball',
+          gameId: this._gameId,
+        });
+      }
     }
     this.invinc--;
   }

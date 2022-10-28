@@ -44,13 +44,14 @@ export class GameGateway {
   handleMessage(
     @ConnectedSocket() client: Socket,
     @CurrentUserFromWs() jwtPayload: JwtPayload,
-    @MessageBody('changeDir') changeDir: number,
+    @MessageBody('changeDir') changeDir: number | number[],
+    @MessageBody('name') name: number,
     @MessageBody('gameId') gameId: number,
   ) {
     console.log(`&${gameId}`, { changeDir, from: jwtPayload.id });
     client
       .to(`&${gameId}`)
-      .emit('gameData', { changeDir, from: jwtPayload.id });
+      .emit('gameData', { changeDir, name, from: jwtPayload.id });
   }
 
   @SubscribeMessage('queue')
@@ -81,11 +82,13 @@ export class GameGateway {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
+      priority: true,
     });
     p2sockets[0].emit('Game', {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
+      priority: false,
     });
     p1sockets[0].join(`&${game.id}`);
     p2sockets[0].join(`&${game.id}`);
