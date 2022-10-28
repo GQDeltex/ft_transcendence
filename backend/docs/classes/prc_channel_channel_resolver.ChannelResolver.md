@@ -21,6 +21,7 @@
 - [findOneById](prc_channel_channel_resolver.ChannelResolver.md#findonebyid)
 - [hasPassword](prc_channel_channel_resolver.ChannelResolver.md#haspassword)
 - [joinChannel](prc_channel_channel_resolver.ChannelResolver.md#joinchannel)
+- [leaveChannel](prc_channel_channel_resolver.ChannelResolver.md#leavechannel)
 
 ## Constructors
 
@@ -138,7 +139,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `createChannelInput` | [`CreateChannelInput`](prc_channel_dto_create_channel_input.CreateChannelInput.md) |
+| `createChannelInput` | [`CreateChannelInput`](prc_channel_channel_input.CreateChannelInput.md) |
 | `user` | [`User`](users_entities_user_entity.User.md) |
 
 #### Returns
@@ -148,3 +149,24 @@ ___
 #### Defined in
 
 [src/prc/channel/channel.resolver.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L49)
+
+___
+
+### leaveChannel
+
+▸ **leaveChannel**(`leaveChannelInput`, `user`): `Promise`<``null`` \| [`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `leaveChannelInput` | [`LeaveChannelInput`](prc_channel_channel_input.LeaveChannelInput.md) |
+| `user` | [`User`](users_entities_user_entity.User.md) |
+
+#### Returns
+
+`Promise`<``null`` \| [`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+#### Defined in
+
+[src/prc/channel/channel.resolver.ts:57](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L57)
