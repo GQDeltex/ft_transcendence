@@ -51,11 +51,12 @@ const channelSelect = (input: string) => {
     <div class="list">
       <ChildChannelComponent
         v-for="channel in channels"
+        v-show="channel.name.startsWith('#')"
         :key="channel.id"
         :channel-id="channel.id"
         :channel-name="channel.name"
         picture="@/assets/pongking_boi.svg"
-        class="clickable"
+        class="clickable omnomnom"
         :selected-channel="selectedChannel"
         @click="channelSelect(channel.name)"
       />
