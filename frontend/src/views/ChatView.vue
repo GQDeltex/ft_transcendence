@@ -15,13 +15,14 @@ import {
   useUserStore,
 } from '@/store/user';
 import type { User } from '@/store/user';
+import type { Channel } from '@/store/message';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
 const chatName = ref('gucalvi');
 
 const users = ref<User[]>([]);
-const channels = ref([]);
+const channels = ref<Channel[]>([]);
 
 socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
@@ -89,6 +90,11 @@ onBeforeUnmount(() => {
 const UpdateChannels = (input: string) => {
   chatName.value = input;
 };
+
+const joinChannel = (channel: Channel) => {
+  // Somehow channels.value.push does not work. This seems to be fine.
+  channels.value = [...channels.value, channel];
+};
 </script>
 
 <template>
@@ -100,6 +106,7 @@ const UpdateChannels = (input: string) => {
         :user-id="userStore.id"
         class="channelsComp"
         @update="UpdateChannels"
+        @join="joinChannel"
       />
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
