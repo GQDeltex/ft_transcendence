@@ -15,13 +15,14 @@ import {
   useUserStore,
 } from '@/store/user';
 import type { User } from '@/store/user';
+import type { Channel } from '@/store/message';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
-const chatName = ref('gucalvi');
+const currentChannel = ref<Channel>({ id: 0, name: '', private: true });
 
 const users = ref<User[]>([]);
-const channels = ref([]);
+const channels = ref<Channel[]>([]);
 
 socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
@@ -76,6 +77,7 @@ onMounted(async () => {
   try {
     users.value = await UserService.findAll();
     channels.value = await ChannelService.findAll();
+    if (channels.value.length > 0) currentChannel.value = channels.value[0];
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -86,8 +88,29 @@ onBeforeUnmount(() => {
   socket.off('onBlock');
 });
 
-const UpdateChannels = (input: string) => {
-  chatName.value = input;
+const UpdateChannels = (channel: Channel) => {
+  currentChannel.value = channel;
+};
+
+const joinChannel = (channel: Channel) => {
+  // Somehow channels.value.push does not work. This seems to be fine.
+  channels.value = [...channels.value, channel];
+};
+
+const leaveChannel = (channelName: string) => {
+  channels.value = [
+    ...channels.value.filter((channel) => channel.name !== channelName),
+  ];
+  if (channels.value.length > 0) currentChannel.value = channels.value[0];
+  else currentChannel.value = { id: 0, name: '', private: true };
+};
+
+const onUpdatePublic = (updatedChannel: Channel) => {
+  channels.value = [
+    ...channels.value.filter((channel) => channel.name !== updatedChannel.name),
+    updatedChannel,
+  ];
+  console.log('current channel updated public');
 };
 </script>
 
@@ -97,15 +120,26 @@ const UpdateChannels = (input: string) => {
       <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
       <ParentChannelsComponent
         :channels="channels"
+        :current-channel="currentChannel"
         :user-id="userStore.id"
         class="channelsComp"
         @update="UpdateChannels"
+        @join="joinChannel"
       />
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
-    <ParentChatComponent :chat-name="chatName" class="chatChatComp" />
-    <input v-model="chatName" type="text" class="inputBox" />
-    <ParentOptionsComponent :clients="users" class="optionsComp" />
+    <ParentChatComponent
+      :chat-name="currentChannel.name"
+      class="chatChatComp"
+    />
+    <input v-model="currentChannel.name" type="text" class="inputBox" />
+    <ParentOptionsComponent
+      :clients="users"
+      :current-channel="currentChannel"
+      class="optionsComp"
+      @leave="leaveChannel"
+      @update-public="onUpdatePublic"
+    />
   </div>
 </template>
 

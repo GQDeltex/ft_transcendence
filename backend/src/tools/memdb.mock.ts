@@ -77,4 +77,8 @@ export class MockRepo {
   async destroyRepo(): Promise<void> {
     await dropDatabase(this.options);
   }
+
+  getRepo(): Repository<any> {
+    return this.repo;
+  }
 }

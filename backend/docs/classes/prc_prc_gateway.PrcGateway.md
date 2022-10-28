@@ -25,6 +25,7 @@
 - [connect](prc_prc_gateway.PrcGateway.md#connect)
 - [handleDisconnect](prc_prc_gateway.PrcGateway.md#handledisconnect)
 - [joinChannel](prc_prc_gateway.PrcGateway.md#joinchannel)
+- [leaveChannel](prc_prc_gateway.PrcGateway.md#leavechannel)
 - [prcMessage](prc_prc_gateway.PrcGateway.md#prcmessage)
 
 ## Constructors
@@ -42,7 +43,7 @@
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:46](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L46)
+[src/prc/prc.gateway.ts:47](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L47)
 
 ## Properties
 
@@ -52,7 +53,7 @@
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L49)
+[src/prc/prc.gateway.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L50)
 
 ___
 
@@ -62,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L44)
+[src/prc/prc.gateway.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L45)
 
 ___
 
@@ -72,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L48)
+[src/prc/prc.gateway.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L49)
 
 ## Methods
 
@@ -93,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L64)
+[src/prc/prc.gateway.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L65)
 
 ___
 
@@ -117,13 +118,13 @@ OnGatewayDisconnect.handleDisconnect
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L52)
+[src/prc/prc.gateway.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L53)
 
 ___
 
 ### joinChannel
 
-▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<`void`\>
+▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private }\>
 
 It creates a new channel and adds the user to it.
 
@@ -133,7 +134,29 @@ It creates a new channel and adds the user to it.
 | :------ | :------ |
 | `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
-| `channelInput` | [`CreateChannelInput`](prc_channel_dto_create_channel_input.CreateChannelInput.md) |
+| `channelInput` | [`CreateChannelInput`](prc_channel_channel_input.CreateChannelInput.md) |
+
+#### Returns
+
+`Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private }\>
+
+#### Defined in
+
+[src/prc/prc.gateway.ts:146](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L146)
+
+___
+
+### leaveChannel
+
+▸ **leaveChannel**(`jwtPayload`, `client`, `leaveChannelInput`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `leaveChannelInput` | [`LeaveChannelInput`](prc_channel_channel_input.LeaveChannelInput.md) |
 
 #### Returns
 
@@ -141,7 +164,7 @@ It creates a new channel and adds the user to it.
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:143](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L143)
+[src/prc/prc.gateway.ts:171](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L171)
 
 ___
 
@@ -174,4 +197,4 @@ Nothing.
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L97)
+[src/prc/prc.gateway.ts:100](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L100)

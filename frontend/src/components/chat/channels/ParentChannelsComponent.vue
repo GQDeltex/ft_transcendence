@@ -1,31 +1,38 @@
 <script setup lang="ts">
 import ChildChannelComponent from './ChildChannelComponent.vue';
 import ModalChannelComponent from './ModalChannelComponent.vue';
+import type { Channel } from '@/store/message';
 import { ref } from 'vue';
-const emits = defineEmits(['update']);
+const emits = defineEmits(['update', 'join']);
 
-defineProps<{
+const props = defineProps<{
   channels: {
     id: number;
     name: string;
     private: boolean;
   }[];
+  currentChannel: Channel;
 }>();
 const modalActive = ref(false);
-const selectedChannel = ref('');
 
 const joinNewChannel = () => {
   modalActive.value = true;
 };
 
-const onClose = (input: string) => {
+const onClose = () => {
   modalActive.value = false;
-  emits('update', input);
+};
+
+const onJoin = (channel: Channel) => {
+  emits('join', channel);
+  emits('update', channel);
 };
 
 const channelSelect = (input: string) => {
-  selectedChannel.value = input;
-  emits('update', input);
+  emits(
+    'update',
+    props.channels.find((channel) => channel.name === input),
+  );
 };
 </script>
 
@@ -36,7 +43,11 @@ const channelSelect = (input: string) => {
       <button class="button" @click="joinNewChannel">
         Join / Create Channel
       </button>
-      <ModalChannelComponent v-show="modalActive" @update="onClose" />
+      <ModalChannelComponent
+        v-show="modalActive"
+        @close="onClose"
+        @join="onJoin"
+      />
     </span>
     <div class="list">
       <ChildChannelComponent
@@ -46,7 +57,7 @@ const channelSelect = (input: string) => {
         :channel-name="channel.name"
         picture="@/assets/pongking_boi.svg"
         class="clickable"
-        :selected-channel="selectedChannel"
+        :selected-channel="currentChannel.name"
         @click="channelSelect(channel.name)"
       />
     </div>

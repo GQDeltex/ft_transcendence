@@ -78,9 +78,8 @@ describe('ChannelService', () => {
 
   //JOIN
   it('should create a channel using join', async () => {
-    const newUser: User = mockUser2;
     await expect(
-      channelService.join({ name: '#test3', password: '' }, newUser),
+      channelService.join({ name: '#test3', password: '' }, mockUser2),
     ).resolves.toEqual(expect.any(Channel));
   });
 
@@ -97,13 +96,11 @@ describe('ChannelService', () => {
   });
 
   it('should not join if bad password', async () => {
-    const owner: User = mockUser;
     await expect(
-      channelService.join({ name: '#test5', password: '123' }, owner),
+      channelService.join({ name: '#test5', password: '123' }, mockUser),
     ).resolves.toEqual(expect.any(Channel));
-    const joiner: User = mockUser2;
     await expect(
-      channelService.join({ name: '#test5', password: '456' }, joiner),
+      channelService.join({ name: '#test5', password: '456' }, mockUser2),
     ).rejects.toThrow('Bad Password');
   });
 
@@ -118,9 +115,8 @@ describe('ChannelService', () => {
   });
 
   it('should not make user owner/admin on join', async () => {
-    const owner: User = mockUser;
     await expect(
-      channelService.join({ name: '#test7', password: '' }, owner),
+      channelService.join({ name: '#test7', password: '' }, mockUser),
     ).resolves.toEqual(expect.any(Channel));
     const joiner: User = mockUser2;
     await expect(
@@ -133,7 +129,78 @@ describe('ChannelService', () => {
     expect(newChannelUser.owner).toEqual(false);
   });
 
-  /*it('should join channel', async () => {
-    
-  });*/
+  it('should leave channel', async () => {
+    await expect(
+      channelService.join({ name: '#test8', password: '' }, mockUser),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      channelService.join({ name: '#test8', password: '' }, mockUser2),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      channelService.leave('#test8', mockUser2),
+    ).resolves.toHaveProperty('userList.length', 1);
+  });
+
+  it('should not leave channel if not in channel', async () => {
+    await expect(
+      channelService.join({ name: '#test9', password: '' }, mockUser),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(channelService.leave('#test9', mockUser2)).rejects.toThrow(
+      "Can't leave a channel you're not in",
+    );
+  });
+
+  it('should not leave channel if muted', async () => {
+    await expect(
+      channelService.join({ name: '#test10', password: '' }, mockUser),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      channelService.join({ name: '#test10', password: '' }, mockUser2),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      mockRepoChannelUser
+        .getRepo()
+        .update({ user_id: mockUser2.id }, { mute: true }),
+    ).resolves.not.toThrow();
+    await expect(channelService.leave('#test10', mockUser2)).rejects.toThrow(
+      "Can't leave because you're muted or banned",
+    );
+  });
+
+  it('should not leave channel if banned', async () => {
+    await expect(
+      channelService.join({ name: '#test11', password: '' }, mockUser),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      channelService.join({ name: '#test11', password: '' }, mockUser2),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      mockRepoChannelUser
+        .getRepo()
+        .update({ user_id: mockUser2.id }, { ban: true }),
+    ).resolves.not.toThrow();
+    await expect(channelService.leave('#test11', mockUser2)).rejects.toThrow(
+      "Can't leave because you're muted or banned",
+    );
+  });
+
+  it('should delete channel if last to leave', async () => {
+    await expect(
+      channelService.join({ name: '#test12', password: '' }, mockUser),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(channelService.leave('#test12', mockUser)).resolves.toBe(null);
+    await expect(mockRepoChannel.getRepo().find()).resolves.toEqual([]);
+  });
+
+  it('should update channel owner on leave', async () => {
+    await expect(
+      channelService.join({ name: '#test13', password: '' }, mockUser),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      channelService.join({ name: '#test13', password: '' }, mockUser2),
+    ).resolves.toEqual(expect.any(Channel));
+    await expect(
+      channelService.leave('#test13', mockUser),
+    ).resolves.toHaveProperty('userList[0].owner', true);
+  });
 });
