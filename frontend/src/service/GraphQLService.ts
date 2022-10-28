@@ -35,17 +35,31 @@ class GraphQLService {
     variables: OperationVariables = {},
     queryOptions: Partial<QueryOptions> = {},
   ) {
-    const { data, error, errors } = await this.apolloClient.query({
-      query: gql`
-        ${query}
-      `,
-      variables,
-      ...queryOptions,
-    });
-    if (error) throw new Error(error.message);
-    if (errors && errors.length > 0) throw new Error(errors[0].message);
-    if (!data) throw new Error('Empty data');
-    return data;
+    return await this.apolloClient
+      .query({
+        query: gql`
+          ${query}
+        `,
+        variables,
+        ...queryOptions,
+      })
+      .then(({ data, error, errors }) => {
+        if (error) throw new Error(error.message);
+        if (errors && errors.length > 0) throw new Error(errors[0].message);
+        if (!data) throw new Error('Empty data');
+        return data;
+      })
+      .catch((error) => {
+        if (
+          typeof error.graphQLErrors?.at(0)?.extensions?.response?.message !==
+          'undefined'
+        ) {
+          throw new Error(
+            error.graphQLErrors?.at(0)?.extensions?.response?.message,
+          );
+        }
+        throw new Error(error.message);
+      });
   }
 
   async mutation(
@@ -53,16 +67,30 @@ class GraphQLService {
     variables: OperationVariables = {},
     mutationOptions: Partial<MutationOptions> = {},
   ) {
-    const { data, errors } = await this.apolloClient.mutate({
-      mutation: gql`
-        ${mutation}
-      `,
-      variables,
-      ...mutationOptions,
-    });
-    if (errors && errors.length > 0) throw new Error(errors[0].message);
-    if (!data) throw new Error('Empty data');
-    return data;
+    return await this.apolloClient
+      .mutate({
+        mutation: gql`
+          ${mutation}
+        `,
+        variables,
+        ...mutationOptions,
+      })
+      .then(({ data, errors }) => {
+        if (errors && errors.length > 0) throw new Error(errors[0].message);
+        if (!data) throw new Error('Empty data');
+        return data;
+      })
+      .catch((error) => {
+        if (
+          typeof error.graphQLErrors?.at(0)?.extensions?.response?.message !==
+          'undefined'
+        ) {
+          throw new Error(
+            error.graphQLErrors?.at(0)?.extensions?.response?.message,
+          );
+        }
+        throw new Error(error.message);
+      });
   }
 }
 
