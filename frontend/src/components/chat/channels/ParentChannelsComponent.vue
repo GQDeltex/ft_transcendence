@@ -2,7 +2,7 @@
 import ChildChannelComponent from './ChildChannelComponent.vue';
 import ModalChannelComponent from './ModalChannelComponent.vue';
 import { ref } from 'vue';
-const emits = defineEmits(['update']);
+const emits = defineEmits(['update', 'join']);
 
 defineProps<{
   channels: {
@@ -18,10 +18,15 @@ const joinNewChannel = () => {
   modalActive.value = true;
 };
 
-const onClose = (input: string) => {
+const onClose = () => {
   modalActive.value = false;
-  emits('update', input);
 };
+
+const onJoin = (channel) => {
+  emits('join', channel);
+  selectedChannel.value = channel.name;
+  emits('update', channel.name);
+}
 
 const channelSelect = (input: string) => {
   selectedChannel.value = input;
@@ -36,7 +41,7 @@ const channelSelect = (input: string) => {
       <button class="button" @click="joinNewChannel">
         Join / Create Channel
       </button>
-      <ModalChannelComponent v-show="modalActive" @close="onClose" />
+      <ModalChannelComponent v-show="modalActive" @close="onClose" @join="onJoin"/>
     </span>
     <div class="list">
       <ChildChannelComponent

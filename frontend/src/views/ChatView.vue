@@ -89,6 +89,11 @@ onBeforeUnmount(() => {
 const UpdateChannels = (input: string) => {
   chatName.value = input;
 };
+
+const joinChannel = (channel) => {
+  // Somehow channels.value.push does not work. This seems to be fine.
+  channels.value = [...channels.value, { __typename: "Channel", ...channel }];
+}
 </script>
 
 <template>
@@ -100,6 +105,7 @@ const UpdateChannels = (input: string) => {
         :user-id="userStore.id"
         class="channelsComp"
         @update="UpdateChannels"
+        @join="joinChannel"
       />
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '@/service/socket';
-const emits = defineEmits(['close', 'update']);
+const emits = defineEmits(['close', 'join']);
 
 let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
@@ -10,8 +10,9 @@ let password: Ref<string> = ref('');
 function closeOk() {
   socket.emit('join', {
     channel: { name: channelName.value, password: password.value },
-  });
-  emits('update', channelName.value);
+    }, (channel) => {
+        emits('join', channel);
+    });
   channelName.value = '';
   password.value = '';
   emits('close');
