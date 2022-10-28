@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:8](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L8)
+[src/game/entities/game.entity.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L14)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L7)
+[src/game/entities/game.entity.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L13)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:6](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L6)
+[src/game/entities/game.entity.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L12)
