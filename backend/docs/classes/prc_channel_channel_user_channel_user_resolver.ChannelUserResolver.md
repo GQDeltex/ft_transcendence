@@ -112,13 +112,13 @@ ___
 
 ### updateBan
 
-▸ **updateBan**(`JwtUser`, `channel_name`, `banUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+▸ **updateBan**(`jwtPayload`, `channel_name`, `banUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JwtUser` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `channel_name` | `string` |
 | `banUser` | `number` |
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:96](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L96)
+[src/prc/channel/channel-user/channel-user.resolver.ts:106](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L106)
 
 ___
 
