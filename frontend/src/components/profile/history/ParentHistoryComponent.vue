@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import UserPlayedGameComponent from '../../globalUse/UserPlayedGameComponent.vue';
+import GameService from '@/service/GameService';
+import { useUserStore } from '@/store/user';
+import { ref } from 'vue';
+
+const userStore = useUserStore();
+const games = ref([]);
+
+GameService.findAll(undefined, userStore.id).then((gamesreturn) => games.value = gamesreturn);
 </script>
 
 <template>
   <div class="frame">
-    <UserPlayedGameComponent />
-    <UserPlayedGameComponent />
-    <UserPlayedGameComponent />
-    <UserPlayedGameComponent />
+    <UserPlayedGameComponent v-for="game in games" :key="game.id" :player1="game.player1.username" :player2="game.player2.username"/>
   </div>
 </template>
 

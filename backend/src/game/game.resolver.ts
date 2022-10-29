@@ -13,7 +13,7 @@ export class GameResolver {
   @Query(() => [Game], { name: 'games' })
   findAll(
     @Args('state', { nullable: true }) searchState: GameState,
-    @Args('user', { nullable: true }) userId: number,
+    @Args('user', { type: () => Int, nullable: true }) userId: number,
   ) {
     return this.gameService.findAll(searchState, userId);
   }
