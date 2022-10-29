@@ -1,9 +1,11 @@
 export class Element {
   public _htmlElem: HTMLElement | null;
   private boundBox: DOMRect | null;
+  public _gameId: number;
 
-  constructor(fieldElem: HTMLElement | null) {
+  constructor(fieldElem: HTMLElement | null, gameId: number) {
     this._htmlElem = fieldElem;
+    this._gameId = gameId;
     this.boundBox = this.getRect();
   }
   getRect(): DOMRect | null {

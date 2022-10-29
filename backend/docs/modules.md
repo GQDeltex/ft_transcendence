@@ -24,6 +24,7 @@
 - [game/game.module](modules/game_game_module.md)
 - [game/game.resolver](modules/game_game_resolver.md)
 - [game/game.service](modules/game_game_service.md)
+- [game/queue.subscriber](modules/game_queue_subscriber.md)
 - [health/health.controller](modules/health_health_controller.md)
 - [health/health.module](modules/health_health_module.md)
 - [main](modules/main.md)

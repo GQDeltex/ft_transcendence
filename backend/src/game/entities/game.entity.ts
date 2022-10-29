@@ -1,5 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 
 export enum GameState {
@@ -16,12 +22,20 @@ export class Game {
   id: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, { nullable: false, eager: true })
+  @ManyToOne(() => User, { nullable: false, eager: true, cascade: true })
+  @JoinColumn({ name: 'player1Id' })
   player1: User;
 
+  @Column()
+  player1Id: number;
+
   @Field(() => User)
-  @ManyToOne(() => User, { nullable: false, eager: true })
+  @ManyToOne(() => User, { nullable: false, eager: true, cascade: true })
+  @JoinColumn({ name: 'player2Id' })
   player2: User;
+
+  @Column()
+  player2Id: number;
 
   @Field(() => Int)
   @Column({ default: 0 })
