@@ -2,6 +2,10 @@
   <!-- <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <div class="playersParent">
+    <GamePeopleComponent :key="props.player1ID.id" :client="props.player1ID" />
+    <GamePeopleComponent :key="props.player2ID.id" :client="props.player2ID" />
+  </div>
   <div id="feld" class="field">
     <div class="score">
       <div id="player">{{ playerScore }}</div>
@@ -21,6 +25,7 @@ import { socket } from '../../service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
+import GamePeopleComponent from './GamePeopleComponent.vue';
 
 const remoteScore = ref(0);
 const playerScore = ref(0);
@@ -29,6 +34,20 @@ const gameLoader = ref(true);
 const props = defineProps<{
   gameId: number;
   priority: boolean;
+  player1ID: {
+    id: number;
+    username: string;
+    title: string[];
+    picture: string;
+    status?: string | undefined;
+  };
+  player2ID: {
+    id: number;
+    username: string;
+    title: string[];
+    picture: string;
+    status?: string | undefined;
+  };
 }>();
 
 onUnmounted(() => {
@@ -36,6 +55,11 @@ onUnmounted(() => {
 });
 
 onMounted(() => {
+  console.log(props.player1ID);
+  console.log(props.player2ID);
+  // player1.value = await UserService.findOneById(props.player1ID);
+  // player2.value = await UserService.findOneById(props.player2ID);
+  // console.log('player1 = ' + player1.value.username + ' player2 ' + player2.value.username)
   console.log(props.gameId);
   const field = new Element(document.getElementById('feld'), props.gameId);
   const ball = new Ball(
@@ -204,5 +228,11 @@ onMounted(() => {
 }
 .score > :last-child {
   text-align: left;
+}
+
+.playersParent {
+  display: flexbox;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
