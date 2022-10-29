@@ -76,7 +76,7 @@ type Query {
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
   channelUsers: [ChannelUser!]!
-  games(state: String): [Game!]!
+  games(state: String, user: Float): [Game!]!
   game(id: Int!): Game!
 }
 
