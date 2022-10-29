@@ -34,6 +34,7 @@ describe('ChannelUserResolver', () => {
     mockRepoUser = new MockRepo('ChannelUserResolver', User, [
       mockUser,
       mockUser2,
+      createMockUser(),
     ]);
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
