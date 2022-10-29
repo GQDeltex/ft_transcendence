@@ -27,7 +27,10 @@ const channels = ref<Channel[]>([]);
 socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
     case AllowedUpdateFriendshipMethod.ADD:
-      userStore.receivedFriendRequests.push(id);
+      userStore.receivedFriendRequests = [
+        ...userStore.receivedFriendRequests,
+        id,
+      ];
       break;
     case AllowedUpdateFriendshipMethod.REMOVE:
       userStore.friends = userStore.friends.filter(
@@ -35,7 +38,7 @@ socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
       );
       break;
     case AllowedUpdateFriendshipMethod.ACCEPT:
-      userStore.friends.push(id);
+      userStore.friends = [...userStore.friends, id];
       userStore.sentFriendRequests = userStore.sentFriendRequests.filter(
         (friendId) => friendId !== id,
       );
@@ -55,7 +58,7 @@ socket.on('onFriend', ({ method, id }: { method: string; id: number }) => {
 socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
     case AllowedUpdateBlockingMethod.BLOCK:
-      userStore.blockedBy.push(id);
+      userStore.blockedBy = [...userStore.blockedBy, id];
       userStore.friends = userStore.friends.filter(
         (friendId) => friendId !== id,
       );
