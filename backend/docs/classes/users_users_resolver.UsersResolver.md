@@ -319,7 +319,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `updateUserUsernameInput` | [`UpdateUserUsernameInput`](users_dto_update_userusername_input.UpdateUserUsernameInput.md) |
+| `updateUserUsernameInput` | [`UpdateUsernameInput`](users_dto_update_username_input.UpdateUsernameInput.md) |
 | `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 
 #### Returns
