@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import ChildStreamComponent from '../stream/ChildStreamComponent.vue';
 defineProps<{
-    player1: string;
-    player2: string;
+  player1: string;
+  player2: string;
 }>();
 </script>
 
 <template>
   <div>
-  <!--
+    <!--
     <span class="username">gucalvi</span>
     <span class="time">6h ago</span>
     -->
