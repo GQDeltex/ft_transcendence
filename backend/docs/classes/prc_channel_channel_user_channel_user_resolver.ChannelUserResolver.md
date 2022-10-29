@@ -19,6 +19,7 @@
 ### Methods
 
 - [findAll](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#findall)
+- [findChannelUsersInChannel](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#findchannelusersinchannel)
 - [updateAdmin](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updateadmin)
 - [updateBan](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updateban)
 - [updateMute](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updatemute)
@@ -88,6 +89,26 @@ ___
 
 ___
 
+### findChannelUsersInChannel
+
+▸ **findChannelUsersInChannel**(`channelName`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelName` | `string` |
+
+#### Returns
+
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Defined in
+
+[src/prc/channel/channel-user/channel-user.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L28)
+
+___
+
 ### updateAdmin
 
 ▸ **updateAdmin**(`JwtUser`, `channel_name`, `newAdmin`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
@@ -106,7 +127,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L42)
+[src/prc/channel/channel-user/channel-user.resolver.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L49)
 
 ___
 
@@ -128,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L69)
+[src/prc/channel/channel-user/channel-user.resolver.ts:76](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L76)
 
 ___
 
@@ -150,7 +171,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:96](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L96)
+[src/prc/channel/channel-user/channel-user.resolver.ts:103](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L103)
 
 ___
 
@@ -172,4 +193,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L28)
+[src/prc/channel/channel-user/channel-user.resolver.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L35)
