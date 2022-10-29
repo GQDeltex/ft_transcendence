@@ -3,6 +3,7 @@ import ChildPeopleComponent from './ChildPeopleComponent.vue';
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
+const emits = defineEmits(['chat']);
 
 defineProps<{
   clients: User[];
@@ -12,6 +13,10 @@ const userStore = useUserStore();
 const friendToggle = ref(false);
 const blockToggle = ref(false);
 const peopleToggle = ref(false);
+
+const onChat = (username: string) => {
+  emits('chat', username);
+};
 </script>
 
 <template>
@@ -29,6 +34,7 @@ const peopleToggle = ref(false);
               userStore.friends.includes(client.id)
             "
             :client="client"
+            @chat="onChat"
           />
         </template>
       </div>
@@ -44,6 +50,7 @@ const peopleToggle = ref(false);
               !userStore.blocks.includes(client.id)
             "
             :client="client"
+            @chat="onChat"
           />
         </template>
       </div>
