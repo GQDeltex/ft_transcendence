@@ -8,6 +8,7 @@ import {
   AllowedUpdateFriendshipMethod,
   useUserStore,
 } from '@/store/user';
+const emits = defineEmits(['chat']);
 
 const props = defineProps<{
   client: User;
@@ -147,6 +148,10 @@ const onProfile = async () => {
     params: { id: props.client.id },
   });
 };
+
+const onChat = (username: string) => {
+  emits('chat', username);
+};
 </script>
 
 <template>
@@ -163,6 +168,7 @@ const onProfile = async () => {
     </div>
   </div>
   <div v-show="toggle" class="popup">
+    <button class="butt" @click="onChat(client.username)">Chat</button>
     <button
       v-show="blockStatus === blockStatusEnum.NOT_BLOCKED"
       class="butt"
