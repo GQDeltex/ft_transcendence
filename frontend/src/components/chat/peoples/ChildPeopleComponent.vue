@@ -20,8 +20,8 @@ const statusStyle = computed(() => {
   switch (props.client.status) {
     case 'online':
       return { color: 'lime' };
-    case 'in Game':
-      return 'yellow';
+    case 'in game':
+      return { color: 'yellow' };
     default:
       return { color: 'grey' };
   }
@@ -211,12 +211,7 @@ const onProfile = async () => {
 
 .status {
   font-size: 0.6vw;
-  color: lime;
-}
-
-.status {
-  font-size: 0.6vw;
-  color: yellow;
+  color: grey;
 }
 
 .popup {

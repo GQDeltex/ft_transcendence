@@ -111,14 +111,14 @@ const onClose = () => {
 }
 
 .onSwitch {
-  color: white;
+  color: cyan;
   margin-top: 10%;
   margin-left: 6%;
   margin-right: 0;
 }
 
 .offSwitch {
-  color: white;
+  color: cyan;
   margin-top: 10%;
   margin-left: 60%;
 }
@@ -137,7 +137,7 @@ const onClose = () => {
   padding: 10px 10px 1%;
   border-width: 1px;
   border-style: solid;
-  border-image: linear-gradient(to bottom, white, #f8971d, #f8971d, #202020) 1;
+  border-image: linear-gradient(to bottom, cyan, #f8971d, #f8971d, #202020) 1;
 }
 
 .infoBox {
@@ -154,7 +154,7 @@ const onClose = () => {
 }
 
 .campus {
-  color: white;
+  color: cyan;
   font-size: 1vw;
 }
 
