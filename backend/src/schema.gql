@@ -12,6 +12,7 @@ type Channel {
 
 type ChannelUser {
   id: Int!
+  user: User
   user_id: Int!
   channel_name: String!
   admin: Boolean!
@@ -76,6 +77,7 @@ type Query {
   channel(id: Int!): Channel!
   channelByName(name: String!): Channel!
   channelUsers: [ChannelUser!]!
+  channelUsersInChannel(channelName: String!): [ChannelUser!]!
   games(state: String): [Game!]!
   game(id: Int!): Game!
 }

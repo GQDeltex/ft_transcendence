@@ -25,6 +25,13 @@ export class ChannelUserResolver {
     return this.channelUserService.findAll();
   }
 
+  @Query(() => [ChannelUser], { name: 'channelUsersInChannel' })
+  findChannelUsersInChannel(
+    @Args('channelName', { type: () => String }) channelName: string,
+  ): Promise<ChannelUser[]> {
+    return this.channelUserService.findAllInChannel(channelName);
+  }
+
   @Mutation(() => Channel)
   async updatePassword(
     @CurrentJwtPayload() JwtUser: JwtPayload,

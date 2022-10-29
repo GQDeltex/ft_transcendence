@@ -16,6 +16,7 @@ export class ChannelUser {
   @Field(() => Int)
   id: number;
 
+  @Field(() => User, { nullable: true })
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
