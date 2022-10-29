@@ -21,6 +21,10 @@ class GameService {
                 }
             }
             `,
+            {
+                state: state,
+                userId: userId,
+            }
         );
         if (typeof games === 'undefined') throw new Error('Empty games data');
         return games;
