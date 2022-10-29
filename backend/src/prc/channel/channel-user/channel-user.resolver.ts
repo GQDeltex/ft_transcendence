@@ -109,10 +109,20 @@ export class ChannelUserResolver {
     );
     if (typeof channelUserNew === 'undefined')
       throw new WsException('channelMuteUserNew undefined');
+    if (channelMuteUser.id == channelUserNew.id)
+      throw new WsException(`${channelMuteUser.user_id} cannot mute itself`);
     //console.log('both users are good'); //DEBUG
     if (!channelMuteUser.admin)
       throw new WsException(
         JwtUser.id + ' is not a Channel Admin on ' + channel_name,
+      );
+    if (channelUserNew.owner)
+      throw new WsException(
+        `${channelMuteUser.user_id} does not have permision to mute an owner`,
+      );
+    if (channelUserNew.admin && !channelMuteUser.owner)
+      throw new WsException(
+        `${channelMuteUser.user_id} does not have permision to mute an admin`,
       );
     if (channelUserNew.mute)
       throw new WsException(muteUser + ' is already muted on ' + channel_name);

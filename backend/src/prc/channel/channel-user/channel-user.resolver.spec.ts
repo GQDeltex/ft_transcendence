@@ -7,7 +7,11 @@ import { MockRepo } from '../../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../../users/entities/user.entity';
 import { UsersService } from '../../../users/users.service';
-import { mockUser, mockUser2 } from '../../../users/entities/user.entity.mock';
+import {
+  createMockUser,
+  mockUser,
+  mockUser2,
+} from '../../../users/entities/user.entity.mock';
 import { ChannelUserService } from './channel-user.service';
 import { PrcGateway } from '../../prc.gateway';
 import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
@@ -74,7 +78,7 @@ describe('ChannelUserResolver', () => {
     expect(channelUserResolver).toBeDefined();
   });
 
-  //ADMIN
+  /*****ADMIN*****/
   it('should not update admin because oldAdmin not on channel', async () => {
     const oldAdmin: JwtPayload = {
       id: mockUser.id,
@@ -136,8 +140,9 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
     ).resolves.not.toThrow();
   });
+  /******ADMIN*******/
 
-  //PASSWORD
+  /*****PASSWORD*****/
   it('should not change password because user not on channel', async () => {
     const JwtUser: JwtPayload = {
       id: mockUser.id,
@@ -182,7 +187,9 @@ describe('ChannelUserResolver', () => {
       channelUserResolver.updatePassword(JwtUser, name, 'new'),
     ).resolves.toEqual(expect.any(Channel));
   });
+  /*****PASSWORD*****/
 
+  /*******BAN********/
   it('should not ban user because admin is not on channel', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
@@ -257,7 +264,9 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     jest.useRealTimers();
   });
+  /*******BAN**********/
 
+  /*******MUTE*********/
   it('should not mute user because admin is not on channel', async () => {
     const admin: JwtPayload = {
       id: mockUser.id,
@@ -302,6 +311,81 @@ describe('ChannelUserResolver', () => {
     ).rejects.toThrow(`${admin.id} is not a Channel Admin on #test`);
   });
 
+  it('should not mute itself', async () => {
+    const itself: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(itself, '#test', itself.id),
+    ).rejects.toThrow(`${mockUser.id} cannot mute itself`);
+  });
+
+  it('should not mute owner because he does not have permission', async () => {
+    const admin: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const owner: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    const ownerJWT: JwtPayload = {
+      id: mockUser2.id,
+      email: mockUser2.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelUserResolver.updateAdmin(ownerJWT, '#test', mockUser.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(admin, '#test', owner.id),
+    ).rejects.toThrow(`${admin.id} does not have permision to mute an owner`);
+  });
+
+  it('should not mute admin because he does not have permission', async () => {
+    const admin1Jwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const admin2: User = createMockUser();
+    const owner: User = mockUser2;
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin2),
+    ).resolves.not.toThrow();
+    const ownerJWT: JwtPayload = {
+      id: mockUser2.id,
+      email: mockUser2.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelUserResolver.updateAdmin(ownerJWT, '#test', mockUser.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJWT, '#test', admin2.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateMute(admin1Jwt, '#test', admin2.id),
+    ).rejects.toThrow(
+      `${admin1Jwt.id} does not have permision to mute an admin`,
+    );
+  });
+
   it('should mute user', async () => {
     jest.useFakeTimers({ legacyFakeTimers: true });
     const admin: JwtPayload = {
@@ -332,4 +416,5 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     jest.useRealTimers();
   });
+  /*****MUTE*****/
 });
