@@ -33,10 +33,10 @@ type User {
   campus: String!
   country: String!
   inventory: [Int!]!
-  status: String!
   lastLoggedIn: Timestamp!
   twoFAEnable: Boolean!
   channelList: [ChannelUser!]
+  status: String!
   friends: [Int]!
   sentFriendRequests: [Int]!
   receivedFriendRequests: [Int]!
