@@ -10,8 +10,16 @@ export class ChannelUserService {
     private readonly channelUserRepository: Repository<ChannelUser>,
   ) {}
 
-  findAll() {
-    return this.channelUserRepository.find();
+  async findAll(userId: number) {
+    const channelUsers: ChannelUser[] = await this.channelUserRepository.find({
+      relations: ['channel'],
+    });
+    return channelUsers.filter((channelUser) => {
+      if (!channelUser.channel.private) return true;
+      return channelUser.channel.userList.some(
+        (channelUser) => channelUser.user_id === userId,
+      );
+    });
   }
 
   findOne(identifier: number | string): Promise<ChannelUser> {
@@ -25,6 +33,13 @@ export class ChannelUserService {
         where: { channel_name: identifier },
         relations: ['channel' /*, 'channel.channel'*/],
       });
+  }
+
+  findAllInChannel(channelName: string) {
+    return this.channelUserRepository.find({
+      where: { channel_name: channelName },
+      relations: ['user'],
+    });
   }
 
   async updateAdmin(channelUser: ChannelUser): Promise<ChannelUser> {
