@@ -20,6 +20,8 @@ GameService.findAll('ended', userStore.id).then(
       :key="game.id"
       :player1="game.player1.username"
       :player2="game.player2.username"
+      :score1="game.score1"
+      :score2="game.score2"
     />
   </div>
 </template>

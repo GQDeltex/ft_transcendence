@@ -22,6 +22,8 @@ GameService.findAll('running').then(
       :key="game.id"
       :player1-name="game.player1.username"
       :player2-name="game.player2.username"
+      :score1="game.score1"
+      :score2="game.score2"
     />
     <!--
     <SearchResultComponent

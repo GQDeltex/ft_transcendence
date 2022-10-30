@@ -3,6 +3,8 @@ import ChildStreamComponent from '../stream/ChildStreamComponent.vue';
 defineProps<{
   player1: string;
   player2: string;
+  score1: number;
+  score2: number;
 }>();
 </script>
 
@@ -13,7 +15,12 @@ defineProps<{
     <span class="time">6h ago</span>
     -->
     <span class="stream">
-      <ChildStreamComponent :player1-name="player1" :player2-name="player2" />
+      <ChildStreamComponent
+        :player1-name="player1"
+        :player2-name="player2"
+        :score1="score1"
+        :score2="score2"
+      />
     </span>
   </div>
 </template>
