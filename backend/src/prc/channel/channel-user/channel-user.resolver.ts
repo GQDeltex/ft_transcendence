@@ -21,8 +21,15 @@ export class ChannelUserResolver {
   ) {}
 
   @Query(() => [ChannelUser], { name: 'channelUsers' })
-  findAll() {
-    return this.channelUserService.findAll();
+  findAll(@CurrentJwtPayload() jwtPayload: JwtPayload) {
+    return this.channelUserService.findAll(jwtPayload.id);
+  }
+
+  @Query(() => [ChannelUser], { name: 'channelUsersInChannel' })
+  findChannelUsersInChannel(
+    @Args('channelName', { type: () => String }) channelName: string,
+  ): Promise<ChannelUser[]> {
+    return this.channelUserService.findAllInChannel(channelName);
   }
 
   @Mutation(() => Channel)
@@ -68,12 +75,14 @@ export class ChannelUserResolver {
 
   @Mutation(() => ChannelUser)
   async updateBan(
-    @CurrentJwtPayload() JwtUser: JwtPayload,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args('channel_name', { type: () => String }) channel_name: string,
     @Args('banUser', { type: () => Int }) banUser: number,
   ) {
+    if (jwtPayload.id === banUser)
+      throw new WsException(`${jwtPayload.id} cannot ban themself`);
     const channelBanUser: ChannelUser = await this.usersService.findChannelUser(
-      JwtUser.id,
+      jwtPayload.id,
       channel_name,
     );
     if (typeof channelBanUser === 'undefined')
@@ -86,7 +95,15 @@ export class ChannelUserResolver {
       throw new WsException('channelBanUserNew undefined');
     if (!channelBanUser.admin)
       throw new WsException(
-        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
+        jwtPayload.id + ' is not a Channel Admin on ' + channel_name,
+      );
+    if (channelUserNew.owner)
+      throw new WsException(
+        `${channelBanUser.user_id} does not have permision to ban an owner`,
+      );
+    if (channelUserNew.admin && !channelBanUser.owner)
+      throw new WsException(
+        `${channelBanUser.user_id} does not have permision to ban an admin`,
       );
     if (channelUserNew.ban)
       throw new WsException(banUser + ' is already banned on ' + channel_name);

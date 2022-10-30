@@ -53,36 +53,40 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async updateUsername(
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args() updateUserUsernameInput: UpdateUsernameInput,
-    @CurrentJwtPayload() user: JwtPayload,
   ) {
     await this.usersService.updateUsername(
-      user.id,
+      jwtPayload.id,
       updateUserUsernameInput.username,
     );
-    return this.usersService.findOne(user.id);
+    return this.usersService.findOne(jwtPayload.id);
   }
 
   @Mutation(() => User)
   async updateFriendship(
-    @CurrentJwtPayload() user: JwtPayload,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args() args: UpdateUserFriendshipInput,
   ): Promise<User> {
     await this.usersService.updateFriendship(
-      user.id,
+      jwtPayload.id,
       args.method,
       args.friendId,
     );
-    return this.usersService.findOne(user.id);
+    return this.usersService.findOne(jwtPayload.id);
   }
 
   @Mutation(() => User)
   async updateBlocking(
-    @CurrentJwtPayload() user: JwtPayload,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args() args: UpdateUserBlockingInput,
   ): Promise<User> {
-    await this.usersService.updateBlocking(user.id, args.method, args.userId);
-    return this.usersService.findOne(user.id);
+    await this.usersService.updateBlocking(
+      jwtPayload.id,
+      args.method,
+      args.userId,
+    );
+    return this.usersService.findOne(jwtPayload.id);
   }
 
   @Query(() => [Item])
@@ -96,6 +100,20 @@ export class UsersResolver {
     @Args('orderId', { type: () => String }) orderId: string,
   ): Promise<User> {
     return this.usersService.updateInventory(user.id, orderId);
+  }
+
+  @ResolveField(() => String)
+  async status(
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
+    @Parent() user: User,
+  ): Promise<string> {
+    if (jwtPayload.id === user.id) return user.status;
+    if (
+      !user.following_id?.includes(jwtPayload.id) &&
+      !user.followers_id?.includes(jwtPayload.id)
+    )
+      return 'offline';
+    return user.status;
   }
 
   @ResolveField(() => [Int], { nullable: 'items' })
