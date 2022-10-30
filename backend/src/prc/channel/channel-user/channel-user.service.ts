@@ -35,6 +35,13 @@ export class ChannelUserService {
       });
   }
 
+  findAllInChannel(channelName: string) {
+    return this.channelUserRepository.find({
+      where: { channel_name: channelName },
+      relations: ['user'],
+    });
+  }
+
   async updateAdmin(channelUser: ChannelUser): Promise<ChannelUser> {
     const result: UpdateResult = await this.channelUserRepository.update(
       { id: channelUser.id },

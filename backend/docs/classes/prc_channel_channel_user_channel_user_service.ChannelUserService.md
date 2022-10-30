@@ -17,6 +17,7 @@
 ### Methods
 
 - [findAll](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findall)
+- [findAllInChannel](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findallinchannel)
 - [findOne](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findone)
 - [unban](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unban)
 - [unmute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unmute)
@@ -72,6 +73,26 @@
 
 ___
 
+### findAllInChannel
+
+▸ **findAllInChannel**(`channelName`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelName` | `string` |
+
+#### Returns
+
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Defined in
+
+[src/prc/channel/channel-user/channel-user.service.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L38)
+
+___
+
 ### findOne
 
 ▸ **findOne**(`identifier`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
@@ -108,7 +129,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L48)
+[src/prc/channel/channel-user/channel-user.service.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L55)
 
 ___
 
@@ -128,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:68](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L68)
+[src/prc/channel/channel-user/channel-user.service.ts:75](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L75)
 
 ___
 
@@ -148,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L38)
+[src/prc/channel/channel-user/channel-user.service.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L45)
 
 ___
 
@@ -168,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:57](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L57)
+[src/prc/channel/channel-user/channel-user.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L64)
 
 ___
 
@@ -188,4 +209,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:77](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L77)
+[src/prc/channel/channel-user/channel-user.service.ts:84](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L84)
