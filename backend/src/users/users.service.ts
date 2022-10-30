@@ -254,8 +254,8 @@ export class UsersService {
 
     if (friend.socketId !== '') {
       this.prcGateway.server.to(friend.socketId).emit('onFriend', {
-        method: method as string,
-        id: id,
+        method,
+        id,
       });
     }
   }
@@ -309,8 +309,8 @@ export class UsersService {
 
     if (blockedUser.socketId !== '') {
       this.prcGateway.server.to(blockedUser.socketId).emit('onBlock', {
-        method: method as string,
-        id: id,
+        method,
+        id,
       });
     }
   }

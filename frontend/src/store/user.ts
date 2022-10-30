@@ -42,9 +42,20 @@ export enum AllowedUpdateFriendshipMethod {
   CANCEL = 'CANCEL',
 }
 
+export enum FriendStatusEnum {
+  FRIEND = 'Remove friend',
+  NOT_FRIEND = 'Add friend',
+  REQUEST_SENT = 'Cancel friend request',
+  REQUEST_RECEIVED = 'Accept friend request',
+}
+
 export enum AllowedUpdateBlockingMethod {
   BLOCK = 'BLOCK',
   UNBLOCK = 'UNBLOCK',
+}
+export enum BlockStatusEnum {
+  BLOCKED = 'Unblock',
+  NOT_BLOCKED = 'Block',
 }
 
 export const useUserStore = defineStore('user', {
@@ -71,6 +82,24 @@ export const useUserStore = defineStore('user', {
     blockedBy: [] as number[],
     inventory: [] as number[],
   }),
+  getters: {
+    getFriendStatus: (state) => {
+      return (friendId: number) => {
+        if (state.friends.includes(friendId)) return FriendStatusEnum.FRIEND;
+        if (state.sentFriendRequests.includes(friendId))
+          return FriendStatusEnum.REQUEST_SENT;
+        if (state.receivedFriendRequests.includes(friendId))
+          return FriendStatusEnum.REQUEST_RECEIVED;
+        return FriendStatusEnum.NOT_FRIEND;
+      };
+    },
+    getBlockStatus: (state) => {
+      return (blockId: number) => {
+        if (state.blocks.includes(blockId)) return BlockStatusEnum.BLOCKED;
+        return BlockStatusEnum.NOT_BLOCKED;
+      };
+    },
+  },
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
       try {

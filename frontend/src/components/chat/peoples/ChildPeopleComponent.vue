@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import { useRouter } from 'vue-router';
 import type { User } from '@/store/user';
 import {
   AllowedUpdateBlockingMethod,
   AllowedUpdateFriendshipMethod,
+  FriendStatusEnum,
+  BlockStatusEnum,
   useUserStore,
 } from '@/store/user';
 const emits = defineEmits(['chat']);
@@ -39,75 +41,29 @@ const statusBorder = computed(() => {
   }
 });
 
-enum friendStatusEnum {
-  FRIEND = 'Remove friend',
-  NOT_FRIEND = 'Add friend',
-  REQUEST_SENT = 'Cancel friend request',
-  REQUEST_RECEIVED = 'Accept friend request',
-}
-
-enum blockStatusEnum {
-  BLOCKED = 'Unblock',
-  NOT_BLOCKED = 'Block',
-}
-
 const toggle = ref(false);
-const friendText = ref<friendStatusEnum>(friendStatusEnum.NOT_FRIEND);
-let friendStatus = friendStatusEnum.NOT_FRIEND;
-const blockText = ref<blockStatusEnum>(blockStatusEnum.NOT_BLOCKED);
-let blockStatus = blockStatusEnum.NOT_BLOCKED;
-
-watch(
-  [
-    () => userStore.friends,
-    () => userStore.sentFriendRequests,
-    () => userStore.receivedFriendRequests,
-  ],
-  () => {
-    if (userStore.friends.includes(props.client.id))
-      friendStatus = friendStatusEnum.FRIEND;
-    else if (userStore.sentFriendRequests.includes(props.client.id))
-      friendStatus = friendStatusEnum.REQUEST_SENT;
-    else if (userStore.receivedFriendRequests.includes(props.client.id))
-      friendStatus = friendStatusEnum.REQUEST_RECEIVED;
-    else friendStatus = friendStatusEnum.NOT_FRIEND;
-    friendText.value = friendStatus;
-  },
-  { deep: true, immediate: true },
-);
-
-watch(
-  () => userStore.blocks,
-  () => {
-    if (userStore.blocks.includes(props.client.id))
-      blockStatus = blockStatusEnum.BLOCKED;
-    else blockStatus = blockStatusEnum.NOT_BLOCKED;
-    blockText.value = blockStatus;
-  },
-  { deep: true, immediate: true },
-);
 
 const onFriend = async () => {
-  switch (friendStatus) {
-    case friendStatusEnum.NOT_FRIEND:
+  switch (userStore.getFriendStatus(props.client.id)) {
+    case FriendStatusEnum.NOT_FRIEND:
       await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.ADD,
         props.client.id,
       );
       break;
-    case friendStatusEnum.FRIEND:
+    case FriendStatusEnum.FRIEND:
       await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.REMOVE,
         props.client.id,
       );
       break;
-    case friendStatusEnum.REQUEST_SENT:
+    case FriendStatusEnum.REQUEST_SENT:
       await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.CANCEL,
         props.client.id,
       );
       break;
-    case friendStatusEnum.REQUEST_RECEIVED:
+    case FriendStatusEnum.REQUEST_RECEIVED:
       await userStore.updateFriendship(
         AllowedUpdateFriendshipMethod.ACCEPT,
         props.client.id,
@@ -117,7 +73,10 @@ const onFriend = async () => {
 };
 
 const onDecline = async () => {
-  if (friendStatus === friendStatusEnum.REQUEST_RECEIVED) {
+  if (
+    userStore.getFriendStatus(props.client.id) ===
+    FriendStatusEnum.REQUEST_RECEIVED
+  ) {
     await userStore.updateFriendship(
       AllowedUpdateFriendshipMethod.DECLINE,
       props.client.id,
@@ -126,14 +85,14 @@ const onDecline = async () => {
 };
 
 const onBlock = async () => {
-  switch (blockStatus) {
-    case blockStatusEnum.NOT_BLOCKED:
+  switch (userStore.getBlockStatus(props.client.id)) {
+    case BlockStatusEnum.NOT_BLOCKED:
       await userStore.updateBlocking(
         AllowedUpdateBlockingMethod.BLOCK,
         props.client.id,
       );
       break;
-    case blockStatusEnum.BLOCKED:
+    case BlockStatusEnum.BLOCKED:
       await userStore.updateBlocking(
         AllowedUpdateBlockingMethod.UNBLOCK,
         props.client.id,
@@ -180,23 +139,28 @@ const onChat = (username: string) => {
   <div v-show="toggle" class="popup">
     <button class="butt" @click="onChat(client.username)">Chat</button>
     <button
-      v-show="blockStatus === blockStatusEnum.NOT_BLOCKED"
+      v-show="
+        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+      "
       class="butt"
       @click="onFriend"
     >
-      {{ friendText }}
+      {{ userStore.getFriendStatus(client.id) }}
     </button>
     <button
       v-show="
-        friendText === friendStatusEnum.REQUEST_RECEIVED &&
-        blockStatus === blockStatusEnum.NOT_BLOCKED
+        userStore.getFriendStatus(client.id) ===
+          FriendStatusEnum.REQUEST_RECEIVED &&
+        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
       "
       class="butt"
       @click="onDecline"
     >
       Decline friend request
     </button>
-    <button class="butt" @click="onBlock">{{ blockText }}</button>
+    <button class="butt" @click="onBlock">
+      {{ userStore.getBlockStatus(client.id) }}
+    </button>
     <button class="butt" @click="onInvite">Invite to Game</button>
     <button class="butt" @click="onProfile">Show Profile</button>
   </div>
