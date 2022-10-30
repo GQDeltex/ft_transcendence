@@ -2,7 +2,19 @@
   <!-- <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-  <div class="players">
+  <div class="players" v-if="props.priority">
+    <GamePeopleComponent
+      :key="props.player2ID.id"
+      :client="props.player2ID"
+      class="player1"
+    />
+    <GamePeopleComponent
+      :key="props.player1ID.id"
+      :client="props.player1ID"
+      class="player2" 
+    />
+  </div>
+  <div class="players" v-else>
     <GamePeopleComponent
       :key="props.player1ID.id"
       :client="props.player1ID"
@@ -11,7 +23,7 @@
     <GamePeopleComponent
       :key="props.player2ID.id"
       :client="props.player2ID"
-      class="player2"
+      class="player2" 
     />
   </div>
   <div id="feld" class="field">
