@@ -7,7 +7,11 @@ import { MockRepo } from '../../../tools/memdb.mock';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../../users/entities/user.entity';
 import { UsersService } from '../../../users/users.service';
-import { mockUser, mockUser2 } from '../../../users/entities/user.entity.mock';
+import {
+  createMockUser,
+  mockUser,
+  mockUser2,
+} from '../../../users/entities/user.entity.mock';
 import { ChannelUserService } from './channel-user.service';
 import { PrcGateway } from '../../prc.gateway';
 import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
@@ -30,6 +34,7 @@ describe('ChannelUserResolver', () => {
     mockRepoUser = new MockRepo('ChannelUserResolver', User, [
       mockUser,
       mockUser2,
+      createMockUser(),
     ]);
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
@@ -225,6 +230,81 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).rejects.toThrow(`${admin.id} is not a Channel Admin on #test`);
+  });
+
+  it('should not ban themself', async () => {
+    const selfJwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(selfJwt, '#test', selfJwt.id),
+    ).rejects.toThrow(`${mockUser.id} cannot ban themself`);
+  });
+
+  it('should not ban owner', async () => {
+    const owner: User = mockUser;
+    const ownerJwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const admin: User = mockUser2;
+    const adminJwt: JwtPayload = {
+      id: mockUser2.id,
+      email: mockUser2.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJwt, '#test', admin.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(adminJwt, '#test', owner.id),
+    ).rejects.toThrow(`${admin.id} does not have permision to ban an owner`);
+  });
+
+  it('should not ban admin if not owner', async () => {
+    const owner: User = mockUser;
+    const ownerJwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const admin: User = mockUser2;
+    const adminJwt: JwtPayload = {
+      id: mockUser2.id,
+      email: mockUser2.email,
+      isAuthenticated: true,
+    };
+    const admin2: User = createMockUser();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin2),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJwt, '#test', admin.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJwt, '#test', admin2.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(adminJwt, '#test', admin2.id),
+    ).rejects.toThrow(`${admin.id} does not have permision to ban an admin`);
   });
 
   it('should ban user', async () => {
