@@ -2,17 +2,18 @@
   <!-- <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-  <div class="playersParent">
-    <GamePeopleComponent :key="props.player1ID.id" :client="props.player1ID" />
-    <GamePeopleComponent :key="props.player2ID.id" :client="props.player2ID" />
+  <div class="players">
+    <GamePeopleComponent :key="props.player2ID.id" :client="props.player2ID" class="player1"/>
+    <GamePeopleComponent :key="props.player1ID.id" :client="props.player1ID" class="player2"/>
   </div>
   <div id="feld" class="field">
     <div class="score">
       <div id="player">{{ playerScore }}</div>
       <div id="remote">{{ remoteScore }}</div>
     </div>
-    <div id="ball" class="ball" src="@/assets/sexy-guy-001-modified.png">
-      <!-- <img class="ball" src="@/assets/sexy-guy-001-modified.png" /> -->
+    <img class="back" src="@/assets/OGPong.png" />
+    <div id="ball" class="ball">
+      <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
     </div>
     <div id="playerPad" class="paddle paddle-left"></div>
     <div id="remotePad" class="paddle paddle-right"></div>
@@ -81,7 +82,7 @@ onMounted(() => {
 
   let lastTime: number | null = null;
   var delta: number;
-  function pupdate(time: number) {
+  async function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
       ball.update(delta, remotePad.getRect());
@@ -168,10 +169,17 @@ onMounted(() => {
   background-color: #212121;
   position: relative;
   margin-left: 15vw;
-  margin-top: 7vh;
+  margin-top: 1vh;
   height: 70vh;
   width: 70vw;
   overflow: hidden;
+  z-index: -1;
+}
+.back {
+  height: 100%;
+  width: 106%;
+  transform: translate(-3%, -6%);
+  z-index: -1;
 }
 .paddle {
   --y: 50;
@@ -181,7 +189,8 @@ onMounted(() => {
   top: calc(var(--y) * 1%);
   transform: translate(0%, -50%);
   width: 1%;
-  height: 20%;
+  height: 13%;
+  z-index: 0;
 }
 
 .paddle-left {
@@ -202,6 +211,7 @@ onMounted(() => {
   transform: translate(-50%, -50%);
   width: 4vh;
   height: 4vh;
+  z-index: 0;
 }
 .score {
   position: relative;
@@ -216,6 +226,7 @@ onMounted(() => {
   font-size: 4vh;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
+  z-index: 1;
 }
 .score > * {
   flex-grow: 1;
@@ -229,10 +240,17 @@ onMounted(() => {
 .score > :last-child {
   text-align: left;
 }
-
-.playersParent {
-  display: flexbox;
-  flex-direction: column;
+.player1{
+  grid-column: 1/2;
   justify-content: center;
+  text-align: center;
+}
+.player2{
+  grid-column: 2/3;
+  justify-content: center;
+  text-align: center;
+}
+.players {
+  display: grid;
 }
 </style>

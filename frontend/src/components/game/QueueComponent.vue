@@ -30,8 +30,15 @@ function leave_queue() {
   socket.emit('queue', { event: 'LEAVE' });
 }
 
+async function gettem(player1Id: number, player2Id: number) {
+  player1User.value = await UserService.findOneById(player1Id);
+  console.log(player1User);
+  player2User.value = await UserService.findOneById(player2Id);
+  console.log(player2User);
+}
+
 // playerIDs to check validity of messages for streaming implementation later™
-socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
+socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
   if (gameId < 0) {
     displayState.value = true;
     return;
@@ -40,12 +47,8 @@ socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   console.log('ich will ein spiel mit dir spielen');
   // player1IdRef.value = player1Id;
   // player2IdRef.value = player2Id;
-  console.log('getting players');
-  player1User.value = await UserService.findOneById(player1Id);
-  console.log(player1User);
-  player2User.value = await UserService.findOneById(player2Id);
-  console.log(player2User);
   // getPlayers(player1Id, player2Id);
+  gettem(player1Id, player2Id);
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
 });
