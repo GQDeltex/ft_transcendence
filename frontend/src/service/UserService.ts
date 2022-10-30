@@ -6,6 +6,7 @@ import type {
   Item,
   User,
 } from '@/store/user';
+import type { AllowedUpdateEquippedItemsMethod } from '@/store/user';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -146,6 +147,14 @@ class UserService {
             blocks
             blockedBy
             inventory
+            equipped {
+              id
+              type
+              name
+              description
+              picture
+              metadata
+            }
           }
         }
       `,
@@ -273,10 +282,12 @@ class UserService {
         query {
           getItems {
             id
+            type
             name
             description
             price
             picture
+            metadata
           }
         }
       `,
@@ -299,6 +310,32 @@ class UserService {
     if (typeof updateInventory === 'undefined')
       throw new Error('Empty inventory data');
     return updateInventory;
+  }
+
+  async updateEquippedItems(
+    method: AllowedUpdateEquippedItemsMethod,
+    itemId: number,
+  ): Promise<Partial<User>> {
+    const { updateEquippedItems } = await graphQLService.mutation(
+      `
+        mutation updateEquippedItems($method: AllowedUpdateEquippedItemsMethod!, $itemId: Int!) {
+          updateEquippedItems(method: $method, itemId: $itemId) {
+            equipped {
+              id
+              type
+              name
+              description
+              picture
+              metadata
+            }
+          }
+        }
+      `,
+      { method, itemId },
+    );
+    if (typeof updateEquippedItems === 'undefined')
+      throw new Error('Empty equipped data');
+    return updateEquippedItems;
   }
 }
 

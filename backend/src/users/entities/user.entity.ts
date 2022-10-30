@@ -63,6 +63,9 @@ export class User {
   @Column({ type: 'integer', array: true, default: [] })
   inventory: number[];
 
+  @Column({ type: 'integer', array: true, default: [] })
+  equipped: number[];
+
   @Column({ default: 'offline' })
   status: string;
 

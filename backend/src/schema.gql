@@ -43,6 +43,7 @@ type User {
   receivedFriendRequests: [Int]!
   blocks: [Int]!
   blockedBy: [Int]!
+  equipped: [Item]!
 }
 
 """
@@ -52,10 +53,12 @@ scalar Timestamp
 
 type Item {
   id: Int!
+  type: String!
   name: String!
   description: String!
   price: Float!
   picture: String!
+  metadata: String!
 }
 
 type Game {
@@ -85,6 +88,7 @@ type Mutation {
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
   updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
   updateInventory(orderId: String!): User!
+  updateEquippedItems(method: AllowedUpdateEquippedItemsMethod!, itemId: Int!): User!
   joinChannel(name: String!, password: String!): Channel!
   leaveChannel(name: String!): Channel
   updatePassword(channel_name: String!, newPassword: String!): Channel!
@@ -104,4 +108,9 @@ enum AllowedUpdateFriendshipMethod {
 enum AllowedUpdateBlockingMethod {
   BLOCK
   UNBLOCK
+}
+
+enum AllowedUpdateEquippedItemsMethod {
+  EQUIP
+  UNEQUIP
 }
