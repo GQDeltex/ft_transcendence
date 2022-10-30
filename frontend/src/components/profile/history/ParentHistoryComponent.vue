@@ -4,15 +4,17 @@ import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
 import type { User } from '@/store/user';
 import type { Ref } from 'vue';
-import { ref, inject } from 'vue';
+import { ref, inject, watchEffect } from 'vue';
 
 const user = inject<{ user: Ref<User>; isMe: Ref<boolean> }>('user');
 const games = ref<Game[]>([]);
 
 if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
-  GameService.findAll('ended', user.user.value.id).then(
-    (gamesreturn: Game[]) => (games.value = gamesreturn),
-  );
+  watchEffect(async () => {
+    GameService.findAll('ended', user.user.value.id).then(
+      (gamesreturn: Game[]) => (games.value = gamesreturn),
+    );
+  });
 }
 </script>
 
