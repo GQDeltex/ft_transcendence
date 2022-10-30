@@ -32,11 +32,11 @@ function leave_queue() {
 
 async function gettem(player1Id: number, player2Id: number) {
   player1User.value = await UserService.findOneById(player1Id);
-  player1User.value.status = 'in game';
-  console.log(player1User);
+  // player1User.value.status = 'in game';
+  // console.log("gettem players", player1User);
   player2User.value = await UserService.findOneById(player2Id);
-  player2User.value.status = 'in game';
-  console.log(player2User);
+  // player2User.value.status = 'in game';
+  // console.log("gettem players", player2User);
 }
 
 // playerIDs to check validity of messages for streaming implementation later™

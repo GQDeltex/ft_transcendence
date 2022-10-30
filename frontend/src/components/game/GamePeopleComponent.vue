@@ -41,7 +41,7 @@ const statusBorder = computed(() => {
     />
     <div class="infoBox">
       <span class="username">{{ client.title[0] }} {{ client.username }}</span>
-      <span :style="statusStyle" class="status">{{ client.status }}</span>
+      <!-- <span :style="statusStyle" class="status">{{ client.status }}</span> -->
     </div>
   </div>
 </template>

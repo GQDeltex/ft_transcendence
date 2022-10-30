@@ -15,7 +15,7 @@
     />
   </div>
   <div v-else class="players">
-    <GamePeopleComponent
+    <GamePeopleComponent 
       :key="props.player1ID.id"
       :client="props.player1ID"
       class="player1"
