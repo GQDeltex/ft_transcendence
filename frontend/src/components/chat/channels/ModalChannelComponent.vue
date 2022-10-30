@@ -10,11 +10,10 @@ let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
 function closeOk() {
-	if ((channelName.value.length > 0) && !(channelName.value.startsWith('#')) ) 
-	{	
-		channelName.value = '#' + channelName.value;
-	}
-	console.log(channelName.value);
+  if (channelName.value.length > 0 && !channelName.value.startsWith('#')) {
+    channelName.value = '#' + channelName.value;
+  }
+  console.log(channelName.value);
   socket.emit(
     'join',
     {
