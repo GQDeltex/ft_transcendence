@@ -76,7 +76,13 @@ ___
 
 ### findAll
 
-▸ **findAll**(): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+▸ **findAll**(`jwtPayload`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 
 #### Returns
 
