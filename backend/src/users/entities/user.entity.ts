@@ -63,7 +63,6 @@ export class User {
   @Column({ type: 'integer', array: true, default: [] })
   inventory: number[];
 
-  @Field()
   @Column({ default: 'offline' })
   status: string;
 
