@@ -116,11 +116,6 @@ const onUpdatePublic = (updatedChannel: Channel) => {
   ];
   console.log('current channel updated public');
 };
-
-const joinChannel = (channel: Channel) => {
-  // Somehow channels.value.push does not work. This seems to be fine.
-  channels.value = [...channels.value, channel];
-};
 </script>
 
 <template>
