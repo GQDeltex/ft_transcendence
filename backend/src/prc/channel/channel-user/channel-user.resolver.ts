@@ -21,8 +21,8 @@ export class ChannelUserResolver {
   ) {}
 
   @Query(() => [ChannelUser], { name: 'channelUsers' })
-  findAll() {
-    return this.channelUserService.findAll();
+  findAll(@CurrentJwtPayload() jwtPayload: JwtPayload) {
+    return this.channelUserService.findAll(jwtPayload.id);
   }
 
   @Mutation(() => Channel)
