@@ -15,7 +15,7 @@ const passModalActive = ref(false);
 const adminModalActive = ref(false);
 const banModalActive = ref(false);
 const muteModalActive = ref(false);
-const emits = defineEmits(['leave', 'updatePublic']);
+const emits = defineEmits(['leave', 'updatePublic', 'chat']);
 const errorStore = useErrorStore();
 
 const props = defineProps<{
@@ -76,6 +76,10 @@ const onClose = () => {
   banModalActive.value = false;
   muteModalActive.value = false;
 };
+
+const onChat = (username: string) => {
+  emits('chat', username);
+};
 </script>
 
 <template>
@@ -85,25 +89,25 @@ const onClose = () => {
       <div class="subheader" @click="chatToggle = !chatToggle">In Chat ▾</div>
       <div v-show="chatToggle" class="people">
         <template v-for="client in clients" :key="client.id">
-          <ChildPeopleComponent :client="client" />
+          <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="subheader" @click="adminToggle = !adminToggle">Admins ▾</div>
       <div v-show="adminToggle" class="people">
         <template v-for="client in clients" :key="client.id">
-          <ChildPeopleComponent :client="client" />
+          <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="subheader" @click="banToggle = !banToggle">Banned ▾</div>
       <div v-show="banToggle" class="people">
         <template v-for="client in clients" :key="client.id">
-          <ChildPeopleComponent :client="client" />
+          <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="subheader" @click="muteToggle = !muteToggle">Muted ▾</div>
       <div v-show="muteToggle" class="people">
         <template v-for="client in clients" :key="client.id">
-          <ChildPeopleComponent :client="client" />
+          <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="buttonList">

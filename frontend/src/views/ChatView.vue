@@ -92,6 +92,10 @@ const UpdateChannels = (channel: Channel) => {
   currentChannel.value = channel;
 };
 
+const UpdateChat = (username: string) => {
+  currentChannel.value = { id: 0, name: username, private: true };
+};
+
 const joinChannel = (channel: Channel) => {
   // Somehow channels.value.push does not work. This seems to be fine.
   channels.value = [...channels.value, channel];
@@ -117,7 +121,11 @@ const onUpdatePublic = (updatedChannel: Channel) => {
 <template>
   <div class="chatViewParent">
     <div class="leftSide">
-      <ParentPeoplesComponent :clients="users" class="friendsPeopleComp" />
+      <ParentPeoplesComponent
+        :clients="users"
+        class="friendsPeopleComp"
+        @chat="UpdateChat"
+      />
       <ParentChannelsComponent
         :channels="channels"
         :current-channel="currentChannel"
@@ -139,6 +147,7 @@ const onUpdatePublic = (updatedChannel: Channel) => {
       class="optionsComp"
       @leave="leaveChannel"
       @update-public="onUpdatePublic"
+      @chat="UpdateChat"
     />
   </div>
 </template>

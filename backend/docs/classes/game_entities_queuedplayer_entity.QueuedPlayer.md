@@ -13,7 +13,8 @@
 ### Properties
 
 - [id](game_entities_queuedplayer_entity.QueuedPlayer.md#id)
-- [player1](game_entities_queuedplayer_entity.QueuedPlayer.md#player1)
+- [playerId](game_entities_queuedplayer_entity.QueuedPlayer.md#playerid)
+- [user](game_entities_queuedplayer_entity.QueuedPlayer.md#user)
 
 ## Constructors
 
@@ -29,14 +30,24 @@
 
 #### Defined in
 
-[src/game/entities/queuedplayer.entity.ts:7](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L7)
+[src/game/entities/queuedplayer.entity.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L13)
 
 ___
 
-### player1
+### playerId
 
-• **player1**: [`User`](users_entities_user_entity.User.md)
+• **playerId**: `number`
 
 #### Defined in
 
-[src/game/entities/queuedplayer.entity.ts:10](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L10)
+[src/game/entities/queuedplayer.entity.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L20)
+
+___
+
+### user
+
+• **user**: [`User`](users_entities_user_entity.User.md)
+
+#### Defined in
+
+[src/game/entities/queuedplayer.entity.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/queuedplayer.entity.ts#L17)

@@ -14,7 +14,9 @@
 
 - [id](game_entities_game_entity.Game.md#id)
 - [player1](game_entities_game_entity.Game.md#player1)
+- [player1Id](game_entities_game_entity.Game.md#player1id)
 - [player2](game_entities_game_entity.Game.md#player2)
+- [player2Id](game_entities_game_entity.Game.md#player2id)
 - [score1](game_entities_game_entity.Game.md#score1)
 - [score2](game_entities_game_entity.Game.md#score2)
 - [state](game_entities_game_entity.Game.md#state)
@@ -33,7 +35,7 @@
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L16)
+[src/game/entities/game.entity.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L22)
 
 ___
 
@@ -43,7 +45,17 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L20)
+[src/game/entities/game.entity.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L27)
+
+___
+
+### player1Id
+
+• **player1Id**: `number`
+
+#### Defined in
+
+[src/game/entities/game.entity.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L30)
 
 ___
 
@@ -53,7 +65,17 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L24)
+[src/game/entities/game.entity.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L35)
+
+___
+
+### player2Id
+
+• **player2Id**: `number`
+
+#### Defined in
+
+[src/game/entities/game.entity.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L38)
 
 ___
 
@@ -63,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L28)
+[src/game/entities/game.entity.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L42)
 
 ___
 
@@ -73,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L32)
+[src/game/entities/game.entity.ts:46](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L46)
 
 ___
 
@@ -83,4 +105,4 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L40)
+[src/game/entities/game.entity.ts:54](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L54)

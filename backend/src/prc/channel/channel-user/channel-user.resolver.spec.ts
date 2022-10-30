@@ -235,6 +235,81 @@ describe('ChannelUserResolver', () => {
     ).rejects.toThrow(`${admin.id} is not a Channel Admin on #test`);
   });
 
+  it('should not ban themself', async () => {
+    const selfJwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(selfJwt, '#test', selfJwt.id),
+    ).rejects.toThrow(`${mockUser.id} cannot ban themself`);
+  });
+
+  it('should not ban owner', async () => {
+    const owner: User = mockUser;
+    const ownerJwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const admin: User = mockUser2;
+    const adminJwt: JwtPayload = {
+      id: mockUser2.id,
+      email: mockUser2.email,
+      isAuthenticated: true,
+    };
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJwt, '#test', admin.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(adminJwt, '#test', owner.id),
+    ).rejects.toThrow(`${admin.id} does not have permision to ban an owner`);
+  });
+
+  it('should not ban admin if not owner', async () => {
+    const owner: User = mockUser;
+    const ownerJwt: JwtPayload = {
+      id: mockUser.id,
+      email: mockUser.email,
+      isAuthenticated: true,
+    };
+    const admin: User = mockUser2;
+    const adminJwt: JwtPayload = {
+      id: mockUser2.id,
+      email: mockUser2.email,
+      isAuthenticated: true,
+    };
+    const admin2: User = createMockUser();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin),
+    ).resolves.not.toThrow();
+    await expect(
+      channelResolver.joinChannel({ name: '#test', password: '' }, admin2),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJwt, '#test', admin.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateAdmin(ownerJwt, '#test', admin2.id),
+    ).resolves.not.toThrow();
+    await expect(
+      channelUserResolver.updateBan(adminJwt, '#test', admin2.id),
+    ).rejects.toThrow(`${admin.id} does not have permision to ban an admin`);
+  });
+
   it('should ban user', async () => {
     jest.useFakeTimers({ legacyFakeTimers: true });
     const admin: JwtPayload = {

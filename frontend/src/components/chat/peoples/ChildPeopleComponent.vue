@@ -8,6 +8,7 @@ import {
   AllowedUpdateFriendshipMethod,
   useUserStore,
 } from '@/store/user';
+const emits = defineEmits(['chat']);
 
 const props = defineProps<{
   client: User;
@@ -20,6 +21,8 @@ const statusStyle = computed(() => {
   switch (props.client.status) {
     case 'online':
       return { color: 'lime' };
+    case 'in game':
+      return { color: 'yellow' };
     default:
       return { color: 'grey' };
   }
@@ -29,6 +32,8 @@ const statusBorder = computed(() => {
   switch (props.client.status) {
     case 'online':
       return 'lime';
+    case 'in game':
+      return 'yellow';
     default:
       return 'grey';
   }
@@ -147,6 +152,10 @@ const onProfile = async () => {
     params: { id: props.client.id },
   });
 };
+
+const onChat = (username: string) => {
+  emits('chat', username);
+};
 </script>
 
 <template>
@@ -163,6 +172,7 @@ const onProfile = async () => {
     </div>
   </div>
   <div v-show="toggle" class="popup">
+    <button class="butt" @click="onChat(client.username)">Chat</button>
     <button
       v-show="blockStatus === blockStatusEnum.NOT_BLOCKED"
       class="butt"
@@ -207,7 +217,7 @@ const onProfile = async () => {
 
 .status {
   font-size: 0.6vw;
-  color: lime;
+  color: grey;
 }
 
 .popup {
