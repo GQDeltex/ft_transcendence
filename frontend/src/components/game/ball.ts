@@ -20,7 +20,7 @@ export class Ball extends Element {
     super(ballElem, gameId);
     this._priority = priority;
     this._direction = new Vector(0, 0);
-    this._speed = 30 /* 60 - Math.abs(50 - this.get_pos_x()) */;
+    this._speed = 60 - Math.abs(50 - this.get_pos_x());
     this.maxinvinc = this._speed * 10;
     this._shape = new Vector(
       field !== null
@@ -186,8 +186,8 @@ export class Ball extends Element {
     let i = 0;
     while (i < delta) {
       this.step(paddleOp);
-      // this._speed = 60 - Math.abs(50 - this.get_pos_x());
-      // this.maxinvinc = this._speed * 20;
+      this._speed = 60 - Math.abs(50 - this.get_pos_x());
+      this.maxinvinc = this._speed * 20;
       i++;
     }
   }

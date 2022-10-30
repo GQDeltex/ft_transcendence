@@ -159,18 +159,24 @@ const onChat = (username: string) => {
 </script>
 
 <template>
-  <div class="client" @click="toggle = !toggle">
-    <RoundPictureComponent
-      class="picture"
-      :picture="client.picture"
-      size="1.5vw"
-      :border-color="statusBorder"
-    />
-    <div class="infoBox">
-      <span class="username">{{ client.title[0] }} {{ client.username }}</span>
-      <span :style="statusStyle" class="status">{{ client.status }}</span>
+  <div class="encaps">
+    <div class="client" @click="onChat(client.username)">
+      <RoundPictureComponent
+        class="picture"
+        :picture="client.picture"
+        size="1.5vw"
+        :border-color="statusBorder"
+      />
+      <div class="infoBox">
+        <span class="username"
+          >{{ client.title[0] }} {{ client.username }}</span
+        >
+        <span :style="statusStyle" class="status">{{ client.status }}</span>
+      </div>
     </div>
+    <div class="vertdot" @click="toggle = !toggle">⋮</div>
   </div>
+
   <div v-show="toggle" class="popup">
     <button class="butt" @click="onChat(client.username)">Chat</button>
     <button
@@ -197,17 +203,26 @@ const onChat = (username: string) => {
 </template>
 
 <style scoped>
+.encaps {
+  display: flex;
+}
+.vertdot {
+  margin-left: 0.5em;
+  margin-right: 1em;
+  cursor: pointer;
+  font-size: 1.5vw;
+}
 .client {
   display: flex;
   align-items: center;
   padding-top: 1%;
-  cursor: pointer;
 }
 
 .infoBox {
   display: flex;
   flex-direction: column;
   padding-left: 5%;
+  cursor: pointer;
 }
 .username {
   color: white;
