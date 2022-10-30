@@ -114,7 +114,7 @@ describe('UsersResolver', () => {
       username: newUser.username,
     };
     await expect(
-      resolver.updateUsername(updateUserUsernameInput, newUser),
+      resolver.updateUsername(newUser, updateUserUsernameInput),
     ).resolves.toEqual(newUser);
   });
 
@@ -126,7 +126,7 @@ describe('UsersResolver', () => {
       username: 'nothingTwice',
     };
     await expect(
-      resolver.updateUsername(updateUserUsernameInput, newUser),
+      resolver.updateUsername(newUser, updateUserUsernameInput),
     ).rejects.toThrow(EntityNotFoundError);
   });
 });
