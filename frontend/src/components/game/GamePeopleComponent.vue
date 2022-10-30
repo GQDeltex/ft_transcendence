@@ -12,15 +12,6 @@ const props = defineProps<{
   };
 }>();
 
-const statusStyle = computed(() => {
-  switch (props.client.status) {
-    case 'online':
-      return { color: 'lime' };
-    default:
-      return { color: 'grey' };
-  }
-});
-
 const statusBorder = computed(() => {
   switch (props.client.status) {
     case 'online':
