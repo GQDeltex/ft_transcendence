@@ -86,7 +86,7 @@ const onClose = () => {
       <br />
       <span class="campus">Wolfsburg, Germany</span>
       <br />
-      <span class="friends">1000 Friends, 149 Videos Watched</span>
+      <span class="friends">{{ userStore.friends.length }} Friends</span>
     </div>
 
     <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
