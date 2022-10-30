@@ -20,4 +20,4 @@
 
 #### Defined in
 
-[src/users/entities/item.entity.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/item.entity.ts#L26)
+[src/users/entities/item.entity.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/item.entity.ts#L31)
