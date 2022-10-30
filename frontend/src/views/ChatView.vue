@@ -140,7 +140,6 @@ const onUpdatePublic = (updatedChannel: Channel) => {
       :chat-name="currentChannel.name"
       class="chatChatComp"
     />
-    <input v-model="currentChannel.name" type="text" class="inputBox" />
     <ParentOptionsComponent
       :clients="users"
       :current-channel="currentChannel"
@@ -189,11 +188,5 @@ const onUpdatePublic = (updatedChannel: Channel) => {
 
 .optionsComp {
   grid-column: 3 / 4;
-}
-
-.inputBox {
-  grid-column: 2 / 3;
-  grid-row: 2 / 2;
-  font-size: 1vw;
 }
 </style>
