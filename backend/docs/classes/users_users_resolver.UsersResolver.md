@@ -26,6 +26,7 @@
 - [getItems](users_users_resolver.UsersResolver.md#getitems)
 - [receivedFriendRequests](users_users_resolver.UsersResolver.md#receivedfriendrequests)
 - [sentFriendRequests](users_users_resolver.UsersResolver.md#sentfriendrequests)
+- [status](users_users_resolver.UsersResolver.md#status)
 - [updateBlocking](users_users_resolver.UsersResolver.md#updateblocking)
 - [updateFriendship](users_users_resolver.UsersResolver.md#updatefriendship)
 - [updateInventory](users_users_resolver.UsersResolver.md#updateinventory)
@@ -75,7 +76,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:121](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L121)
+[src/users/users.resolver.ts:139](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L139)
 
 ___
 
@@ -95,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:116](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L116)
+[src/users/users.resolver.ts:134](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L134)
 
 ___
 
@@ -190,7 +191,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:101](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L101)
+[src/users/users.resolver.ts:119](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L119)
 
 ___
 
@@ -204,7 +205,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:88](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L88)
+[src/users/users.resolver.ts:92](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L92)
 
 ___
 
@@ -224,7 +225,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:111](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L111)
+[src/users/users.resolver.ts:129](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L129)
 
 ___
 
@@ -244,19 +245,40 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:106](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L106)
+[src/users/users.resolver.ts:124](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L124)
 
 ___
 
-### updateBlocking
+### status
 
-▸ **updateBlocking**(`user`, `args`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+▸ **status**(`jwtPayload`, `user`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `user` | [`User`](users_entities_user_entity.User.md) |
+
+#### Returns
+
+`Promise`<`string`\>
+
+#### Defined in
+
+[src/users/users.resolver.ts:105](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L105)
+
+___
+
+### updateBlocking
+
+▸ **updateBlocking**(`jwtPayload`, `args`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `args` | [`UpdateUserBlockingInput`](users_dto_update_blocking_input.UpdateUserBlockingInput.md) |
 
 #### Returns
@@ -271,13 +293,13 @@ ___
 
 ### updateFriendship
 
-▸ **updateFriendship**(`user`, `args`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+▸ **updateFriendship**(`jwtPayload`, `args`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `args` | [`UpdateUserFriendshipInput`](users_dto_update_friendship_input.UpdateUserFriendshipInput.md) |
 
 #### Returns
@@ -307,20 +329,20 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:93](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L93)
+[src/users/users.resolver.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L97)
 
 ___
 
 ### updateUsername
 
-▸ **updateUsername**(`updateUserUsernameInput`, `user`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+▸ **updateUsername**(`jwtPayload`, `updateUserUsernameInput`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `updateUserUsernameInput` | [`UpdateUsernameInput`](users_dto_update_username_input.UpdateUsernameInput.md) |
-| `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 
 #### Returns
 

@@ -19,6 +19,7 @@
 ### Methods
 
 - [findAll](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#findall)
+- [findChannelUsersInChannel](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#findchannelusersinchannel)
 - [updateAdmin](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updateadmin)
 - [updateBan](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updateban)
 - [updateMute](prc_channel_channel_user_channel_user_resolver.ChannelUserResolver.md#updatemute)
@@ -76,7 +77,13 @@ ___
 
 ### findAll
 
-▸ **findAll**(): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+▸ **findAll**(`jwtPayload`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 
 #### Returns
 
@@ -85,6 +92,26 @@ ___
 #### Defined in
 
 [src/prc/channel/channel-user/channel-user.resolver.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L23)
+
+___
+
+### findChannelUsersInChannel
+
+▸ **findChannelUsersInChannel**(`channelName`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `channelName` | `string` |
+
+#### Returns
+
+`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[]\>
+
+#### Defined in
+
+[src/prc/channel/channel-user/channel-user.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L28)
 
 ___
 
@@ -106,19 +133,19 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L42)
+[src/prc/channel/channel-user/channel-user.resolver.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L49)
 
 ___
 
 ### updateBan
 
-▸ **updateBan**(`JwtUser`, `channel_name`, `banUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+▸ **updateBan**(`jwtPayload`, `channel_name`, `banUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JwtUser` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `channel_name` | `string` |
 | `banUser` | `number` |
 
@@ -128,7 +155,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:69](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L69)
+[src/prc/channel/channel-user/channel-user.resolver.ts:76](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L76)
 
 ___
 
@@ -150,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:96](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L96)
+[src/prc/channel/channel-user/channel-user.resolver.ts:113](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L113)
 
 ___
 
@@ -172,4 +199,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L28)
+[src/prc/channel/channel-user/channel-user.resolver.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L35)
