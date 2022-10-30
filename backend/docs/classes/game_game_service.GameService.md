@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:62](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L62)
+[src/game/game.service.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L70)
 
 ___
 
@@ -145,19 +145,20 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L55)
+[src/game/game.service.ts:63](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L63)
 
 ___
 
 ### findAll
 
-▸ **findAll**(`searchState`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
+▸ **findAll**(`searchState?`, `searchUserId?`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `searchState` | [`GameState`](../enums/game_entities_game_entity.GameState.md) |
+| `searchState?` | [`GameState`](../enums/game_entities_game_entity.GameState.md) |
+| `searchUserId?` | `number` |
 
 #### Returns
 
@@ -185,7 +186,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L41)
+[src/game/game.service.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L49)
 
 ___
 
@@ -205,4 +206,4 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L45)
+[src/game/game.service.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L53)
