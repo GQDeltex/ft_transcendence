@@ -2,15 +2,18 @@
 import UserPlayedGameComponent from '../../globalUse/UserPlayedGameComponent.vue';
 import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
-import { useUserStore } from '@/store/user';
-import { ref } from 'vue';
+import type { User } from '@/store/user';
+import type { Ref } from 'vue';
+import { ref, inject } from 'vue';
 
-const userStore = useUserStore();
+const user = inject<{ user: Ref<User>; isMe: Ref<boolean> }>('user');
 const games = ref<Game[]>([]);
 
-GameService.findAll('ended', userStore.id).then(
-  (gamesreturn: Game[]) => (games.value = gamesreturn),
-);
+if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
+  GameService.findAll('ended', user.user.value.id).then(
+    (gamesreturn: Game[]) => (games.value = gamesreturn),
+  );
+}
 </script>
 
 <template>

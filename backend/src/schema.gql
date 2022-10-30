@@ -76,6 +76,7 @@ type Query {
   channels: [Channel!]!
   channelUsers: [ChannelUser!]!
   channelUsersInChannel(channelName: String!): [ChannelUser!]!
+  games(state: String, user: Int): [Game!]!
   game(id: Int!): Game!
 }
 
