@@ -73,8 +73,6 @@ type Query {
   userChannelList(username: String!): User!
   getItems: [Item!]!
   channels: [Channel!]!
-  channel(id: Int!): Channel!
-  channelByName(name: String!): Channel!
   channelUsers: [ChannelUser!]!
   games(state: String): [Game!]!
   game(id: Int!): Game!
