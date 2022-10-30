@@ -49,13 +49,14 @@
 
 ### findAll
 
-▸ **findAll**(`searchState`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
+▸ **findAll**(`searchState`, `userId`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `searchState` | [`GameState`](../enums/game_entities_game_entity.GameState.md) |
+| `userId` | `number` |
 
 #### Returns
 
@@ -83,4 +84,4 @@ ___
 
 #### Defined in
 
-[src/game/game.resolver.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L18)
+[src/game/game.resolver.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L21)

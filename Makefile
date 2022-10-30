@@ -1,6 +1,6 @@
 DC := $(shell which docker-compose)
 ifeq ($(DC),)
-	DC := "docker compose"
+	DC := docker compose
 endif
 
 FOLDER_NAME := $(shell basename $(realpath .))

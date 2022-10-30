@@ -38,13 +38,19 @@ function sendMsg() {
 
 <template>
   <div class="parent">
-    <span class="chatname">chat: {{ chatName }}</span>
+    <span class="chatname">chat: {{ props.chatName }}</span>
     <div id="container" class="messages">
-      <span
-        v-for="message in messages"
-        :key="`msg_${message.from.name}_${message.to.name}_${message.msg}`"
-        >{{ message.from.name }}: {{ message.msg }}<br
-      /></span>
+      <template v-for="message in messages">
+        <span
+          v-if="
+            message.to.name === props.chatName ||
+            (message.from.name === props.chatName &&
+              message.to.name === userStore.username)
+          "
+          :key="`msg_${message.from.name}_${message.to.name}_${message.msg}`"
+          >{{ message.from.name }}: {{ message.msg }}<br
+        /></span>
+      </template>
     </div>
     <div class="lower">
       <input

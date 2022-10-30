@@ -11,8 +11,11 @@ export class GameResolver {
   constructor(private readonly gameService: GameService) {}
 
   @Query(() => [Game], { name: 'games' })
-  findAll(@Args('state', { nullable: true }) searchState: GameState) {
-    return this.gameService.findAll(searchState);
+  findAll(
+    @Args('state', { nullable: true }) searchState: GameState,
+    @Args('user', { type: () => Int, nullable: true }) userId: number,
+  ) {
+    return this.gameService.findAll(searchState, userId);
   }
 
   @Query(() => Game, { name: 'game' })
