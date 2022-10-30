@@ -273,7 +273,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateBan(adminJwt, '#test', owner.id),
-    ).rejects.toThrow(`${admin.id} does not have permision to ban an owner`);
+    ).rejects.toThrow(`${admin.id} does not have permission to ban an owner`);
   });
 
   it('should not ban admin if not owner', async () => {
@@ -307,7 +307,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateBan(adminJwt, '#test', admin2.id),
-    ).rejects.toThrow(`${admin.id} does not have permision to ban an admin`);
+    ).rejects.toThrow(`${admin.id} does not have permission to ban an admin`);
   });
 
   it('should ban user', async () => {
@@ -424,7 +424,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateMute(admin, '#test', owner.id),
-    ).rejects.toThrow(`${admin.id} does not have permision to mute an owner`);
+    ).rejects.toThrow(`${admin.id} does not have permission to mute an owner`);
   });
 
   it('should not mute admin because he does not have permission', async () => {
@@ -434,9 +434,8 @@ describe('ChannelUserResolver', () => {
       isAuthenticated: true,
     };
     const admin2: User = createMockUser();
-    const owner: User = mockUser2;
     await expect(
-      channelResolver.joinChannel({ name: '#test', password: '' }, owner),
+      channelResolver.joinChannel({ name: '#test', password: '' }, mockUser2),
     ).resolves.not.toThrow();
     await expect(
       channelResolver.joinChannel({ name: '#test', password: '' }, mockUser),
@@ -458,7 +457,7 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateMute(admin1Jwt, '#test', admin2.id),
     ).rejects.toThrow(
-      `${admin1Jwt.id} does not have permision to mute an admin`,
+      `${admin1Jwt.id} does not have permission to mute an admin`,
     );
   });
 
