@@ -1,7 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
-  Int,
   Mutation,
   Query,
   Resolver,
@@ -26,16 +25,6 @@ export class ChannelResolver {
   @Query(() => [Channel], { name: 'channels' })
   findAll(@CurrentJwtPayload() user: JwtPayload) {
     return this.channelService.findJoined(user.id);
-  }
-
-  @Query(() => Channel, { name: 'channel' })
-  findOneById(@Args('id', { type: () => Int }) id: number) {
-    return this.channelService.findOne(id);
-  }
-
-  @Query(() => Channel, { name: 'channelByName' })
-  findOneByChannelName(@Args('name') channelName: string) {
-    return this.channelService.findOne(channelName);
   }
 
   @ResolveField('password', () => Boolean)

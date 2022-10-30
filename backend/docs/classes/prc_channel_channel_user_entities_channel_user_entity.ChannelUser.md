@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L37)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L38)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L45)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:46](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L46)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L29)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L30)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:33](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L33)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:34](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L34)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:49](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L49)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L50)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L41)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L42)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L21)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L22)
 
 ___
 
@@ -116,4 +116,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/entities/channel-user.entity.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L25)
+[src/prc/channel/channel-user/entities/channel-user.entity.ts:26](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/entities/channel-user.entity.ts#L26)
