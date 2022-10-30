@@ -21,6 +21,8 @@ const statusStyle = computed(() => {
   switch (props.client.status) {
     case 'online':
       return { color: 'lime' };
+    case 'in game':
+      return { color: 'yellow' };
     default:
       return { color: 'grey' };
   }
@@ -30,6 +32,8 @@ const statusBorder = computed(() => {
   switch (props.client.status) {
     case 'online':
       return 'lime';
+    case 'in game':
+      return 'yellow';
     default:
       return 'grey';
   }
@@ -213,7 +217,7 @@ const onChat = (username: string) => {
 
 .status {
   font-size: 0.6vw;
-  color: lime;
+  color: grey;
 }
 
 .popup {

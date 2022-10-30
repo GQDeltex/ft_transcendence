@@ -8,7 +8,9 @@ import { socket } from './service/socket';
 import ModalComponent from './components/globalUse/ModalComponent.vue';
 import NavbarComponent from './components/globalUse/NavbarComponent.vue';
 import { useMessagesStore } from './store/message';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const messagesStore = useMessagesStore();
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
@@ -30,6 +32,15 @@ socket.on('prc', (data) => {
 socket.on('status', (status) => {
   console.log(status.msg);
   messagesStore.saveMessage(status);
+});
+
+socket.on('newclient', async () => {
+  console.log('New client connected, loggin this one out');
+  await userStore.logout();
+  await router.push({ path: '/login' });
+  errorStore.setError(
+    "You've been logged out, because only one session can be active at a time",
+  );
 });
 </script>
 

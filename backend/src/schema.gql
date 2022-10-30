@@ -12,6 +12,7 @@ type Channel {
 
 type ChannelUser {
   id: Int!
+  user: User
   user_id: Int!
   channel_name: String!
   admin: Boolean!
@@ -33,10 +34,10 @@ type User {
   campus: String!
   country: String!
   inventory: [Int!]!
-  status: String!
   lastLoggedIn: Timestamp!
   twoFAEnable: Boolean!
   channelList: [ChannelUser!]
+  status: String!
   friends: [Int]!
   sentFriendRequests: [Int]!
   receivedFriendRequests: [Int]!
@@ -73,9 +74,8 @@ type Query {
   userChannelList(username: String!): User!
   getItems: [Item!]!
   channels: [Channel!]!
-  channel(id: Int!): Channel!
-  channelByName(name: String!): Channel!
   channelUsers: [ChannelUser!]!
+  channelUsersInChannel(channelName: String!): [ChannelUser!]!
   games(state: String): [Game!]!
   game(id: Int!): Game!
 }

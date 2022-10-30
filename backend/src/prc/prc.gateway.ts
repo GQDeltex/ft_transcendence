@@ -68,9 +68,15 @@ export class PrcGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     console.log('Client connected', client.id, jwtToken.id);
+    const user: User = await this.usersService.findOne(jwtToken.id);
+    if (user.socketId != '') {
+      const sockets = await this.server.in(user.socketId).fetchSockets();
+      if (sockets.length < 1)
+        throw new WsException('Could not find Recipients socket');
+      sockets[0].emit('newclient');
+    }
     await this.usersService.updateSocketId(jwtToken.id, client.id);
     await this.usersService.updateStatus(jwtToken.id, 'online');
-    const user: User = await this.usersService.findOne(jwtToken.id);
     const channelUsers: ChannelUser[] | undefined = user.channelList;
     if (typeof channelUsers === 'undefined') return;
     channelUsers.forEach((channelUser) => {
