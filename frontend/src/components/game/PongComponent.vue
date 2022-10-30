@@ -3,8 +3,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
   <div class="players">
-    <GamePeopleComponent :key="props.player2ID.id" :client="props.player2ID" class="player1"/>
-    <GamePeopleComponent :key="props.player1ID.id" :client="props.player1ID" class="player2"/>
+    <GamePeopleComponent
+      :key="props.player2ID.id"
+      :client="props.player2ID"
+      class="player1"
+    />
+    <GamePeopleComponent
+      :key="props.player1ID.id"
+      :client="props.player1ID"
+      class="player2"
+    />
   </div>
   <div id="feld" class="field">
     <div class="score">
@@ -240,12 +248,12 @@ onMounted(() => {
 .score > :last-child {
   text-align: left;
 }
-.player1{
+.player1 {
   grid-column: 1/2;
   justify-content: center;
   text-align: center;
 }
-.player2{
+.player2 {
   grid-column: 2/3;
   justify-content: center;
   text-align: center;
