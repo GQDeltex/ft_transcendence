@@ -4,13 +4,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
   <div class="players">
     <GamePeopleComponent
-      :key="props.player2ID.id"
-      :client="props.player2ID"
+      :key="props.player1ID.id"
+      :client="props.player1ID"
       class="player1"
     />
     <GamePeopleComponent
-      :key="props.player1ID.id"
-      :client="props.player1ID"
+      :key="props.player2ID.id"
+      :client="props.player2ID"
       class="player2"
     />
   </div>
