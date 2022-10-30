@@ -46,7 +46,7 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
     return;
   }
   displayState.value = false;
-  console.log('ich will ein spiel mit dir spielen');
+  console.log('ich will ein spiel mit dir spielen', gameId);
   // player1IdRef.value = player1Id;
   // player2IdRef.value = player2Id;
   // getPlayers(player1Id, player2Id);
