@@ -34,8 +34,16 @@ export class GameService {
     console.log('game     list\n', await this.gameRepository.find());
   }
 
-  findAll(searchState: GameState) {
-    return this.gameRepository.find({ where: { state: searchState } });
+  async findAll(searchState?: GameState, searchUserId?: number) {
+    const games: Game[] = await this.gameRepository.find({
+      where: { state: searchState },
+    });
+    if (typeof searchUserId !== 'undefined')
+      return games.filter(
+        (game: Game) =>
+          game.player1Id == searchUserId || game.player2Id == searchUserId,
+      );
+    return games;
   }
 
   findOne(id: number) {

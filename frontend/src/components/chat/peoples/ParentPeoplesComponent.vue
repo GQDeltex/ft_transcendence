@@ -10,9 +10,9 @@ defineProps<{
 }>();
 
 const userStore = useUserStore();
-const friendToggle = ref(false);
-const blockToggle = ref(false);
-const peopleToggle = ref(false);
+const friendToggle = ref(true);
+const blockToggle = ref(true);
+const peopleToggle = ref(true);
 
 const onChat = (username: string) => {
   emits('chat', username);

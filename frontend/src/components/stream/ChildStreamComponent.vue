@@ -1,14 +1,26 @@
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue';
+const props = defineProps<{
   player1Name: string;
   player2Name: string;
+  score1?: number;
+  score2?: number;
 }>();
+
+const hasScores = computed(() => {
+  if (typeof props.score1 === 'undefined') return false;
+  if (typeof props.score2 === 'undefined') return false;
+  return true;
+});
 </script>
 
 <template>
   <router-link to="/placeholder">
     <div>
       <img class="thumbnail" src="@/assets/pong.png" />
+      <span v-if="hasScores" class="playernames">
+        {{ score1 }} : {{ score2 }}</span
+      >
       <span class="playernames"> {{ player1Name }} vs {{ player2Name }}</span>
     </div>
   </router-link>
