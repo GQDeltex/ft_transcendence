@@ -18,6 +18,7 @@ import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
 import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 import { HttpModule } from '@nestjs/axios';
+import { Game } from '../../../game/entities/game.entity';
 
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
@@ -27,6 +28,7 @@ describe('ChannelUserResolver', () => {
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
+  let mockRepoGame: MockRepo;
 
   beforeEach(async () => {
     mockRepoChannel = new MockRepo('ChannelUserResolver', Channel);
@@ -36,9 +38,11 @@ describe('ChannelUserResolver', () => {
       mockUser2,
       createMockUser(),
     ]);
+    mockRepoGame = new MockRepo('ChannelUserResolver', Game);
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
     await mockRepoUser.setupDb();
+    await mockRepoGame.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
@@ -66,12 +70,14 @@ describe('ChannelUserResolver', () => {
     await mockRepoChannelUser.clearRepo();
     await mockRepoChannel.clearRepo();
     await mockRepoUser.clearRepo();
+    await mockRepoGame.clearRepo();
   });
 
   afterAll(async () => {
     await mockRepoChannel.destroyRepo();
     await mockRepoUser.destroyRepo();
     await mockRepoChannelUser.destroyRepo();
+    await mockRepoGame.destroyRepo();
   });
 
   //DEFINE

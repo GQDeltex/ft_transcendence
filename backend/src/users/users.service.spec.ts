@@ -12,20 +12,24 @@ import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.e
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 import { HttpModule } from '@nestjs/axios';
 import { AllowedUpdateEquippedItemsMethod } from './dto/update-equipped-items.input';
+import { Game } from '../game/entities/game.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
   let mockRepoUser: MockRepo;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
+  let mockRepoGame: MockRepo;
 
   beforeEach(async () => {
     mockRepoUser = new MockRepo('UsersService', User, mockUser);
     mockRepoChannel = new MockRepo('UsersService', Channel);
     mockRepoChannelUser = new MockRepo('UsersService', ChannelUser);
+    mockRepoGame = new MockRepo('UsersService', Game);
     await mockRepoUser.setupDb();
     await mockRepoChannel.setupDb();
     await mockRepoChannelUser.setupDb();
+    await mockRepoGame.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
@@ -47,12 +51,14 @@ describe('UsersService', () => {
     await mockRepoUser.clearRepo();
     await mockRepoChannel.clearRepo();
     await mockRepoChannelUser.clearRepo();
+    await mockRepoGame.clearRepo();
   });
 
   afterAll(async () => {
     await mockRepoUser.destroyRepo();
     await mockRepoChannel.destroyRepo();
     await mockRepoChannelUser.destroyRepo();
+    await mockRepoGame.destroyRepo();
   });
 
   it('should be defined', () => {
