@@ -93,7 +93,10 @@ export class UsersService {
   }
 
   async findLeaders(): Promise<User[]> {
-    return await this.userRepository.find({ order: { points: 'DESC' } });
+    return await this.userRepository.find({
+      order: { points: 'DESC' },
+      take: 6,
+    });
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {
