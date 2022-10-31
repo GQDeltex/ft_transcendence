@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentJwtPayload } from '../../../users/decorator/current-jwt-payload.decorator';
 import { JwtAuthGuard } from '../../../auth/guard/jwt.guard';
@@ -10,9 +10,11 @@ import { UsersService } from '../../../users/users.service';
 import { Channel } from '../entities/channel.entity';
 import { ChannelService } from '../channel.service';
 import { WsException } from '@nestjs/websockets';
+import { AllExceptionFilter } from '../../../tools/ExceptionFilter';
 
 @Resolver(() => ChannelUser)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
+@UseFilters(new AllExceptionFilter())
 export class ChannelUserResolver {
   constructor(
     private readonly channelUserService: ChannelUserService,
@@ -99,11 +101,11 @@ export class ChannelUserResolver {
       );
     if (channelUserNew.owner)
       throw new WsException(
-        `${channelBanUser.user_id} does not have permision to ban an owner`,
+        `${channelBanUser.user_id} does not have permission to ban an owner`,
       );
     if (channelUserNew.admin && !channelBanUser.owner)
       throw new WsException(
-        `${channelBanUser.user_id} does not have permision to ban an admin`,
+        `${channelBanUser.user_id} does not have permission to ban an admin`,
       );
     if (channelUserNew.ban)
       throw new WsException(banUser + ' is already banned on ' + channel_name);
@@ -135,11 +137,11 @@ export class ChannelUserResolver {
       );
     if (channelUserNew.owner)
       throw new WsException(
-        `${channelMuteUser.user_id} does not have permision to mute an owner`,
+        `${channelMuteUser.user_id} does not have permission to mute an owner`,
       );
     if (channelUserNew.admin && !channelMuteUser.owner)
       throw new WsException(
-        `${channelMuteUser.user_id} does not have permision to mute an admin`,
+        `${channelMuteUser.user_id} does not have permission to mute an admin`,
       );
     if (channelUserNew.mute)
       throw new WsException(muteUser + ' is already muted on ' + channel_name);

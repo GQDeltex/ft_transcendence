@@ -28,12 +28,13 @@ export class TypeORMErrorFilter implements GqlExceptionFilter {
   }
 }
 
-// To suppress nestjs from logging ApolloError
+// To suppress nestjs from logging ApolloError and WsException
 // https://github.com/nestjs/graphql/issues/2060
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   catch(exception: unknown): any {
     if (exception instanceof ApolloError) throw exception;
+    if (exception instanceof WsException) throw exception;
     return exception;
   }
 }

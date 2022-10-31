@@ -42,7 +42,6 @@ class ChannelUserService {
               updateBan ( channel_name: $channel_name, banUser: $banUser ){
                 id
                 ban
-                unbanTime
               }
             }
             `,

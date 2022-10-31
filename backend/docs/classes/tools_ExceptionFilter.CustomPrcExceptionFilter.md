@@ -56,7 +56,7 @@ BaseWsExceptionFilter.catch
 
 #### Defined in
 
-[src/tools/ExceptionFilter.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/tools/ExceptionFilter.ts#L43)
+[src/tools/ExceptionFilter.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/tools/ExceptionFilter.ts#L44)
 
 ___
 
