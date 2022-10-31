@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Queue from './queue';
 import GameService from '@/service/GameService';
 import { onMounted, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
@@ -78,9 +77,6 @@ onMounted(async () => {
     <p class="saving">{{ player.username }} wins!</p>
     <div class="btns">
       <button class="home-page flex-btn" @click="homepage()">Home page</button>
-      <button class="re-queue flex-btn" @click="Queue.join_queue()">
-        Re-Queue
-      </button>
     </div>
   </div>
 </template>

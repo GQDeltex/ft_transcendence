@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import {
   Args,
   Mutation,
@@ -16,9 +16,11 @@ import { Channel } from './entities/channel.entity';
 import { TwoFAGuard } from '../../auth/guard/twoFA.guard';
 import { CurrentJwtPayload } from '../../users/decorator/current-jwt-payload.decorator';
 import { JwtPayload } from '../../auth/strategy/jwt.strategy';
+import { AllExceptionFilter } from '../../tools/ExceptionFilter';
 
 @Resolver(() => Channel)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
+@UseFilters(new AllExceptionFilter())
 export class ChannelResolver {
   constructor(private readonly channelService: ChannelService) {}
 

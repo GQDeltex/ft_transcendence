@@ -14,6 +14,7 @@ export type User = {
   campus: string;
   country: string;
   coalition: string;
+  points: number;
   status?: string;
   lastLoggedIn?: number;
   twoFAEnable?: boolean;
@@ -24,14 +25,17 @@ export type User = {
   blocks?: number[];
   blockedBy?: number[];
   inventory?: number[];
+  equipped?: Item[];
 };
 
 export type Item = {
   id: number;
+  type: string;
   name: string;
   description: string;
   price: number;
   picture: string;
+  metadata: string;
 };
 
 export enum AllowedUpdateFriendshipMethod {
@@ -42,9 +46,26 @@ export enum AllowedUpdateFriendshipMethod {
   CANCEL = 'CANCEL',
 }
 
+export enum FriendStatusEnum {
+  FRIEND = 'Remove friend',
+  NOT_FRIEND = 'Add friend',
+  REQUEST_SENT = 'Cancel friend request',
+  REQUEST_RECEIVED = 'Accept friend request',
+}
+
 export enum AllowedUpdateBlockingMethod {
   BLOCK = 'BLOCK',
   UNBLOCK = 'UNBLOCK',
+}
+
+export enum BlockStatusEnum {
+  BLOCKED = 'Unblock',
+  NOT_BLOCKED = 'Block',
+}
+
+export enum AllowedUpdateEquippedItemsMethod {
+  EQUIP = 'EQUIP',
+  UNEQUIP = 'UNEQUIP',
 }
 
 export const useUserStore = defineStore('user', {
@@ -60,6 +81,7 @@ export const useUserStore = defineStore('user', {
     campus: '',
     country: '',
     coalition: '',
+    points: 0,
     status: '',
     lastLoggedIn: 0,
     twoFAEnable: false,
@@ -70,7 +92,31 @@ export const useUserStore = defineStore('user', {
     blocks: [] as number[],
     blockedBy: [] as number[],
     inventory: [] as number[],
+    equipped: [] as Item[],
   }),
+  getters: {
+    getFriendStatus: (state) => {
+      return (friendId: number) => {
+        if (state.friends.includes(friendId)) return FriendStatusEnum.FRIEND;
+        if (state.sentFriendRequests.includes(friendId))
+          return FriendStatusEnum.REQUEST_SENT;
+        if (state.receivedFriendRequests.includes(friendId))
+          return FriendStatusEnum.REQUEST_RECEIVED;
+        return FriendStatusEnum.NOT_FRIEND;
+      };
+    },
+    getBlockStatus: (state) => {
+      return (blockId: number) => {
+        if (state.blocks.includes(blockId)) return BlockStatusEnum.BLOCKED;
+        return BlockStatusEnum.NOT_BLOCKED;
+      };
+    },
+    isItemEquipped: (state) => {
+      return (itemId: number) => {
+        return state.equipped.some((item) => item.id === itemId);
+      };
+    },
+  },
   actions: {
     async login(code: string, bypassId?: string): Promise<void> {
       try {
@@ -114,6 +160,7 @@ export const useUserStore = defineStore('user', {
       this.blocks = user.blocks ?? [];
       this.blockedBy = user.blockedBy ?? [];
       this.inventory = user.inventory ?? [];
+      this.equipped = user.equipped ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -198,6 +245,19 @@ export const useUserStore = defineStore('user', {
       try {
         const user: Partial<User> = await UserService.updateInventory(orderId);
         this.inventory = user.inventory ?? [];
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async updateEquippedItems(itemId: number): Promise<void> {
+      try {
+        const user: Partial<User> = await UserService.updateEquippedItems(
+          this.isItemEquipped(itemId)
+            ? AllowedUpdateEquippedItemsMethod.UNEQUIP
+            : AllowedUpdateEquippedItemsMethod.EQUIP,
+          itemId,
+        );
+        this.equipped = user.equipped ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }
