@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
-import ImportedPicture from '@/assets/sexy-guy-001-modified.png';
+import type { User } from '@/store/user';
 
 defineProps<{
-  medalName: string;
+  medalPlayer: Partial<User>;
   medalKind: string;
 }>();
 </script>
@@ -13,17 +13,17 @@ defineProps<{
     <router-link to="/profile">
       <div>
         <RoundPictureComponent
+          v-if="medalPlayer.picture"
           class="gilohm"
-          :picture="ImportedPicture"
+          :picture="medalPlayer.picture"
           size="100px"
           border-color="transparent"
         />
         <img :src="medalKind" class="gold" width="30" height="30" />
-        <span class="playername">{{ medalName }}</span>
+        <span class="playername">{{ medalPlayer.username }}</span>
       </div>
     </router-link>
-    <span class="sub">455 Matches</span>
-    <span class="sub">3 Mio. Views</span>
+    <span class="sub">{{ medalPlayer.points }} Points</span>
   </div>
 </template>
 
