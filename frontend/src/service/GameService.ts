@@ -44,6 +44,34 @@ class GameService {
     if (typeof games === 'undefined') throw new Error('Empty games data');
     return games;
   }
+
+  async findOne( gameId: number): Promise<Game> {
+    const { game } = await graphQLService.query(
+      `
+            query($gameId: Int!) {
+                game(id: $gameId) {
+                    id
+                    player1 {
+                        id
+                        username
+                    }
+                    player2 {
+                        id
+                        username
+                    }
+                    score1
+                    score2
+                    state
+                }
+            }
+            `,
+			{
+				gameId: gameId,
+			}
+    );
+    if (typeof game === 'undefined') throw new Error('Empty game data');
+    return game;
+  }
 }
 
 export default new GameService();

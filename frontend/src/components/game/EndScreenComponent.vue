@@ -1,26 +1,93 @@
 <script setup lang="ts">
 import Queue from './queue';
+import GameService from '@/service/GameService';
+import { onMounted, ref, computed } from 'vue';
+import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
+import  UserService  from '@/service/UserService';
 
-// defineProps <{
-// 	playerScore: number;
-// 	remoteScore: 
-// }
+const props = defineProps <{ 
+	gameId: number;
+
+}>();
+
+const status = 'online';
+
+const playerScore1 = ref(0);
+const remoteScore2 = ref(0);
+const player1 = ref({
+	id: 0,
+	username: '',
+	picture: '',
+	status: '',
+});
+const player2 = ref({
+	id: 0,
+	username: '',
+	picture: '',
+});
+
+const player = ref({
+	id: 0,
+	username: '',
+	picture: '',
+	status: '',
+});
 
 function homepage() {
 	window.location.href = '/';
 }
 
+onMounted(async () => {
+
+	await GameService.findOne(props.gameId).then((game) => {
+		playerScore1.value = game.score1;
+		remoteScore2.value = game.score2;
+		player1.value.id = game.player1.id;
+		player2.value.id = game.player2.id;
+		player1.value.username = game.player1.username;
+		player2.value.username = game.player2.username;
+	});
+
+	await UserService.findOneById(player1.value.id).then((user) => {
+		player1.value.picture = user.picture;
+	});
+
+	await UserService.findOneById(player2.value.id).then((user) => {
+		player2.value.picture = user.picture;
+		username();
+	});
+
+	function username()
+	{
+		if (playerScore1.value > remoteScore2.value) {
+			player.value.username = player1.value.username;
+			player.value.picture = player1.value.picture;
+		} else {
+			player.value.username =  player2.value.username;
+			player.value.picture = player2.value.picture;
+		}
+	}
+
+});
 </script>
 
 <template>
   <div class="parent">
-    <p class="saving">Some player wins!</p>
-	<button class="home-page" @click="homepage()">Home page</button>
-	<button class="re-queue" @click="Queue.join_queue()">Re-Queue</button>
-	<p class="saving">Player Score: {{ Queue.playerScore }}</p>
-	<p class="saving">Player Remote: {{ Queue.remoteScore }}</p>
-    <div class="loader"></div>
+	<RoundPictureComponent
+      class="picture"
+      :picture="player.picture"
+      size="15vw"
+      :border-color="status"
+    />
+    <p class="saving"> {{ player.username }}  wins! </p>
+	<div class="btns">
+	<button class="home-page flex-btn" @click="homepage()">Home page</button>
+	<button class="re-queue flex-btn" @click="Queue.join_queue()">Re-Queue</button>
   </div>
+	
+  </div>
+
+  
 </template>
 
 <style scoped>
@@ -30,6 +97,22 @@ function homepage() {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 5vh;
+}
+
+.btns
+{
+   display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+}
+
+.flex-btn
+{
+	width: 11vh;
+    height: 4vh;
+	margin: 5vh;
 }
 
 </style>
