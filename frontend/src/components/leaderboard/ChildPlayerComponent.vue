@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
-import ImportedPicture from '@/assets/sexy-guy-001-modified.png';
+import type { User } from '@/store/user';
 
 defineProps<{
-  playerName: string;
+  player: Partial<User>;
 }>();
 </script>
 
 <template>
   <div>
-    <router-link to="/profile">
+    <router-link :to="`/profile/${player.id}`">
       <div>
         <RoundPictureComponent
-          :picture="ImportedPicture"
+          v-if="player.picture"
+          :picture="player.picture"
           size="100px"
           border-color="transparent"
         />
@@ -22,11 +23,10 @@ defineProps<{
           width="30"
           height="30"
         />
-        <span class="playername">{{ playerName }}</span>
+        <span class="playername">{{ player.username }}</span>
       </div>
     </router-link>
-    <span class="sub">455 Matches</span>
-    <span class="sub">3 Mio. Views</span>
+    <span class="sub">{{ player.points }} Points</span>
   </div>
 </template>
 

@@ -128,6 +128,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       msg: msg,
     };
     if (recipient instanceof User) {
+      if (sender.blocking_id?.includes(recipient.id)) {
+        throw new WsException('Unable to send message to blocked user.');
+      }
+      if (sender.blockedBy_id?.includes(recipient.id)) {
+        throw new WsException('Unable to send message.');
+      }
       if (recipient.socketId == '') {
         //throw new WsException('Recipient socketId empty');
         this.channelService.saveMessage(message);
@@ -141,6 +147,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       if (!sender.isInChannel(to))
         throw new WsException(
           'Recipient not found ###DEBUG Sender not on channel',
+        );
+      const sendChannelUser: ChannelUser =
+        await this.usersService.findChannelUser(sender.id, recipient.name);
+      if (sendChannelUser.mute || sendChannelUser.ban)
+        throw new WsException(
+          'Sender does not have permision to send messages',
         );
       recClient = client.to(recipient.name);
     }

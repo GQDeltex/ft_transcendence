@@ -52,6 +52,11 @@ export class UsersResolver {
     return await this.usersService.findUserChannelList(username);
   }
 
+  @Query(() => [User], { name: 'leaders' })
+  async findLeaders() {
+    return await this.usersService.findLeaders();
+  }
+
   @Mutation(() => User)
   async updateUsername(
     @CurrentJwtPayload() jwtPayload: JwtPayload,
@@ -121,11 +126,11 @@ export class UsersResolver {
   ): Promise<string> {
     if (jwtPayload.id === user.id) return user.status;
     if (
-      !user.following_id?.includes(jwtPayload.id) &&
-      !user.followers_id?.includes(jwtPayload.id)
+      user.following_id?.includes(jwtPayload.id) &&
+      user.followers_id?.includes(jwtPayload.id)
     )
-      return 'offline';
-    return user.status;
+      return user.status;
+    return 'offline';
   }
 
   @ResolveField(() => [Int], { nullable: 'items' })

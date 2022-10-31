@@ -6,11 +6,7 @@ import { ref } from 'vue';
 const emits = defineEmits(['update', 'join']);
 
 const props = defineProps<{
-  channels: {
-    id: number;
-    name: string;
-    private: boolean;
-  }[];
+  channels: Channel[];
   currentChannel: Channel;
 }>();
 const modalActive = ref(false);
