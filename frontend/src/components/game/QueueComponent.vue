@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { socket } from '../../service/socket';
 import PongComponent from './PongComponent.vue';
 import UserService from '@/service/UserService';
+
+onUnmounted(async () => {
+  leave_queue();
+});
+
+onMounted(async () => {
+  join_queue();
+});
 
 const displayState = ref(true);
 const gameIdRef = ref(0);
@@ -32,11 +40,7 @@ function leave_queue() {
 
 async function gettem(player1Id: number, player2Id: number) {
   player1User.value = await UserService.findOneById(player1Id);
-  // player1User.value.status = 'in game';
-  // console.log("gettem players", player1User);
   player2User.value = await UserService.findOneById(player2Id);
-  // player2User.value.status = 'in game';
-  // console.log("gettem players", player2User);
 }
 
 // playerIDs to check validity of messages for streaming implementation later™
@@ -47,9 +51,6 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
   }
   displayState.value = false;
   console.log('ich will ein spiel mit dir spielen');
-  // player1IdRef.value = player1Id;
-  // player2IdRef.value = player2Id;
-  // getPlayers(player1Id, player2Id);
   gettem(player1Id, player2Id);
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
@@ -57,9 +58,9 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
 </script>
 
 <template>
-  <div v-if="displayState">
-    <button @click="join_queue">JOIN Queue</button>
-    <button @click="leave_queue">leave Queue</button>
+  <div v-if="displayState" class="parent">
+    <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
+    <div class="loader"></div>
   </div>
   <PongComponent
     v-else
@@ -69,3 +70,63 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
     :player2-i-d="player2User"
   />
 </template>
+
+<style scoped>
+.parent {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loader {
+  border: 16px solid #f8971d;
+  border-top: 16px solid gray;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.saving {
+  font-size: 5em;
+  margin-bottom: 0.3em;
+}
+
+.saving span {
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.saving span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.saving span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+</style>
