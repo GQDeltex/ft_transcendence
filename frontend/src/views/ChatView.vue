@@ -5,7 +5,7 @@ import ParentChannelsComponent from '../components/chat/channels/ParentChannelsC
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
 import ChannelService from '../service/ChannelService';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
@@ -79,6 +79,14 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
         (userId) => userId !== id,
       );
       break;
+  }
+});
+
+watch([() => userStore.friends, () => userStore.blocks], async () => {
+  try {
+    users.value = await UserService.findAll({ fetchPolicy: 'network-only' });
+  } catch (error) {
+    errorStore.setError((error as Error).message);
   }
 });
 
