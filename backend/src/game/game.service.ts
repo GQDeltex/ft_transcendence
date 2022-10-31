@@ -60,10 +60,18 @@ export class GameService {
     console.log(await this.queuedPlayerRepository.find());
   }
 
-  async dequeuePlayer(id: number) {
-    await this.queuedPlayerRepository.delete({
-      playerId: id,
-    });
+  async dequeuePlayer(id: number | string) {
+    if (typeof id === 'number')
+      await this.queuedPlayerRepository.delete({
+        playerId: id,
+      });
+    if (typeof id === 'string') {
+      const user = await this.usersService.findSocketUser(id);
+      await this.queuedPlayerRepository.delete({
+        playerId: user.id,
+      });
+      console.log('Dequeued Player because of disconnect');
+    }
     console.log('list', await this.queuedPlayerRepository.find());
   }
 
