@@ -6,7 +6,6 @@ import EndScreenComponent from './EndScreenComponent.vue';
 import Queue from './queue';
 import UserService from '@/service/UserService';
 
-
 // const displayState = ref(true);
 const displayState = ref('queue');
 const gameIdRef = ref(0);
@@ -47,7 +46,7 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
     displayState.value = 'end';
     return;
   }
-//   displayState.value = false;
+  //   displayState.value = false;
   displayState.value = 'start';
   console.log('ich will ein spiel mit dir spielen');
   // player1IdRef.value = player1Id;
@@ -57,7 +56,6 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
 });
-
 </script>
 
 <template>

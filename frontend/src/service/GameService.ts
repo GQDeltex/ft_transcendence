@@ -45,7 +45,7 @@ class GameService {
     return games;
   }
 
-  async findOne( gameId: number): Promise<Game> {
+  async findOne(gameId: number): Promise<Game> {
     const { game } = await graphQLService.query(
       `
             query($gameId: Int!) {
@@ -65,9 +65,9 @@ class GameService {
                 }
             }
             `,
-			{
-				gameId: gameId,
-			}
+      {
+        gameId: gameId,
+      },
     );
     if (typeof game === 'undefined') throw new Error('Empty game data');
     return game;
