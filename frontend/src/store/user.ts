@@ -25,6 +25,8 @@ export type User = {
   blockedBy?: number[];
   inventory?: number[];
   equipped?: Item[];
+  sentGameRequests_id?: number[];
+  receivedGameRequests_id?: number[];
 };
 
 export type Item = {
@@ -67,6 +69,19 @@ export enum AllowedUpdateEquippedItemsMethod {
   UNEQUIP = 'UNEQUIP',
 }
 
+export enum GameStatusEnum {
+  NOT_SEND = 'Send game request',
+  SENT = 'Cancel game request',
+  RECEIVED = 'Accept game request',
+}
+
+export enum AllowedUpdateGameRequestMethod {
+  SEND = 'SEND',
+  ACCEPT = 'ACCEPT',
+  DECLINE = 'DECLINE',
+  CANCEL = 'CANCEL',
+}
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
@@ -91,6 +106,8 @@ export const useUserStore = defineStore('user', {
     blockedBy: [] as number[],
     inventory: [] as number[],
     equipped: [] as Item[],
+    sentGameRequests_id: [] as number[],
+    receivedGameRequests_id: [] as number[],
   }),
   getters: {
     getFriendStatus: (state) => {
@@ -112,6 +129,15 @@ export const useUserStore = defineStore('user', {
     isItemEquipped: (state) => {
       return (itemId: number) => {
         return state.equipped.some((item) => item.id === itemId);
+      };
+    },
+    getGameRequestStatus: (state) => {
+      return (userId: number) => {
+        if (state.sentGameRequests_id.includes(userId))
+          return GameStatusEnum.SENT;
+        if (state.receivedGameRequests_id.includes(userId))
+          return GameStatusEnum.RECEIVED;
+        return GameStatusEnum.NOT_SEND;
       };
     },
   },
@@ -159,6 +185,8 @@ export const useUserStore = defineStore('user', {
       this.blockedBy = user.blockedBy ?? [];
       this.inventory = user.inventory ?? [];
       this.equipped = user.equipped ?? [];
+      this.sentGameRequests_id = user.sentGameRequests_id ?? [];
+      this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
@@ -235,6 +263,8 @@ export const useUserStore = defineStore('user', {
         this.receivedFriendRequests = user.receivedFriendRequests ?? [];
         this.blocks = user.blocks ?? [];
         this.blockedBy = user.blockedBy ?? [];
+        this.sentGameRequests_id = user.sentGameRequests_id ?? [];
+        this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }
@@ -256,6 +286,21 @@ export const useUserStore = defineStore('user', {
           itemId,
         );
         this.equipped = user.equipped ?? [];
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
+    async updateGameRequest(
+      method: AllowedUpdateGameRequestMethod,
+      userId: number,
+    ) {
+      try {
+        const user: Partial<User> = await UserService.updateGameRequest(
+          method,
+          userId,
+        );
+        this.sentGameRequests_id = user.sentGameRequests_id ?? [];
+        this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }

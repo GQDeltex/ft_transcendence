@@ -12,6 +12,7 @@ import { socket } from '@/service/socket';
 import {
   AllowedUpdateBlockingMethod,
   AllowedUpdateFriendshipMethod,
+  AllowedUpdateGameRequestMethod,
   useUserStore,
 } from '@/store/user';
 import type { User } from '@/store/user';
@@ -76,6 +77,26 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
   }
 });
 
+socket.on('onGameRequest', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateGameRequestMethod.SEND:
+      userStore.receivedGameRequests_id = [
+        ...userStore.receivedGameRequests_id,
+        id,
+      ];
+      break;
+    case AllowedUpdateGameRequestMethod.DECLINE:
+      userStore.sentGameRequests_id = userStore.sentGameRequests_id.filter(
+        (userId) => userId !== id,
+      );
+      break;
+    case AllowedUpdateGameRequestMethod.CANCEL:
+      userStore.receivedGameRequests_id =
+        userStore.receivedGameRequests_id.filter((userId) => userId !== id);
+      break;
+  }
+});
+
 onMounted(async () => {
   try {
     users.value = await UserService.findAll();
@@ -89,6 +110,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   socket.off('onFriend');
   socket.off('onBlock');
+  socket.off('onGameRequest');
 });
 
 const UpdateChannels = (channel: Channel) => {

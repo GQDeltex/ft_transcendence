@@ -24,6 +24,8 @@ export const createMockUser = (options: Partial<User> = {}): User => {
   user.blocking_id = [];
   user.blockedBy_id = [];
   user.channelList = [];
+  user.sentGameRequests_id = [];
+  user.receivedGameRequests_id = [];
   user.socketId = '';
   Object.assign(user, options);
   return user;

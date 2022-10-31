@@ -30,7 +30,7 @@ export class GameService {
     });
     await this.dequeuePlayer(player1.playerId);
     await this.dequeuePlayer(player2.playerId);
-    this.gameGateway.startGame(game);
+    await this.gameGateway.startGame(game);
     console.log('game     list\n', await this.gameRepository.find());
   }
 
@@ -67,7 +67,7 @@ export class GameService {
     console.log('list', await this.queuedPlayerRepository.find());
   }
 
-  async EndGame(gameId: number, score: number[]) {
+  async endGame(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
     game.state = GameState.ENDED;
     game.player1.status = 'online';

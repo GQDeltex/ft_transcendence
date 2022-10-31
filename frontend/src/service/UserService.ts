@@ -3,10 +3,11 @@ import axios from 'axios';
 import type {
   AllowedUpdateBlockingMethod,
   AllowedUpdateFriendshipMethod,
+  AllowedUpdateEquippedItemsMethod,
+  AllowedUpdateGameRequestMethod,
   Item,
   User,
 } from '@/store/user';
-import type { AllowedUpdateEquippedItemsMethod } from '@/store/user';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -155,6 +156,8 @@ class UserService {
               picture
               metadata
             }
+            sentGameRequests_id
+            receivedGameRequests_id
           }
         }
       `,
@@ -266,6 +269,8 @@ class UserService {
             receivedFriendRequests
             blocks
             blockedBy
+            sentGameRequests_id
+            receivedGameRequests_id
           }
         }
       `,
@@ -336,6 +341,26 @@ class UserService {
     if (typeof updateEquippedItems === 'undefined')
       throw new Error('Empty equipped data');
     return updateEquippedItems;
+  }
+
+  async updateGameRequest(
+    method: AllowedUpdateGameRequestMethod,
+    userId: number,
+  ): Promise<Partial<User>> {
+    const { updateGameRequest } = await graphQLService.mutation(
+      `
+      mutation updateGameRequest($method: AllowedUpdateGameRequestMethod!, $userId: Int!) {
+        updateGameRequest(method: $method, userId: $userId) {
+          sentGameRequests_id
+          receivedGameRequests_id
+        }
+      }
+      `,
+      { method, userId },
+    );
+    if (typeof updateGameRequest === 'undefined')
+      throw new Error('Empty game request data');
+    return updateGameRequest;
   }
 }
 

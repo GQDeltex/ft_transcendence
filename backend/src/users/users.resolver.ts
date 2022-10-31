@@ -20,6 +20,7 @@ import { AllExceptionFilter } from '../tools/ExceptionFilter';
 import { UpdateUserBlockingInput } from './dto/update-blocking.input';
 import itemList, { Item } from './entities/item.entity';
 import { UpdateUserEquippedItemsInput } from './dto/update-equipped-items.input';
+import { UpdateGameRequestInput } from './dto/update-gamerequest.input';
 
 @UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
@@ -112,6 +113,20 @@ export class UsersResolver {
       jwtPayload.id,
       updateUserEquippedItemsInput,
     );
+  }
+
+  @Mutation(() => User)
+  async updateGameRequest(
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
+    @Args() updateGameRequestInput: UpdateGameRequestInput,
+  ): Promise<User> {
+    await this.usersService.updateGameRequest(
+      jwtPayload.id,
+      updateGameRequestInput,
+    );
+    const test = await this.usersService.findOne(jwtPayload.id);
+    console.log(test);
+    return test;
   }
 
   @ResolveField(() => String)

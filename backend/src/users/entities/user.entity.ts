@@ -130,6 +130,27 @@ export class User {
   @Index()
   socketId: string;
 
+  @ManyToMany(() => User, (user) => user.receivedGameRequests, {
+    nullable: true,
+  })
+  @JoinTable()
+  sentGameRequests?: User[];
+
+  @Field(() => [Int], { nullable: 'items' })
+  @RelationId('sentGameRequests')
+  sentGameRequests_id: number[] | null;
+
+  @ManyToMany(() => User, (user) => user.sentGameRequests, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  receivedGameRequests?: User[];
+
+  @Field(() => [Int], { nullable: 'items' })
+  @RelationId('receivedGameRequests')
+  receivedGameRequests_id: number[] | null;
+
   public isInChannel(channelName: string): boolean {
     const result = this.channelList?.some(
       (channelUser) => channelUser.channel_name === channelName,

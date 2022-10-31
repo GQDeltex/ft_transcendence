@@ -6,14 +6,19 @@ import {
 } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
-import { EntityNotFoundError, Repository, UpdateResult, Like } from 'typeorm';
+import {
+  EntityNotFoundError,
+  Like,
+  QueryFailedError,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
 import { UserInputError } from 'apollo-server-express';
 import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
-import { QueryFailedError } from 'typeorm';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
@@ -23,6 +28,11 @@ import {
   AllowedUpdateEquippedItemsMethod,
   UpdateUserEquippedItemsInput,
 } from './dto/update-equipped-items.input';
+import {
+  AllowedUpdateGameRequestMethod,
+  UpdateGameRequestInput,
+} from './dto/update-gamerequest.input';
+import { Game, GameState } from '../game/entities/game.entity';
 
 @Injectable()
 export class UsersService {
@@ -32,6 +42,7 @@ export class UsersService {
     private readonly prcGateway: PrcGateway,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<void> {
@@ -273,7 +284,14 @@ export class UsersService {
 
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: userId }],
-      relations: ['following', 'followers', 'blocking', 'blockedBy'],
+      relations: [
+        'following',
+        'followers',
+        'blocking',
+        'blockedBy',
+        'sentGameRequests',
+        'receivedGameRequests',
+      ],
     });
     const user: User | undefined = users.find((user) => user.id === id);
     const blockedUser: User | undefined = users.find(
@@ -297,6 +315,12 @@ export class UsersService {
       );
       blockedUser.following = blockedUser.following?.filter(
         (following) => following.id !== id,
+      );
+      user.sentGameRequests = user.sentGameRequests?.filter(
+        (user) => user.id !== userId,
+      );
+      blockedUser.sentGameRequests = blockedUser.sentGameRequests?.filter(
+        (user) => user.id !== id,
       );
       await this.userRepository.save([user, blockedUser]);
     }
@@ -388,5 +412,89 @@ export class UsersService {
     }
     await this.userRepository.save(user);
     return user;
+  }
+
+  async updateGameRequest(
+    id: number,
+    input: UpdateGameRequestInput,
+  ): Promise<void> {
+    const users: User[] = await this.userRepository.find({
+      where: [{ id }, { id: input.userId }],
+      relations: ['sentGameRequests', 'receivedGameRequests'],
+    });
+    const user: User | undefined = users.find((user) => user.id === id);
+    const invitedUser: User | undefined = users.find(
+      (user) => user.id === input.userId,
+    );
+    if (typeof user === 'undefined') throw new EntityNotFoundError(User, id);
+    if (typeof invitedUser === 'undefined')
+      throw new EntityNotFoundError(User, input.userId);
+
+    if (input.method === AllowedUpdateGameRequestMethod.SEND) {
+      if (
+        user.sentGameRequests_id?.includes(input.userId) ||
+        user.receivedGameRequests_id?.includes(input.userId) ||
+        user.blocking_id?.includes(input.userId)
+      )
+        throw new UserInputError('Failed to send a game request to this user.');
+      user.sentGameRequests?.push(invitedUser);
+      await this.userRepository.save(user);
+    }
+
+    if (input.method === AllowedUpdateGameRequestMethod.ACCEPT) {
+      if (!user.receivedGameRequests_id?.includes(input.userId))
+        throw new UserInputError(
+          'You do not received game request from this user',
+        );
+      if (invitedUser.socketId === '')
+        throw new UserInputError('User is not online');
+      invitedUser.sentGameRequests = invitedUser.sentGameRequests?.filter(
+        (user) => user.id !== id,
+      );
+      user.receivedGameRequests = user.receivedGameRequests?.filter(
+        (user) => user.id !== input.userId,
+      );
+      await this.userRepository.save([invitedUser, user]);
+      const game: Game = await this.gameRepository.save({
+        state: GameState.RUNNING,
+        player1Id: invitedUser.id,
+        player1: invitedUser,
+        player2Id: user.id,
+        player2: user,
+      });
+      this.prcGateway.server
+        .to(invitedUser.socketId)
+        .emit('onGameRequestAccepted', {
+          gameId: game.id,
+        });
+      return;
+    }
+
+    if (input.method === AllowedUpdateGameRequestMethod.DECLINE) {
+      if (!user.receivedGameRequests_id?.includes(input.userId))
+        throw new UserInputError(
+          'You do not received game request from this user',
+        );
+      invitedUser.sentGameRequests = invitedUser.sentGameRequests?.filter(
+        (user) => user.id !== id,
+      );
+      await this.userRepository.save(invitedUser);
+    }
+
+    if (input.method === AllowedUpdateGameRequestMethod.CANCEL) {
+      if (!user.sentGameRequests_id?.includes(input.userId))
+        throw new UserInputError('You do not sent game request to this user');
+      user.sentGameRequests = user.sentGameRequests?.filter(
+        (user) => user.id !== input.userId,
+      );
+      await this.userRepository.save(user);
+    }
+
+    if (invitedUser.socketId !== '') {
+      this.prcGateway.server.to(invitedUser.socketId).emit('onGameRequest', {
+        method: input.method,
+        id,
+      });
+    }
   }
 }

@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { socket } from '../../service/socket';
+import { socket } from '@/service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
@@ -101,7 +101,7 @@ onMounted(() => {
   );
 
   let lastTime: number | null = null;
-  var delta: number;
+  let delta: number;
   async function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
@@ -237,8 +237,6 @@ onMounted(() => {
   position: relative;
   top: 1em;
   right: calc(100% / -2);
-  color: grey;
-  font-size: 2vh;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
@@ -251,8 +249,8 @@ onMounted(() => {
 .score > * {
   flex-grow: 1;
   flex-basis: 0;
-  padding: 0% 1%;
-  margin: 0% 0%;
+  padding: 0 1%;
+  margin: 0 0;
 }
 .score > :first-child {
   text-align: right;
