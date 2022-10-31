@@ -25,6 +25,7 @@
 - [findChannelUser](users_users_service.UsersService.md#findchanneluser)
 - [findLeaders](users_users_service.UsersService.md#findleaders)
 - [findOne](users_users_service.UsersService.md#findone)
+- [findSocketUser](users_users_service.UsersService.md#findsocketuser)
 - [findUserChannelList](users_users_service.UsersService.md#finduserchannellist)
 - [update2FAEnable](users_users_service.UsersService.md#update2faenable)
 - [update2FASecret](users_users_service.UsersService.md#update2fasecret)
@@ -115,7 +116,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:330](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L330)
+[src/users/users.service.ts:336](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L336)
 
 ___
 
@@ -149,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:118](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L118)
+[src/users/users.service.ts:124](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L124)
 
 ___
 
@@ -204,7 +205,27 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:122](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L122)
+[src/users/users.service.ts:128](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L128)
+
+___
+
+### findSocketUser
+
+▸ **findSocketUser**(`socketId`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `socketId` | `string` |
+
+#### Returns
+
+`Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Defined in
+
+[src/users/users.service.ts:102](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L102)
 
 ___
 
@@ -245,7 +266,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:110](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L110)
+[src/users/users.service.ts:116](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L116)
 
 ___
 
@@ -266,7 +287,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:102](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L102)
+[src/users/users.service.ts:108](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L108)
 
 ___
 
@@ -288,7 +309,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:274](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L274)
+[src/users/users.service.ts:280](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L280)
 
 ___
 
@@ -309,7 +330,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:379](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L379)
+[src/users/users.service.ts:385](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L385)
 
 ___
 
@@ -331,7 +352,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:180](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L180)
+[src/users/users.service.ts:186](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L186)
 
 ___
 
@@ -352,7 +373,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:369](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L369)
+[src/users/users.service.ts:375](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L375)
 
 ___
 
@@ -373,7 +394,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:131](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L131)
+[src/users/users.service.ts:137](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L137)
 
 ___
 
@@ -394,7 +415,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:147](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L147)
+[src/users/users.service.ts:153](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L153)
 
 ___
 
@@ -415,7 +436,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:162](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L162)
+[src/users/users.service.ts:168](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L168)
 
 ___
 
@@ -436,4 +457,4 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:139](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L139)
+[src/users/users.service.ts:145](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L145)

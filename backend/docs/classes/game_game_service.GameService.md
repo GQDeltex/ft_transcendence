@@ -116,7 +116,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `id` | `string` \| `number` |
 
 #### Returns
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L70)
+[src/game/game.service.ts:78](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L78)
 
 ___
 
