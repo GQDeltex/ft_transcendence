@@ -137,6 +137,11 @@ export class PrcGateway implements OnGatewayDisconnect {
         throw new WsException(
           'Recipient not found ###DEBUG Sender not on channel',
         );
+	  const sendChannelUser: ChannelUser = await this.usersService.findChannelUser(sender.id, recipient.name);
+	  if (sendChannelUser.mute || sendChannelUser.ban)
+	    throw new WsException(
+	      'Sender does not have permision to send messages',
+		);
       recClient = client.to(recipient.name);
     }
     recClient.emit('prc', message);
