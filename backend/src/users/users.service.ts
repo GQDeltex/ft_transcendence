@@ -99,6 +99,12 @@ export class UsersService {
     });
   }
 
+  async findSocketUser(socketId: string): Promise<User> {
+    if (typeof socketId === 'undefined')
+      throw new EntityNotFoundError(User, {});
+    return this.userRepository.findOneByOrFail({ socketId: socketId });
+  }
+
   async update2FASecret(id: number, secret: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,

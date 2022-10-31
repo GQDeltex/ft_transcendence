@@ -13,6 +13,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
   WsException,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
@@ -32,13 +33,18 @@ import { GameService } from './game.service';
 })
 @UseGuards(WsJwt2FAAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
-export class GameGateway {
+export class GameGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
   constructor(
     @Inject(forwardRef(() => GameService))
     private readonly gameService: GameService,
   ) {}
+
+  async handleDisconnect(@ConnectedSocket() client: Socket) {
+    console.log('Game client disconnected');
+    await this.gameService.dequeuePlayer(client.id);
+  }
 
   @SubscribeMessage('gameData')
   async handleMessage(
