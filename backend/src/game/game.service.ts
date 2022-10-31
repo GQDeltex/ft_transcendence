@@ -31,7 +31,6 @@ export class GameService {
     await this.dequeuePlayer(player1.playerId);
     await this.dequeuePlayer(player2.playerId);
     await this.gameGateway.startGame(game);
-    console.log('game     list\n', await this.gameRepository.find());
   }
 
   async findAll(searchState?: GameState, searchUserId?: number) {
@@ -57,24 +56,56 @@ export class GameService {
       playerId: id,
       user: user,
     });
-    console.log(await this.queuedPlayerRepository.find());
   }
 
   async dequeuePlayer(id: number) {
-    await this.queuedPlayerRepository.delete({
-      playerId: id,
-    });
-    console.log('list', await this.queuedPlayerRepository.find());
+    if (typeof id === 'number')
+      await this.queuedPlayerRepository.delete({
+        playerId: id,
+      });
+  }
+
+  async saveScore(gameId: number, score: number[]) {
+    const game: Game = await this.findOne(gameId);
+    game.score1 = score[1];
+    game.score2 = score[0];
+    await this.gameRepository.save(game);
   }
 
   async endGame(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
+    game.score1 = score[1];
+    game.score2 = score[0];
+    game.state = GameState.ENDED;
+    game.player1.status = 'online';
+    game.player1.points += game.score1;
+    game.player2.status = 'online';
+    game.player2.points += game.score2;
+    await this.gameRepository.save(game);
+  }
+
+  async killGame(userId: number): Promise<number> {
+    const viableGames: Game[] = await this.gameRepository.find({
+      where: { state: GameState.RUNNING },
+      order: { id: 'DESC' },
+    });
+    const game: Game = viableGames.filter(
+      (thatgame) =>
+        thatgame.player1.id == userId || thatgame.player2.id == userId,
+    )[0];
+    if (typeof game === 'undefined') return -1;
     game.state = GameState.ENDED;
     game.player1.status = 'online';
     game.player2.status = 'online';
-    console.log(score);
-    game.score1 = score[1];
-    game.score2 = score[0];
+    if (game.player1.id == userId) {
+      game.score1 = 0;
+      game.player2.points += game.score2;
+    }
+    if (game.player2.id == userId) {
+      game.score2 = 0;
+      game.player1.points += game.score1;
+    }
     await this.gameRepository.save(game);
+    return game.id;
   }
 }

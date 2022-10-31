@@ -13,6 +13,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
   WsException,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
@@ -32,13 +33,24 @@ import { GameService } from './game.service';
 })
 @UseGuards(WsJwt2FAAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
-export class GameGateway {
+export class GameGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
+
   constructor(
     @Inject(forwardRef(() => GameService))
     private readonly gameService: GameService,
   ) {}
+
+  async handleDisconnect(@ConnectedSocket() client: Socket) {
+    await this.gameService.dequeuePlayer(+client.data.user.id);
+    const gameId = await this.gameService.killGame(+client.data.user.id);
+    if (gameId == -1) return;
+    const otherSockets = await this.server.in(`&${gameId}`).fetchSockets();
+    otherSockets.forEach((socket) => {
+      socket.emit('Game', { gameId: -1 });
+    });
+  }
 
   @SubscribeMessage('gameData')
   async handleMessage(
@@ -49,12 +61,15 @@ export class GameGateway {
     @MessageBody('name') name: number,
     @MessageBody('gameId') gameId: number,
   ) {
-    if (typeof score !== 'undefined' && (score[0] >= 10 || score[1] >= 10)) {
-      await this.gameService.endGame(gameId, score);
-      client.to(`&${gameId}`).emit('Game', { gameId: -1 });
-      client.emit('Game', { gameId: -1 });
+    if (typeof score !== 'undefined') {
+      if (score[0] >= 10 || score[1] >= 10) {
+        await this.gameService.endGame(gameId, score);
+        client.to(`&${gameId}`).emit('Game', { gameId: -1 });
+        client.emit('Game', { gameId: -1 });
+      } else {
+        await this.gameService.saveScore(gameId, score);
+      }
     }
-    console.log(`&${gameId}`, { changeDir, from: jwtPayload.id });
     client
       .to(`&${gameId}`)
       .emit('gameData', { changeDir, score, name, from: jwtPayload.id });
@@ -70,6 +85,12 @@ export class GameGateway {
       await this.gameService.queuePlayer(jwtPayload.id);
     } else if (event === 'LEAVE') {
       await this.gameService.dequeuePlayer(jwtPayload.id);
+      const gameId = await this.gameService.killGame(+client.data.user.id);
+      if (gameId == -1) return;
+      const otherSockets = await this.server.in(`&${gameId}`).fetchSockets();
+      otherSockets.forEach((socket) => {
+        socket.emit('Game', { gameId: -1 });
+      });
     }
   }
 

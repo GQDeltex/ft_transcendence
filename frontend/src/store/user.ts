@@ -14,6 +14,7 @@ export type User = {
   campus: string;
   country: string;
   coalition: string;
+  points: number;
   status?: string;
   lastLoggedIn?: number;
   twoFAEnable?: boolean;
@@ -95,6 +96,7 @@ export const useUserStore = defineStore('user', {
     campus: '',
     country: '',
     coalition: '',
+    points: 0,
     status: '',
     lastLoggedIn: 0,
     twoFAEnable: false,

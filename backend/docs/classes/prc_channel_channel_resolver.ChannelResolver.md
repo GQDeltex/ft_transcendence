@@ -20,6 +20,7 @@
 - [hasPassword](prc_channel_channel_resolver.ChannelResolver.md#haspassword)
 - [joinChannel](prc_channel_channel_resolver.ChannelResolver.md#joinchannel)
 - [leaveChannel](prc_channel_channel_resolver.ChannelResolver.md#leavechannel)
+- [updateChannelPublic](prc_channel_channel_resolver.ChannelResolver.md#updatechannelpublic)
 
 ## Constructors
 
@@ -35,7 +36,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L25)
+[src/prc/channel/channel.resolver.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L29)
 
 ## Properties
 
@@ -45,7 +46,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L25)
+[src/prc/channel/channel.resolver.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L29)
 
 ## Methods
 
@@ -65,7 +66,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L27)
+[src/prc/channel/channel.resolver.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L31)
 
 ___
 
@@ -85,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:32](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L32)
+[src/prc/channel/channel.resolver.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L36)
 
 ___
 
@@ -106,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L40)
+[src/prc/channel/channel.resolver.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L44)
 
 ___
 
@@ -127,4 +128,25 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.resolver.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L48)
+[src/prc/channel/channel.resolver.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L52)
+
+___
+
+### updateChannelPublic
+
+▸ **updateChannelPublic**(`toggleChannelPpInput`, `user`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `toggleChannelPpInput` | [`ToggleChannelPpInput`](prc_channel_channel_input.ToggleChannelPpInput.md) |
+| `user` | [`User`](users_entities_user_entity.User.md) |
+
+#### Returns
+
+`Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+
+#### Defined in
+
+[src/prc/channel/channel.resolver.ts:60](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.resolver.ts#L60)

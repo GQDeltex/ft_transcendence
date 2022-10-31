@@ -6,12 +6,9 @@ import { ref } from 'vue';
 const emits = defineEmits(['update', 'join']);
 
 const props = defineProps<{
-  channels: {
-    id: number;
-    name: string;
-    private: boolean;
-  }[];
+  channels: Channel[];
   currentChannel: Channel;
+  userId: number;
 }>();
 const modalActive = ref(false);
 
@@ -28,12 +25,21 @@ const onJoin = (channel: Channel) => {
   emits('update', channel);
 };
 
-const channelSelect = (input: string) => {
+const channelSelect = (input: Channel) => {
+  if (!userInChannel(input)) return;
   emits(
     'update',
-    props.channels.find((channel) => channel.name === input),
+    props.channels.find((channel) => channel.name === input.name),
   );
 };
+
+function userInChannel(input: Channel) {
+  console.log('input', input);
+  return input.userList.some((inside) => {
+    if (inside.user_id == props.userId) return true;
+    return false;
+  });
+}
 </script>
 
 <template>
@@ -56,9 +62,10 @@ const channelSelect = (input: string) => {
         :channel-id="channel.id"
         :channel-name="channel.name"
         picture="@/assets/pongking_boi.svg"
-        class="clickable"
+        :class="{ clickable: userInChannel(channel) }"
+        :is-user-inside="userInChannel(channel)"
         :selected-channel="currentChannel.name"
-        @click="channelSelect(channel.name)"
+        @click="channelSelect(channel)"
       />
     </div>
   </div>

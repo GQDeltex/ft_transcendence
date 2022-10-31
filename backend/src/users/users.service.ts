@@ -103,6 +103,19 @@ export class UsersService {
     return channelUser;
   }
 
+  async findLeaders(): Promise<User[]> {
+    return await this.userRepository.find({
+      order: { points: 'DESC' },
+      take: 6,
+    });
+  }
+
+  async findSocketUser(socketId: string): Promise<User> {
+    if (typeof socketId === 'undefined')
+      throw new EntityNotFoundError(User, {});
+    return this.userRepository.findOneByOrFail({ socketId: socketId });
+  }
+
   async update2FASecret(id: number, secret: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,

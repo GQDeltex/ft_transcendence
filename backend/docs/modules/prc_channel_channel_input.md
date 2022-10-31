@@ -8,3 +8,4 @@
 
 - [CreateChannelInput](../classes/prc_channel_channel_input.CreateChannelInput.md)
 - [LeaveChannelInput](../classes/prc_channel_channel_input.LeaveChannelInput.md)
+- [ToggleChannelPpInput](../classes/prc_channel_channel_input.ToggleChannelPpInput.md)

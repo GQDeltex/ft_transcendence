@@ -59,6 +59,10 @@ export class User {
   @Column()
   country: string;
 
+  @Field(() => Int)
+  @Column({ type: 'integer', default: 0 })
+  points: number;
+
   @Field(() => [Int])
   @Column({ type: 'integer', array: true, default: [] })
   inventory: number[];

@@ -6,11 +6,20 @@ const props = defineProps<{
   channelName: string;
   picture: string;
   selectedChannel: string;
+  isUserInside: boolean;
 }>();
 
 const activeChannel = computed(() => {
   if (props.channelName === props.selectedChannel) return { color: '#f8971d' };
+  if (!props.isUserInside) return { color: 'grey' };
   else return { color: 'white' };
+});
+
+const activePicture = computed(() => {
+  if (props.channelName === props.selectedChannel)
+    return { 'border-color': '#f8971d' };
+  if (!props.isUserInside) return { 'border-color': 'grey' };
+  else return { 'border-color': 'white' };
 });
 </script>
 
@@ -20,6 +29,7 @@ const activeChannel = computed(() => {
       class="picture"
       alt="channel picture"
       src="@/assets/pongking_boi.svg"
+      :style="activePicture"
     />
     <div class="infoBox">
       <span class="channelName" :style="activeChannel">{{ channelName }}</span>
