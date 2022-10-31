@@ -30,14 +30,15 @@ const banToggle = ref(true);
 const adminToggle = ref(true);
 const muteToggle = ref(true);
 
-// const isPrivate = ref(props.currentChannel.private);
-
 const leave = () => {
   try {
-    socket.emit('leave', {
-      channel: { name: props.currentChannel.name },
-    });
-    emits('leave', props.currentChannel.name);
+    socket.emit(
+      'leave',
+      {
+        channel: { name: props.currentChannel.name },
+      },
+      () => emits('leave'),
+    );
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -65,7 +66,6 @@ const makePublic = async () => {
       props.currentChannel.name,
       !props.currentChannel.private,
     );
-    // isPrivate.value = updatedChannel.private;
     emits('updatePublic', updatedChannel);
   } catch (error) {
     errorStore.setError((error as Error).message);

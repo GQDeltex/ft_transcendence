@@ -121,24 +121,25 @@ const UpdateChat = (username: string) => {
   };
 };
 
-const joinChannel = (channel: Channel) => {
+const joinChannel = async (channel: Channel) => {
   // Somehow channels.value.push does not work. This seems to be fine.
-  channels.value = [...channels.value, channel];
+  channels.value = await ChannelService.findAll({
+    fetchPolicy: 'network-only',
+  });
+  currentChannel.value = channel;
 };
 
-const leaveChannel = (channelName: string) => {
-  channels.value = [
-    ...channels.value.filter((channel) => channel.name !== channelName),
-  ];
-  if (channels.value.length > 0) currentChannel.value = channels.value[0];
-  else
-    currentChannel.value = {
-      id: 0,
-      name: '',
-      private: true,
-      password: '',
-      userList: [],
-    };
+const leaveChannel = async () => {
+  channels.value = await ChannelService.findAll({
+    fetchPolicy: 'network-only',
+  });
+  currentChannel.value = {
+    id: 0,
+    name: '',
+    private: true,
+    password: '',
+    userList: [],
+  };
 };
 
 const onUpdatePublic = (updatedChannel: Channel) => {

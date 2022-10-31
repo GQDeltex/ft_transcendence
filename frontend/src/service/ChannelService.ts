@@ -1,7 +1,8 @@
 import graphQLService from './GraphQLService';
+import type { QueryOptions } from '@apollo/client/core/watchQueryOptions';
 
 class ChannelService {
-  async findAll() {
+  async findAll(queryOptions: Partial<QueryOptions> = {}) {
     const { channels } = await graphQLService.query(
       `
 			query {
@@ -21,6 +22,8 @@ class ChannelService {
 			  }
 			}
 		  `,
+      {},
+      queryOptions,
     );
     if (typeof channels === 'undefined') throw new Error('Empty channels data');
     return channels;
