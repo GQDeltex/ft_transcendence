@@ -14,6 +14,7 @@ export const createMockUser = (options: Partial<User> = {}): User => {
   user.country = 'Germany';
   user.coalition = 'Fluvius';
   user.inventory = [];
+  user.equipped = [];
   user.status = 'offline';
   (user.lastLoggedIn = new Date()).setMilliseconds(0);
   user.twoFASecret = null;

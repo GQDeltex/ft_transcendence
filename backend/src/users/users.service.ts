@@ -19,6 +19,10 @@ import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import itemList from './entities/item.entity';
+import {
+  AllowedUpdateEquippedItemsMethod,
+  UpdateUserEquippedItemsInput,
+} from './dto/update-equipped-items.input';
 
 @Injectable()
 export class UsersService {
@@ -254,8 +258,8 @@ export class UsersService {
 
     if (friend.socketId !== '') {
       this.prcGateway.server.to(friend.socketId).emit('onFriend', {
-        method: method as string,
-        id: id,
+        method,
+        id,
       });
     }
   }
@@ -309,8 +313,8 @@ export class UsersService {
 
     if (blockedUser.socketId !== '') {
       this.prcGateway.server.to(blockedUser.socketId).emit('onBlock', {
-        method: method as string,
-        id: id,
+        method,
+        id,
       });
     }
   }
@@ -361,6 +365,27 @@ export class UsersService {
     if (user.inventory.includes(itemId))
       throw new UserInputError('You already have this item');
     user.inventory.push(itemId);
+    await this.userRepository.save(user);
+    return user;
+  }
+
+  async updateEquippedItems(id: number, input: UpdateUserEquippedItemsInput) {
+    const user: User = await this.findOne(id);
+    if (input.method == AllowedUpdateEquippedItemsMethod.EQUIP) {
+      if (!user.inventory.includes(input.itemId))
+        throw new UserInputError('You do not have this item');
+      if (user.equipped.includes(input.itemId))
+        throw new UserInputError('You already have this item equipped');
+      user.equipped = user.equipped.filter(
+        (itemId) => itemList[itemId].type !== itemList[input.itemId].type,
+      );
+      user.equipped.push(input.itemId);
+    }
+    if (input.method == AllowedUpdateEquippedItemsMethod.UNEQUIP) {
+      if (!user.equipped.includes(input.itemId))
+        throw new UserInputError('You do not have this item equipped');
+      user.equipped = user.equipped.filter((itemId) => itemId !== input.itemId);
+    }
     await this.userRepository.save(user);
     return user;
   }

@@ -10,6 +10,9 @@ export class Item {
   id: number;
 
   @Field()
+  type: string;
+
+  @Field()
   name: string;
 
   @Field()
@@ -20,33 +23,71 @@ export class Item {
 
   @Field()
   picture: string;
+
+  @Field()
+  metadata: string;
 }
 
-// TODO: serve static picture from server instead
 const itemList: Item[] = [
   new Item({
     id: 0,
-    name: 'Sexy avatar',
-    description: 'Sexy guy 001 modified',
+    type: 'map',
+    name: 'Blue map',
+    description: 'Blue map',
     price: 6.69,
     picture:
-      'https://github.com/GQDeltex/ft_transcendence/blob/main/frontend/src/assets/sexy-guy-001-modified.png?raw=true',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
+    metadata: 'blue',
   }),
   new Item({
     id: 1,
-    name: 'Sexier avatar',
-    description: 'Sexier guy 001 modified',
-    price: 69.69,
+    type: 'map',
+    name: 'Red map',
+    description: 'Red map',
+    price: 6.69,
     picture:
-      'https://github.com/GQDeltex/ft_transcendence/blob/main/frontend/src/assets/even-sexier-guy-001-modified.png?raw=true',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+    metadata: 'red',
   }),
   new Item({
     id: 2,
-    name: 'Sexiest avatar',
-    description: 'Sexiest guy 001 modified',
-    price: 696.69,
+    type: 'map',
+    name: 'Yellow map',
+    description: 'Yellow map',
+    price: 6.69,
     picture:
-      'https://github.com/GQDeltex/ft_transcendence/blob/main/frontend/src/assets/sexiest-guy-001-modified.png?raw=true',
+      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+    metadata: 'yellow',
+  }),
+  new Item({
+    id: 3,
+    type: 'ball',
+    name: 'Blue ball',
+    description: 'Blue ball',
+    price: 6.69,
+    picture:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
+    metadata: 'blue',
+  }),
+  new Item({
+    id: 4,
+    type: 'ball',
+    name: 'Red ball',
+    description: 'Red ball',
+    price: 6.69,
+    picture:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+    metadata: 'red',
+  }),
+  new Item({
+    id: 5,
+    type: 'ball',
+    name: 'Yellow ball',
+    description: 'Yellow ball',
+    price: 6.69,
+    picture:
+      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+    metadata: 'yellow',
   }),
 ];
 
