@@ -11,6 +11,7 @@ import { ChannelService } from '../prc/channel/channel.service';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 import { HttpModule } from '@nestjs/axios';
+import { AllowedUpdateEquippedItemsMethod } from './dto/update-equipped-items.input';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -313,5 +314,39 @@ describe('UsersService', () => {
     newUser.blockedBy_id = [];
     await expect(service.findOne(user.id)).resolves.toEqual(user);
     await expect(service.findOne(newUser.id)).resolves.toEqual(newUser);
+  });
+
+  it('should equip item', async () => {
+    const user: User = mockUser;
+    user.inventory = [0];
+    user.equipped = [0];
+    await expect(
+      mockRepoUser.getRepo().update(mockUser.id, { inventory: [0] }),
+    ).resolves.not.toThrow();
+    await expect(
+      service.updateEquippedItems(mockUser.id, {
+        method: AllowedUpdateEquippedItemsMethod.EQUIP,
+        itemId: 0,
+      }),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(mockUser.id)).resolves.toEqual(user);
+  });
+
+  it('should unequip item', async () => {
+    const user: User = mockUser;
+    user.inventory = [0];
+    user.equipped = [];
+    await expect(
+      mockRepoUser
+        .getRepo()
+        .update(mockUser.id, { inventory: [0], equipped: [0] }),
+    ).resolves.not.toThrow();
+    await expect(
+      service.updateEquippedItems(mockUser.id, {
+        method: AllowedUpdateEquippedItemsMethod.UNEQUIP,
+        itemId: 0,
+      }),
+    ).resolves.not.toThrow();
+    await expect(service.findOne(mockUser.id)).resolves.toEqual(user);
   });
 });

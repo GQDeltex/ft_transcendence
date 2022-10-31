@@ -75,11 +75,17 @@ onUnmounted(async () => {
   }
   document.getElementById(paypalButtonId)?.remove();
 });
+
+const updateEquip = async () => {
+  await userStore.updateEquippedItems(props.item.id);
+};
 </script>
 
 <template>
   <div v-show="!owned" :id="paypalButtonId" class="paypal-button"></div>
-  <div v-show="owned" class="confirmation">You owned this!</div>
+  <button v-show="owned" @click="updateEquip">
+    {{ userStore.isItemEquipped(item.id) ? 'Unequip' : 'Equip' }}
+  </button>
 </template>
 
 <style scoped>
@@ -87,13 +93,5 @@ onUnmounted(async () => {
   display: flex;
   justify-content: center;
   margin: 30px 0;
-}
-
-.confirmation {
-  display: flex;
-  justify-content: center;
-  color: white;
-  margin-top: 1em;
-  font-size: 2em;
 }
 </style>
