@@ -11,8 +11,8 @@ import { PrcGateway } from '../../prc/prc.gateway';
 import { ChannelService } from '../../prc/channel/channel.service';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
-import { ChannelUserService } from 'src/prc/channel/channel-user/channel-user.service';
-import { ChannelUserResolver } from 'src/prc/channel/channel-user/channel-user.resolver';
+import { ChannelUserService } from '../../prc/channel/channel-user/channel-user.service';
+import { ChannelUserResolver } from '../../prc/channel/channel-user/channel-user.resolver';
 
 describe('Intra42Controller', () => {
   let controller: Intra42Controller;

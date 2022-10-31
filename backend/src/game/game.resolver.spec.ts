@@ -15,8 +15,8 @@ import { ChannelService } from '../prc/channel/channel.service';
 import { Channel } from '../prc/channel/entities/channel.entity';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
-import { ChannelUserService } from 'src/prc/channel/channel-user/channel-user.service';
-import { ChannelUserResolver } from 'src/prc/channel/channel-user/channel-user.resolver';
+import { ChannelUserService } from '../prc/channel/channel-user/channel-user.service';
+import { ChannelUserResolver } from '../prc/channel/channel-user/channel-user.resolver';
 
 describe('GameResolver', () => {
   let resolver: GameResolver;
