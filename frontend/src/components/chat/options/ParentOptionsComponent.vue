@@ -25,10 +25,10 @@ const props = defineProps<{
   currentChannel: Channel;
 }>();
 
-const chatToggle = ref(false);
-const banToggle = ref(false);
-const adminToggle = ref(false);
-const muteToggle = ref(false);
+const chatToggle = ref(true);
+const banToggle = ref(true);
+const adminToggle = ref(true);
+const muteToggle = ref(true);
 
 const isPrivate = ref(props.currentChannel.private);
 
@@ -202,7 +202,7 @@ const isAdmin = computed(() => {
           <button class="button" @click="muteUser">Mute User</button>
           <ModalMuteUserComponent v-show="muteModalActive" @close="onClose" />
         </span>
-        <span v-if="isAdmin || isOwner">
+        <span v-if="isOwner">
           <button class="button" @click="makePublic">
             Make {{ isPrivate ? 'Public' : 'Private' }}
           </button>
