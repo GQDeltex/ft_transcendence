@@ -32,6 +32,7 @@
 - [updateBlocking](users_users_resolver.UsersResolver.md#updateblocking)
 - [updateEquippedItems](users_users_resolver.UsersResolver.md#updateequippeditems)
 - [updateFriendship](users_users_resolver.UsersResolver.md#updatefriendship)
+- [updateGameRequest](users_users_resolver.UsersResolver.md#updategamerequest)
 - [updateInventory](users_users_resolver.UsersResolver.md#updateinventory)
 - [updateUsername](users_users_resolver.UsersResolver.md#updateusername)
 
@@ -49,7 +50,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L28)
+[src/users/users.resolver.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L29)
 
 ## Properties
 
@@ -59,7 +60,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L28)
+[src/users/users.resolver.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L29)
 
 ## Methods
 
@@ -79,7 +80,7 @@
 
 #### Defined in
 
-[src/users/users.resolver.ts:156](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L156)
+[src/users/users.resolver.ts:169](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L169)
 
 ___
 
@@ -99,7 +100,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:151](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L151)
+[src/users/users.resolver.ts:164](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L164)
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:161](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L161)
+[src/users/users.resolver.ts:174](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L174)
 
 ___
 
@@ -133,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L30)
+[src/users/users.resolver.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L31)
 
 ___
 
@@ -147,7 +148,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L55)
+[src/users/users.resolver.ts:56](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L56)
 
 ___
 
@@ -168,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L35)
+[src/users/users.resolver.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L36)
 
 ___
 
@@ -188,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L45)
+[src/users/users.resolver.ts:46](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L46)
 
 ___
 
@@ -208,7 +209,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L50)
+[src/users/users.resolver.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L51)
 
 ___
 
@@ -228,7 +229,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:136](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L136)
+[src/users/users.resolver.ts:149](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L149)
 
 ___
 
@@ -242,7 +243,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:98](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L98)
+[src/users/users.resolver.ts:99](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L99)
 
 ___
 
@@ -262,7 +263,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:146](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L146)
+[src/users/users.resolver.ts:159](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L159)
 
 ___
 
@@ -282,7 +283,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:141](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L141)
+[src/users/users.resolver.ts:154](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L154)
 
 ___
 
@@ -303,7 +304,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:122](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L122)
+[src/users/users.resolver.ts:135](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L135)
 
 ___
 
@@ -324,7 +325,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:85](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L85)
+[src/users/users.resolver.ts:86](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L86)
 
 ___
 
@@ -345,7 +346,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:111](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L111)
+[src/users/users.resolver.ts:112](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L112)
 
 ___
 
@@ -366,7 +367,28 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L72)
+[src/users/users.resolver.ts:73](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L73)
+
+___
+
+### updateGameRequest
+
+▸ **updateGameRequest**(`jwtPayload`, `updateGameRequestInput`): `Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `updateGameRequestInput` | [`UpdateGameRequestInput`](users_dto_update_gamerequest_input.UpdateGameRequestInput.md) |
+
+#### Returns
+
+`Promise`<[`User`](users_entities_user_entity.User.md)\>
+
+#### Defined in
+
+[src/users/users.resolver.ts:123](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L123)
 
 ___
 
@@ -387,7 +409,7 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:103](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L103)
+[src/users/users.resolver.ts:104](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L104)
 
 ___
 
@@ -408,4 +430,4 @@ ___
 
 #### Defined in
 
-[src/users/users.resolver.ts:60](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L60)
+[src/users/users.resolver.ts:61](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.resolver.ts#L61)

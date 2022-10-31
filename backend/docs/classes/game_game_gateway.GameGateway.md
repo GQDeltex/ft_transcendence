@@ -22,6 +22,7 @@
 ### Methods
 
 - [handleDisconnect](game_game_gateway.GameGateway.md#handledisconnect)
+- [handleInviteGame](game_game_gateway.GameGateway.md#handleinvitegame)
 - [handleMessage](game_game_gateway.GameGateway.md#handlemessage)
 - [handleQueueIn](game_game_gateway.GameGateway.md#handlequeuein)
 - [startGame](game_game_gateway.GameGateway.md#startgame)
@@ -88,6 +89,28 @@ OnGatewayDisconnect.handleDisconnect
 
 ___
 
+### handleInviteGame
+
+▸ **handleInviteGame**(`client`, `jwtPayload`, `gameId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `gameId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.gateway.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L97)
+
+___
+
 ### handleMessage
 
 ▸ **handleMessage**(`client`, `jwtPayload`, `changeDir`, `score`, `name`, `gameId`): `Promise`<`void`\>
@@ -151,4 +174,4 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L97)
+[src/game/game.gateway.ts:107](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L107)
