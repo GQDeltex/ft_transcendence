@@ -9,6 +9,8 @@ import { ChannelService } from './channel/channel.service';
 import { Channel } from './channel/entities/channel.entity';
 import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
+import { ChannelUserService } from './channel/channel-user/channel-user.service';
+import { ChannelUserResolver } from './channel/channel-user/channel-user.resolver';
 
 describe('PrcGateway', () => {
   let gateway: PrcGateway;
@@ -31,6 +33,8 @@ describe('PrcGateway', () => {
         PrcGateway,
         UsersService,
         ChannelService,
+        ChannelUserService,
+        ChannelUserResolver,
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),

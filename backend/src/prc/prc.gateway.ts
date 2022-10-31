@@ -28,6 +28,8 @@ import { Channel } from './channel/entities/channel.entity';
 import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
 import { CurrentUserFromWs } from '../tools/UserFromWs';
 import { Message } from './message/message';
+import { ChannelUserService } from './channel/channel-user/channel-user.service';
+import { ChannelUserResolver } from './channel/channel-user/channel-user.resolver';
 
 @Injectable()
 @UsePipes(new ValidationPipe())
@@ -48,6 +50,9 @@ export class PrcGateway implements OnGatewayDisconnect {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly channelService: ChannelService,
+    private readonly channelUserService: ChannelUserService,
+    @Inject(forwardRef(() => ChannelUserResolver))
+    private readonly channelUserResolver: ChannelUserResolver,
   ) {}
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
@@ -191,5 +196,49 @@ export class PrcGateway implements OnGatewayDisconnect {
       msg: user.username + ' has left your channel.',
     };
     client.broadcast.to(leaveChannelInput.name).emit('status', leaveMessage);
+  }
+
+  async unban(
+    userSocket: any,
+    channelUserID: number,
+    channelName: string,
+  ): Promise<void> {
+    await this.channelUserService.updateBanRepo(channelUserID, false);
+    await userSocket.join(channelName);
+  }
+
+  @SubscribeMessage('ban')
+  async updateBan(
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @MessageBody('channelName') channelName: string,
+    @MessageBody('banID') banID: number,
+  ): Promise<ChannelUser> {
+    const channelUserNew: ChannelUser =
+      await this.channelUserResolver.updateBan(jwtPayload, channelName, banID);
+    await this.channelUserService.updateBanRepo(channelUserNew.id, true);
+    /*const message: Message = {
+      from: { id: -1, name: '' },
+      to: { name: channelUserNew.channel_name },
+      msg:
+        channelUserNew.user.username +
+        ' has been banned from your channel for 42 seconds.',
+    };*/
+    const sockets = await this.server
+      .of(channelName)
+      .in(channelUserNew.user.socketId)
+      .fetchSockets();
+    if (sockets.length < 1)
+      throw new WsException('Could not find Recipients socket');
+    const userSocket = sockets.find(
+      (socket) => socket.id.toString() === channelUserNew.user.socketId,
+    );
+    if (typeof userSocket === 'undefined')
+      throw new WsException('Could not find Recipients socket');
+    userSocket.leave(channelUserNew.channel_name);
+    setTimeout(
+      () => this.unban(userSocket, channelUserNew.id, channelName),
+      42 * 1000,
+    );
+    return await this.channelUserService.findOne(channelUserNew.id);
   }
 }

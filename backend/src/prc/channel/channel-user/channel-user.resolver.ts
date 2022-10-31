@@ -1,4 +1,4 @@
-import { UseFilters, UseGuards } from '@nestjs/common';
+import { forwardRef, Inject, UseFilters, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentJwtPayload } from '../../../users/decorator/current-jwt-payload.decorator';
 import { JwtAuthGuard } from '../../../auth/guard/jwt.guard';
@@ -18,6 +18,7 @@ import { AllExceptionFilter } from '../../../tools/ExceptionFilter';
 export class ChannelUserResolver {
   constructor(
     private readonly channelUserService: ChannelUserService,
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly channelService: ChannelService,
   ) {}
@@ -109,7 +110,7 @@ export class ChannelUserResolver {
       );
     if (channelUserNew.ban)
       throw new WsException(banUser + ' is already banned on ' + channel_name);
-    return await this.channelUserService.updateBan(channelUserNew);
+    return channelUserNew;
   }
 
   @Mutation(() => ChannelUser)

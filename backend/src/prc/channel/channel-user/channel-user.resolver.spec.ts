@@ -324,10 +324,10 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelResolver.joinChannel({ name: '#test', password: '' }, banUser),
     ).resolves.not.toThrow();
-    const channelUserNew: ChannelUser = await usersService.findChannelUser(
+    /*const channelUserNew: ChannelUser = await usersService.findChannelUser(
       banUser.id,
       '#test',
-    );
+    );*/
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).resolves.not.toThrow();
@@ -335,9 +335,9 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
     ).rejects.toThrow(`${banUser.id} is already banned on #test`);
-    await expect(
+    /*await expect(
       channelUserService.unban(channelUserNew.id),
-    ).resolves.not.toThrow();
+    ).resolves.not.toThrow();*/
     jest.useRealTimers();
   });
   /*******BAN**********/

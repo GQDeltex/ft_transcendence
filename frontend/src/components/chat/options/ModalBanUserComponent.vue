@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import ChannelUserService from '@/service/ChannelUserService';
 import { useErrorStore } from '@/store/error';
+import { socket } from '@/service/socket';
+
 const emits = defineEmits(['close']);
 const errorStore = useErrorStore();
 
@@ -14,8 +15,11 @@ async function closeOk() {
     'channelName= ' + channelName.value + ' admin= ' + banUser.value, //DEBUG
   );
   try {
-    await ChannelUserService.banUser(channelName.value, +banUser.value);
-    console.log(channelName.value + ' admin is now ' + banUser.value); //DEBUG
+    socket.emit('ban', {
+      channelName: channelName.value,
+      banID: +banUser.value,
+    });
+    console.log(channelName.value + ' has banned ' + banUser.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }

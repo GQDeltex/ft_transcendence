@@ -34,7 +34,7 @@ export class ChannelService {
     return channels.filter((channel) => {
       if (!channel.private) return true;
       return channel.userList.some(
-        (channelUser) => channelUser.user_id === identifier,
+        (channelUser) => channelUser.user_id === identifier && !channelUser.ban,
       );
     });
   }
@@ -175,7 +175,7 @@ export class ChannelService {
       // Update new owner
       await this.channelUserRepository.update(
         { id: newOwner.id },
-        { owner: true },
+        { owner: true, admin: true },
       );
     }
     await this.channelUserRepository.delete({ id: channelUser.id });
@@ -183,7 +183,7 @@ export class ChannelService {
       await this.channelRepository.delete({ id: channel.id });
       return null;
     }
-    return this.findOne(channel.id);
+    return this.findOne(channel.id); // still needs to "leave" the room on the socket
   }
 
   /**

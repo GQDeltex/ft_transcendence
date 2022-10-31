@@ -52,25 +52,33 @@ export class ChannelUserService {
     return await this.findOne(channelUser.id);
   }
 
-  async unban(channelUserID: number): Promise<void> {
+  async updateBanRepo(channelUserID: number, bool: boolean): Promise<void> {
     const result: UpdateResult = await this.channelUserRepository.update(
       { id: channelUserID },
-      { ban: false },
+      { ban: bool },
     );
     if (typeof result.affected != 'undefined' && result.affected != 1)
       throw new EntityNotFoundError(ChannelUser, { id: channelUserID });
   }
 
-  async updateBan(channelUser: ChannelUser): Promise<ChannelUser> {
+  /*async updateBan(channelUser: ChannelUser): Promise<ChannelUser> {
     const result: UpdateResult = await this.channelUserRepository.update(
       { id: channelUser.id },
       { ban: true },
-    ); //Is it possible to search by the channelUser? if not, only send channelUser.id to this function to save mem
+    );
     if (typeof result.affected != 'undefined' && result.affected != 1)
       throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
-    setTimeout(() => this.unban(channelUser.id), 30 * 1000);
+    const message: Message = {
+        from: { id: -1, name: '' },
+        to: { name: channelUser.channel_name },
+        msg: channelUser.user.username + ' has been banned from your channel for 42 seconds.',
+      };
+    this.prcGatewayService.prcBan()
+    client.broadcast.to(channelUser.channel_name).emit('status', message);
+    client.leave(channelUser.channel_name);
+    setTimeout(() => this.unban(channelUser, client), 42 * 1000);
     return await this.findOne(channelUser.id);
-  }
+  }*/
 
   async unmute(channelUserID: number): Promise<void> {
     const result: UpdateResult = await this.channelUserRepository.update(
@@ -88,7 +96,7 @@ export class ChannelUserService {
     );
     if (typeof result.affected != 'undefined' && result.affected != 1)
       throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
-    setTimeout(() => this.unmute(channelUser.id), 30 * 1000);
+    setTimeout(() => this.unmute(channelUser.id), 42 * 1000);
     return await this.findOne(channelUser.id);
   }
 }
