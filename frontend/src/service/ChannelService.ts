@@ -9,6 +9,15 @@ class ChannelService {
 				id
 				name
 				private
+        userList {
+          id
+          user_id
+          channel_name
+          admin
+          owner
+          ban
+          mute
+          }
 			  }
 			}
 		  `,

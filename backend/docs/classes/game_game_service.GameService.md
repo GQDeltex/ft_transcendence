@@ -19,9 +19,9 @@
 
 ### Methods
 
-- [EndGame](game_game_service.GameService.md#endgame)
 - [create](game_game_service.GameService.md#create)
 - [dequeuePlayer](game_game_service.GameService.md#dequeueplayer)
+- [endGame](game_game_service.GameService.md#endgame)
 - [findAll](game_game_service.GameService.md#findall)
 - [findOne](game_game_service.GameService.md#findone)
 - [queuePlayer](game_game_service.GameService.md#queueplayer)
@@ -87,27 +87,6 @@ ___
 
 ## Methods
 
-### EndGame
-
-▸ **EndGame**(`gameId`, `score`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `gameId` | `number` |
-| `score` | `number`[] |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-[src/game/game.service.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L70)
-
-___
-
 ### create
 
 ▸ **create**(`player1`, `player2`): `Promise`<`void`\>
@@ -146,6 +125,27 @@ ___
 #### Defined in
 
 [src/game/game.service.ts:63](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L63)
+
+___
+
+### endGame
+
+▸ **endGame**(`gameId`, `score`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `gameId` | `number` |
+| `score` | `number`[] |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.service.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L70)
 
 ___
 

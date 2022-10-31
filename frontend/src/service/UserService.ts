@@ -7,6 +7,7 @@ import type {
   User,
 } from '@/store/user';
 import type { AllowedUpdateEquippedItemsMethod } from '@/store/user';
+import type { QueryOptions } from '@apollo/client/core/watchQueryOptions';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -191,7 +192,7 @@ class UserService {
     return user;
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(queryOptions: Partial<QueryOptions> = {}): Promise<User[]> {
     const { users } = await graphQLService.query(
       `
         query {
@@ -211,6 +212,8 @@ class UserService {
           }
         }
       `,
+      {},
+      queryOptions,
     );
     if (typeof users === 'undefined') throw new Error('Empty users data');
     return users;
@@ -336,6 +339,24 @@ class UserService {
     if (typeof updateEquippedItems === 'undefined')
       throw new Error('Empty equipped data');
     return updateEquippedItems;
+  }
+
+  async findLeaders(): Promise<Partial<User>[]> {
+    const { leaders } = await graphQLService.query(
+      `
+          query {
+              leaders {
+                  id
+                  username
+                  title
+                  picture
+                  points
+              }
+          }
+          `,
+    );
+    if (typeof leaders === 'undefined') throw new Error('Empty leaders data');
+    return leaders;
   }
 }
 

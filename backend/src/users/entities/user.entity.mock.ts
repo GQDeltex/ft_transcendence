@@ -13,6 +13,7 @@ export const createMockUser = (options: Partial<User> = {}): User => {
   user.campus = 'Berlin';
   user.country = 'Germany';
   user.coalition = 'Fluvius';
+  user.points = 0;
   user.inventory = [];
   user.equipped = [];
   user.status = 'offline';
