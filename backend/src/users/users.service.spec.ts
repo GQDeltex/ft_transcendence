@@ -12,6 +12,8 @@ import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.e
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 import { HttpModule } from '@nestjs/axios';
 import { AllowedUpdateEquippedItemsMethod } from './dto/update-equipped-items.input';
+import { ChannelUserService } from 'src/prc/channel/channel-user/channel-user.service';
+import { ChannelUserResolver } from 'src/prc/channel/channel-user/channel-user.resolver';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -33,6 +35,8 @@ describe('UsersService', () => {
         ConfigService,
         UsersService,
         PrcGateway,
+        ChannelUserService,
+        ChannelUserResolver,
         ChannelService,
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
