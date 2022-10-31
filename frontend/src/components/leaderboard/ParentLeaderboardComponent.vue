@@ -6,14 +6,18 @@ import pongking_boi_silver from '../../assets/pongking_boi_silver.png';
 import pongking_boi_bronze from '../../assets/pongking_boi_bronze.png';
 import { ref } from 'vue';
 import UserService from '@/service/UserService';
+import { useErrorStore } from '@/store/error';
 import type { User } from '@/store/user';
 
 defineProps<{
   categoryName: string;
 }>();
 
+const errorStore = useErrorStore();
 const leaders = ref<Partial<User>[]>([]);
-UserService.findLeaders().then((users) => (leaders.value = users));
+UserService.findLeaders()
+  .then((users) => (leaders.value = users))
+  .catch((error) => errorStore.setError(error.message));
 </script>
 
 <template>
