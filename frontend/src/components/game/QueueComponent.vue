@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onBeforeMount, onUnmounted, ref, nextTick } from 'vue';
 import { socket } from '@/service/socket';
 import PongComponent from './PongComponent.vue';
 import EndScreenComponent from './EndScreenComponent.vue';
@@ -9,7 +9,8 @@ import {
   GameStatusEnum,
   useUserStore,
 } from '@/store/user';
-import { useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import type { _RouteLocationBase } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
@@ -55,33 +56,54 @@ socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   }
   console.log('ich will ein spiel mit dir spiel');
   await getPlayerUsers(player1Id, player2Id);
+  await nextTick();
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
   displayState.value = 'start';
 });
 
-onMounted(async () => {
-  if (typeof route.query.inviterId === 'string') {
+const checkGame = async (url: _RouteLocationBase) => {
+  if (typeof url.query.inviterId === 'string') {
+    await nextTick();
     if (
-      userStore.getGameRequestStatus(+route.query.inviterId) !==
-      GameStatusEnum.RECEIVED
+      userStore.getGameRequestStatus(+url.query.inviterId) !==
+        GameStatusEnum.RECEIVED ||
+      !(await userStore.updateGameRequest(
+        AllowedUpdateGameRequestMethod.ACCEPT,
+        +url.query.inviterId,
+      ))
     )
       await router.push({ name: 'ChatView' });
-    await userStore.updateGameRequest(
-      AllowedUpdateGameRequestMethod.ACCEPT,
-      +route.query.inviterId,
-    );
-  } else if (typeof route.query.gameId === 'string') {
-    socket.emit('inviteReady', { gameId: +route.query.gameId });
+  } else if (typeof url.query.gameId === 'string') {
+    await nextTick();
+    socket.emit('inviteReady', { gameId: +url.query.gameId });
   } else {
     join_queue();
   }
+};
+
+onBeforeMount(async () => {
+  await checkGame(route);
+});
+
+onBeforeRouteUpdate(async (to) => {
+  if (displayState.value === 'start') {
+    console.log('yay');
+  }
+  await checkGame(to);
 });
 
 onUnmounted(() => {
   leave_queue();
-  socket.off('Game');
 });
+
+const backToQueue = async () => {
+  displayState.value = 'queue';
+  gameIdRef.value = 0;
+  playerPriorityRef.value = false;
+  await nextTick();
+  join_queue();
+};
 </script>
 
 <template>
@@ -89,7 +111,11 @@ onUnmounted(() => {
     <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
     <div class="loader"></div>
   </div>
-  <EndScreenComponent v-else-if="displayState === 'end'" :game-id="gameIdRef" />
+  <EndScreenComponent
+    v-else-if="displayState === 'end'"
+    :game-id="gameIdRef"
+    @back="backToQueue"
+  />
   <PongComponent
     v-else
     :game-id="gameIdRef"

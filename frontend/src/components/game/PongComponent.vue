@@ -156,7 +156,7 @@ onMounted(() => {
       ball.set_speed(0);
       playerPad.sety(50);
       remotePad.sety(50);
-      ball.reset;
+      ball.reset([playerScore.value, remoteScore.value]);
     }
   });
 

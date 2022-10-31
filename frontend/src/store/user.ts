@@ -295,7 +295,7 @@ export const useUserStore = defineStore('user', {
     async updateGameRequest(
       method: AllowedUpdateGameRequestMethod,
       userId: number,
-    ) {
+    ): Promise<boolean> {
       try {
         const user: Partial<User> = await UserService.updateGameRequest(
           method,
@@ -303,8 +303,10 @@ export const useUserStore = defineStore('user', {
         );
         this.sentGameRequests_id = user.sentGameRequests_id ?? [];
         this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+        return true;
       } catch (error) {
         useErrorStore().setError((error as Error).message);
+        return false;
       }
     },
   },
