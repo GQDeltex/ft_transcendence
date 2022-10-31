@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ChildPeopleComponent from '../peoples/ChildPeopleComponent.vue';
 import ModalUpdatePasswordComponent from './ModalUpdatePasswordComponent.vue';
 import ModalUpdateAdminComponent from './ModalUpdateAdminComponent.vue';
@@ -10,6 +10,7 @@ import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
 import ChannelService from '@/service/ChannelService';
 import type { Channel } from '@/store/message';
+import { useUserStore } from '@/store/user';
 
 const passModalActive = ref(false);
 const adminModalActive = ref(false);
@@ -17,6 +18,7 @@ const banModalActive = ref(false);
 const muteModalActive = ref(false);
 const emits = defineEmits(['leave', 'updatePublic', 'chat']);
 const errorStore = useErrorStore();
+const userStore = useUserStore();
 
 const props = defineProps<{
   clients: User[];
@@ -80,6 +82,67 @@ const onClose = () => {
 const onChat = (username: string) => {
   emits('chat', username);
 };
+
+const userList = computed(() => {
+  const tmp = props.clients.filter((user) => {
+    return props.currentChannel.userList.some(
+      (channelUser) => channelUser.user_id == user.id,
+    );
+  });
+  return tmp;
+});
+
+const adminList = computed(() => {
+  const tmp = props.clients.filter((user) => {
+    return props.currentChannel.userList.some(
+      (channelUser) =>
+        channelUser.user_id == user.id && channelUser.admin == true,
+    );
+  });
+  return tmp;
+});
+
+const banList = computed(() => {
+  const tmp = props.clients.filter((user) => {
+    return props.currentChannel.userList.some(
+      (channelUser) =>
+        channelUser.user_id == user.id && channelUser.ban == true,
+    );
+  });
+  return tmp;
+});
+
+const muteList = computed(() => {
+  const tmp = props.clients.filter((user) => {
+    return props.currentChannel.userList.some(
+      (channelUser) =>
+        channelUser.user_id == user.id && channelUser.mute == true,
+    );
+  });
+  return tmp;
+});
+
+const ownerList = computed(() => {
+  const tmp = props.clients.filter((user) => {
+    return props.currentChannel.userList.some(
+      (channelUser) =>
+        channelUser.user_id == user.id && channelUser.owner == true,
+    );
+  });
+  return tmp;
+});
+
+const isOwner = computed(() => {
+  if (ownerList.value.find((user) => user.id == userStore.id) != null)
+    return true;
+  return false;
+});
+
+const isAdmin = computed(() => {
+  if (adminList.value.find((user) => user.id == userStore.id) != null)
+    return true;
+  return false;
+});
 </script>
 
 <template>
@@ -88,31 +151,31 @@ const onChat = (username: string) => {
     <div class="list">
       <div class="subheader" @click="chatToggle = !chatToggle">In Chat ▾</div>
       <div v-show="chatToggle" class="people">
-        <template v-for="client in clients" :key="client.id">
+        <template v-for="client in userList" :key="client.userId">
           <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="subheader" @click="adminToggle = !adminToggle">Admins ▾</div>
       <div v-show="adminToggle" class="people">
-        <template v-for="client in clients" :key="client.id">
+        <template v-for="client in adminList" :key="client.id">
           <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="subheader" @click="banToggle = !banToggle">Banned ▾</div>
       <div v-show="banToggle" class="people">
-        <template v-for="client in clients" :key="client.id">
+        <template v-for="client in banList" :key="client.id">
           <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="subheader" @click="muteToggle = !muteToggle">Muted ▾</div>
       <div v-show="muteToggle" class="people">
-        <template v-for="client in clients" :key="client.id">
+        <template v-for="client in muteList" :key="client.id">
           <ChildPeopleComponent :client="client" @chat="onChat" />
         </template>
       </div>
       <div class="buttonList">
         <span class="Text"> Options </span>
-        <span>
+        <span v-if="isOwner">
           <button class="button" @click="changePassword">
             Change Password
           </button>
@@ -121,25 +184,25 @@ const onChat = (username: string) => {
             @close="onClose"
           />
         </span>
-        <span>
+        <span v-if="props.currentChannel.name.startsWith('#')">
           <button class="button" @click="leave">Leave Chat</button>
         </span>
-        <span>
+        <span v-if="isOwner">
           <button class="button" @click="updateAdmin">Make Admin</button>
           <ModalUpdateAdminComponent
             v-show="adminModalActive"
             @close="onClose"
           />
         </span>
-        <span>
+        <span v-if="isAdmin || isOwner">
           <button class="button" @click="banUser">Ban User</button>
           <ModalBanUserComponent v-show="banModalActive" @close="onClose" />
         </span>
-        <span>
+        <span v-if="isAdmin || isOwner">
           <button class="button" @click="muteUser">Mute User</button>
           <ModalMuteUserComponent v-show="muteModalActive" @close="onClose" />
         </span>
-        <span>
+        <span v-if="isAdmin || isOwner">
           <button class="button" @click="makePublic">
             Make {{ isPrivate ? 'Public' : 'Private' }}
           </button>
