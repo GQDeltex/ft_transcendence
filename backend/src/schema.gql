@@ -33,6 +33,7 @@ type User {
   coalition: String!
   campus: String!
   country: String!
+  points: Int!
   inventory: [Int!]!
   lastLoggedIn: Timestamp!
   twoFAEnable: Boolean!
@@ -75,6 +76,7 @@ type Query {
   user(id: Int): User!
   userByName(username: String!): User!
   userChannelList(username: String!): User!
+  leaders: [User!]!
   getItems: [Item!]!
   channels: [Channel!]!
   channelUsers: [ChannelUser!]!

@@ -340,6 +340,24 @@ class UserService {
       throw new Error('Empty equipped data');
     return updateEquippedItems;
   }
+
+  async findLeaders(): Promise<Partial<User>[]> {
+    const { leaders } = await graphQLService.query(
+      `
+          query {
+              leaders {
+                  id
+                  username
+                  title
+                  picture
+                  points
+              }
+          }
+          `,
+    );
+    if (typeof leaders === 'undefined') throw new Error('Empty leaders data');
+    return leaders;
+  }
 }
 
 export default new UserService();

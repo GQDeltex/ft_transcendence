@@ -52,6 +52,11 @@ export class UsersResolver {
     return await this.usersService.findUserChannelList(username);
   }
 
+  @Query(() => [User], { name: 'leaders' })
+  async findLeaders() {
+    return await this.usersService.findLeaders();
+  }
+
   @Mutation(() => User)
   async updateUsername(
     @CurrentJwtPayload() jwtPayload: JwtPayload,

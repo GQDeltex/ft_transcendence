@@ -92,6 +92,13 @@ export class UsersService {
     return channelUser;
   }
 
+  async findLeaders(): Promise<User[]> {
+    return await this.userRepository.find({
+      order: { points: 'DESC' },
+      take: 6,
+    });
+  }
+
   async update2FASecret(id: number, secret: string): Promise<void> {
     const result: UpdateResult = await this.userRepository.update(id, {
       twoFASecret: secret,

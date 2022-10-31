@@ -67,14 +67,15 @@ export class GameService {
     console.log('list', await this.queuedPlayerRepository.find());
   }
 
-  async EndGame(gameId: number, score: number[]) {
+  async endGame(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
-    game.state = GameState.ENDED;
-    game.player1.status = 'online';
-    game.player2.status = 'online';
-    console.log(score);
     game.score1 = score[1];
     game.score2 = score[0];
+    game.state = GameState.ENDED;
+    game.player1.status = 'online';
+    game.player1.points += game.score1;
+    game.player2.status = 'online';
+    game.player2.points += game.score2;
     await this.gameRepository.save(game);
   }
 }
