@@ -2,7 +2,10 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { socket } from '../../service/socket';
 import PongComponent from './PongComponent.vue';
+import EndScreenComponent from './EndScreenComponent.vue';
 import UserService from '@/service/UserService';
+
+const displayState = ref('queue');
 
 onUnmounted(async () => {
   leave_queue();
@@ -12,7 +15,6 @@ onMounted(async () => {
   join_queue();
 });
 
-const displayState = ref(true);
 const gameIdRef = ref(0);
 const playerPriorityRef = ref(false);
 
@@ -34,6 +36,7 @@ const player2User = ref<{
 function join_queue() {
   socket.emit('queue', { event: 'JOIN' });
 }
+
 function leave_queue() {
   socket.emit('queue', { event: 'LEAVE' });
 }
@@ -46,10 +49,12 @@ async function gettem(player1Id: number, player2Id: number) {
 // playerIDs to check validity of messages for streaming implementation later™
 socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
   if (gameId < 0) {
-    displayState.value = true;
+    // displayState.value = true;
+    displayState.value = 'end';
     return;
   }
-  displayState.value = false;
+  //   displayState.value = false;
+  displayState.value = 'start';
   console.log('ich will ein spiel mit dir spielen');
   gettem(player1Id, player2Id);
   gameIdRef.value = gameId;
@@ -58,10 +63,11 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
 </script>
 
 <template>
-  <div v-if="displayState" class="parent">
+  <div v-if="displayState === 'queue'" class="parent">
     <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
     <div class="loader"></div>
   </div>
+  <EndScreenComponent v-else-if="displayState === 'end'" :game-id="gameIdRef" />
   <PongComponent
     v-else
     :game-id="gameIdRef"
