@@ -124,7 +124,7 @@ ___
 
 ### joinChannel
 
-▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private }\>
+▸ **joinChannel**(`user`, `client`, `channelInput`): `Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private; `userList`: [`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[] = channel.userList }\>
 
 It creates a new channel and adds the user to it.
 
@@ -138,7 +138,7 @@ It creates a new channel and adds the user to it.
 
 #### Returns
 
-`Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private }\>
+`Promise`<{ `id`: `number` = channel.id; `name`: `string` = channel.name; `private`: `boolean` = channel.private; `userList`: [`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)[] = channel.userList }\>
 
 #### Defined in
 
@@ -148,7 +148,7 @@ ___
 
 ### leaveChannel
 
-▸ **leaveChannel**(`jwtPayload`, `client`, `leaveChannelInput`): `Promise`<`void`\>
+▸ **leaveChannel**(`jwtPayload`, `client`, `leaveChannelInput`): `Promise`<`boolean`\>
 
 #### Parameters
 
@@ -160,11 +160,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`<`boolean`\>
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:187](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L187)
+[src/prc/prc.gateway.ts:192](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L192)
 
 ___
 
