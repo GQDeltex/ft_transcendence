@@ -129,19 +129,34 @@ onMounted(() => {
     }
   }
 
-  document.addEventListener('keydown', (e) => {
+  function handleUp(e: KeyboardEvent): void {
+    if (e.repeat) return;
+    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
+      remotePad.changeDir(0);
+    }
+  }
+
+  function handleDown(e: KeyboardEvent): void {
     if (e.repeat) return;
     if (e.code == 'ArrowUp') {
       remotePad.changeDir(-10);
     } else if (e.code == 'ArrowDown') {
       remotePad.changeDir(10);
     }
-  });
+  }
 
-  document.addEventListener('keyup', (e) => {
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir(0);
+  window.addEventListener('keydown', handleDown);
+
+  window.addEventListener('keyup', handleUp);
+
+  socket.on('Game', ({ gameId }) => {
+    if (gameId < 0) {
+      window.removeEventListener('keydown', handleDown);
+      window.removeEventListener('keyup', handleUp);
+      ball.set_speed(0);
+      playerPad.sety(50);
+      remotePad.sety(50);
+      ball.reset;
     }
   });
 
@@ -154,6 +169,7 @@ onMounted(() => {
       playerScore.value = e.score[1];
       playerPad.sety(50);
       remotePad.sety(50);
+      ball.set_speed(30);
     }
   });
 
