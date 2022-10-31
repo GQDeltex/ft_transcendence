@@ -41,7 +41,7 @@ export class GameGateway {
   ) {}
 
   @SubscribeMessage('gameData')
-  handleMessage(
+  async handleMessage(
     @ConnectedSocket() client: Socket,
     @CurrentUserFromWs() jwtPayload: JwtPayload,
     @MessageBody('changeDir') changeDir: number | number[],
@@ -50,7 +50,7 @@ export class GameGateway {
     @MessageBody('gameId') gameId: number,
   ) {
     if (typeof score !== 'undefined' && (score[0] >= 10 || score[1] >= 10)) {
-      this.gameService.endGame(gameId, score);
+      await this.gameService.endGame(gameId, score);
       client.to(`&${gameId}`).emit('Game', { gameId: -1 });
       client.emit('Game', { gameId: -1 });
     }
