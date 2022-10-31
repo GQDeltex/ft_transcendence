@@ -22,6 +22,19 @@ const haswon = computed(() => {
   return counter;
 });
 
+const haslost = computed(() => {
+  let count = 0;
+  for (let game of games.value) {
+    if (game.player1.id === user?.user.value.id && game.score1 < game.score2) {
+      count++;
+    }
+    if (game.player2.id === user?.user.value.id && game.score2 < game.score1) {
+      count++;
+    }
+  }
+  return count;
+});
+
 if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
   watchEffect(async () => {
     GameService.findAll('ended', user.user.value.id).then(
@@ -42,8 +55,8 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
       />
       <ChildAchievementComponent
         v-if="games.length > 0"
-        header="First Steps"
-        text="First Game"
+        header="Gamer"
+        text="Played First Game"
         picture=""
       />
       <ChildAchievementComponent
@@ -54,14 +67,26 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
       />
       <ChildAchievementComponent
         v-if="haswon > 0"
-        header="Smol PongKing"
+        header="Alpha"
         text="Won a Game"
         picture=""
       />
       <ChildAchievementComponent
         v-if="haswon > 4"
-        header="Smol PongKing"
+        header="Sigma"
         text="Won Five Games"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="haslost > 0"
+        header="Noob"
+        text="Lost a Game"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="haslost > 4"
+        header="L+R"
+        text="Lost Five Games"
         picture=""
       />
     </div>
