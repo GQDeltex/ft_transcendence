@@ -50,6 +50,7 @@
 - [users/dto/update-blocking.input](modules/users_dto_update_blocking_input.md)
 - [users/dto/update-equipped-items.input](modules/users_dto_update_equipped_items_input.md)
 - [users/dto/update-friendship.input](modules/users_dto_update_friendship_input.md)
+- [users/dto/update-gamerequest.input](modules/users_dto_update_gamerequest_input.md)
 - [users/dto/update-username.input](modules/users_dto_update_username_input.md)
 - [users/entities/item.entity](modules/users_entities_item_entity.md)
 - [users/entities/user.entity](modules/users_entities_user_entity.md)
