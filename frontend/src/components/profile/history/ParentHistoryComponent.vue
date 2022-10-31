@@ -41,12 +41,11 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 
 .scroll {
   overflow-y: scroll;
-  max-height: inherit;
+  max-height: 96%;
 }
 .frame {
   border: 1px solid #202020;
   padding: 1vw;
   max-height: inherit;
-  /* overflow-y: scroll; */
 }
 </style>
