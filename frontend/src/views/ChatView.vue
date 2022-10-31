@@ -5,7 +5,7 @@ import ParentChannelsComponent from '../components/chat/channels/ParentChannelsC
 import ParentRequestsComponent from '../components/chat/requests/ParentRequestsComponent.vue';
 import ParentOptionsComponent from '../components/chat/options/ParentOptionsComponent.vue';
 import ChannelService from '../service/ChannelService';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { socket } from '@/service/socket';
@@ -19,7 +19,13 @@ import type { Channel } from '@/store/message';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
-const currentChannel = ref<Channel>({ id: 0, name: '', private: true });
+const currentChannel = ref<Channel>({
+  id: 0,
+  name: '',
+  private: true,
+  password: '',
+  userList: [],
+});
 
 const users = ref<User[]>([]);
 const channels = ref<Channel[]>([]);
@@ -76,11 +82,20 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
   }
 });
 
+watch([() => userStore.friends, () => userStore.blocks], async () => {
+  try {
+    users.value = await UserService.findAll({ fetchPolicy: 'network-only' });
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
+});
+
 onMounted(async () => {
   try {
     users.value = await UserService.findAll();
     channels.value = await ChannelService.findAll();
-    if (channels.value.length > 0) currentChannel.value = channels.value[0];
+    if (channels.value.length > 0 && currentChannel.value == null)
+      currentChannel.value = channels.value[0];
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -91,12 +106,19 @@ onBeforeUnmount(() => {
   socket.off('onBlock');
 });
 
-const UpdateChannels = (channel: Channel) => {
-  currentChannel.value = channel;
+const UpdateChannels = (input: Channel) => {
+  // currentChannel.value = await channels.value.find((channel) => channel.name === input.name);
+  currentChannel.value = input;
 };
 
 const UpdateChat = (username: string) => {
-  currentChannel.value = { id: 0, name: username, private: true };
+  currentChannel.value = {
+    id: 0,
+    name: username,
+    private: true,
+    password: '',
+    userList: [],
+  };
 };
 
 const joinChannel = (channel: Channel) => {
@@ -109,7 +131,14 @@ const leaveChannel = (channelName: string) => {
     ...channels.value.filter((channel) => channel.name !== channelName),
   ];
   if (channels.value.length > 0) currentChannel.value = channels.value[0];
-  else currentChannel.value = { id: 0, name: '', private: true };
+  else
+    currentChannel.value = {
+      id: 0,
+      name: '',
+      private: true,
+      password: '',
+      userList: [],
+    };
 };
 
 const onUpdatePublic = (updatedChannel: Channel) => {
