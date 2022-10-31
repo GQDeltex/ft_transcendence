@@ -9,6 +9,15 @@ class ChannelService {
 				id
 				name
 				private
+        userList {
+          id
+          user_id
+          channel_name
+          admin
+          owner
+          ban
+          mute
+          }
 			  }
 			}
 		  `,
@@ -20,12 +29,21 @@ class ChannelService {
   async updatePublic(channelName: string, pp: boolean) {
     const { updateChannelPublic } = await graphQLService.mutation(
       `
-			  mutation UpdateChannelPublic($channelName: String!, $private: Boolean!) {
+			  mutation updateChannelPublic($channelName: String!, $private: Boolean!) {
 				updateChannelPublic(channelName: $channelName, private: $private) {
 				  id
 				  name
 				  private
-				}
+          userList {
+            id
+            user_id
+            channel_name
+            admin
+            owner
+            ban
+            mute
+            }
+				  }
 			  }
 			`,
       { channelName, private: pp },

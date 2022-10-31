@@ -19,10 +19,9 @@
 - [findAll](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findall)
 - [findAllInChannel](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findallinchannel)
 - [findOne](prc_channel_channel_user_channel_user_service.ChannelUserService.md#findone)
-- [unban](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unban)
 - [unmute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#unmute)
 - [updateAdmin](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateadmin)
-- [updateBan](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updateban)
+- [updateBanRepo](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updatebanrepo)
 - [updateMute](prc_channel_channel_user_channel_user_service.ChannelUserService.md#updatemute)
 
 ## Constructors
@@ -113,26 +112,6 @@ ___
 
 ___
 
-### unban
-
-▸ **unban**(`channelUserID`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `channelUserID` | `number` |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-[src/prc/channel/channel-user/channel-user.service.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L55)
-
-___
-
 ### unmute
 
 ▸ **unmute**(`channelUserID`): `Promise`<`void`\>
@@ -149,7 +128,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:75](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L75)
+[src/prc/channel/channel-user/channel-user.service.ts:83](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L83)
 
 ___
 
@@ -173,23 +152,24 @@ ___
 
 ___
 
-### updateBan
+### updateBanRepo
 
-▸ **updateBan**(`channelUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+▸ **updateBanRepo**(`channelUserID`, `bool`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `channelUser` | [`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md) |
+| `channelUserID` | `number` |
+| `bool` | `boolean` |
 
 #### Returns
 
-`Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+`Promise`<`void`\>
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L64)
+[src/prc/channel/channel-user/channel-user.service.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L55)
 
 ___
 
@@ -209,4 +189,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.service.ts:84](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L84)
+[src/prc/channel/channel-user/channel-user.service.ts:92](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.service.ts#L92)

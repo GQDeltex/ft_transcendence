@@ -33,6 +33,7 @@ type User {
   coalition: String!
   campus: String!
   country: String!
+  points: Int!
   inventory: [Int!]!
   lastLoggedIn: Timestamp!
   twoFAEnable: Boolean!
@@ -75,6 +76,7 @@ type Query {
   user(id: Int): User!
   userByName(username: String!): User!
   userChannelList(username: String!): User!
+  leaders: [User!]!
   getItems: [Item!]!
   channels: [Channel!]!
   channelUsers: [ChannelUser!]!
@@ -91,6 +93,7 @@ type Mutation {
   updateEquippedItems(method: AllowedUpdateEquippedItemsMethod!, itemId: Int!): User!
   joinChannel(name: String!, password: String!): Channel!
   leaveChannel(name: String!): Channel
+  updateChannelPublic(channelName: String!, private: Boolean!): Channel!
   updatePassword(channel_name: String!, newPassword: String!): Channel!
   updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
   updateBan(channel_name: String!, banUser: Int!): ChannelUser!

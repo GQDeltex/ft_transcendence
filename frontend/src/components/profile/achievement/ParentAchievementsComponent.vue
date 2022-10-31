@@ -1,34 +1,92 @@
 <script setup lang="ts">
 import ChildAchievementComponent from './ChildAchievementComponent.vue';
+import GameService from '@/service/GameService';
+import type { Game } from '@/service/GameService';
+import type { User } from '@/store/user';
+import type { Ref } from 'vue';
+import { ref, inject, watchEffect, computed } from 'vue';
+
+const user = inject<{ user: Ref<User>; isMe: Ref<boolean> }>('user');
+const games = ref<Game[]>([]);
+
+const haswon = computed(() => {
+  let counter = 0;
+  for (let game of games.value) {
+    if (game.player1.id === user?.user.value.id && game.score1 > game.score2) {
+      counter++;
+    }
+    if (game.player2.id === user?.user.value.id && game.score2 > game.score1) {
+      counter++;
+    }
+  }
+  return counter;
+});
+
+const haslost = computed(() => {
+  let count = 0;
+  for (let game of games.value) {
+    if (game.player1.id === user?.user.value.id && game.score1 < game.score2) {
+      count++;
+    }
+    if (game.player2.id === user?.user.value.id && game.score2 < game.score1) {
+      count++;
+    }
+  }
+  return count;
+});
+
+if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
+  watchEffect(async () => {
+    GameService.findAll('ended', user.user.value.id).then(
+      (gamesreturn: Game[]) => (games.value = gamesreturn),
+    );
+  });
+}
 </script>
 
 <template>
   <div class="achievementsParent">
-    <span class="text">Achievements (1)</span>
+    <span class="text">Achievements</span>
     <div class="achievements">
       <ChildAchievementComponent
         header="Smol PongKing"
-        text="first login"
+        text="First Login"
         picture=""
       />
       <ChildAchievementComponent
-        header="Smol PongKing"
-        text="second login"
+        v-if="games.length > 0"
+        header="Gamer"
+        text="Played First Game"
         picture=""
       />
       <ChildAchievementComponent
-        header="Smol PongKing"
-        text="Played a Pong game"
+        v-if="games.length > 4"
+        header="Warming Up"
+        text="Five Games"
         picture=""
       />
       <ChildAchievementComponent
-        header="Smol PongKing"
-        text="Lost a Pong game"
+        v-if="haswon > 0"
+        header="Alpha"
+        text="Won a Game"
         picture=""
       />
       <ChildAchievementComponent
-        header="Smol PongKing"
-        text="Lost a Pong game twice"
+        v-if="haswon > 4"
+        header="Sigma"
+        text="Won Five Games"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="haslost > 0"
+        header="Noob"
+        text="Lost a Game"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="haslost > 4"
+        header="L+R"
+        text="Lost Five Games"
         picture=""
       />
     </div>
