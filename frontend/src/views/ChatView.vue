@@ -146,6 +146,7 @@ const onUpdatePublic = (updatedChannel: Channel) => {
     ...channels.value.filter((channel) => channel.name !== updatedChannel.name),
     updatedChannel,
   ];
+  currentChannel.value = updatedChannel;
   console.log('current channel updated public');
 };
 </script>

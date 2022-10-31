@@ -8,11 +8,12 @@ import {
 } from 'typeorm';
 import { Channel } from './entities/channel.entity';
 import { ChannelUser } from './channel-user/entities/channel-user.entity';
-import { CreateChannelInput } from './channel.input';
+import { CreateChannelInput, ToggleChannelPpInput } from './channel.input';
 import { User } from '../../users/entities/user.entity';
 import { WsException } from '@nestjs/websockets';
 import { Message } from '../message/message';
 import * as bcrypt from 'bcrypt';
+import { UserInputError } from 'apollo-server-express';
 
 @Injectable()
 export class ChannelService {
@@ -123,6 +124,27 @@ export class ChannelService {
       //still needs to rejoin room(if they are not being stupid and just clicking join again while being in the room)
     } else throw new WsException('Bad Password');
     return this.findOne(+channel.id); //'+' VIC ;)
+  }
+
+  async toggleChannel(toggleChannelPpInput: ToggleChannelPpInput, user: User) {
+    const channel: Channel = await this.findOne(
+      toggleChannelPpInput.channelName,
+    );
+    const channelOwner: ChannelUser | undefined = channel.userList.find(
+      (channelUser) => {
+        if (channelUser.user_id == user.id) return true;
+        return false;
+      },
+    );
+    if (typeof channelOwner == 'undefined')
+      throw new UserInputError('You are not in this channel');
+    if (channelOwner.owner == false)
+      throw new UserInputError('You are not allowed to change this property');
+    if (toggleChannelPpInput.private != channel.private) {
+      channel.private = toggleChannelPpInput.private;
+      await this.channelRepository.save(channel);
+    }
+    return channel;
   }
 
   async leave(channelName: string, user: User): Promise<Channel | null> {

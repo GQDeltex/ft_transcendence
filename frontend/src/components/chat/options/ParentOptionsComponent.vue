@@ -30,7 +30,7 @@ const banToggle = ref(true);
 const adminToggle = ref(true);
 const muteToggle = ref(true);
 
-const isPrivate = ref(props.currentChannel.private);
+// const isPrivate = ref(props.currentChannel.private);
 
 const leave = () => {
   try {
@@ -65,7 +65,7 @@ const makePublic = async () => {
       props.currentChannel.name,
       !props.currentChannel.private,
     );
-    isPrivate.value = updatedChannel.private;
+    // isPrivate.value = updatedChannel.private;
     emits('updatePublic', updatedChannel);
   } catch (error) {
     errorStore.setError((error as Error).message);
@@ -204,7 +204,7 @@ const isAdmin = computed(() => {
         </span>
         <span v-if="isOwner">
           <button class="button" @click="makePublic">
-            Make {{ isPrivate ? 'Public' : 'Private' }}
+            Make {{ props.currentChannel.private ? 'Public' : 'Private' }}
           </button>
         </span>
       </div>
