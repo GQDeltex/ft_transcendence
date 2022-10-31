@@ -19,6 +19,7 @@ import { JwtPayload } from '../auth/strategy/jwt.strategy';
 import { AllExceptionFilter } from '../tools/ExceptionFilter';
 import { UpdateUserBlockingInput } from './dto/update-blocking.input';
 import itemList, { Item } from './entities/item.entity';
+import { UpdateUserEquippedItemsInput } from './dto/update-equipped-items.input';
 
 @UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
@@ -49,6 +50,11 @@ export class UsersResolver {
   @Query(() => User, { name: 'userChannelList' })
   async findUserChannelList(@Args('username') username: string) {
     return await this.usersService.findUserChannelList(username);
+  }
+
+  @Query(() => [User], { name: 'leaders' })
+  async findLeaders() {
+    return await this.usersService.findLeaders();
   }
 
   @Mutation(() => User)
@@ -96,10 +102,21 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async updateInventory(
-    @CurrentJwtPayload() user: JwtPayload,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args('orderId', { type: () => String }) orderId: string,
   ): Promise<User> {
-    return this.usersService.updateInventory(user.id, orderId);
+    return this.usersService.updateInventory(jwtPayload.id, orderId);
+  }
+
+  @Mutation(() => User)
+  async updateEquippedItems(
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
+    @Args() updateUserEquippedItemsInput: UpdateUserEquippedItemsInput,
+  ): Promise<User> {
+    return this.usersService.updateEquippedItems(
+      jwtPayload.id,
+      updateUserEquippedItemsInput,
+    );
   }
 
   @ResolveField(() => String)
@@ -109,11 +126,11 @@ export class UsersResolver {
   ): Promise<string> {
     if (jwtPayload.id === user.id) return user.status;
     if (
-      !user.following_id?.includes(jwtPayload.id) &&
-      !user.followers_id?.includes(jwtPayload.id)
+      user.following_id?.includes(jwtPayload.id) &&
+      user.followers_id?.includes(jwtPayload.id)
     )
-      return 'offline';
-    return user.status;
+      return user.status;
+    return 'offline';
   }
 
   @ResolveField(() => [Int], { nullable: 'items' })
@@ -139,5 +156,10 @@ export class UsersResolver {
   @ResolveField(() => [Int], { nullable: 'items' })
   async blockedBy(@Parent() user: User): Promise<number[]> {
     return user.blockedBy_id ?? [];
+  }
+
+  @ResolveField(() => [Item], { nullable: 'items' })
+  async equipped(@Parent() user: User): Promise<Item[]> {
+    return itemList.filter((item) => user.equipped.includes(item.id));
   }
 }

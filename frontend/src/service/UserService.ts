@@ -6,6 +6,8 @@ import type {
   Item,
   User,
 } from '@/store/user';
+import type { AllowedUpdateEquippedItemsMethod } from '@/store/user';
+import type { QueryOptions } from '@apollo/client/core/watchQueryOptions';
 
 class UserService {
   async fetchJwt(code: string, bypassId?: string) {
@@ -146,6 +148,14 @@ class UserService {
             blocks
             blockedBy
             inventory
+            equipped {
+              id
+              type
+              name
+              description
+              picture
+              metadata
+            }
           }
         }
       `,
@@ -182,7 +192,7 @@ class UserService {
     return user;
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(queryOptions: Partial<QueryOptions> = {}): Promise<User[]> {
     const { users } = await graphQLService.query(
       `
         query {
@@ -202,6 +212,8 @@ class UserService {
           }
         }
       `,
+      {},
+      queryOptions,
     );
     if (typeof users === 'undefined') throw new Error('Empty users data');
     return users;
@@ -273,10 +285,12 @@ class UserService {
         query {
           getItems {
             id
+            type
             name
             description
             price
             picture
+            metadata
           }
         }
       `,
@@ -299,6 +313,50 @@ class UserService {
     if (typeof updateInventory === 'undefined')
       throw new Error('Empty inventory data');
     return updateInventory;
+  }
+
+  async updateEquippedItems(
+    method: AllowedUpdateEquippedItemsMethod,
+    itemId: number,
+  ): Promise<Partial<User>> {
+    const { updateEquippedItems } = await graphQLService.mutation(
+      `
+        mutation updateEquippedItems($method: AllowedUpdateEquippedItemsMethod!, $itemId: Int!) {
+          updateEquippedItems(method: $method, itemId: $itemId) {
+            equipped {
+              id
+              type
+              name
+              description
+              picture
+              metadata
+            }
+          }
+        }
+      `,
+      { method, itemId },
+    );
+    if (typeof updateEquippedItems === 'undefined')
+      throw new Error('Empty equipped data');
+    return updateEquippedItems;
+  }
+
+  async findLeaders(): Promise<Partial<User>[]> {
+    const { leaders } = await graphQLService.query(
+      `
+          query {
+              leaders {
+                  id
+                  username
+                  title
+                  picture
+                  points
+              }
+          }
+          `,
+    );
+    if (typeof leaders === 'undefined') throw new Error('Empty leaders data');
+    return leaders;
   }
 }
 

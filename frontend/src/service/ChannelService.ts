@@ -1,7 +1,8 @@
 import graphQLService from './GraphQLService';
+import type { QueryOptions } from '@apollo/client/core/watchQueryOptions';
 
 class ChannelService {
-  async findAll() {
+  async findAll(queryOptions: Partial<QueryOptions> = {}) {
     const { channels } = await graphQLService.query(
       `
 			query {
@@ -9,9 +10,20 @@ class ChannelService {
 				id
 				name
 				private
+        userList {
+          id
+          user_id
+          channel_name
+          admin
+          owner
+          ban
+          mute
+          }
 			  }
 			}
 		  `,
+      {},
+      queryOptions,
     );
     if (typeof channels === 'undefined') throw new Error('Empty channels data');
     return channels;
@@ -20,12 +32,21 @@ class ChannelService {
   async updatePublic(channelName: string, pp: boolean) {
     const { updateChannelPublic } = await graphQLService.mutation(
       `
-			  mutation UpdateChannelPublic($channelName: String!, $private: Boolean!) {
+			  mutation updateChannelPublic($channelName: String!, $private: Boolean!) {
 				updateChannelPublic(channelName: $channelName, private: $private) {
 				  id
 				  name
 				  private
-				}
+          userList {
+            id
+            user_id
+            channel_name
+            admin
+            owner
+            ban
+            mute
+            }
+				  }
 			  }
 			`,
       { channelName, private: pp },

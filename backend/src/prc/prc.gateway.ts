@@ -123,6 +123,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       msg: msg,
     };
     if (recipient instanceof User) {
+      if (sender.blocking_id?.includes(recipient.id)) {
+        throw new WsException('Unable to send message to blocked user.');
+      }
+      if (sender.blockedBy_id?.includes(recipient.id)) {
+        throw new WsException('Unable to send message.');
+      }
       if (recipient.socketId == '') {
         //throw new WsException('Recipient socketId empty');
         this.channelService.saveMessage(message);
@@ -136,6 +142,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       if (!sender.isInChannel(to))
         throw new WsException(
           'Recipient not found ###DEBUG Sender not on channel',
+        );
+      const sendChannelUser: ChannelUser =
+        await this.usersService.findChannelUser(sender.id, recipient.name);
+      if (sendChannelUser.mute || sendChannelUser.ban)
+        throw new WsException(
+          'Sender does not have permision to send messages',
         );
       recClient = client.to(recipient.name);
     }
@@ -169,7 +181,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
     console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
-    return { id: channel.id, name: channel.name, private: channel.private };
+    return {
+      id: channel.id,
+      name: channel.name,
+      private: channel.private,
+      userList: channel.userList,
+    };
   }
 
   @SubscribeMessage('leave')
@@ -177,19 +194,20 @@ export class PrcGateway implements OnGatewayDisconnect {
     @CurrentUserFromWs() jwtPayload: JwtPayload,
     @ConnectedSocket() client: Socket,
     @MessageBody('channel') leaveChannelInput: LeaveChannelInput,
-  ): Promise<void> {
+  ): Promise<boolean> {
     const user: User = await this.usersService.findOne(jwtPayload.id);
     const channel: Channel | null = await this.channelService.leave(
       leaveChannelInput.name,
       user,
     );
     client.leave(leaveChannelInput.name);
-    if (channel === null) return;
+    if (channel === null) return false;
     const leaveMessage: Message = {
       from: { id: -1, name: '' },
       to: { name: leaveChannelInput.name },
       msg: user.username + ' has left your channel.',
     };
     client.broadcast.to(leaveChannelInput.name).emit('status', leaveMessage);
+    return true;
   }
 }

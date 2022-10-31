@@ -4,6 +4,10 @@
 
 [game/game.gateway](../modules/game_game_gateway.md).GameGateway
 
+## Implements
+
+- `OnGatewayDisconnect`
+
 ## Table of contents
 
 ### Constructors
@@ -17,6 +21,7 @@
 
 ### Methods
 
+- [handleDisconnect](game_game_gateway.GameGateway.md#handledisconnect)
 - [handleMessage](game_game_gateway.GameGateway.md#handlemessage)
 - [handleQueueIn](game_game_gateway.GameGateway.md#handlequeuein)
 - [startGame](game_game_gateway.GameGateway.md#startgame)
@@ -35,7 +40,7 @@
 
 #### Defined in
 
-[src/game/game.gateway.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L38)
+[src/game/game.gateway.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L40)
 
 ## Properties
 
@@ -45,7 +50,7 @@
 
 #### Defined in
 
-[src/game/game.gateway.ts:40](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L40)
+[src/game/game.gateway.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L42)
 
 ___
 
@@ -55,13 +60,37 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L37)
+[src/game/game.gateway.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L38)
 
 ## Methods
 
+### handleDisconnect
+
+▸ **handleDisconnect**(`client`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+OnGatewayDisconnect.handleDisconnect
+
+#### Defined in
+
+[src/game/game.gateway.ts:45](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L45)
+
+___
+
 ### handleMessage
 
-▸ **handleMessage**(`client`, `jwtPayload`, `changeDir`, `score`, `name`, `gameId`): `void`
+▸ **handleMessage**(`client`, `jwtPayload`, `changeDir`, `score`, `name`, `gameId`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -76,11 +105,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-[src/game/game.gateway.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L43)
+[src/game/game.gateway.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L55)
 
 ___
 
@@ -102,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:63](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L63)
+[src/game/game.gateway.ts:78](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L78)
 
 ___
 
@@ -122,4 +151,4 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:75](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L75)
+[src/game/game.gateway.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L97)

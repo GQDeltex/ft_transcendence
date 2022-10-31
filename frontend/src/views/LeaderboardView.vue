@@ -3,8 +3,7 @@ import ParentLeaderboardComponent from '../components/leaderboard/ParentLeaderbo
 </script>
 
 <template>
-  <ParentLeaderboardComponent category-name="Top Viewed Player" />
-  <ParentLeaderboardComponent category-name="Top Performer" />
+  <ParentLeaderboardComponent category-name="Top Players" />
 </template>
 
 <style scoped></style>

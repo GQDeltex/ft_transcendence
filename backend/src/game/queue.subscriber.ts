@@ -3,7 +3,6 @@ import {
   DataSource,
   EntitySubscriberInterface,
   EventSubscriber,
-  InsertEvent,
   Repository,
 } from 'typeorm';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
@@ -26,13 +25,12 @@ export class QueuedPlayerSubscriber
     return QueuedPlayer;
   }
 
-  async afterInsert(event: InsertEvent<QueuedPlayer>) {
+  async afterInsert() {
     const players: QueuedPlayer[] = await this.queuedPlayerRepository.find({
       take: 2,
     }); // Nimm Zwei!
     if (players.length == 2) {
       await this.gameService.create(players[0], players[1]);
     }
-    console.log(`!BEFORE QueuedPlayer INSERTED: `, event.entity);
   }
 }

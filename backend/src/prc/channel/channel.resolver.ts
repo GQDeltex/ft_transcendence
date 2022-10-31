@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import {
   Args,
   Mutation,
@@ -11,14 +11,20 @@ import { CurrentUser } from '../../users/decorator/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { JwtAuthGuard } from '../../auth/guard/jwt.guard';
 import { ChannelService } from './channel.service';
-import { CreateChannelInput, LeaveChannelInput } from './channel.input';
+import {
+  CreateChannelInput,
+  LeaveChannelInput,
+  ToggleChannelPpInput,
+} from './channel.input';
 import { Channel } from './entities/channel.entity';
 import { TwoFAGuard } from '../../auth/guard/twoFA.guard';
 import { CurrentJwtPayload } from '../../users/decorator/current-jwt-payload.decorator';
 import { JwtPayload } from '../../auth/strategy/jwt.strategy';
+import { AllExceptionFilter } from '../../tools/ExceptionFilter';
 
 @Resolver(() => Channel)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
+@UseFilters(new AllExceptionFilter())
 export class ChannelResolver {
   constructor(private readonly channelService: ChannelService) {}
 
@@ -49,5 +55,13 @@ export class ChannelResolver {
     @CurrentUser() user: User,
   ): Promise<Channel | null> {
     return await this.channelService.leave(leaveChannelInput.name, user);
+  }
+
+  @Mutation(() => Channel)
+  async updateChannelPublic(
+    @Args() toggleChannelPpInput: ToggleChannelPpInput,
+    @CurrentUser() user: User,
+  ) {
+    return await this.channelService.toggleChannel(toggleChannelPpInput, user);
   }
 }
