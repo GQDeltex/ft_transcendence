@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[src/game/queue.subscriber.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L16)
+[src/game/queue.subscriber.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L15)
 
 ## Properties
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[src/game/queue.subscriber.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L18)
+[src/game/queue.subscriber.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L17)
 
 ___
 
@@ -60,19 +60,13 @@ ___
 
 #### Defined in
 
-[src/game/queue.subscriber.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L20)
+[src/game/queue.subscriber.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L19)
 
 ## Methods
 
 ### afterInsert
 
-▸ **afterInsert**(`event`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `event` | `InsertEvent`<[`QueuedPlayer`](game_entities_queuedplayer_entity.QueuedPlayer.md)\> |
+▸ **afterInsert**(): `Promise`<`void`\>
 
 #### Returns
 
@@ -84,7 +78,7 @@ EntitySubscriberInterface.afterInsert
 
 #### Defined in
 
-[src/game/queue.subscriber.ts:29](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L29)
+[src/game/queue.subscriber.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L28)
 
 ___
 
@@ -102,4 +96,4 @@ EntitySubscriberInterface.listenTo
 
 #### Defined in
 
-[src/game/queue.subscriber.ts:25](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L25)
+[src/game/queue.subscriber.ts:24](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/queue.subscriber.ts#L24)
