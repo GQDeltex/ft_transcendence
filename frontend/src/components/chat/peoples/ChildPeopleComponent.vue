@@ -6,10 +6,13 @@ import type { User } from '@/store/user';
 import {
   AllowedUpdateBlockingMethod,
   AllowedUpdateFriendshipMethod,
-  FriendStatusEnum,
+  AllowedUpdateGameRequestMethod,
   BlockStatusEnum,
+  FriendStatusEnum,
+  GameStatusEnum,
   useUserStore,
 } from '@/store/user';
+
 const emits = defineEmits(['chat']);
 
 const props = defineProps<{
@@ -72,7 +75,7 @@ const onFriend = async () => {
   }
 };
 
-const onDecline = async () => {
+const onFriendDecline = async () => {
   if (
     userStore.getFriendStatus(props.client.id) ===
     FriendStatusEnum.REQUEST_RECEIVED
@@ -101,8 +104,38 @@ const onBlock = async () => {
   }
 };
 
-const onInvite = () => {
-  console.log('onInvite');
+const onInvite = async () => {
+  switch (userStore.getGameRequestStatus(props.client.id)) {
+    case GameStatusEnum.RECEIVED:
+      await router.push({
+        name: 'PongView',
+        query: { inviterId: props.client.id },
+      });
+      break;
+    case GameStatusEnum.SENT:
+      await userStore.updateGameRequest(
+        AllowedUpdateGameRequestMethod.CANCEL,
+        props.client.id,
+      );
+      break;
+    case GameStatusEnum.NOT_SEND:
+      await userStore.updateGameRequest(
+        AllowedUpdateGameRequestMethod.SEND,
+        props.client.id,
+      );
+      break;
+  }
+};
+
+const onGameDecline = async () => {
+  if (
+    userStore.getGameRequestStatus(props.client.id) === GameStatusEnum.RECEIVED
+  ) {
+    await userStore.updateGameRequest(
+      AllowedUpdateGameRequestMethod.DECLINE,
+      props.client.id,
+    );
+  }
 };
 
 const onProfile = async () => {
@@ -118,7 +151,7 @@ const onChat = (username: string) => {
 </script>
 
 <template>
-  <div class="encaps">
+  <div class="flex">
     <div class="client" @click="onChat(client.username)">
       <RoundPictureComponent
         class="picture"
@@ -133,7 +166,7 @@ const onChat = (username: string) => {
         <span :style="statusStyle" class="status">{{ client.status }}</span>
       </div>
     </div>
-    <div class="vertdot" @click="toggle = !toggle">⋮</div>
+    <div class="dot" @click="toggle = !toggle">⋮</div>
   </div>
 
   <div v-show="toggle" class="popup">
@@ -154,28 +187,48 @@ const onChat = (username: string) => {
         userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
       "
       class="butt"
-      @click="onDecline"
+      @click="onFriendDecline"
     >
       Decline friend request
     </button>
     <button class="butt" @click="onBlock">
       {{ userStore.getBlockStatus(client.id) }}
     </button>
-    <button class="butt" @click="onInvite">Invite to Game</button>
+    <button
+      v-show="
+        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+      "
+      class="butt"
+      @click="onInvite"
+    >
+      {{ userStore.getGameRequestStatus(client.id) }}
+    </button>
+    <button
+      v-show="
+        userStore.getGameRequestStatus(client.id) === GameStatusEnum.RECEIVED &&
+        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+      "
+      class="butt"
+      @click="onGameDecline"
+    >
+      Decline game request
+    </button>
     <button class="butt" @click="onProfile">Show Profile</button>
   </div>
 </template>
 
 <style scoped>
-.encaps {
+.flex {
   display: flex;
 }
-.vertdot {
+
+.dot {
   margin-left: 0.5em;
   margin-right: 1em;
   cursor: pointer;
   font-size: 1.5vw;
 }
+
 .client {
   display: flex;
   align-items: center;
@@ -188,6 +241,7 @@ const onChat = (username: string) => {
   padding-left: 5%;
   cursor: pointer;
 }
+
 .username {
   color: white;
   font-size: 0.8vw;

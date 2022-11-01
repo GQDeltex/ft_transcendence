@@ -3,6 +3,7 @@
 import FriendRequestComponent from './FriendRequestComponent.vue';
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
+import GameRequestComponent from '@/components/chat/requests/GameRequestComponent.vue';
 
 defineProps<{
   clients: User[];
@@ -24,6 +25,14 @@ const userStore = useUserStore();
           "
           :client="client"
         />
+        <GameRequestComponent
+          v-if="
+            client.id !== userStore.id &&
+            userStore.receivedGameRequests_id.includes(client.id) &&
+            !userStore.blocks.includes(client.id)
+          "
+          :client="client"
+        />
       </template>
       <!--      <ChildRequestComponent-->
       <!--        key="4242"-->
@@ -31,13 +40,6 @@ const userStore = useUserStore();
       <!--        sender="René"-->
       <!--        request="has invited you to join the channel"-->
       <!--        target="SecretChannel"-->
-      <!--      />-->
-      <!--      <ChildRequestComponent-->
-      <!--        key="4242"-->
-      <!--        :client-id="4242"-->
-      <!--        sender="Vinny"-->
-      <!--        request="has invited you to play a game"-->
-      <!--        target=""-->
       <!--      />-->
     </div>
   </div>
