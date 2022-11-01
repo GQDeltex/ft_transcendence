@@ -49,15 +49,25 @@ const itemList: Item[] = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
     metadata: 'red',
   }),
+  // new Item({
+  //   id: 2,
+  //   type: 'map',
+  //   name: 'Yellow map',
+  //   description: 'Yellow map',
+  //   price: 6.69,
+  //   picture:
+  //     'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+  //   metadata: 'yellow',
+  // }),
   new Item({
     id: 2,
     type: 'map',
-    name: 'Yellow map',
-    description: 'Yellow map',
+    name: 'Soccer Court',
+    description: 'Soccer Court',
     price: 6.69,
     picture:
-      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
-    metadata: 'yellow',
+      'https://cdn.discordapp.com/attachments/809463378435244073/1035934712457334804/Soccer_field_-_empty.png',
+    metadata: 'green',
   }),
   new Item({
     id: 3,
@@ -79,14 +89,24 @@ const itemList: Item[] = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
     metadata: 'red',
   }),
+  // new Item({
+  //   id: 5,
+  //   type: 'ball',
+  //   name: 'Yellow ball',
+  //   description: 'Yellow ball',
+  //   price: 6.69,
+  //   picture:
+  //     'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+  //   metadata: 'yellow',
+  // }),
   new Item({
     id: 5,
     type: 'ball',
-    name: 'Yellow ball',
-    description: 'Yellow ball',
+    name: 'socccer ball',
+    description: 'socccer ball',
     price: 6.69,
     picture:
-      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+      'https://cdn.discordapp.com/attachments/809463378435244073/1035934712994222100/soccer-ball.gif',
     metadata: 'yellow',
   }),
 ];
