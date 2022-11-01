@@ -67,12 +67,12 @@ onUnmounted(() => {
 
 onMounted(async () => {
   graph();
-  console.log(props.player1ID);
-  console.log(props.player2ID);
+  // console.log(props.player1ID);
+  // console.log(props.player2ID);
   // player1.value = await UserService.findOneById(p   rops.player1ID);
   // player2.value = await UserService.findOneById(props.player2ID);
   // console.log('player1 = ' + player1.value.username + ' player2 ' + player2.value.username)
-  console.log(props.gameId);
+  // console.log(props.gameId);
   const field = new Element(document.getElementById('feld'), props.gameId);
   const ball = new Ball(
     document.getElementById('ball'),
