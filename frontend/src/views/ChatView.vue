@@ -115,7 +115,6 @@ onMounted(async () => {
   try {
     users.value = await UserService.findAll();
     channels.value = await ChannelService.findAll();
-    if (channels.value.length > 0) currentChannel.value = channels.value[0];
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
