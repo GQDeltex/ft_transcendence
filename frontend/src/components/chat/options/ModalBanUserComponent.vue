@@ -10,12 +10,12 @@ let channelName: Ref<string> = ref('');
 let banUser: Ref<string> = ref('');
 
 async function closeOk() {
-  console.log(
-    'channelName= ' + channelName.value + ' admin= ' + banUser.value, //DEBUG
-  );
+  // console.log(
+  //   'channelName= ' + channelName.value + ' admin= ' + banUser.value, //DEBUG
+  // );
   try {
     await ChannelUserService.banUser(channelName.value, +banUser.value);
-    console.log(channelName.value + ' admin is now ' + banUser.value); //DEBUG
+    // console.log(channelName.value + ' admin is now ' + banUser.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
