@@ -7,7 +7,7 @@ export class Ball extends Element {
   // private _direction: Vector; get-set- soon™
   public _direction: Vector;
   private _speed: number;
-  private _priority: boolean;
+  private _priority: number;
 
   private invinc = 0;
   private maxinvinc: number;
@@ -15,12 +15,13 @@ export class Ball extends Element {
     ballElem: HTMLElement | null,
     field: null | DOMRect,
     gameId: number,
-    priority: boolean,
+    priority: number,
+    emitter: boolean,
   ) {
     super(ballElem, gameId);
     this._priority = priority;
     this._direction = new Vector(0, 0);
-    this._speed = 40;
+    this._speed = 30;
     this.maxinvinc = this._speed * 10;
     this._shape = new Vector(
       field !== null
@@ -30,7 +31,7 @@ export class Ball extends Element {
         ? (super.getHeight() / Math.abs(field.bottom - field.top)) * 100
         : 0,
     );
-    this.reset([0, 0]);
+    this.reset([0, 0], emitter);
   }
 
   // later functions depend on pixel values in screen
@@ -47,12 +48,12 @@ export class Ball extends Element {
         : 0;
   }
 
-  reset(score: number[]) {
+  reset(score: number[], emitter: boolean) {
     this.set_pos_x(50);
     this.set_pos_y(50);
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
-    if (this._priority) {
+    if (this._priority === 0 && emitter) {
       socket.emit('gameData', {
         changeDir: [
           -this._direction.x,
@@ -69,7 +70,7 @@ export class Ball extends Element {
   }
 
   changeDir(dir: number[]) {
-    if (!(typeof dir[2] === 'undefined' || typeof dir[2] === 'undefined')) {
+    if (!(typeof dir[2] === 'undefined' || typeof dir[3] === 'undefined')) {
       this.set_pos_x(dir[2]);
       this.set_pos_y(dir[3]);
     }
@@ -116,7 +117,7 @@ export class Ball extends Element {
     else console.log('7 failiure, no object assigned\n');
   }
 
-  step(paddleOp: null | DOMRect) {
+  step(paddleOp: null | DOMRect, emitter: boolean) {
     //move step
     this.set_pos_x(
       parseFloat(String(this.get_pos_x())) +
@@ -140,7 +141,7 @@ export class Ball extends Element {
     // paddle collision
     const rect: DOMRect | null = super.getRect();
     if (rect === null) return;
-    if (this.invinc <= 0 && this.isCollision(paddleOp, rect)) {
+    if (emitter && this.invinc <= 0 && this.isCollision(paddleOp, rect)) {
       this.invinc = this.maxinvinc;
       this._direction.x = -1;
       this.set_pos_x(
@@ -182,10 +183,10 @@ export class Ball extends Element {
     return false;
   }
 
-  public update(delta: number, paddleOp: null | DOMRect) {
+  public update(delta: number, paddleOp: null | DOMRect, emitter: boolean) {
     let i = 0;
     while (i < delta) {
-      this.step(paddleOp);
+      this.step(paddleOp, emitter);
       i++;
     }
   }

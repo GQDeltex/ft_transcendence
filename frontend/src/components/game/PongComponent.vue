@@ -5,8 +5,10 @@ import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
+import { useUserStore } from '@/store/user';
 import type { Item } from '@/store/user';
 
+const userStore = useUserStore();
 const remoteScore = ref(0);
 const playerScore = ref(0);
 const gameLoader = ref(true);
@@ -19,7 +21,7 @@ const mapImg = ref(
 
 const props = defineProps<{
   gameId: number;
-  priority: boolean;
+  priority: number;
   player1ID: {
     id: number;
     username: string;
@@ -38,6 +40,7 @@ const props = defineProps<{
   };
 }>();
 
+console.log(props);
 function graph() {
   let cur: Item;
   if (
@@ -46,9 +49,10 @@ function graph() {
   ) {
     for (
       let i = 0;
-      (cur = props.priority
-        ? props.player1ID.equipped[i]
-        : props.player2ID.equipped[i]);
+      (cur =
+        props.priority === 0
+          ? props.player1ID.equipped[i]
+          : props.player2ID.equipped[i]);
       i++
     ) {
       console.log(cur);
@@ -72,13 +76,16 @@ onMounted(async () => {
   // player1.value = await UserService.findOneById(p   rops.player1ID);
   // player2.value = await UserService.findOneById(props.player2ID);
   // console.log('player1 = ' + player1.value.username + ' player2 ' + player2.value.username)
-  // console.log(props.gameId);
+  console.log(props.gameId);
+  let me: boolean =
+    userStore.id === props.player1ID.id || userStore.id === props.player2ID.id;
   const field = new Element(document.getElementById('feld'), props.gameId);
   const ball = new Ball(
     document.getElementById('ball'),
     field.getRect(),
     props.gameId,
     props.priority,
+    me,
   );
   const playerPad = new Paddle(
     document.getElementById('playerPad'),
@@ -93,13 +100,14 @@ onMounted(async () => {
 
   let lastTime: number | null = null;
   let delta: number;
+
   async function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
-      ball.update(delta, remotePad.getRect());
+      ball.update(delta, remotePad.getRect(), me);
       remotePad.update(delta, time);
       playerPad.update(delta, time);
-      if (props.priority) loseCase();
+      if (props.priority === 0) loseCase();
     }
     lastTime = time;
     if (gameLoader.value) window.requestAnimationFrame(pupdate);
@@ -108,31 +116,41 @@ onMounted(async () => {
   function loseCase() {
     if (ball.get_pos_x() >= 100 + ball._shape.x / 2) {
       playerScore.value++;
-      ball.reset([playerScore.value, remoteScore.value]);
+      ball.reset([playerScore.value, remoteScore.value], me);
       playerPad.sety(50);
       remotePad.sety(50);
     }
     if (ball.get_pos_x() <= 0 - ball._shape.x / 2) {
       remoteScore.value++;
-      ball.reset([playerScore.value, remoteScore.value]);
+      ball.reset([playerScore.value, remoteScore.value], me);
       playerPad.sety(50);
       remotePad.sety(50);
     }
   }
 
   function handleUp(e: KeyboardEvent): void {
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     if (e.repeat) return;
     if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir(0);
+      remotePad.changeDir(0, false, true);
     }
   }
 
   function handleDown(e: KeyboardEvent): void {
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     if (e.repeat) return;
     if (e.code == 'ArrowUp') {
-      remotePad.changeDir(-10);
+      remotePad.changeDir(-10, false, true);
     } else if (e.code == 'ArrowDown') {
-      remotePad.changeDir(10);
+      remotePad.changeDir(10, false, true);
     }
   }
 
@@ -142,8 +160,31 @@ onMounted(async () => {
 
   socket.on('gameData', (e) => {
     console.log(e);
-    if (e.name === 'opponent') playerPad.changeDir(e.changeDir, true);
-    if (e.name === 'ball') ball.changeDir(e.changeDir);
+    let me: boolean =
+      userStore.id === props.player1ID.id ||
+      userStore.id === props.player2ID.id;
+    if (e.name === 'opponent') {
+      if (props.priority === 2) {
+        if (e.from === props.player1ID.id)
+          playerPad.changeDir(e.changeDir, false, me);
+        if (e.from === props.player2ID.id)
+          remotePad.changeDir(e.changeDir, false, me);
+      } else {
+        console.log(e.from, props.priority);
+        if (e.from === props.player2ID.id && props.priority === 0)
+          playerPad.changeDir(e.changeDir, true, me);
+        if (e.from === props.player1ID.id && props.priority === 1)
+          playerPad.changeDir(e.changeDir, true, me);
+      }
+    }
+
+    if (e.name === 'ball') {
+      if (props.priority === 2 && e.from === props.player2ID.id) {
+        e.changeDir[2] = 100 - e.changeDir[2];
+        e.changeDir[0] = e.changeDir[0] * -1;
+      }
+      ball.changeDir(e.changeDir);
+    }
     if (typeof e.score != 'undefined') {
       remoteScore.value = e.score[0];
       playerScore.value = e.score[1];
@@ -159,6 +200,7 @@ onMounted(async () => {
       field.getRect(),
       props.gameId,
       props.priority,
+      me,
     );
     const pPlay = new Paddle(
       document.getElementById('player'),
@@ -181,7 +223,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <div v-if="props.priority" class="players">
+    <div v-if="props.priority == 0" class="players">
       <GamePeopleComponent
         :key="props.player2ID.id"
         :client="props.player2ID"
