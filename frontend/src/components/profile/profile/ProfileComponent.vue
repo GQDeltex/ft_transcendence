@@ -45,9 +45,8 @@ const onClose = () => {
 const errorStore = useErrorStore();
 const leaders = ref<Partial<User>[]>([]);
 UserService.findLeaders()
-.then((users) => (leaders.value = users))
+  .then((users) => (leaders.value = users))
   .catch((error) => errorStore.setError(error.message));
-
 </script>
 
 <template>
@@ -59,7 +58,7 @@ UserService.findLeaders()
         size="10vw"
         border-color="white"
       />
-	  
+
       <img
         v-if="isMe"
         alt="pen"
@@ -73,7 +72,14 @@ UserService.findLeaders()
       <span class="title">{{ user.title[0] }}</span>
       <br />
       <div class="username">
-        <span>{{ user.username }} (Rank <span v-for="(leader, index) in leaders" ><span v-show="leader.username === user.username">{{ index + 1}}</span></span>) </span>
+        <span
+          >{{ user.username }} (Rank
+          <span v-for="(leader, index) in leaders" :key="leader.id">
+            <span v-show="leader.username === user.username">{{
+              index + 1
+            }}</span></span
+          >)
+        </span>
         <img
           v-if="isMe"
           alt="pen"
