@@ -39,6 +39,7 @@ describe('UsersController', () => {
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
       controllers: [UsersController],
     }).compile();

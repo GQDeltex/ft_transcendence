@@ -42,6 +42,7 @@ describe('Intra42Controller', () => {
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
     }).compile();
 

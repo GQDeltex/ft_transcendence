@@ -41,6 +41,7 @@ describe('UsersService', () => {
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
     }).compile();
 

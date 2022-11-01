@@ -39,6 +39,7 @@ describe('ChannelResolver', () => {
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
         mockRepoUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
     }).compile();
 

@@ -40,6 +40,7 @@ describe('ChannelService', () => {
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
         mockRepoUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
     }).compile();
 

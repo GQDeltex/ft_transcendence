@@ -40,6 +40,7 @@ describe('TwoFAService', () => {
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
     }).compile();
 
