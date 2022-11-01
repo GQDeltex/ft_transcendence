@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:99](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L99)
+[src/game/game.gateway.ts:115](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L115)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L97)
+[src/game/game.gateway.ts:99](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L99)
 
 ___
 
@@ -198,5 +198,4 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:109](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L109)
-
+[src/game/game.gateway.ts:125](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L125)
