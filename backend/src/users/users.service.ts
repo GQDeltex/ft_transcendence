@@ -431,6 +431,9 @@ export class UsersService {
     id: number,
     input: UpdateGameRequestInput,
   ): Promise<void> {
+    if (id === input.userId)
+      throw new UserInputError('You cannot send game request to yourself');
+
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: input.userId }],
       relations: ['sentGameRequests', 'receivedGameRequests'],
