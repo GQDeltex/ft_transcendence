@@ -66,6 +66,8 @@ export class GameGateway implements OnGatewayDisconnect {
         await this.gameService.endGame(gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
+        // Game is over anyways, no need to send gameData anymore
+        return;
       } else {
         this.gameService.saveScore(gameId, score);
       }
