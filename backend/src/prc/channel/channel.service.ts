@@ -35,7 +35,7 @@ export class ChannelService {
     return channels.filter((channel) => {
       if (!channel.private) return true;
       return channel.userList.some(
-        (channelUser) => channelUser.user_id === identifier,
+        (channelUser) => channelUser.user_id === identifier && !channelUser.ban,
       );
     });
   }
