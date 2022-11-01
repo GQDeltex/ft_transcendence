@@ -30,12 +30,12 @@ watch(isLoggedIn, (newLogState) => {
 });
 
 socket.on('prc', (data) => {
-  console.log('Msg from: ', data);
+  // console.log('Msg from: ', data);
   messagesStore.saveMessage(data);
 });
 
 socket.on('status', (status) => {
-  console.log(status.msg);
+  // console.log(status.msg);
   messagesStore.saveMessage(status);
 });
 

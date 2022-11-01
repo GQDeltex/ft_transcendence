@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[src/game/game.resolver.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L11)
+[src/game/game.resolver.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L13)
 
 ## Properties
 
@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[src/game/game.resolver.ts:11](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L11)
+[src/game/game.resolver.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L13)
 
 ## Methods
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[src/game/game.resolver.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L13)
+[src/game/game.resolver.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L15)
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-[src/game/game.resolver.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L21)
+[src/game/game.resolver.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.resolver.ts#L23)

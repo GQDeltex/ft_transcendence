@@ -23,7 +23,7 @@ const { messages } = storeToRefs(messagesStore);
 
 function sendMsg() {
   if (text.value == '') return;
-  console.log(props.chatName, text.value);
+  // console.log(props.chatName, text.value);
   socket.emit('prc', { to: props.chatName, msg: text.value });
   messagesStore.saveMessage({
     from: { id: +userStore.id, name: userStore.username },

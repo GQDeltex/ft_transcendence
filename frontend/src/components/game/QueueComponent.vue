@@ -59,7 +59,7 @@ socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
     displayState.value = 'end';
     return;
   }
-  console.log('ich will ein spiel mit dir spiel');
+  // console.log('ich will ein spiel mit dir spiel');
   await getPlayerUsers(player1Id, player2Id);
   await nextTick();
   gameIdRef.value = gameId;

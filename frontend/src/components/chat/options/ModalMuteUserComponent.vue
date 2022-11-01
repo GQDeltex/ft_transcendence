@@ -10,12 +10,12 @@ let channelName: Ref<string> = ref('');
 let muteUser: Ref<string> = ref('');
 
 async function closeOk() {
-  console.log(
-    'channelName= ' + channelName.value + ' admin= ' + muteUser.value, //DEBUG
-  );
+  // console.log(
+  //   'channelName= ' + channelName.value + ' admin= ' + muteUser.value, //DEBUG
+  // );
   try {
     await ChannelUserService.muteUser(channelName.value, +muteUser.value);
-    console.log(channelName.value + ' admin is now ' + muteUser.value); //DEBUG
+    // console.log(channelName.value + ' admin is now ' + muteUser.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
