@@ -3,10 +3,12 @@ import { GameService } from './game.service';
 import { Game, GameState } from './entities/game.entity';
 import { TwoFAGuard } from '../auth/guard/twoFA.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
+import { AllExceptionFilter } from '../tools/ExceptionFilter';
 
 @Resolver()
 @UseGuards(JwtAuthGuard, TwoFAGuard)
+@UseFilters(new AllExceptionFilter())
 export class GameResolver {
   constructor(private readonly gameService: GameService) {}
 
