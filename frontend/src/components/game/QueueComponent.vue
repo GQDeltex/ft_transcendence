@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onUnmounted, ref, nextTick } from 'vue';
+import { onUnmounted, ref, nextTick, onMounted } from 'vue';
 import { socket } from '@/service/socket';
 import PongComponent from './PongComponent.vue';
 import EndScreenComponent from './EndScreenComponent.vue';
@@ -9,13 +9,13 @@ import {
   GameStatusEnum,
   useUserStore,
 } from '@/store/user';
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import type { Item } from '@/store/user';
 import type { _RouteLocationBase } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
-import type { Item } from '../../store/user';
 
 const displayState = ref('queue');
 const gameIdRef = ref(0);
@@ -85,28 +85,13 @@ const checkGame = async (url: _RouteLocationBase) => {
   }
 };
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await checkGame(route);
-});
-
-onBeforeRouteUpdate(async (to) => {
-  if (displayState.value === 'start') {
-    console.log('yay');
-  }
-  await checkGame(to);
 });
 
 onUnmounted(() => {
   leave_queue();
 });
-
-const backToQueue = async () => {
-  displayState.value = 'queue';
-  gameIdRef.value = 0;
-  playerPriorityRef.value = false;
-  await nextTick();
-  join_queue();
-};
 </script>
 
 <template>
@@ -114,11 +99,7 @@ const backToQueue = async () => {
     <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
     <div class="loader"></div>
   </div>
-  <EndScreenComponent
-    v-else-if="displayState === 'end'"
-    :game-id="gameIdRef"
-    @back="backToQueue"
-  />
+  <EndScreenComponent v-else-if="displayState === 'end'" :game-id="gameIdRef" />
   <PongComponent
     v-else
     :game-id="gameIdRef"

@@ -5,7 +5,7 @@ import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
-import type { Item } from '../../store/user';
+import type { Item } from '@/store/user';
 
 const remoteScore = ref(0);
 const playerScore = ref(0);
@@ -140,17 +140,6 @@ onMounted(async () => {
 
   window.addEventListener('keyup', handleUp);
 
-  socket.on('Game', ({ gameId }) => {
-    if (gameId < 0) {
-      window.removeEventListener('keydown', handleDown);
-      window.removeEventListener('keyup', handleUp);
-      ball.set_speed(0);
-      playerPad.sety(50);
-      remotePad.sety(50);
-      ball.reset([playerScore.value, remoteScore.value]);
-    }
-  });
-
   socket.on('gameData', (e) => {
     console.log(e);
     if (e.name === 'opponent') playerPad.changeDir(e.changeDir, true);
@@ -160,7 +149,6 @@ onMounted(async () => {
       playerScore.value = e.score[1];
       playerPad.sety(50);
       remotePad.sety(50);
-      ball.set_speed(30);
     }
   });
 

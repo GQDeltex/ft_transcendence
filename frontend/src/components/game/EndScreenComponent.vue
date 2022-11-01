@@ -3,15 +3,10 @@ import GameService from '@/service/GameService';
 import { onMounted, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import UserService from '@/service/UserService';
-import { useRouter } from 'vue-router';
-
-const emit = defineEmits(['back']);
 
 const props = defineProps<{
   gameId: number;
 }>();
-
-const router = useRouter();
 
 const status = 'online';
 
@@ -37,7 +32,7 @@ const player = ref({
 });
 
 async function homepage() {
-  await router.push('/');
+  window.location.href = '/';
 }
 
 onMounted(async () => {
@@ -69,10 +64,6 @@ onMounted(async () => {
     }
   }
 });
-
-const backToQueue = () => {
-  emit('back');
-};
 </script>
 
 <template>
@@ -86,7 +77,6 @@ const backToQueue = () => {
     <p class="saving">{{ player.username }} wins!</p>
     <div class="btns">
       <button class="home-page flex-btn" @click="homepage">Home page</button>
-      <button class="flex-btn" @click="backToQueue">Back to queue</button>
     </div>
   </div>
 </template>

@@ -89,9 +89,6 @@ export class Ball extends Element {
   set_dir_y(n: number) {
     this._direction.y = n;
   }
-  set_speed(n: number) {
-    this._speed = n;
-  }
   get_pos_x(): number {
     if (this._htmlElem != null)
       return parseFloat(
