@@ -1,47 +1,7 @@
-<template>
-  <div>
-    <div v-if="props.priority" class="players">
-      <GamePeopleComponent
-        :key="props.player2ID.id"
-        :client="props.player2ID"
-        class="player1"
-      />
-      <GamePeopleComponent
-        :key="props.player1ID.id"
-        :client="props.player1ID"
-        class="player2"
-      />
-    </div>
-    <div v-else class="players">
-      <GamePeopleComponent
-        :key="props.player1ID.id"
-        :client="props.player1ID"
-        class="player1"
-      />
-      <GamePeopleComponent
-        :key="props.player2ID.id"
-        :client="props.player2ID"
-        class="player2"
-      />
-    </div>
-    <div id="feld" class="field">
-      <div class="score">
-        <div id="player">{{ playerScore }}</div>
-        <div id="remote">{{ remoteScore }}</div>
-      </div>
-      <img class="back" src="@/assets/OGPong.png" />
-      <div id="ball" class="ball">
-        <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
-      </div>
-      <div id="playerPad" class="paddle paddle-left"></div>
-      <div id="remotePad" class="paddle paddle-right"></div>
-    </div>
-  </div>
-</template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { socket } from '../../service/socket';
+import { socket } from '@/service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
@@ -49,10 +9,17 @@ import GamePeopleComponent from './GamePeopleComponent.vue';
 import { useUserStore } from '@/store/user';
 
 const userStore = useUserStore();
+import type { Item } from '@/store/user';
 
 const remoteScore = ref(0);
 const playerScore = ref(0);
 const gameLoader = ref(true);
+const ballImg = ref(
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
+);
+const mapImg = ref(
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
+);
 
 const props = defineProps<{
   gameId: number;
@@ -63,6 +30,7 @@ const props = defineProps<{
     title: string[];
     picture: string;
     status?: string | undefined;
+    equipped?: Item[];
   };
   player2ID: {
     id: number;
@@ -70,19 +38,43 @@ const props = defineProps<{
     title: string[];
     picture: string;
     status?: string | undefined;
+    equipped?: Item[] | undefined;
   };
 }>();
 
 console.log(props);
+function graph() {
+  let cur: Item;
+  if (
+    typeof props.player1ID.equipped !== 'undefined' &&
+    typeof props.player2ID.equipped !== 'undefined'
+  ) {
+    for (
+      let i = 0;
+      (cur = props.priority
+        ? props.player1ID.equipped[i]
+        : props.player2ID.equipped[i]);
+      i++
+    ) {
+      console.log(cur);
+      if (cur.type == 'ball') {
+        ballImg.value = cur.picture;
+      } else if (cur.type == 'map') {
+        mapImg.value = cur.picture;
+      }
+    }
+  }
+}
 
 onUnmounted(() => {
   gameLoader.value = false;
 });
 
-onMounted(() => {
+onMounted(async () => {
+  graph();
   console.log(props.player1ID);
   console.log(props.player2ID);
-  // player1.value = await UserService.findOneById(props.player1ID);
+  // player1.value = await UserService.findOneById(p   rops.player1ID);
   // player2.value = await UserService.findOneById(props.player2ID);
   // console.log('player1 = ' + player1.value.username + ' player2 ' + player2.value.username)
   console.log(props.gameId);
@@ -105,7 +97,7 @@ onMounted(() => {
   );
 
   let lastTime: number | null = null;
-  var delta: number;
+  let delta: number;
   async function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
@@ -133,7 +125,15 @@ onMounted(() => {
     }
   }
 
-  document.addEventListener('keydown', (e) => {
+  function handleUp(e: KeyboardEvent): void {
+    if (userStore.id !== props.player1ID.id && userStore.id !== props.player2ID.id) return;
+    if (e.repeat) return;
+    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
+      remotePad.changeDir(0);
+    }
+  }
+
+  function handleDown(e: KeyboardEvent): void {
     if (userStore.id !== props.player1ID.id && userStore.id !== props.player2ID.id) return;
     if (e.repeat) return;
     if (e.code == 'ArrowUp') {
@@ -141,15 +141,11 @@ onMounted(() => {
     } else if (e.code == 'ArrowDown') {
       remotePad.changeDir(10);
     }
-  });
+  }
 
-  document.addEventListener('keyup', (e) => {
-    if (userStore.id !== props.player1ID.id && userStore.id !== props.player2ID.id) return;
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir(0);
-    }
-  });
+  window.addEventListener('keydown', handleDown);
+
+  window.addEventListener('keyup', handleUp);
 
   socket.on('gameData', (e) => {
     console.log(e);
@@ -190,6 +186,47 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <div>
+    <div v-if="props.priority" class="players">
+      <GamePeopleComponent
+        :key="props.player2ID.id"
+        :client="props.player2ID"
+        class="player1"
+      />
+      <GamePeopleComponent
+        :key="props.player1ID.id"
+        :client="props.player1ID"
+        class="player2"
+      />
+    </div>
+    <div v-else class="players">
+      <GamePeopleComponent
+        :key="props.player1ID.id"
+        :client="props.player1ID"
+        class="player1"
+      />
+      <GamePeopleComponent
+        :key="props.player2ID.id"
+        :client="props.player2ID"
+        class="player2"
+      />
+    </div>
+    <div id="feld" class="field">
+      <div class="score">
+        <div id="player">{{ playerScore }}</div>
+        <div id="remote">{{ remoteScore }}</div>
+      </div>
+      <img class="back" :src="mapImg" />
+      <div id="ball" class="ball">
+        <img class="ball" :src="ballImg" />
+      </div>
+      <div id="playerPad" class="paddle paddle-left"></div>
+      <div id="remotePad" class="paddle paddle-right"></div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
 .field {
   background-color: #212121;
@@ -215,7 +252,7 @@ onMounted(() => {
   top: calc(var(--y) * 1%);
   transform: translate(0%, -50%);
   width: 1%;
-  height: 13%;
+  height: 10%;
   z-index: 0;
 }
 
@@ -228,9 +265,10 @@ onMounted(() => {
 .ball {
   --x: 50;
   --y: 50;
+  --col: #fff;
 
   position: absolute;
-  background-color: #fff;
+  background-color: var(--col);
   left: calc(var(--x) * 1%);
   top: calc(var(--y) * 1%);
   border-radius: 50%;
@@ -243,8 +281,6 @@ onMounted(() => {
   position: relative;
   top: 1em;
   right: calc(100% / -2);
-  color: grey;
-  font-size: 2vh;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
@@ -257,8 +293,8 @@ onMounted(() => {
 .score > * {
   flex-grow: 1;
   flex-basis: 0;
-  padding: 0% 1%;
-  margin: 0% 0%;
+  padding: 0 1%;
+  margin: 0 0;
 }
 .score > :first-child {
   text-align: right;

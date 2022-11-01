@@ -37,7 +37,7 @@ GameService.findAll('running').then(
 <template>
   <div>
     <div v-if="routExist" >
-      <h1>current stream</h1>
+      <h1>stream overview</h1>
       <ChildStreamComponent
         v-for="game in games"
         :key="game.id"

@@ -42,6 +42,10 @@ socket.on('newclient', async () => {
     "You've been logged out, because only one session can be active at a time",
   );
 });
+
+socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
+  await router.push({ name: 'PongView', query: { gameId: data.gameId } });
+});
 </script>
 
 <template>

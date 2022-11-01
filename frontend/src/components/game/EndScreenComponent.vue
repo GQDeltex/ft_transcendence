@@ -31,7 +31,7 @@ const player = ref({
   status: '',
 });
 
-function homepage() {
+async function homepage() {
   window.location.href = '/';
 }
 
@@ -76,7 +76,7 @@ onMounted(async () => {
     />
     <p class="saving">{{ player.username }} wins!</p>
     <div class="btns">
-      <button class="home-page flex-btn" @click="homepage()">Home page</button>
+      <button class="home-page flex-btn" @click="homepage">Home page</button>
     </div>
   </div>
 </template>
