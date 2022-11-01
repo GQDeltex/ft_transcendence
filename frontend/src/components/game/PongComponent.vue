@@ -1,42 +1,41 @@
 <template>
-  <!-- <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-  <div v-if="props.priority" class="players">
-    <GamePeopleComponent
-      :key="props.player2ID.id"
-      :client="props.player2ID"
-      class="player1"
-    />
-    <GamePeopleComponent
-      :key="props.player1ID.id"
-      :client="props.player1ID"
-      class="player2"
-    />
-  </div>
-  <div v-else class="players">
-    <GamePeopleComponent
-      :key="props.player1ID.id"
-      :client="props.player1ID"
-      class="player1"
-    />
-    <GamePeopleComponent
-      :key="props.player2ID.id"
-      :client="props.player2ID"
-      class="player2"
-    />
-  </div>
-  <div id="feld" class="field">
-    <div class="score">
-      <div id="player">{{ playerScore }}</div>
-      <div id="remote">{{ remoteScore }}</div>
+  <div>
+    <div v-if="props.priority" class="players">
+      <GamePeopleComponent
+        :key="props.player2ID.id"
+        :client="props.player2ID"
+        class="player1"
+      />
+      <GamePeopleComponent
+        :key="props.player1ID.id"
+        :client="props.player1ID"
+        class="player2"
+      />
     </div>
-    <img class="back" src="@/assets/OGPong.png" />
-    <div id="ball" class="ball">
-      <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
+    <div v-else class="players">
+      <GamePeopleComponent
+        :key="props.player1ID.id"
+        :client="props.player1ID"
+        class="player1"
+      />
+      <GamePeopleComponent
+        :key="props.player2ID.id"
+        :client="props.player2ID"
+        class="player2"
+      />
     </div>
-    <div id="playerPad" class="paddle paddle-left"></div>
-    <div id="remotePad" class="paddle paddle-right"></div>
+    <div id="feld" class="field">
+      <div class="score">
+        <div id="player">{{ playerScore }}</div>
+        <div id="remote">{{ remoteScore }}</div>
+      </div>
+      <img class="back" src="@/assets/OGPong.png" />
+      <div id="ball" class="ball">
+        <img class="ball" src="@/assets/sexy-guy-001-modified.png" />
+      </div>
+      <div id="playerPad" class="paddle paddle-left"></div>
+      <div id="remotePad" class="paddle paddle-right"></div>
+    </div>
   </div>
 </template>
 
@@ -73,6 +72,8 @@ const props = defineProps<{
     status?: string | undefined;
   };
 }>();
+
+console.log(props);
 
 onUnmounted(() => {
   gameLoader.value = false;

@@ -102,8 +102,9 @@ export class GameGateway implements OnGatewayDisconnect {
     @MessageBody('gameId') gameId: number,
   ) {
     if (event === 'JOIN') {
-      const game: Game = this.gameService.findOne(gameId);
-      client.join(`&${gameId}`, { player1Id: game.player1.id, player2Id: game.player2.id });
+      const game: Game = await this.gameService.findOne(gameId);
+      client.join(`&${gameId}`);
+      return { player1Id: game.player1.id, player2Id: game.player2.id };
     } else {
       client.leave(`&${gameId}`);
     }

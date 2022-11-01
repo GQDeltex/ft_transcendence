@@ -10,12 +10,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: LandingView,
-    },
-    {
-      path: '/:catchAll(.*)*',
-      name: 'PageNotFoundView',
-      component: PageNotFoundView,
-    },
+    },,
     {
       path: '/leaderboard',
       name: 'LeaderboardView',
@@ -50,7 +45,19 @@ const router = createRouter({
       path: '/stream',
       name: 'StreamView',
       component: () => import('../views/StreamView.vue'),
+      children:[
+        {
+          path: ':id',
+          name: 'StreamView',
+          component: () => import('../views/PongView.vue'),
+        }
+      ],
     },
+    {
+      path: '/:catchAll(.*)*',
+      name: 'PageNotFoundView',
+      component: PageNotFoundView,
+    }
   ],
 });
 
