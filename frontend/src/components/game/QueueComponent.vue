@@ -1,21 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { socket } from '../../service/socket';
+import { onUnmounted, ref, nextTick, onMounted } from 'vue';
+import { socket } from '@/service/socket';
 import PongComponent from './PongComponent.vue';
 import EndScreenComponent from './EndScreenComponent.vue';
 import UserService from '@/service/UserService';
-import type { Item } from '../../store/user';
+import {
+  AllowedUpdateGameRequestMethod,
+  GameStatusEnum,
+  useUserStore,
+} from '@/store/user';
+import { useRoute, useRouter } from 'vue-router';
+import type { Item } from '@/store/user';
+import type { _RouteLocationBase } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+const userStore = useUserStore();
 
 const displayState = ref('queue');
-
-onUnmounted(async () => {
-  leave_queue();
-});
-
-onMounted(async () => {
-  join_queue();
-});
-
 const gameIdRef = ref(0);
 const playerPriorityRef = ref(false);
 
@@ -44,7 +46,7 @@ function leave_queue() {
   socket.emit('queue', { event: 'LEAVE' });
 }
 
-async function gettem(player1Id: number, player2Id: number) {
+async function getPlayerUsers(player1Id: number, player2Id: number) {
   player1User.value = await UserService.findOneById(player1Id);
   player2User.value = await UserService.findOneById(player2Id);
 }
@@ -52,16 +54,43 @@ async function gettem(player1Id: number, player2Id: number) {
 // playerIDs to check validity of messages for streaming implementation later™
 socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   if (gameId < 0) {
-    // displayState.value = true;
     displayState.value = 'end';
     return;
   }
-  //   displayState.value = false;
-  console.log('ich will ein spiel mit dir spielen');
-  await gettem(player1Id, player2Id);
+  console.log('ich will ein spiel mit dir spiel');
+  await getPlayerUsers(player1Id, player2Id);
+  await nextTick();
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
   displayState.value = 'start';
+});
+
+const checkGame = async (url: _RouteLocationBase) => {
+  if (typeof url.query.inviterId === 'string') {
+    await nextTick();
+    if (
+      userStore.getGameRequestStatus(+url.query.inviterId) !==
+        GameStatusEnum.RECEIVED ||
+      !(await userStore.updateGameRequest(
+        AllowedUpdateGameRequestMethod.ACCEPT,
+        +url.query.inviterId,
+      ))
+    )
+      await router.push({ name: 'ChatView' });
+  } else if (typeof url.query.gameId === 'string') {
+    await nextTick();
+    socket.emit('inviteReady', { gameId: +url.query.gameId });
+  } else {
+    join_queue();
+  }
+};
+
+onMounted(async () => {
+  await checkGame(route);
+});
+
+onUnmounted(() => {
+  leave_queue();
 });
 </script>
 

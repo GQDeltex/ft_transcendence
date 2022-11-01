@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { socket } from '../../service/socket';
+import { socket } from '@/service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
 import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
-import type { Item } from '../../store/user';
+import type { Item } from '@/store/user';
 
 const remoteScore = ref(0);
 const playerScore = ref(0);
@@ -92,7 +92,7 @@ onMounted(async () => {
   );
 
   let lastTime: number | null = null;
-  var delta: number;
+  let delta: number;
   async function pupdate(time: number) {
     if (lastTime != null) {
       delta = time - lastTime;
@@ -120,21 +120,25 @@ onMounted(async () => {
     }
   }
 
-  document.addEventListener('keydown', (e) => {
+  function handleUp(e: KeyboardEvent): void {
+    if (e.repeat) return;
+    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
+      remotePad.changeDir(0);
+    }
+  }
+
+  function handleDown(e: KeyboardEvent): void {
     if (e.repeat) return;
     if (e.code == 'ArrowUp') {
       remotePad.changeDir(-10);
     } else if (e.code == 'ArrowDown') {
       remotePad.changeDir(10);
     }
-  });
+  }
 
-  document.addEventListener('keyup', (e) => {
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir(0);
-    }
-  });
+  window.addEventListener('keydown', handleDown);
+
+  window.addEventListener('keyup', handleUp);
 
   socket.on('gameData', (e) => {
     console.log(e);
@@ -270,8 +274,6 @@ onMounted(async () => {
   position: relative;
   top: 1em;
   right: calc(100% / -2);
-  color: grey;
-  font-size: 2vh;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
@@ -284,8 +286,8 @@ onMounted(async () => {
 .score > * {
   flex-grow: 1;
   flex-basis: 0;
-  padding: 0% 1%;
-  margin: 0% 0%;
+  padding: 0 1%;
+  margin: 0 0;
 }
 .score > :first-child {
   text-align: right;
