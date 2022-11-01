@@ -20,7 +20,7 @@ export class Ball extends Element {
     super(ballElem, gameId);
     this._priority = priority;
     this._direction = new Vector(0, 0);
-    this._speed = 30;
+    this._speed = 40;
     this.maxinvinc = this._speed * 10;
     this._shape = new Vector(
       field !== null
@@ -175,11 +175,11 @@ export class Ball extends Element {
       padBox.bottom >= ballBox.top
     ) {
       this._direction.y =
-        2 *
+        3 *
         (((ballBox.top + (ballBox.bottom - ballBox.top) / 2 - padBox.top) /
           (padBox.bottom - padBox.top)) *
-          2 -
-          1);
+          3 -
+          1.5);
       return true;
     }
     return false;

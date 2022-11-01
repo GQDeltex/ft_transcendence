@@ -15,6 +15,7 @@ import type { _RouteLocationBase } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
+import type { Item } from '../../store/user';
 
 const displayState = ref('queue');
 const gameIdRef = ref(0);
@@ -26,14 +27,16 @@ const player1User = ref<{
   title: string[];
   picture: string;
   status?: string | undefined;
-}>({ id: 0, username: '', title: [''], picture: '', status: '' });
+  equipped?: Item[];
+}>({ id: 0, username: '', title: [''], picture: '', status: '', equipped: [] });
 const player2User = ref<{
   id: number;
   username: string;
   title: string[];
   picture: string;
   status?: string | undefined;
-}>({ id: 0, username: '', title: [''], picture: '', status: '' });
+  equipped?: Item[];
+}>({ id: 0, username: '', title: [''], picture: '', status: '', equipped: [] });
 
 function join_queue() {
   socket.emit('queue', { event: 'JOIN' });

@@ -186,6 +186,14 @@ class UserService {
             coalition
             status
             lastLoggedIn
+            equipped {
+              id
+              type
+              name
+              description
+              picture
+              metadata
+            }
           }
         }
       `,
