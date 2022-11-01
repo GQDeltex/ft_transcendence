@@ -69,7 +69,7 @@ export class GameGateway implements OnGatewayDisconnect {
         // Game is over anyways, no need to send gameData anymore
         return;
       } else {
-        this.gameService.saveScore(gameId, score);
+        await this.gameService.saveScore(gameId, score);
       }
     }
     client
@@ -94,6 +94,16 @@ export class GameGateway implements OnGatewayDisconnect {
         socket.emit('Game', { gameId: -1 });
       });
     }
+  }
+
+  @SubscribeMessage('inviteReady')
+  async handleInviteGame(
+    @ConnectedSocket() client: Socket,
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @MessageBody('gameId') gameId: number,
+  ) {
+    const game: Game = await this.gameService.findOne(gameId);
+    await this.startGame(game);
   }
 
   async startGame(game: Game) {

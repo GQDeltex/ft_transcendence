@@ -5,12 +5,13 @@ import { JwtAuthGuard } from '../../../auth/guard/jwt.guard';
 import { TwoFAGuard } from '../../../auth/guard/twoFA.guard';
 import { ChannelUserService } from './channel-user.service';
 import { ChannelUser } from './entities/channel-user.entity';
-import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
+import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
 import { UsersService } from '../../../users/users.service';
 import { Channel } from '../entities/channel.entity';
 import { ChannelService } from '../channel.service';
 import { WsException } from '@nestjs/websockets';
 import { AllExceptionFilter } from '../../../tools/ExceptionFilter';
+import { User } from '../../../users/entities/user.entity';
 
 @Resolver(() => ChannelUser)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
@@ -44,6 +45,12 @@ export class ChannelUserResolver {
       JwtUser.id,
       channel_name,
     );
+    if (typeof channelUser === 'undefined')
+      throw new WsException('ChannelUser undefined');
+    if (channelUser.ban)
+      throw new WsException(
+        'You are temporarly banned. Please wait till you are no longer banned',
+      );
     if (!channelUser.owner) throw new WsException('Not Channel Owner');
     return await this.channelService.updatePassword(channel_name, newPassword);
   }
@@ -58,6 +65,10 @@ export class ChannelUserResolver {
       await this.usersService.findChannelUser(JwtUser.id, channel_name);
     if (typeof channelUserAdmin === 'undefined')
       throw new WsException('ChannelUserAdmin undefined');
+    if (channelUserAdmin.ban)
+      throw new WsException(
+        'You are temporarly banned. Please wait till you are no longer banned',
+      );
     const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
       newAdmin,
       channel_name,
@@ -89,6 +100,10 @@ export class ChannelUserResolver {
     );
     if (typeof channelBanUser === 'undefined')
       throw new WsException('channelBanUser undefined');
+    if (channelBanUser.ban)
+      throw new WsException(
+        'You are temporarly banned. Please wait till you are no longer banned',
+      );
     const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
       banUser,
       channel_name,
@@ -109,7 +124,12 @@ export class ChannelUserResolver {
       );
     if (channelUserNew.ban)
       throw new WsException(banUser + ' is already banned on ' + channel_name);
-    return await this.channelUserService.updateBan(channelUserNew);
+    const user: User = await this.usersService.findOne(channelUserNew.user_id);
+    return await this.channelUserService.updateBan(
+      user,
+      channelUserNew,
+      channel_name,
+    );
   }
 
   @Mutation(() => ChannelUser)
@@ -122,6 +142,10 @@ export class ChannelUserResolver {
       await this.usersService.findChannelUser(JwtUser.id, channel_name);
     if (typeof channelMuteUser === 'undefined')
       throw new WsException('channelMuteUser undefined');
+    if (channelMuteUser.ban)
+      throw new WsException(
+        'You are temporarly banned. Please wait till you are no longer banned',
+      );
     const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
       muteUser,
       channel_name,

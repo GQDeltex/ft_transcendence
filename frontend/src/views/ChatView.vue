@@ -12,6 +12,7 @@ import { socket } from '@/service/socket';
 import {
   AllowedUpdateBlockingMethod,
   AllowedUpdateFriendshipMethod,
+  AllowedUpdateGameRequestMethod,
   useUserStore,
 } from '@/store/user';
 import type { User } from '@/store/user';
@@ -82,6 +83,26 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
   }
 });
 
+socket.on('onGameRequest', ({ method, id }: { method: string; id: number }) => {
+  switch (method) {
+    case AllowedUpdateGameRequestMethod.SEND:
+      userStore.receivedGameRequests_id = [
+        ...userStore.receivedGameRequests_id,
+        id,
+      ];
+      break;
+    case AllowedUpdateGameRequestMethod.DECLINE:
+      userStore.sentGameRequests_id = userStore.sentGameRequests_id.filter(
+        (userId) => userId !== id,
+      );
+      break;
+    case AllowedUpdateGameRequestMethod.CANCEL:
+      userStore.receivedGameRequests_id =
+        userStore.receivedGameRequests_id.filter((userId) => userId !== id);
+      break;
+  }
+});
+
 watch([() => userStore.friends, () => userStore.blocks], async () => {
   try {
     users.value = await UserService.findAll({ fetchPolicy: 'network-only' });
@@ -94,8 +115,7 @@ onMounted(async () => {
   try {
     users.value = await UserService.findAll();
     channels.value = await ChannelService.findAll();
-    if (channels.value.length > 0 && currentChannel.value == null)
-      currentChannel.value = channels.value[0];
+    if (channels.value.length > 0) currentChannel.value = channels.value[0];
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -104,10 +124,10 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   socket.off('onFriend');
   socket.off('onBlock');
+  socket.off('onGameRequest');
 });
 
 const UpdateChannels = (input: Channel) => {
-  // currentChannel.value = await channels.value.find((channel) => channel.name === input.name);
   currentChannel.value = input;
 };
 

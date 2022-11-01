@@ -30,7 +30,7 @@ export class GameService {
     });
     await this.dequeuePlayer(player1.playerId);
     await this.dequeuePlayer(player2.playerId);
-    this.gameGateway.startGame(game);
+    await this.gameGateway.startGame(game);
   }
 
   async findAll(searchState?: GameState, searchUserId?: number) {
