@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PrcGateway } from '../../../prc/prc.gateway';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
 import { ChannelUser } from './entities/channel-user.entity';
+import { WsException } from '@nestjs/websockets';
+import { Message } from '../../../prc/message/message';
+import { User } from '../../../users/entities/user.entity';
 
 @Injectable()
 export class ChannelUserService {
   constructor(
     @InjectRepository(ChannelUser)
     private readonly channelUserRepository: Repository<ChannelUser>,
+    private readonly prcGateway: PrcGateway,
   ) {}
 
   async findAll(userId: number) {
@@ -52,23 +57,52 @@ export class ChannelUserService {
     return await this.findOne(channelUser.id);
   }
 
-  async unban(channelUserID: number): Promise<void> {
+  async unban(
+    user: User,
+    channelUser: ChannelUser,
+    channelName: string,
+  ): Promise<void> {
     const result: UpdateResult = await this.channelUserRepository.update(
-      { id: channelUserID },
+      { id: channelUser.id },
       { ban: false },
     );
     if (typeof result.affected != 'undefined' && result.affected != 1)
-      throw new EntityNotFoundError(ChannelUser, { id: channelUserID });
+      throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
+    if (user.socketId != '') {
+      const sockets = await this.prcGateway.server
+        .in(user.socketId)
+        .fetchSockets();
+      if (sockets.length >= 1) sockets[0].join(channelName);
+    }
+    console.log('No longer Banned');
   }
 
-  async updateBan(channelUser: ChannelUser): Promise<ChannelUser> {
+  async updateBan(
+    user: User,
+    channelUser: ChannelUser,
+    channelName: string,
+  ): Promise<ChannelUser> {
+    if (user.socketId === '') throw new WsException('Empty Socket');
+    const sockets = await this.prcGateway.server
+      .in(user.socketId)
+      .fetchSockets();
+    if (sockets.length < 1) throw new WsException('Empty Socket');
+    const message: Message = {
+      from: { id: channelUser.user_id, name: '' },
+      to: { name: channelName },
+      msg:
+        channelUser.user_id +
+        ' has been banned from your channel for 42 seconds.',
+    };
+    sockets[0].emit('status', message);
     const result: UpdateResult = await this.channelUserRepository.update(
       { id: channelUser.id },
       { ban: true },
-    ); //Is it possible to search by the channelUser? if not, only send channelUser.id to this function to save mem
+    );
     if (typeof result.affected != 'undefined' && result.affected != 1)
       throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
-    setTimeout(() => this.unban(channelUser.id), 30 * 1000);
+    sockets[0].leave(channelName);
+    setTimeout(() => this.unban(user, channelUser, channelName), 42 * 1000);
     return await this.findOne(channelUser.id);
   }
 
@@ -88,7 +122,7 @@ export class ChannelUserService {
     );
     if (typeof result.affected != 'undefined' && result.affected != 1)
       throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
-    setTimeout(() => this.unmute(channelUser.id), 30 * 1000);
+    setTimeout(() => this.unmute(channelUser.id), 42 * 1000);
     return await this.findOne(channelUser.id);
   }
 }
