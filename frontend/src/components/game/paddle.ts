@@ -49,10 +49,10 @@ export class Paddle extends Element {
     else console.log('9 failiure, no object assigned\n');
   }
 
-  changeDir(dir: number, isOpponent = false) {
+  changeDir(dir: number, isOpponent = false, emitter: boolean) {
     if (this._direction.y === dir) return;
     this._direction.y = dir;
-    if (!isOpponent) {
+    if (!isOpponent && emitter) {
       socket.emit('gameData', {
         changeDir: dir,
         name: 'opponent',

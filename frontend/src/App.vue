@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { RouterView } from 'vue-router';
 import { useUserStore } from './store/user';
@@ -16,6 +16,11 @@ const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 const errorStore = useErrorStore();
 const { getErrors: errors } = storeToRefs(errorStore);
+
+const hide = ref(false);
+function onHide() {
+  hide.value = true;
+}
 
 if (isLoggedIn.value && !socket.connected) socket.connect();
 
@@ -49,7 +54,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
 </script>
 
 <template>
-  <header v-if="userStore.isLoggedIn">
+  <header v-if="userStore.isLoggedIn && !hide">
     <NavbarComponent />
   </header>
   <ModalComponent
@@ -59,7 +64,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
     :text="error"
     :callback="errorStore.delError"
   />
-  <RouterView />
+  <RouterView @hide="onHide" />
 </template>
 
 <style>

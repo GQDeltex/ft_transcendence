@@ -1,33 +1,40 @@
 <script setup lang="ts">
-import CategorySearchComponent from '../components/landingview/CategorySearchComponent.vue';
 import ChildStreamComponent from '../components/stream/ChildStreamComponent.vue';
 import PongComponent from '../components/game/PongComponent.vue';
 import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { socket } from '@/service/socket';
-import type { User } from '@/store/user'
+import type { User } from '@/store/user';
 import UserService from '@/service/UserService';
 
 const games = ref<Game[]>([]);
 const player1User = ref<User>();
 const player2User = ref<User>();
-const route = useRoute()
+const route = useRoute();
 const routExist = computed(() => typeof route.params.id === 'undefined');
 
-const gameId= ref(0)
-const loadedData= ref(false)
+const gameId = ref(0);
+const loadedData = ref(false);
 
-onBeforeMount(() => {
-  gameId.value = +route.params.id;
-  socket.emit('stream', {gameId: gameId.value, event:"JOIN"}, async(data:{player1Id: number, player2Id: number}) => {
-  player1User.value = await UserService.findOneById(data.player1Id);
-  player2User.value = await UserService.findOneById(data.player2Id);
-  loadedData.value = true;
-  console.log(data.player1Id, data.player2Id);
-  })
-})
+watch(
+  () => route.params,
+  () => {
+    if (typeof route.params.id === 'undefined') return;
+    gameId.value = +route.params.id;
+    socket.emit(
+      'stream',
+      { gameId: gameId.value, event: 'JOIN' },
+      async (data: { player1Id: number; player2Id: number }) => {
+        player1User.value = await UserService.findOneById(data.player1Id);
+        player2User.value = await UserService.findOneById(data.player2Id);
+        loadedData.value = true;
+        console.log(data.player1Id, data.player2Id);
+      },
+    );
+  },
+);
 
 GameService.findAll('running').then(
   (gamesreturn: Game[]) => (games.value = gamesreturn),
@@ -36,7 +43,7 @@ GameService.findAll('running').then(
 
 <template>
   <div>
-    <div v-if="routExist" >
+    <div v-if="routExist">
       <h1>stream overview</h1>
       <ChildStreamComponent
         v-for="game in games"
@@ -48,10 +55,20 @@ GameService.findAll('running').then(
         :game-id="game.id"
       />
     </div>
-  <div v-else>
-    <h1>pathed stream</h1>
-     <PongComponent v-if="loadedData" :gameId="gameId" :player1ID="player1User" :player2ID="player2User" :priority='false'/>
-  </div>
+    <div v-else>
+      <h1>pathed stream</h1>
+      <PongComponent
+        v-if="
+          loadedData &&
+          typeof player1User !== 'undefined' &&
+          typeof player2User !== 'undefined'
+        "
+        :game-id="gameId"
+        :player1-i-d="player1User"
+        :player2-i-d="player2User"
+        :priority="2"
+      />
+    </div>
   </div>
 </template>
 

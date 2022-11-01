@@ -17,9 +17,11 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
+const emits = defineEmits(['hide']);
+
 const displayState = ref('queue');
 const gameIdRef = ref(0);
-const playerPriorityRef = ref(false);
+const playerPriorityRef = ref(1);
 
 const player1User = ref<{
   id: number;
@@ -63,6 +65,7 @@ socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
   displayState.value = 'start';
+  emits('hide');
 });
 
 const checkGame = async (url: _RouteLocationBase) => {

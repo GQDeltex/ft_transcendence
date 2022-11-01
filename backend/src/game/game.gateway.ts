@@ -67,7 +67,7 @@ export class GameGateway implements OnGatewayDisconnect {
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
       } else {
-        await this.gameService.saveScore(gameId, score);
+        await this.gameService.saveScore(gameId, score); // slower?
       }
     }
     client
@@ -136,13 +136,13 @@ export class GameGateway implements OnGatewayDisconnect {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: true,
+      priority: 0,
     });
     p2sockets[0].emit('Game', {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: false,
+      priority: 1,
     });
     p1sockets[0].join(`&${game.id}`);
     p2sockets[0].join(`&${game.id}`);

@@ -1,64 +1,71 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+  createRouter,
+  createWebHistory,
+  type RouteRecordRaw,
+} from 'vue-router';
 import LandingView from '../views/LandingView.vue';
 import PageNotFoundView from '../views/PageNotFoundView.vue';
 import { useUserStore } from '@/store/user';
 
+const navRoutes: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    name: 'home',
+    component: LandingView,
+  },
+  ,
+  {
+    path: '/leaderboard',
+    name: 'LeaderboardView',
+    component: () => import('../views/LeaderboardView.vue'),
+  },
+  {
+    path: '/play',
+    name: 'PongView',
+    component: () => import('../views/PongView.vue'),
+  },
+  {
+    path: '/chat',
+    name: 'ChatView',
+    component: () => import('../views/ChatView.vue'),
+  },
+  {
+    path: '/skin',
+    name: 'SkinView',
+    component: () => import('../views/SkinView.vue'),
+  },
+  {
+    path: '/login',
+    name: 'LoginView',
+    component: () => import('../views/LoginView.vue'),
+  },
+  {
+    path: '/profile/:id',
+    name: 'ProfileView',
+    component: () => import('../views/ProfileView.vue'),
+  },
+  {
+    path: '/stream',
+    name: 'StreamView',
+    component: () => import('../views/StreamView.vue'),
+    children: [
+      {
+        path: ':id',
+        name: 'StreamView',
+        component: () => import('../views/PongView.vue'),
+      },
+    ],
+  },
+  {
+    path: '/:catchAll(.*)*',
+    name: 'PageNotFoundView',
+    component: PageNotFoundView,
+  },
+] as RouteRecordRaw[];
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: LandingView,
-    },,
-    {
-      path: '/leaderboard',
-      name: 'LeaderboardView',
-      component: () => import('../views/LeaderboardView.vue'),
-    },
-    {
-      path: '/play',
-      name: 'PongView',
-      component: () => import('../views/PongView.vue'),
-    },
-    {
-      path: '/chat',
-      name: 'ChatView',
-      component: () => import('../views/ChatView.vue'),
-    },
-    {
-      path: '/skin',
-      name: 'SkinView',
-      component: () => import('../views/SkinView.vue'),
-    },
-    {
-      path: '/login',
-      name: 'LoginView',
-      component: () => import('../views/LoginView.vue'),
-    },
-    {
-      path: '/profile/:id',
-      name: 'ProfileView',
-      component: () => import('../views/ProfileView.vue'),
-    },
-    {
-      path: '/stream',
-      name: 'StreamView',
-      component: () => import('../views/StreamView.vue'),
-      children:[
-        {
-          path: ':id',
-          name: 'StreamView',
-          component: () => import('../views/PongView.vue'),
-        }
-      ],
-    },
-    {
-      path: '/:catchAll(.*)*',
-      name: 'PageNotFoundView',
-      component: PageNotFoundView,
-    }
-  ],
+  routes: navRoutes,
 });
 
 router.beforeResolve(async (to) => {
