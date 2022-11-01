@@ -5,6 +5,8 @@ import PongComponent from './PongComponent.vue';
 import EndScreenComponent from './EndScreenComponent.vue';
 import UserService from '@/service/UserService';
 
+const emits = defineEmits(['hide']);
+
 const displayState = ref('queue');
 
 onUnmounted(async () => {
@@ -59,6 +61,7 @@ socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
   gettem(player1Id, player2Id);
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
+  emits('hide');
 });
 </script>
 

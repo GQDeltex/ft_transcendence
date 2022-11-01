@@ -133,7 +133,11 @@ onMounted(() => {
   }
 
   document.addEventListener('keydown', (e) => {
-    if (userStore.id !== props.player1ID.id && userStore.id !== props.player2ID.id) return;
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     if (e.repeat) return;
     if (e.code == 'ArrowUp') {
       remotePad.changeDir(-10);
@@ -143,7 +147,11 @@ onMounted(() => {
   });
 
   document.addEventListener('keyup', (e) => {
-    if (userStore.id !== props.player1ID.id && userStore.id !== props.player2ID.id) return;
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     if (e.repeat) return;
     if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
       remotePad.changeDir(0);
@@ -152,14 +160,14 @@ onMounted(() => {
 
   socket.on('gameData', (e) => {
     console.log(e);
-      if (e.name === 'opponent') playerPad.changeDir(e.changeDir, true);
-      if (e.name === 'ball') ball.changeDir(e.changeDir);
-      if (typeof e.score != 'undefined') {
-        remoteScore.value = e.score[0];
-        playerScore.value = e.score[1];
-        playerPad.sety(50);
-        remotePad.sety(50);
-      }
+    if (e.name === 'opponent') playerPad.changeDir(e.changeDir, true);
+    if (e.name === 'ball') ball.changeDir(e.changeDir);
+    if (typeof e.score != 'undefined') {
+      remoteScore.value = e.score[0];
+      playerScore.value = e.score[1];
+      playerPad.sety(50);
+      remotePad.sety(50);
+    }
   });
 
   window.onresize = function () {
