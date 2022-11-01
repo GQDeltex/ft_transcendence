@@ -4,6 +4,7 @@ import { socket } from '../../service/socket';
 import PongComponent from './PongComponent.vue';
 import EndScreenComponent from './EndScreenComponent.vue';
 import UserService from '@/service/UserService';
+import type { Item } from '../../store/user';
 
 const displayState = ref('queue');
 
@@ -24,14 +25,16 @@ const player1User = ref<{
   title: string[];
   picture: string;
   status?: string | undefined;
-}>({ id: 0, username: '', title: [''], picture: '', status: '' });
+  equipped?: Item[];
+}>({ id: 0, username: '', title: [''], picture: '', status: '', equipped: [] });
 const player2User = ref<{
   id: number;
   username: string;
   title: string[];
   picture: string;
   status?: string | undefined;
-}>({ id: 0, username: '', title: [''], picture: '', status: '' });
+  equipped?: Item[];
+}>({ id: 0, username: '', title: [''], picture: '', status: '', equipped: [] });
 
 function join_queue() {
   socket.emit('queue', { event: 'JOIN' });
@@ -47,18 +50,18 @@ async function gettem(player1Id: number, player2Id: number) {
 }
 
 // playerIDs to check validity of messages for streaming implementation later™
-socket.on('Game', ({ gameId, player1Id, player2Id, priority }) => {
+socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   if (gameId < 0) {
     // displayState.value = true;
     displayState.value = 'end';
     return;
   }
   //   displayState.value = false;
-  displayState.value = 'start';
   console.log('ich will ein spiel mit dir spielen');
-  gettem(player1Id, player2Id);
+  await gettem(player1Id, player2Id);
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
+  displayState.value = 'start';
 });
 </script>
 
