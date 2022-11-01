@@ -94,6 +94,20 @@ export class GameGateway implements OnGatewayDisconnect {
     }
   }
 
+  @SubscribeMessage('stream')
+  async handleStream(
+    @ConnectedSocket() client: Socket,
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @MessageBody('event') event: string,
+    @MessageBody('gameId') gameId: number,
+  ) {
+    if (event === 'JOIN') {
+      client.join(`&${gameId}`);
+    } else {
+      client.leave(`&${gameId}`);
+    }
+  }
+
   async startGame(game: Game) {
     const p1sockets = await this.server
       .in(game.player1.socketId)
