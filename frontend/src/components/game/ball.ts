@@ -21,7 +21,7 @@ export class Ball extends Element {
     super(ballElem, gameId);
     this._priority = priority;
     this._direction = new Vector(0, 0);
-    this._speed = 10;
+    this._speed = 30;
     this.maxinvinc = this._speed * 10;
     this._shape = new Vector(
       field !== null

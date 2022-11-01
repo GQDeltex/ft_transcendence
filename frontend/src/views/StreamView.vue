@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import ChildStreamComponent from '../components/stream/ChildStreamComponent.vue';
 import PongComponent from '../components/game/PongComponent.vue';
+import EndScreenComponent from '../components/game/EndScreenComponent.vue';
 import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { socket } from '@/service/socket';
 import type { User } from '@/store/user';
@@ -14,9 +15,14 @@ const player1User = ref<User>();
 const player2User = ref<User>();
 const route = useRoute();
 const routExist = computed(() => typeof route.params.id === 'undefined');
+const displayEnd = ref(false);
 
 const gameId = ref(0);
 const loadedData = ref(false);
+
+onUnmounted(() => {
+  socket.emit('stream', { gameId: gameId.value, event: 'LEAVE' });
+});
 
 watch(
   () => route.params,
@@ -39,11 +45,18 @@ watch(
 GameService.findAll('running').then(
   (gamesreturn: Game[]) => (games.value = gamesreturn),
 );
+
+socket.on('Game', async ({ gameId }) => {
+  if (gameId < 0) {
+    displayEnd.value = true;
+    socket.emit('stream', { gameId: gameId.value, event: 'LEAVE' });
+  }
+});
 </script>
 
 <template>
   <div>
-    <div v-if="routExist">
+    <div v-if="routExist && !displayEnd">
       <h1>stream overview</h1>
       <ChildStreamComponent
         v-for="game in games"
@@ -55,7 +68,7 @@ GameService.findAll('running').then(
         :game-id="game.id"
       />
     </div>
-    <div v-else>
+    <div v-if="!routExist && !displayEnd">
       <h1>pathed stream</h1>
       <PongComponent
         v-if="
@@ -69,6 +82,7 @@ GameService.findAll('running').then(
         :priority="2"
       />
     </div>
+    <EndScreenComponent v-if="displayEnd === true" :game-id="gameId" />
   </div>
 </template>
 
