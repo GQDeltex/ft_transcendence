@@ -19,7 +19,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const errorStore = useErrorStore();
 
-const emits = defineEmits(['hide']);
+const emits = defineEmits(['hide', 'unhide']);
 
 const displayState = ref('queue');
 const gameIdRef = ref(0);
@@ -100,6 +100,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   leave_queue();
+  emits('unhide');
 });
 </script>
 
