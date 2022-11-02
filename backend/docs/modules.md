@@ -28,7 +28,6 @@
 - [health/health.controller](modules/health_health_controller.md)
 - [health/health.module](modules/health_health_module.md)
 - [main](modules/main.md)
-- [prc/BadRequestExceptionFilter](modules/prc_BadRequestExceptionFilter.md)
 - [prc/channel/channel-user/channel-user.resolver](modules/prc_channel_channel_user_channel_user_resolver.md)
 - [prc/channel/channel-user/channel-user.service](modules/prc_channel_channel_user_channel_user_service.md)
 - [prc/channel/channel-user/entities/channel-user.entity](modules/prc_channel_channel_user_entities_channel_user_entity.md)
