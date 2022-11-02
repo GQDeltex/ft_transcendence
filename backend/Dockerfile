@@ -24,5 +24,6 @@ COPY --from=0 /app/dist /app/dist
 
 EXPOSE 3000
 HEALTHCHECK CMD curl --fail http://localhost:3000/health/check
+VOLUME /app/uploads
 
 CMD ["npm", "run", "start:prod"]
