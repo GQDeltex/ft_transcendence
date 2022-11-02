@@ -28,6 +28,7 @@ export type User = {
   equipped?: Item[];
   sentGameRequests_id?: number[];
   receivedGameRequests_id?: number[];
+  rank?: number;
 };
 
 export type Item = {
@@ -110,6 +111,7 @@ export const useUserStore = defineStore('user', {
     equipped: [] as Item[],
     sentGameRequests_id: [] as number[],
     receivedGameRequests_id: [] as number[],
+    rank: -1,
   }),
   getters: {
     getFriendStatus: (state) => {
@@ -164,31 +166,36 @@ export const useUserStore = defineStore('user', {
         await this.logout();
       }
     },
-    async fetchSelfData(): Promise<void> {
-      const user = await UserService.findSelf();
-      this.isLoggedIn = true;
-      this.id = user.id;
-      this.intra = user.intra;
-      this.firstname = user.firstname;
-      this.lastname = user.lastname;
-      this.username = user.username;
-      this.title = user.title;
-      this.picture = user.picture;
-      this.campus = user.campus;
-      this.country = user.country;
-      this.coalition = user.coalition;
-      this.status = user.status ?? '';
-      this.lastLoggedIn = user.lastLoggedIn ?? 0;
-      this.twoFAEnable = user.twoFAEnable ?? false;
-      this.friends = user.friends ?? [];
-      this.sentFriendRequests = user.sentFriendRequests ?? [];
-      this.receivedFriendRequests = user.receivedFriendRequests ?? [];
-      this.blocks = user.blocks ?? [];
-      this.blockedBy = user.blockedBy ?? [];
-      this.inventory = user.inventory ?? [];
-      this.equipped = user.equipped ?? [];
-      this.sentGameRequests_id = user.sentGameRequests_id ?? [];
-      this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+    async fetchSelfData(withRank = false): Promise<void> {
+      try {
+        const user = await UserService.findSelf(withRank);
+        this.isLoggedIn = true;
+        this.id = user.id;
+        this.intra = user.intra;
+        this.firstname = user.firstname;
+        this.lastname = user.lastname;
+        this.username = user.username;
+        this.title = user.title;
+        this.picture = user.picture;
+        this.campus = user.campus;
+        this.country = user.country;
+        this.coalition = user.coalition;
+        this.status = user.status ?? '';
+        this.lastLoggedIn = user.lastLoggedIn ?? 0;
+        this.twoFAEnable = user.twoFAEnable ?? false;
+        this.friends = user.friends ?? [];
+        this.sentFriendRequests = user.sentFriendRequests ?? [];
+        this.receivedFriendRequests = user.receivedFriendRequests ?? [];
+        this.blocks = user.blocks ?? [];
+        this.blockedBy = user.blockedBy ?? [];
+        this.inventory = user.inventory ?? [];
+        this.equipped = user.equipped ?? [];
+        this.sentGameRequests_id = user.sentGameRequests_id ?? [];
+        this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+        this.rank = user.rank ?? -1;
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {

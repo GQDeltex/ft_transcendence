@@ -72,13 +72,9 @@ UserService.findLeaders()
       <span class="title">{{ user.title[0] }}</span>
       <br />
       <div class="username">
-        <span
-          >{{ user.username }} (Rank
-          <span v-for="(leader, index) in leaders" :key="leader.id">
-            <span v-show="leader.username === user.username">{{
-              index + 1
-            }}</span></span
-          >)
+        <span>
+          {{ user.username }}
+          <span v-if="user.rank > 0">(Rank {{ user.rank }}) </span>
         </span>
         <img
           v-if="isMe"
@@ -248,13 +244,5 @@ input:checked + .slider:before {
   height: 1.5vw;
   width: 1.5vw;
   cursor: pointer;
-}
-
-.noPen {
-  position: relative;
-  border-radius: 50%;
-  height: 1.5vw;
-  width: 1.5vw;
-  color: red;
 }
 </style>

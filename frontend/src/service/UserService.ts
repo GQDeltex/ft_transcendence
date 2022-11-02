@@ -125,7 +125,7 @@ class UserService {
       });
   }
 
-  async findSelf(): Promise<User> {
+  async findSelf(withRank = false): Promise<User> {
     const { user } = await graphQLService.query(
       `
         query {
@@ -159,6 +159,7 @@ class UserService {
             }
             sentGameRequests_id
             receivedGameRequests_id
+            ${withRank ? 'rank' : ''}
           }
         }
       `,
@@ -169,7 +170,7 @@ class UserService {
     return user;
   }
 
-  async findOneById(id: number): Promise<User> {
+  async findOneById(id: number, withRank = false): Promise<User> {
     const { user } = await graphQLService.query(
       `
         query User($id: Int!) {
@@ -194,6 +195,7 @@ class UserService {
               picture
               metadata
             }
+            ${withRank ? 'rank' : ''}
           }
         }
       `,

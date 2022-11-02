@@ -41,6 +41,7 @@ type User {
   sentGameRequests_id: [Int]!
   receivedGameRequests_id: [Int]!
   status: String!
+  rank: Int!
   friends: [Int]!
   sentFriendRequests: [Int]!
   receivedFriendRequests: [Int]!
