@@ -91,7 +91,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
         header="No need to test"
         text="If I throw a rock at the computer, it'll also break the shop"
         picture=""
-      />kmeixner
+      />
       <ChildAchievementComponent
         v-if="user?.user.value.username == 'kmeixner'"
         header="25 Hours"
