@@ -52,6 +52,17 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
     // For some reason this throws an 'Error' again?
     //super.catch(exception, host);
     const client = host.switchToWs().getClient<Socket>();
+
+    if (exception instanceof BadRequestException) {
+        const errorObject = exception.getResponse() as string | { message: string };
+        let message;
+        if (typeof errorObject === "string")
+            message = errorObject;
+        else
+            message = errorObject.message
+        client.emit('exception', { status: 'error', message: message });
+        return;
+    }
     client.emit('exception', { status: 'error', message: exception.message });
   }
 }
