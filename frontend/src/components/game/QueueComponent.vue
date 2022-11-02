@@ -51,12 +51,12 @@ function leave_queue() {
 }
 
 async function getPlayerUsers(player1Id: number, player2Id: number) {
-    try {
-        player1User.value = await UserService.findOneById(player1Id);
-        player2User.value = await UserService.findOneById(player2Id);
-    } catch (error) {
-        errorStore.setError(error.message);
-    }
+  try {
+    player1User.value = await UserService.findOneById(player1Id);
+    player2User.value = await UserService.findOneById(player2Id);
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
 }
 
 // playerIDs to check validity of messages for streaming implementation later™
