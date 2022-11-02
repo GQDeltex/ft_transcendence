@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:89](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L89)
+[src/prc/channel/channel-user/channel-user.resolver.ts:91](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L91)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:135](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L135)
+[src/prc/channel/channel-user/channel-user.resolver.ts:138](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L138)
 
 ___
 
