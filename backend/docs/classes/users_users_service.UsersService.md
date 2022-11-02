@@ -26,6 +26,7 @@
 - [findChannelUser](users_users_service.UsersService.md#findchanneluser)
 - [findLeaders](users_users_service.UsersService.md#findleaders)
 - [findOne](users_users_service.UsersService.md#findone)
+- [findRank](users_users_service.UsersService.md#findrank)
 - [findSocketUser](users_users_service.UsersService.md#findsocketuser)
 - [findUserChannelList](users_users_service.UsersService.md#finduserchannellist)
 - [update2FAEnable](users_users_service.UsersService.md#update2faenable)
@@ -219,6 +220,26 @@ ___
 #### Defined in
 
 [src/users/users.service.ts:139](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L139)
+
+___
+
+### findRank
+
+▸ **findRank**(`user`): `Promise`<`number`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `user` | [`User`](users_entities_user_entity.User.md) |
+
+#### Returns
+
+`Promise`<`number`\>
+
+#### Defined in
+
+[src/users/users.service.ts:521](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L521)
 
 ___
 

@@ -146,6 +146,11 @@ export class UsersResolver {
     return 'offline';
   }
 
+  @ResolveField(() => Int)
+  async rank(@Parent() user: User): Promise<number> {
+    return this.usersService.findRank(user);
+  }
+
   @ResolveField(() => [Int], { nullable: 'items' })
   async friends(@Parent() user: User): Promise<number[]> {
     return user.friends;

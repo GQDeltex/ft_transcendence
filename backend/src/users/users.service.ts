@@ -517,4 +517,13 @@ export class UsersService {
       });
     }
   }
+
+  async findRank(user: User) {
+    const users: User[] = await this.userRepository.find({
+      order: { points: 'DESC' },
+    });
+    const rank: number = users.findIndex((u) => u.id === user.id);
+    if (rank === -1) return rank;
+    return rank + 1;
+  }
 }
