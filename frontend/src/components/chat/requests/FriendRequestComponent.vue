@@ -29,7 +29,7 @@ const declineButton = async () => {
       <img class="picture" alt="user picture" :src="client.picture" />
       <span class="sender">
         {{ client.username }}
-        <span class="requestText">has send a friend request</span>
+        <span class="requestText"><br />has send a friend request</span>
       </span>
     </div>
     <div class="buttonBox">
