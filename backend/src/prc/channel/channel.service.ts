@@ -33,7 +33,11 @@ export class ChannelService {
   async findJoined(identifier: number): Promise<Channel[]> {
     const channels: Channel[] = await this.channelRepository.find();
     return channels.filter((channel) => {
-      if (!channel.private) return true;
+      if (!channel.private) {
+        if (channel.userList.some((channelUser) => channelUser.ban))
+          return false;
+        else return true;
+      }
       return channel.userList.some(
         (channelUser) => channelUser.user_id === identifier && !channelUser.ban,
       );
