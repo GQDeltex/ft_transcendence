@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:521](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L521)
+[src/users/users.service.ts:519](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L519)
 
 ___
 
