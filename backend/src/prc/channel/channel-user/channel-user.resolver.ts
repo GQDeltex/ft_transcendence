@@ -102,7 +102,7 @@ export class ChannelUserResolver {
     );
     if (typeof channelBanUser === 'undefined')
       throw new WsException('channelBanUser undefined');
-    if (banUser == 0) throw new WsException('You cannot ban God (ie Vincent)');
+    if (banUser == 0) throw new WsException('You cannot ban God(ie Vincent)');
     if (channelBanUser.ban)
       throw new WsException(
         'You are temporarly banned. Please wait till you are no longer banned',
