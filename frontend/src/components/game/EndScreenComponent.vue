@@ -36,6 +36,7 @@ async function homepage() {
 }
 
 onMounted(async () => {
+  if (props.gameId === 0) return;
   await GameService.findOne(props.gameId).then((game) => {
     playerScore1.value = game.score1;
     remoteScore2.value = game.score2;
