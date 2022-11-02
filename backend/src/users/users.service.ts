@@ -466,8 +466,6 @@ export class UsersService {
         throw new UserInputError('User is not online');
       if (invitedUser.status === 'in game')
         throw new UserInputError('Player is in game');
-      invitedUser.status = 'in game';
-      user.status = 'in game';
       invitedUser.sentGameRequests = invitedUser.sentGameRequests?.filter(
         (user) => user.id !== id,
       );
