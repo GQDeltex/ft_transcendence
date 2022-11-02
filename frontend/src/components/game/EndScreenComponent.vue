@@ -3,6 +3,9 @@ import GameService from '@/service/GameService';
 import { onMounted, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import UserService from '@/service/UserService';
+import { useErrorStore } from '@/store/error';
+
+const errorStore = useErrorStore();
 
 const props = defineProps<{
   gameId: number;
@@ -44,16 +47,16 @@ onMounted(async () => {
     player2.value.id = game.player2.id;
     player1.value.username = game.player1.username;
     player2.value.username = game.player2.username;
-  });
+  }).catch((error) => errorStore.setError(error.message));
 
   await UserService.findOneById(player1.value.id).then((user) => {
     player1.value.picture = user.picture;
-  });
+  }).catch((error) => errorStore.setError(error.message));
 
   await UserService.findOneById(player2.value.id).then((user) => {
     player2.value.picture = user.picture;
     username();
-  });
+  }).catch((error) => errorStore.setError(error.message));
 
   function username() {
     if (playerScore1.value > remoteScore2.value) {
