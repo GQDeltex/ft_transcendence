@@ -18,9 +18,6 @@ const errorStore = useErrorStore();
 const { getErrors: errors } = storeToRefs(errorStore);
 
 const hide = ref(false);
-function onHide() {
-  hide.value = true;
-}
 
 if (isLoggedIn.value && !socket.connected) socket.connect();
 
@@ -64,7 +61,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
     :text="error"
     :callback="errorStore.delError"
   />
-  <RouterView @hide="onHide" />
+  <RouterView @hide="hide = true" @unhide="hide = false" />
 </template>
 
 <style>
