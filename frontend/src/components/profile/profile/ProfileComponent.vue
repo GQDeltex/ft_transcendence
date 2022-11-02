@@ -74,7 +74,7 @@ UserService.findLeaders()
       <div class="username">
         <span>
           {{ user.username }}
-          <span v-if="user.rank > 0">(Rank {{ user.rank }}) </span>
+          <span v-if="user.rank && user.rank > 0">(Rank {{ user.rank }}) </span>
         </span>
         <img
           v-if="isMe"
