@@ -28,6 +28,7 @@ export type User = {
   equipped?: Item[];
   sentGameRequests_id?: number[];
   receivedGameRequests_id?: number[];
+  rank?: number;
 };
 
 export type Item = {
@@ -110,6 +111,7 @@ export const useUserStore = defineStore('user', {
     equipped: [] as Item[],
     sentGameRequests_id: [] as number[],
     receivedGameRequests_id: [] as number[],
+    rank: -1,
   }),
   getters: {
     getFriendStatus: (state) => {
@@ -164,8 +166,8 @@ export const useUserStore = defineStore('user', {
         await this.logout();
       }
     },
-    async fetchSelfData(): Promise<void> {
-      const user = await UserService.findSelf();
+    async fetchSelfData(withRank = false): Promise<void> {
+      const user = await UserService.findSelf(withRank);
       this.isLoggedIn = true;
       this.id = user.id;
       this.intra = user.intra;
@@ -189,6 +191,7 @@ export const useUserStore = defineStore('user', {
       this.equipped = user.equipped ?? [];
       this.sentGameRequests_id = user.sentGameRequests_id ?? [];
       this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+      this.rank = user.rank ?? -1;
     },
     async logout(): Promise<void> {
       if (this.isLoggedIn || this.id > 0) {
