@@ -19,17 +19,17 @@ const user = ref<User | null>(null);
 const isMe = ref(false);
 
 const fetchUserData = async (id: number) => {
-  if (id === userStore.id) {
-    await userStore.fetchSelfData(true);
-    user.value = userStore.$state;
-    isMe.value = true;
-  } else {
-    try {
+  try {
+    if (id === userStore.id) {
+      await userStore.fetchSelfData(true);
+      user.value = userStore.$state;
+      isMe.value = true;
+    } else {
       user.value = await UserService.findOneById(id, true);
-    } catch (error) {
-      errorStore.setError((error as Error).message);
-      await router.push({ path: '/' });
     }
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+    await router.push({ path: '/' });
   }
 };
 
