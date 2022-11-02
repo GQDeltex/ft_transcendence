@@ -61,7 +61,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
     :text="error"
     :callback="errorStore.delError"
   />
-  <RouterView @hide="hide=true" @unhide="hide=false"/>
+  <RouterView @hide="hide = true" @unhide="hide = false" />
 </template>
 
 <style>
