@@ -85,6 +85,7 @@ function sendMsg() {
   font-size: 1vw;
   padding: 0.5vw;
   overflow-y: scroll;
+  overflow-wrap: break-word;
 }
 .lower {
   display: flex;
