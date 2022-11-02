@@ -54,6 +54,104 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
         picture=""
       />
       <ChildAchievementComponent
+        v-if="
+          user?.user.value.username == 'hlehmann' &&
+          user.user.value.id != 835543
+        "
+        header="Fake News"
+        text="You are not the President"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.id == 835543"
+        header="President"
+        text="Welcome Mr. President"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'shazam'"
+        header="Baggette"
+        text="Hon hon hon I am ze french. Baggette baggette fromage"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'mamuller'"
+        header="Design"
+        text="Buisness, Buisness, Buisness. Design, Design, Design"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'rkaufman'"
+        header="Not my department"
+        text="I need a cubical, this is not my department"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'cthien-h'"
+        header="No need to test"
+        text="If I throw a rock at the computer, it'll also break the shop"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'kmeixner'"
+        header="25 Hours"
+        text="I can fix my IRC in one day"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'pstengl'"
+        header="Techlead"
+        text="I dont know why Java does that"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'cdahlhof'"
+        header="Hamster"
+        text="He said that he would be here 3 hours ago. Probably is sleeping"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'vheymans'"
+        header="TBA"
+        text="TBA"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'dzivanov'"
+        header="You look good"
+        text="Man, your hair looks so good right now. You look so well rested."
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'ehosu'"
+        header="Complicated"
+        text="Why go the easy way when thats the boring way."
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'backlog'"
+        header="TBA"
+        text="THATS BACKLOG, WE'LL DO IT LATER"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="
+          user?.user.value.username == 'hlehmann' ||
+          'mamuller' ||
+          'rkaufman' ||
+          'cthien-h' ||
+          'kmeixner' ||
+          'pstengl' ||
+          'cdahlhof' ||
+          'vheymans' ||
+          'dzivanov' ||
+          'ehosu'
+        "
+        header="Bonding time"
+        text="Time to do some family bonding. ;)"
+        picture=""
+      />
+      <ChildAchievementComponent
         v-if="games.length > 0"
         header="Gamer"
         text="Played First Game"
