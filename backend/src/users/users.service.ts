@@ -472,6 +472,8 @@ export class UsersService {
       user.receivedGameRequests = user.receivedGameRequests?.filter(
         (user) => user.id !== input.userId,
       );
+      invitedUser.status = 'in game';
+      user.status = 'in game';
       await this.userRepository.save([invitedUser, user]);
       const game: Game = await this.gameRepository.save({
         state: GameState.RUNNING,
