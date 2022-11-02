@@ -5,7 +5,7 @@ import { IsNotEmpty, Length, Matches } from 'class-validator';
 export class UpdateUsernameInput {
   @IsNotEmpty()
   @Field()
-  @Length(1, 42)
+  @Length(1, 20)
   @Matches('^[a-zA-Z0-9\\_\\-]+$')
   username: string;
 }

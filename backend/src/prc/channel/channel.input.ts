@@ -6,7 +6,7 @@ export class CreateChannelInput {
   @Field()
   @IsNotEmpty()
   @IsAscii()
-  @Length(2, 42)
+  @Length(2, 20)
   @Matches('^[#][a-zA-Z0-9\\_\\-\\.]+$')
   name: string;
 
@@ -29,7 +29,7 @@ export class ToggleChannelPpInput {
   @Field()
   @IsNotEmpty()
   @IsAscii()
-  @Length(2, 42)
+  @Length(2, 20)
   @Matches('^[#][a-zA-Z0-9\\_\\-\\.]+$')
   channelName: string;
 
