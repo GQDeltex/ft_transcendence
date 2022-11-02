@@ -135,9 +135,20 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user?.user.value.username == 'family'"
+        v-if="
+          user?.user.value.username == 'hlehmann' ||
+          'mamuller' ||
+          'rkaufman' ||
+          'cthien-h' ||
+          'kmeixner' ||
+          'pstengl' ||
+          'cdahlhof' ||
+          'vheymans' ||
+          'dzivanov' ||
+          'ehosu'
+        "
         header="Bonding time"
-        text="Time to do some family bonding time. ;)"
+        text="Time to do some family bonding. ;)"
         picture=""
       />
       <ChildAchievementComponent
