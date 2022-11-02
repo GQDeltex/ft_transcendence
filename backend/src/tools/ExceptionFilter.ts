@@ -54,14 +54,14 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
     const client = host.switchToWs().getClient<Socket>();
 
     if (exception instanceof BadRequestException) {
-        const errorObject = exception.getResponse() as string | { message: string };
-        let message;
-        if (typeof errorObject === "string")
-            message = errorObject;
-        else
-            message = errorObject.message
-        client.emit('exception', { status: 'error', message: message });
-        return;
+      const errorObject = exception.getResponse() as
+        | string
+        | { message: string };
+      let message;
+      if (typeof errorObject === 'string') message = errorObject;
+      else message = errorObject.message;
+      client.emit('exception', { status: 'error', message: message });
+      return;
     }
     client.emit('exception', { status: 'error', message: exception.message });
   }
