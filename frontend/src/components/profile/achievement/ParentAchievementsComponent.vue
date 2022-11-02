@@ -54,6 +54,18 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
         picture=""
       />
       <ChildAchievementComponent
+        v-if="user?.user.value.username == 'hlehmann'"
+        header="President"
+        text="Welcome Mr. President"
+        picture=""
+      />
+      <ChildAchievementComponent
+        v-if="user?.user.value.username == 'shazam'"
+        header="Baggette"
+        text="Hon hon hon I am ze french. Baggette baggette fromage"
+        picture=""
+      />
+      <ChildAchievementComponent
         v-if="games.length > 0"
         header="Gamer"
         text="Played First Game"
