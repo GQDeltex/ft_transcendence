@@ -174,7 +174,7 @@ const isAdmin = computed(() => {
         </template>
       </div>
       <div class="buttonList">
-        <span class="Text"> Options </span>
+        <span class="headerText"> Options </span>
         <span v-if="isOwner">
           <button class="button" @click="changePassword">
             Change Password

@@ -74,7 +74,7 @@ export class ChannelUserService {
         .fetchSockets();
       if (sockets.length >= 1) sockets[0].join(channelName);
     }
-    console.log('No longer Banned');
+    // console.log('No longer Banned');
   }
 
   async updateBan(

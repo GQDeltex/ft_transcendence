@@ -12,14 +12,18 @@ import {
 import { useRoute, useRouter } from 'vue-router';
 import type { Item } from '@/store/user';
 import type { _RouteLocationBase } from 'vue-router';
+import { useErrorStore } from '@/store/error';
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
+const errorStore = useErrorStore();
+
+const emits = defineEmits(['hide']);
 
 const displayState = ref('queue');
 const gameIdRef = ref(0);
-const playerPriorityRef = ref(false);
+const playerPriorityRef = ref(1);
 
 const player1User = ref<{
   id: number;
@@ -47,8 +51,12 @@ function leave_queue() {
 }
 
 async function getPlayerUsers(player1Id: number, player2Id: number) {
-  player1User.value = await UserService.findOneById(player1Id);
-  player2User.value = await UserService.findOneById(player2Id);
+  try {
+    player1User.value = await UserService.findOneById(player1Id);
+    player2User.value = await UserService.findOneById(player2Id);
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
 }
 
 // playerIDs to check validity of messages for streaming implementation later™
@@ -57,12 +65,13 @@ socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
     displayState.value = 'end';
     return;
   }
-  console.log('ich will ein spiel mit dir spiel');
+  // console.log('ich will ein spiel mit dir spiel');
   await getPlayerUsers(player1Id, player2Id);
   await nextTick();
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
   displayState.value = 'start';
+  emits('hide');
 });
 
 const checkGame = async (url: _RouteLocationBase) => {

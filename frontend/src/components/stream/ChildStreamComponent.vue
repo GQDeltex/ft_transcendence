@@ -5,6 +5,7 @@ const props = defineProps<{
   player2Name: string;
   score1?: number;
   score2?: number;
+  gameId?: number;
 }>();
 
 const hasScores = computed(() => {
@@ -15,7 +16,7 @@ const hasScores = computed(() => {
 </script>
 
 <template>
-  <router-link to="/placeholder">
+  <router-link :to="`/stream/${gameId}`">
     <div>
       <img class="thumbnail" src="@/assets/pong.png" />
       <span v-if="hasScores" class="playernames">

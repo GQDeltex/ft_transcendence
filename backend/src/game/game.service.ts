@@ -59,14 +59,15 @@ export class GameService {
   }
 
   async dequeuePlayer(id: number) {
-    if (typeof id === 'number')
-      await this.queuedPlayerRepository.delete({
-        playerId: id,
-      });
+    await this.queuedPlayerRepository.delete({
+      playerId: id,
+    });
   }
 
   async saveScore(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
+    // if the game has already ended, don't try to write the score
+    if (game.state == GameState.ENDED) return;
     game.score1 = score[1];
     game.score2 = score[0];
     await this.gameRepository.save(game);

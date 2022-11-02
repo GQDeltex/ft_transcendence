@@ -13,7 +13,7 @@ function closeOk() {
   if (channelName.value.length > 0 && !channelName.value.startsWith('#')) {
     channelName.value = '#' + channelName.value;
   }
-  console.log(channelName.value);
+  // console.log(channelName.value);
   socket.emit(
     'join',
     {

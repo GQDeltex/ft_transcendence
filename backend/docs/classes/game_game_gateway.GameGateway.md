@@ -25,6 +25,7 @@
 - [handleInviteGame](game_game_gateway.GameGateway.md#handleinvitegame)
 - [handleMessage](game_game_gateway.GameGateway.md#handlemessage)
 - [handleQueueIn](game_game_gateway.GameGateway.md#handlequeuein)
+- [handleStream](game_game_gateway.GameGateway.md#handlestream)
 - [startGame](game_game_gateway.GameGateway.md#startgame)
 
 ## Constructors
@@ -107,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:97](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L97)
+[src/game/game.gateway.ts:115](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L115)
 
 ___
 
@@ -154,7 +155,30 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:78](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L78)
+[src/game/game.gateway.ts:80](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L80)
+
+___
+
+### handleStream
+
+▸ **handleStream**(`client`, `jwtPayload`, `event`, `gameId`): `Promise`<`undefined` \| { `player1Id`: `number` = game.player1.id; `player2Id`: `number` = game.player2.id }\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `event` | `string` |
+| `gameId` | `number` |
+
+#### Returns
+
+`Promise`<`undefined` \| { `player1Id`: `number` = game.player1.id; `player2Id`: `number` = game.player2.id }\>
+
+#### Defined in
+
+[src/game/game.gateway.ts:99](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L99)
 
 ___
 
@@ -174,4 +198,4 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:107](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L107)
+[src/game/game.gateway.ts:125](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L125)

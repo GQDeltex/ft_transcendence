@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { RouterView } from 'vue-router';
 import { useUserStore } from './store/user';
@@ -17,6 +17,11 @@ const { isLoggedIn } = storeToRefs(userStore);
 const errorStore = useErrorStore();
 const { getErrors: errors } = storeToRefs(errorStore);
 
+const hide = ref(false);
+function onHide() {
+  hide.value = true;
+}
+
 if (isLoggedIn.value && !socket.connected) socket.connect();
 
 watch(isLoggedIn, (newLogState) => {
@@ -25,12 +30,12 @@ watch(isLoggedIn, (newLogState) => {
 });
 
 socket.on('prc', (data) => {
-  console.log('Msg from: ', data);
+  // console.log('Msg from: ', data);
   messagesStore.saveMessage(data);
 });
 
 socket.on('status', (status) => {
-  console.log(status.msg);
+  // console.log(status.msg);
   messagesStore.saveMessage(status);
 });
 
@@ -49,7 +54,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
 </script>
 
 <template>
-  <header v-if="userStore.isLoggedIn">
+  <header v-if="userStore.isLoggedIn && !hide">
     <NavbarComponent />
   </header>
   <ModalComponent
@@ -59,7 +64,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
     :text="error"
     :callback="errorStore.delError"
   />
-  <RouterView />
+  <RouterView @hide="onHide" />
 </template>
 
 <style>

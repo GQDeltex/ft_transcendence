@@ -10,12 +10,12 @@ let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
 
 async function closeOk() {
-  console.log(
-    'channelName= ' + channelName.value + ' password= ' + password.value, //DEBUG
-  );
+  // console.log(
+  //   'channelName= ' + channelName.value + ' password= ' + password.value, //DEBUG
+  // );
   try {
     await ChannelUserService.updatePassword(channelName.value, password.value);
-    console.log(channelName.value + ' password is now ' + password.value); //DEBUG
+    // console.log(channelName.value + ' password is now ' + password.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }

@@ -198,10 +198,10 @@ export class ChannelService {
       if (typeof newOwner === 'undefined') {
         newOwner = userList[0];
       }
-      // Update new owner
+      // Update new owner and new admin
       await this.channelUserRepository.update(
         { id: newOwner.id },
-        { owner: true },
+        { owner: true, admin: true },
       );
     }
     await this.channelUserRepository.delete({ id: channelUser.id });

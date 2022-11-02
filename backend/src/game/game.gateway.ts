@@ -66,8 +66,10 @@ export class GameGateway implements OnGatewayDisconnect {
         await this.gameService.endGame(gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
+        // Game is over anyways, no need to send gameData anymore
+        return;
       } else {
-        await this.gameService.saveScore(gameId, score);
+        await this.gameService.saveScore(gameId, score); // slower?
       }
     }
     client
@@ -91,6 +93,22 @@ export class GameGateway implements OnGatewayDisconnect {
       otherSockets.forEach((socket) => {
         socket.emit('Game', { gameId: -1 });
       });
+    }
+  }
+
+  @SubscribeMessage('stream')
+  async handleStream(
+    @ConnectedSocket() client: Socket,
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @MessageBody('event') event: string,
+    @MessageBody('gameId') gameId: number,
+  ) {
+    if (event === 'JOIN') {
+      const game: Game = await this.gameService.findOne(gameId);
+      client.join(`&${gameId}`);
+      return { player1Id: game.player1.id, player2Id: game.player2.id };
+    } else {
+      client.leave(`&${gameId}`);
     }
   }
 
@@ -120,13 +138,13 @@ export class GameGateway implements OnGatewayDisconnect {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: true,
+      priority: 0,
     });
     p2sockets[0].emit('Game', {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: false,
+      priority: 1,
     });
     p1sockets[0].join(`&${game.id}`);
     p2sockets[0].join(`&${game.id}`);
