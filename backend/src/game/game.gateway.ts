@@ -43,6 +43,7 @@ export class GameGateway implements OnGatewayDisconnect {
   ) {}
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
+    if (typeof client.data.user === "undefined") return;
     await this.gameService.dequeuePlayer(+client.data.user.id);
     const gameId = await this.gameService.killGame(+client.data.user.id);
     if (gameId == -1) return;
