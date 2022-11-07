@@ -34,7 +34,7 @@ const channelSelect = (input: Channel) => {
 };
 
 function userInChannel(input: Channel) {
-  console.log('input', input);
+  // console.log('input', input);
   return input.userList.some((inside) => {
     if (inside.user_id == props.userId) return true;
     return false;
