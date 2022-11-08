@@ -46,7 +46,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 
 <template>
   <div class="achievementsParent">
-    <span class="text">Achievements</span>
+    <span class="title">Achievements</span>
     <div class="achievements">
       <ChildAchievementComponent
         header="Smol PongKing"
@@ -63,9 +63,9 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user?.user.value.id == 835543"
+        v-if="user?.user.value.username == 'hlehmann'"
         header="President"
-        text="Welcome Mr. President"
+        text="Welcome Mr. President!"
         picture=""
       />
       <ChildAchievementComponent
@@ -112,8 +112,8 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
       />
       <ChildAchievementComponent
         v-if="user?.user.value.username == 'vheymans'"
-        header="TBA"
-        text="TBA"
+        header="Java"
+        text="Java is an island too! But Javascript something complete different!"
         picture=""
       />
       <ChildAchievementComponent
@@ -137,15 +137,15 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
       <ChildAchievementComponent
         v-if="
           user?.user.value.username == 'hlehmann' ||
-          'mamuller' ||
-          'rkaufman' ||
-          'cthien-h' ||
-          'kmeixner' ||
-          'pstengl' ||
-          'cdahlhof' ||
-          'vheymans' ||
-          'dzivanov' ||
-          'ehosu'
+          user?.user.value.username == 'mamuller' ||
+          user?.user.value.username == 'rkaufman' ||
+          user?.user.value.username == 'cthien-h' ||
+          user?.user.value.username == 'kmeixner' ||
+          user?.user.value.username == 'pstengl' ||
+          user?.user.value.username == 'cdahlhof' ||
+          user?.user.value.username == 'vheymans' ||
+          user?.user.value.username == 'dzivanov' ||
+          user?.user.value.username == 'ehosu'
         "
         header="Bonding time"
         text="Time to do some family bonding. ;)"
@@ -195,15 +195,17 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 .achievementsParent {
   display: grid;
   padding: 1vw;
-  border: 1px solid grey;
+  border: 1px solid var(--main-3-color);
   max-height: 30vh;
+}
+
+.title {
+  font-size: var(--main-title-font-size);
+  color: var(--main-2-color);
+  margin-bottom: 1vw;
 }
 .achievements {
   max-height: inherit;
   overflow-y: scroll;
-}
-.text {
-  font-size: 2vw;
-  margin-bottom: 1vw;
 }
 </style>

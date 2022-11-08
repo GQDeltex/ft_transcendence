@@ -35,7 +35,7 @@ div {
 .playernames {
   display: flex;
   justify-content: center;
-  color: white;
+  color: var(--main-2-color);
   text-decoration: none;
   font-size: 2vw;
   margin-top: 1vw;

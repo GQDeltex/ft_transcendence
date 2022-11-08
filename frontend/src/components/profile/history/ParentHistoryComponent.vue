@@ -24,9 +24,9 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 </script>
 
 <template>
-  <div class="frame">
-    <div class="title">History</div>
-    <div class="scroll">
+  <div class="historiesParent">
+    <span class="title">History</span>
+    <div class="history">
       <UserPlayedGameComponent
         v-for="game in sortedGames"
         :key="game.id"
@@ -40,17 +40,21 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 </template>
 
 <style scoped>
+.historiesParent {
+  display: grid;
+  padding: 1vw;
+  border: 1px solid var(--main-4-color);
+  max-height: 50vh;
+}
 .title {
-  font-size: 2vw;
+  font-size: var(--main-title-font-size);
+  color: var(--main-2-color);
+  margin-bottom: 1vw;
 }
 
-.scroll {
-  overflow-y: scroll;
-  max-height: 96%;
-}
-.frame {
-  border: 1px solid #202020;
-  padding: 1vw;
+.history {
+  /* max-height: 96%; */
   max-height: inherit;
+  overflow-y: scroll;
 }
 </style>

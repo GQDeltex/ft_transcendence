@@ -45,7 +45,8 @@ const capitalize = (str: string) => {
 <style scoped>
 .about {
   padding: 1vw;
-  border: 1px solid grey;
+  border: 1px solid var(--main-3-color);
+  color: var(--main-2-color);
   display: flex;
   flex-direction: column;
   /* max-height: inherit; */
@@ -56,13 +57,13 @@ const capitalize = (str: string) => {
 
 .infoBox {
   font-size: 1.5vw;
-  color: grey;
+  color: var(--main-3-color);
   /* max-height: inherit; */
   /* max-height: 1fr; */
   overflow-y: scroll;
 }
 
 .info {
-  color: white;
+  color: var(--main-2-color);
 }
 </style>

@@ -37,7 +37,7 @@ function closeCancel() {
       <label>new Picture</label>
       <input ref="file" name="picture" type="file" accept="image/*" />
       <br />
-      <button class="ok" @click="uploadPicture">upload picture</button>
+      <button class="button" @click="uploadPicture">upload picture</button>
     </div>
   </div>
 </template>
@@ -88,8 +88,5 @@ function closeCancel() {
 .close:focus {
   color: black;
   text-decoration: none;
-}
-.ok {
-  cursor: pointer;
 }
 </style>

@@ -54,7 +54,7 @@ const logout = async () => {
   <div v-if="user" class="profileViewParent">
     <ProfileComponent class="profile" />
     <div class="lowerPart">
-      <ParentHistoryComponent class="history" />
+      <ParentHistoryComponent />
       <div class="aboutParent">
         <AboutMeComponent class="aboutMe" />
         <ParentAchievementsComponent class="achievement" />

@@ -28,20 +28,20 @@ defineProps<{
   margin-right: 10%;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--main-3-color);
   padding: 10px;
 }
 
 .item-name {
   text-decoration: none;
-  color: grey;
+  color: var(--main-3-color);
   width: 50%;
   padding: 10px;
 }
 
 .item-price {
   text-decoration: none;
-  color: gray;
+  color: var(--main-3-color);
   width: 20%;
   padding: 10px;
 }

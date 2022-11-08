@@ -26,12 +26,12 @@ defineProps<{
 
 .infoBox {
   /* grid-column: 2 / 4; */
-  font-size: 2vw;
-  color: grey;
+  font-size: var(--main-title-font-size);
+  color: var(--main-3-color);
 }
 
 .info {
-  color: white;
+  color: var(--main-2-color);
 }
 
 .logo {
@@ -39,7 +39,7 @@ defineProps<{
   /* grid-column: 1 / 2; */
   object-position: 50% 0%;
   border-radius: 50%;
-  border: 1px solid #f8971d;
+  border: 1px solid var(--main-1-color);
   height: 5vw;
   width: 5vw;
 }

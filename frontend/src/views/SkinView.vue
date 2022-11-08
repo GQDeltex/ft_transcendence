@@ -36,7 +36,7 @@ onMounted(async () => {
   margin-right: 10%;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--main-3-color);
 }
 
 .button {
@@ -44,8 +44,8 @@ onMounted(async () => {
   width: 25%;
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  /* color: var(--main-bg-color);
+  background-color: var(--main-1-color); */
   padding: 10px;
   margin: 20px;
 }

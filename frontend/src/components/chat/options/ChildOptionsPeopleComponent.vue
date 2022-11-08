@@ -86,20 +86,20 @@ const onProfile = async () => {
 
   <div v-if="props.client.id != userStore.id" v-show="toggle" class="popup">
     <span>
-      <button class="button second" @click="onProfile">Show Profile</button>
+      <button class="button" @click="onProfile">Show Profile</button>
     </span>
     <span v-if="props.isOwner">
-      <button class="button second" @click="emits('updateAdmin', props.client.id)">
+      <button class="button" @click="emits('updateAdmin', props.client.id)">
         Make Admin
       </button>
     </span>
     <span v-if="props.isAdmin || props.isOwner">
-      <button class="button second" @click="emits('banUser', props.client.id)">
+      <button class="button" @click="emits('banUser', props.client.id)">
         Ban User
       </button>
     </span>
     <span v-if="props.isAdmin || props.isOwner">
-      <button class="button second" @click="emits('muteUser', props.client.id)">
+      <button class="button" @click="emits('muteUser', props.client.id)">
         Mute User
       </button>
     </span>
@@ -131,14 +131,14 @@ const onProfile = async () => {
 }
 
 .username {
-  color: white;
-  font-size: 0.8vw;
+  color: var(--main-2-color);
+  font-size: var(--main-small-font-size);
   font-stretch: expanded;
 }
 
 .status {
-  font-size: 0.6vw;
-  color: grey;
+  font-size: var(--main-small-font-size);
+  color: var(--main-4-color);
 }
 
 .popup {
@@ -157,6 +157,5 @@ const onProfile = async () => {
   font-size: 0.5vw;
   border-color: transparent; */
   margin-top: 2px;
-
 }
 </style>

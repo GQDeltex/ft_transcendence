@@ -21,7 +21,7 @@ UserService.findLeaders()
 </script>
 
 <template>
-  <h3>{{ categoryName }}</h3>
+  <div class="title">{{ categoryName }}</div>
   <div class="categories">
     <ChildMedalComponent
       v-if="typeof leaders[0] != 'undefined'"
@@ -47,9 +47,10 @@ UserService.findLeaders()
 </template>
 
 <style scoped>
-h3 {
+.title {
   padding: 5px;
-  color: orange;
+  color: var(--main-1-color);
+  font-size: var(--main-title-font-size);
 }
 .categories {
   display: flex;

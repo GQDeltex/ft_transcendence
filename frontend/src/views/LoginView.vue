@@ -50,8 +50,8 @@ const login = () => {
 .text {
   text-align: center;
   flex-wrap: wrap;
-  color: white;
-  font-size: 2vw;
+  color: var(--main-2-color);
+  font-size: var(--main-title-font-size);
 }
 
 .buttons {
@@ -62,8 +62,8 @@ const login = () => {
 .button {
   text-decoration: none;
   border-radius: 20px;
-  color: white;
-  background-color: #f8971d;
+  color: var(--main-2-color);
+  background-color: var(--main-1-color);
   padding: 10px;
   align-content: center;
   cursor: pointer;
@@ -78,14 +78,14 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 10vh;
-  background: #f8971d;
+  background: var(--main-1-color);
 }
 
 button {
   border-radius: 50%;
-  border: 2px outset grey;
+  border: 2px outset var(--main-3-color);
   position: relative;
-  color: white;
+  color: var(--main-2-color);
   overflow: hidden;
 
   box-shadow: 0 0 10px rgb(0, 0, 0, 1);
@@ -93,16 +93,28 @@ button {
   font-size: 2vw;
   font-weight: bolder;
   text-decoration: none;
-  background: linear-gradient(160deg, white, grey, grey, black);
+  background: linear-gradient(
+    160deg,
+    var(--main-2-color),
+    var(--main-3-color),
+    var(--main-3-color),
+    var(--main-bg-color)
+  );
   text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
   transition: 0.3s;
 }
 
 button:hover {
   border: 2px outset #ddd;
-  color: white;
-  background: linear-gradient(160deg, white, #f8971d, #f8971d, black);
-  text-shadow: 0px 0px 4px #202020;
+  color: var(--main-2-color);
+  background: linear-gradient(
+    160deg,
+    var(--main-2-color),
+    var(--main-1-color),
+    var(--main-1-color),
+    var(--main-bg-color)
+  );
+  text-shadow: 0px 0px 4px var(--main-4-color);
   box-shadow: 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
   transition-delay: 0.2s;
 }

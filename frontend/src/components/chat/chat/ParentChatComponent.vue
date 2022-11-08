@@ -69,20 +69,20 @@ function sendMsg() {
 .parent {
   display: flex;
   flex-direction: column;
-  border: 1px solid #202020;
+  border: 1px solid var(--main-4-color);
   height: inherit;
   width: 60vw;
 }
 .chatname {
-  color: #f8971d;
+  color: var(--main-1-color);
   padding: 1vw;
   font-size: 1vw;
 }
 .messages {
   height: 100%;
-  border-top: 1px solid #202020;
-  border-bottom: 1px solid #202020;
-  font-size: 1vw;
+  border-top: 1px solid var(--main-4-color);
+  border-bottom: 1px solid var(--main-4-color);
+  font-size: var(--main-text-font-size);
   padding: 0.5vw;
   overflow-y: scroll;
   overflow-wrap: break-word;
@@ -93,14 +93,14 @@ function sendMsg() {
 }
 .text {
   flex-grow: 1;
-  font-size: 1vw;
+  font-size: var(--main-text-font-size);
 }
 .sendbutton {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
-  font-size: 1vw;
+  color: var(--main-bg-color);
+  background-color: var(--main-1-color);
+  font-size: var(--main-text-font-size);
   border-color: transparent;
   cursor: pointer;
 }

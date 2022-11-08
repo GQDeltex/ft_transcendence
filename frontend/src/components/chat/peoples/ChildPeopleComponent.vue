@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CI } from '@/CI';
 import { computed, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import { useRouter } from 'vue-router';
@@ -13,6 +14,8 @@ import {
   useUserStore,
 } from '@/store/user';
 
+const ci = ref<typeof CI>(CI);
+
 const emits = defineEmits(['chat']);
 
 const props = defineProps<{
@@ -24,8 +27,9 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const activeChat = computed(() => {
-  if (props.highlight) return { color: '#f8971d' };
-  return { color: 'white' };
+  // if (props.highlight) return { color: '#f8971d' };
+  if (props.highlight) return { color: ci.value.color1 };
+  return { color: ci.value.color2 };
 });
 
 const statusStyle = computed(() => {
@@ -176,50 +180,65 @@ const onChat = (username: string) => {
   </div>
 
   <div v-show="toggle" class="popup">
-    <button class="butt" @click="onChat(client.username)">Chat</button>
-    <button
-      v-show="
-        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
-      "
-      class="butt"
-      @click="onFriend"
-    >
-      {{ userStore.getFriendStatus(client.id) }}
-    </button>
-    <button
-      v-show="
-        userStore.getFriendStatus(client.id) ===
-          FriendStatusEnum.REQUEST_RECEIVED &&
-        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
-      "
-      class="butt"
-      @click="onFriendDecline"
-    >
-      Decline friend request
-    </button>
-    <button class="butt" @click="onBlock">
-      {{ userStore.getBlockStatus(client.id) }}
-    </button>
-    <button
-      v-show="
-        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
-      "
-      class="butt"
-      @click="onInvite"
-    >
-      {{ userStore.getGameRequestStatus(client.id) }}
-    </button>
-    <button
-      v-show="
-        userStore.getGameRequestStatus(client.id) === GameStatusEnum.RECEIVED &&
-        userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
-      "
-      class="butt"
-      @click="onGameDecline"
-    >
-      Decline game request
-    </button>
-    <button class="butt" @click="onProfile">Show Profile</button>
+    <div>
+      <button class="button" @click="onChat(client.username)">Chat</button>
+    </div>
+    <div>
+      <button
+        v-show="
+          userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+        "
+        class="button"
+        @click="onFriend"
+      >
+        {{ userStore.getFriendStatus(client.id) }}
+      </button>
+    </div>
+    <div>
+      <button
+        v-show="
+          userStore.getFriendStatus(client.id) ===
+            FriendStatusEnum.REQUEST_RECEIVED &&
+          userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+        "
+        class="button"
+        @click="onFriendDecline"
+      >
+        Decline friend request
+      </button>
+    </div>
+    <div>
+      <button class="button" @click="onBlock">
+        {{ userStore.getBlockStatus(client.id) }}
+      </button>
+    </div>
+    <div>
+      <button
+        v-show="
+          userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+        "
+        class="button"
+        @click="onInvite"
+      >
+        {{ userStore.getGameRequestStatus(client.id) }}
+      </button>
+    </div>
+    <div>
+      <button
+        v-show="
+          userStore.getGameRequestStatus(client.id) ===
+            GameStatusEnum.RECEIVED &&
+          userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
+        "
+        class="button"
+        @click="onGameDecline"
+      >
+        Decline game request
+      </button>
+    </div>
+    <div>
+      <button class="button" @click="onProfile">Show Profile</button>
+    </div>
   </div>
 </template>
 
@@ -249,14 +268,14 @@ const onChat = (username: string) => {
 }
 
 .username {
-  color: white;
-  font-size: 0.8vw;
+  color: var(--main-2-color);
+  font-size: var(--main-small-font-size);
   font-stretch: expanded;
 }
 
 .status {
   font-size: 0.6vw;
-  color: grey;
+  color: var(--main-3-color);
 }
 
 .popup {
@@ -266,14 +285,15 @@ const onChat = (username: string) => {
   margin-right: 5%;
 }
 
-.butt {
-  text-decoration: none;
+.button {
+  /* text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: var(--main-bg-color);
+  background-color: var(--main-1-color);
   cursor: pointer;
   font-size: 0.5vw;
-  border-color: transparent;
-  margin-top: 3px;
+  border-color: transparent; */
+  margin-top: 1px;
+  font-size: var(--main-small-font-size);
 }
 </style>

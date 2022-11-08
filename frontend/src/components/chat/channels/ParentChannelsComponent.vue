@@ -78,15 +78,18 @@ function userInChannel(input: Channel) {
   flex-direction: column;
   padding: 0.5vw;
   padding-bottom: 0.5vw;
-  border: 1px solid #202020;
+  border: 1px solid var(--main-4-color);
 }
+
 .text {
   display: flex;
-  font-size: 1vw;
+  font-size: var(--main-text-font-size);
   padding-bottom: 0.5vw;
-  color: #f8971d;
+  color: var(--main-1-color);
   justify-content: space-between;
+  font-size: var(--main-text-font-size);
 }
+
 .list {
   overflow-y: scroll;
   padding-left: 5%;
@@ -96,13 +99,13 @@ function userInChannel(input: Channel) {
   cursor: pointer;
 }
 
-button {
-  text-decoration: none;
+.button {
+  /* text-decoration: none;
   border-radius: 5px;
   color: black;
   background-color: #f8971d;
-  cursor: pointer;
-  font-size: 0.8vw;
-  border-color: transparent;
+  cursor: pointer; */
+  font-size: var(--main-small-font-size);
+  /* border-color: transparent; */
 }
 </style>

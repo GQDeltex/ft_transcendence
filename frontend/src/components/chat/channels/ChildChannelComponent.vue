@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { CI } from '@/CI';
+import { computed, ref } from 'vue';
+
+const ci = ref<typeof CI>(CI);
 
 const props = defineProps<{
   channelId: number;
@@ -10,16 +13,18 @@ const props = defineProps<{
 }>();
 
 const activeChannel = computed(() => {
-  if (props.channelName === props.selectedChannel) return { color: '#f8971d' };
-  if (!props.isUserInside) return { color: 'grey' };
-  else return { color: 'white' };
+  // if (props.channelName === props.selectedChannel) return { color: '#f8971d' };
+  if (props.channelName === props.selectedChannel)
+    return { color: ci.value.color1 };
+  if (!props.isUserInside) return { color: ci.value.color3 };
+  else return { color: ci.value.color2 };
 });
 
 const activePicture = computed(() => {
   if (props.channelName === props.selectedChannel)
-    return { 'border-color': '#f8971d' };
-  if (!props.isUserInside) return { 'border-color': 'grey' };
-  else return { 'border-color': 'white' };
+    return { 'border-color': ci.value.color1 };
+  if (!props.isUserInside) return { 'border-color': ci.value.color3 };
+  else return { 'border-color': ci.value.color2 };
 });
 </script>
 
@@ -54,12 +59,12 @@ const activePicture = computed(() => {
   height: 1.5vw;
   width: 1.5vw;
   border-radius: 50%;
-  border: 1px solid white;
-  font-size: 1vw;
+  border: 1px solid var(--main-2-color);
+  font-size: var(--main-text-font-size);
 }
 .channelName {
-  color: white;
-  font-size: 0.8vw;
+  color: var(--main-2-color);
+  font-size: var(--main-small-font-size);
   font-stretch: expanded;
 }
 </style>

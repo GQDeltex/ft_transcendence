@@ -84,13 +84,13 @@ function userInChatWith(input: User) {
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
-  border: 1px solid #202020;
+  border: 1px solid var(--main-4-color);
 }
 
 .text {
-  font-size: 1vw;
+  font-size: var(--main-text-font-size);
   padding-bottom: 0.5vw;
-  color: #f8971d;
+  color: var(--main-1-color);
 }
 
 .scroll {
@@ -99,8 +99,8 @@ function userInChatWith(input: User) {
 
 .subheader {
   cursor: pointer;
-  font-size: 0.8vw;
-  color: gray;
+  font-size: var(--main-small-font-size);
+  color: var(--main-3-color);
   font-weight: bold;
 }
 .people {

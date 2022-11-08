@@ -52,7 +52,7 @@ const statusBorder = computed(() => {
 }
 .username {
   color: white;
-  font-size: 1.8vw;
+  font-size: var(--main-title-font-size);
   font-stretch: expanded;
 }
 

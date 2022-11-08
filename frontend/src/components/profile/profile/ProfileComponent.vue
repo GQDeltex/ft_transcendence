@@ -71,7 +71,7 @@ UserService.findLeaders()
     <div class="infoBox">
       <span class="title">{{ user.title[0] }}</span>
       <br />
-      <div class="username">
+      <div class="rank">
         <span>
           {{ user.username }}
           <span v-if="user.rank && user.rank > 0">(Rank {{ user.rank }}) </span>
@@ -96,7 +96,7 @@ UserService.findLeaders()
         @close="modalChangePicture = false"
       />
       <br />
-      <span class="campus">Wolfsburg, Germany</span>
+      <span class="text">Wolfsburg, Germany</span>
       <br />
       <span class="friends">{{ userStore.friends.length }} Friends</span>
     </div>
@@ -119,18 +119,21 @@ UserService.findLeaders()
 
 <style scoped>
 .title {
-  font-size: 2vw;
+  font-size: var(--main-title-font-size);
 }
-
+.rank {
+  font-size: var(--main-title-font-size);
+  color: var(--main-1-color);
+}
 .onSwitch {
-  color: white;
+  color: var(--main-2-color);
   margin-top: 10%;
   margin-left: 6%;
   margin-right: 0;
 }
 
 .offSwitch {
-  color: white;
+  color: var(--main-2-color);
   margin-top: 10%;
   margin-left: 60%;
 }
@@ -149,7 +152,14 @@ UserService.findLeaders()
   padding: 10px 10px 1%;
   border-width: 1px;
   border-style: solid;
-  border-image: linear-gradient(to bottom, white, #f8971d, #f8971d, #202020) 1;
+  border-image: linear-gradient(
+      to bottom,
+      var(--main-2-color),
+      var(--main-1-color),
+      var(--main-1-color),
+      var(--main-4-color)
+    )
+    1;
 }
 
 .infoBox {
@@ -160,28 +170,13 @@ UserService.findLeaders()
   grid-column: 1 / 2;
 }
 
-.username {
-  color: #f8971d;
-  font-size: 2vw;
-}
-
-.campus {
-  color: white;
-  font-size: 1vw;
-}
-
-.friends {
-  color: grey;
-  font-size: 1vw;
-}
-
 .twoFA {
   grid-column: 2 / 3;
   margin: 0;
   justify-content: left;
-  color: grey;
-  font-size: 1vw;
   display: flex;
+  font-size: var(--main-text-font-size);
+  color: var(--main-3-color);
 }
 
 .switch {
@@ -205,7 +200,7 @@ UserService.findLeaders()
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: grey;
+  background-color: var(--main-3-color);
 }
 
 .slider:before {
@@ -215,13 +210,13 @@ UserService.findLeaders()
   width: 1.6vw;
   left: 0.3vw;
   bottom: 0.2vw;
-  background-color: white;
+  background-color: var(--main-2-color);
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }
 
 input:checked + .slider {
-  background-color: #f8971d;
+  background-color: var(--main-1-color);
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }

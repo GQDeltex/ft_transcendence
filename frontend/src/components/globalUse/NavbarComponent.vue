@@ -44,18 +44,18 @@ img {
 .column1 {
   grid-column: 1 / 2;
   justify-self: start;
-  font-size: 2vw;
+  font-size: var(--main-title-font-size);
 }
 .column2 {
   grid-column: 2 / 3;
   justify-self: end;
-  font-size: 2vw;
+  font-size: var(--main-title-font-size);
 }
 .columncontent {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: white;
+  color: var(--main-2-color);
 }
 .logo {
   margin-right: 5%;
@@ -64,8 +64,8 @@ img {
 }
 
 nav {
-  border-top: 1px solid grey;
-  border-bottom: 1px solid gray;
+  border-top: 1px solid var(--main-3-color);
+  border-bottom: 1px solid var(--main-3-color);
   grid-column: 1 / 3;
   list-style-type: none;
   margin: 0;
@@ -73,10 +73,10 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  font-size: 2vw;
+  font-size: var(--main-title-font-size);
 }
 .router-link-active {
-  color: white;
+  color: var(--main-2-color);
 }
 li {
   display: inline;
@@ -84,13 +84,13 @@ li {
 }
 li a {
   display: block;
-  color: #f8971d;
+  color: var(--main-1-color);
   text-align: center;
   padding: 1% 1%;
   text-decoration: none;
 }
 li a:hover {
-  background-color: #f8971d;
-  color: black;
+  background-color: var(--main-1-color);
+  color: var(--main-bg-color);
 }
 </style>

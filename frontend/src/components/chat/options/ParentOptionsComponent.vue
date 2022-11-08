@@ -264,14 +264,14 @@ function getChannelUserStatus(client: User) {
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
-  border: 1px solid #202020;
+  border: 1px solid var(--main-4-color);
   height: inherit;
   width: 15vw;
 }
 
 .headerText {
-  font-size: 1vw;
-  color: #f8971d;
+  font-size: var(--main-text-font-size);
+  color: var(--main-1-color);
 }
 
 .list {
@@ -281,8 +281,8 @@ function getChannelUserStatus(client: User) {
 
 .subheader {
   cursor: pointer;
-  font-size: 0.8vw;
-  color: grey;
+  font-size: var(--main-small-font-size);
+  color: var(--main-3-color);
   font-weight: bold;
   margin-top: 5px;
 }

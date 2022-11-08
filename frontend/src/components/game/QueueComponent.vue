@@ -129,8 +129,8 @@ onUnmounted(() => {
 }
 
 .loader {
-  border: 16px solid #f8971d;
-  border-top: 16px solid gray;
+  border: 16px solid var(--main-1-color);
+  border-top: 16px solid var(--main-3-color);
   border-radius: 50%;
   width: 120px;
   height: 120px;

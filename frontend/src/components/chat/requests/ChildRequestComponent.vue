@@ -42,11 +42,11 @@ const declineButton = async () => {
   font-size: 0.8vw;
 }
 .sender {
-  color: white;
+  color: var(--main-2-color);
 }
 
 .requestText {
-  color: grey;
+  color: var(--main-3-color);
   font-stretch: expanded;
 }
 
@@ -58,10 +58,10 @@ const declineButton = async () => {
 .acceptButton {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: var(--main-bg-color);
+  background-color: var(--main-1-color);
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: var(--main-small-font-size);
   border-color: transparent;
   margin-right: 1vw;
 }
@@ -69,10 +69,10 @@ const declineButton = async () => {
 .declineButton {
   text-decoration: none;
   border-radius: 5px;
-  color: white;
-  background-color: #202020;
+  color: var(--main-2-color);
+  background-color: var(--main-4-color);
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: var(--main-small-font-size);
   border-color: transparent;
   margin-left: 1vw;
 }

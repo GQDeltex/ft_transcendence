@@ -65,10 +65,32 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
 </template>
 
 <style>
+:root {
+  /* First ColorSet */
+  --main-bg-color: black;
+  --main-1-color: #f8971d;
+  --main-2-color: white;
+  --main-3-color: grey;
+  --main-4-color: #202020;
+  --main-title-font-size: 2vw;
+  --main-text-font-size: 1vw;
+  --main-small-font-size: 0.8vw;
+
+  /* Second ColorSet */
+  /* --main-bg-color: grey;
+  --main-1-color: green;
+  --main-2-color: yellow;
+  --main-3-color: purple;
+  --main-4-color: blue;
+  --main-title-font-size: 3vw;
+  --main-text-font-size: 2vw;
+  --main-small-font-size: 1vw; */
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
-  color: white;
-  background-color: #000000;
+  color: var(--main-2-color);
+  background-color: var(--main-bg-color);
 }
 *,
 *:before,
@@ -81,18 +103,10 @@ body {
 button {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: var(--main-bg-color);
+  background-color: var(--main-1-color);
   border-color: transparent;
   cursor: pointer;
-}
-
-.main {
-  font-size: 1vw;
-}
-
-.second {
-  font-size: 0.8vw;
 }
 </style>
 

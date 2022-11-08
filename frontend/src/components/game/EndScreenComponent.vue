@@ -86,7 +86,9 @@ onMounted(async () => {
     />
     <p class="saving">{{ player.username }} wins!</p>
     <div class="btns">
-      <button class="home-page flex-btn" @click="homepage">Home page</button>
+      <button class="home-page flex-btn button" @click="homepage">
+        Home page
+      </button>
     </div>
   </div>
 </template>

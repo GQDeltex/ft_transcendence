@@ -47,7 +47,7 @@ function closeCancel() {
         :placeholder="props.inputUsername"
       />
       <br />
-      <button class="ok" @click="closeOk()">OK</button>
+      <button class="button" @click="closeOk()">OK</button>
     </div>
   </div>
 </template>
@@ -98,8 +98,5 @@ function closeCancel() {
 .close:focus {
   color: black;
   text-decoration: none;
-}
-.ok {
-  cursor: pointer;
 }
 </style>

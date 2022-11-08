@@ -33,7 +33,8 @@ function closeCancel() {
       <div class="input">
         <span>Please enter your 2FA code</span>
         <br />
-        <input v-model="code" type="text" @keyup.enter="submit" /><br />
+        <input v-model="code" type="text" @keyup.enter="submit" />
+        <br />
         <button class="button" @click="submit">Submit</button>
       </div>
     </div>
@@ -63,12 +64,12 @@ function closeCancel() {
   text-align: center;
 }
 
-.button {
+/* .button {
   color: #aaa;
   font-size: 28px;
   font-weight: bold;
   margin: 10px;
-}
+} */
 
 .button:hover,
 .button:focus {

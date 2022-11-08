@@ -38,12 +38,12 @@ div {
 .playername {
   display: flex;
   justify-content: center;
-  color: white;
+  color: var(--main-2-color);
   text-decoration: none;
 }
 .sub {
-  color: grey;
-  font-size: 0.7em;
+  color: var(--main-3-color);
+  font-size: var(--main-small-font-size);
   display: flex;
   justify-content: center;
 }

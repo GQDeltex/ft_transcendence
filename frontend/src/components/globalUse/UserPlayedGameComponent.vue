@@ -10,10 +10,6 @@ defineProps<{
 
 <template>
   <div>
-    <!--
-    <span class="username">gucalvi</span>
-    <span class="time">6h ago</span>
-    -->
     <span class="stream">
       <ChildStreamComponent
         :player1-name="player1"
@@ -26,7 +22,7 @@ defineProps<{
 </template>
 
 <style scoped>
-div {
+/* div {
   display: grid;
 }
 .stream {
@@ -45,5 +41,5 @@ div {
   color: grey;
   grid-column: 1 / 2;
   grid-row: 2 / 3;
-}
+} */
 </style>
