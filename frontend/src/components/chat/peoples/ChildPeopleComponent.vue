@@ -17,10 +17,16 @@ const emits = defineEmits(['chat']);
 
 const props = defineProps<{
   client: User;
+  highlight: boolean;
 }>();
 
 const router = useRouter();
 const userStore = useUserStore();
+
+const activeChat = computed(() => {
+  if (props.highlight) return { color: '#f8971d' };
+  return { color: 'white' };
+});
 
 const statusStyle = computed(() => {
   switch (props.client.status) {
@@ -160,7 +166,7 @@ const onChat = (username: string) => {
         :border-color="statusBorder"
       />
       <div class="infoBox">
-        <span class="username"
+        <span class="username" :style="activeChat"
           >{{ client.title[0] }} {{ client.username }}</span
         >
         <span :style="statusStyle" class="status">{{ client.status }}</span>
