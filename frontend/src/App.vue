@@ -77,6 +77,23 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
+button {
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  background-color: #f8971d;
+  border-color: transparent;
+  cursor: pointer;
+}
+
+.main {
+  font-size: 1vw;
+}
+
+.second {
+  font-size: 0.8vw;
+}
 </style>
 
 <style scoped>

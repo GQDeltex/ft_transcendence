@@ -92,13 +92,13 @@ const logout = async () => {
 }
 
 .button {
-  text-decoration: none;
+  /* text-decoration: none;
   border-radius: 25px;
   color: white;
   background-color: #f8971d;
   cursor: pointer;
+  font-size: 1vw;  */
   float: right;
-  font-size: 1vw;
 }
 .aboutMe {
   grid-row: 1 / 2;

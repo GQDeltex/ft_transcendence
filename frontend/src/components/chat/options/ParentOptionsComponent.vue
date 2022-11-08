@@ -222,7 +222,7 @@ function getChannelUserStatus(client: User) {
       <div class="buttonList">
         <span class="headerText"> Options </span>
         <span v-if="isOwner">
-          <button class="button" @click="changePassword">
+          <button class="button main" @click="changePassword">
             Change Password
           </button>
           <ModalUpdatePasswordComponent
@@ -232,7 +232,7 @@ function getChannelUserStatus(client: User) {
           />
         </span>
         <span v-if="props.currentChannel.name.startsWith('#')">
-          <button class="button" @click="leave">Leave Chat</button>
+          <button class="button main" @click="leave">Leave Chat</button>
         </span>
         <!-- <span v-if="isOwner">
           <button class="button" @click="updateAdmin">Make Admin</button>
@@ -250,7 +250,7 @@ function getChannelUserStatus(client: User) {
           <ModalMuteUserComponent v-show="muteModalActive" @close="onClose" />
         </span> -->
         <span v-if="isOwner">
-          <button class="button" @click="makePublic">
+          <button class="button main" @click="makePublic">
             Make {{ props.currentChannel.private ? 'Public' : 'Private' }}
           </button>
         </span>
@@ -297,13 +297,13 @@ function getChannelUserStatus(client: User) {
 }
 
 .button {
-  text-decoration: none;
+  /* text-decoration: none;
   border-radius: 5px;
   color: black;
   background-color: #f8971d;
   cursor: pointer;
   font-size: 0.8vw;
-  border-color: transparent;
-  margin-top: 5px;
+  border-color: transparent; */
+  margin-top: 2px;
 }
 </style>
