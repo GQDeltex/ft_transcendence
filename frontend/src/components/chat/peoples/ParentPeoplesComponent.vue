@@ -3,10 +3,12 @@ import ChildPeopleComponent from './ChildPeopleComponent.vue';
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
+import type { Channel } from '@/store/message';
 const emits = defineEmits(['chat']);
 
-defineProps<{
+const props = defineProps<{
   clients: User[];
+  currentChannel: Channel;
 }>();
 
 const userStore = useUserStore();
@@ -17,6 +19,11 @@ const peopleToggle = ref(true);
 const onChat = (username: string) => {
   emits('chat', username);
 };
+
+function userInChatWith(input: User) {
+  if (input.username == props.currentChannel.name) return true;
+  return false;
+}
 </script>
 
 <template>
@@ -34,6 +41,7 @@ const onChat = (username: string) => {
               userStore.friends.includes(client.id)
             "
             :client="client"
+            :highlight="userInChatWith(client)"
             @chat="onChat"
           />
         </template>
@@ -50,6 +58,7 @@ const onChat = (username: string) => {
               !userStore.blocks.includes(client.id)
             "
             :client="client"
+            :highlight="userInChatWith(client)"
             @chat="onChat"
           />
         </template>
@@ -62,6 +71,7 @@ const onChat = (username: string) => {
               client.id !== userStore.id && userStore.blocks.includes(client.id)
             "
             :client="client"
+            :highlight="false"
           />
         </template>
       </div>
