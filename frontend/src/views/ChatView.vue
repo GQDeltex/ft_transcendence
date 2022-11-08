@@ -176,6 +176,7 @@ const onUpdatePublic = (updatedChannel: Channel) => {
     <div class="leftSide">
       <ParentPeoplesComponent
         :clients="users"
+        :current-channel="currentChannel"
         class="friendsPeopleComp"
         @chat="UpdateChat"
       />
