@@ -226,7 +226,8 @@ function getChannelUserStatus(client: User) {
             Change Password
           </button>
           <ModalUpdatePasswordComponent
-            v-show="passModalActive"
+            v-if="passModalActive"
+            :current-channel="props.currentChannel"
             @close="onClose"
           />
         </span>

@@ -23,6 +23,7 @@ const onClose = () => {
 const onJoin = (channel: Channel) => {
   emits('join', channel);
   emits('update', channel);
+  modalActive.value = false;
 };
 
 const channelSelect = (input: Channel) => {
@@ -50,9 +51,9 @@ function userInChannel(input: Channel) {
         Join / Create Channel
       </button>
       <ModalChannelComponent
-        v-show="modalActive"
-        @close="onClose"
+        v-if="modalActive"
         @join="onJoin"
+        @close="onClose"
       />
     </span>
     <div class="list">

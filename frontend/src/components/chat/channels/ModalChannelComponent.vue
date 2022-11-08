@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '@/service/socket';
 import type { Channel } from '@/store/message';
@@ -13,7 +13,7 @@ function closeOk() {
   if (channelName.value.length > 0 && !channelName.value.startsWith('#')) {
     channelName.value = '#' + channelName.value;
   }
-  // console.log(channelName.value);
+  console.log(channelName.value);
   socket.emit(
     'join',
     {
@@ -25,7 +25,7 @@ function closeOk() {
   );
   channelName.value = '';
   password.value = '';
-  emits('close');
+  // emits('close');
 }
 
 function closeCancel() {
@@ -33,6 +33,11 @@ function closeCancel() {
   password.value = '';
   emits('close');
 }
+
+onMounted(() => {
+  const element = document.getElementById('mytext');
+  if (element != null) element.focus();
+});
 </script>
 
 <template>
@@ -44,7 +49,7 @@ function closeCancel() {
         >
       </h1>
       <label>Name</label>
-      <input v-model="channelName" type="text" />
+      <input id="mytext" v-model="channelName" type="text" />
       <label>Password</label>
       <input v-model="password" type="password" />
       <br />
