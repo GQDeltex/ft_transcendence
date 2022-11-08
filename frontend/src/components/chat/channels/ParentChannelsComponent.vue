@@ -50,7 +50,7 @@ function userInChannel(input: Channel) {
         Join / Create Channel
       </button>
       <ModalChannelComponent
-        v-show="modalActive"
+        v-if="modalActive"
         @close="onClose"
         @join="onJoin"
       />

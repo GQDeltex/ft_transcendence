@@ -1,34 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import type { Ref } from 'vue';
 import ChannelUserService from '@/service/ChannelUserService';
 import { useErrorStore } from '@/store/error';
+import type { Channel } from '@/store/message';
 const emits = defineEmits(['close']);
 const errorStore = useErrorStore();
 
-let channelName: Ref<string> = ref('');
 let password: Ref<string> = ref('');
+
+const props = defineProps<{
+  currentChannel: Channel;
+}>();
 
 async function closeOk() {
   // console.log(
   //   'channelName= ' + channelName.value + ' password= ' + password.value, //DEBUG
   // );
   try {
-    await ChannelUserService.updatePassword(channelName.value, password.value);
+    await ChannelUserService.updatePassword(
+      props.currentChannel.name,
+      password.value,
+    );
     // console.log(channelName.value + ' password is now ' + password.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
-  channelName.value = '';
   password.value = '';
   emits('close');
 }
 
 function closeCancel() {
-  channelName.value = '';
   password.value = '';
   emits('close');
 }
+
+onMounted(() => {
+  const element = document.getElementById('mytext');
+  if (element != null) element.focus();
+});
 </script>
 
 <template>
@@ -37,10 +47,10 @@ function closeCancel() {
       <h1>
         Change Password<span class="close" @click="closeCancel()">&times;</span>
       </h1>
-      <label>Name</label>
-      <input v-model="channelName" type="text" />
+      <label>Channel Name</label>
+      <span>{{ props.currentChannel.name }}</span>
       <label>Password</label>
-      <input v-model="password" type="password" />
+      <input id="mytext" v-model="password" type="password" />
       <br />
       <button class="ok" @click="closeOk()">OK</button>
     </div>
