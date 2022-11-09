@@ -5,11 +5,12 @@ import { socket } from '@/service/socket';
 import { useMessagesStore } from '@/store/message';
 import { useUserStore } from '@/store/user';
 import { storeToRefs } from 'pinia';
+import type { Channel } from '@/store/message';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
 const props = defineProps<{
-  chatName: string;
+  currentChannel: Channel;
 }>();
 
 let text: Ref<string> = ref('');
@@ -23,11 +24,14 @@ const { messages } = storeToRefs(messagesStore);
 
 function sendMsg() {
   if (text.value == '') return;
-  // console.log(props.chatName, text.value);
-  socket.emit('prc', { to: props.chatName, msg: text.value });
+  // console.log(props.currentChannel.name, text.value);
+  socket.emit('prc', {
+    to: { id: props.currentChannel.id, name: props.currentChannel.name },
+    msg: text.value,
+  });
   messagesStore.saveMessage({
     from: { id: +userStore.id, name: userStore.username },
-    to: { name: props.chatName },
+    to: { id: +props.currentChannel.id, name: props.currentChannel.name },
     msg: text.value,
   });
   text.value = '';
@@ -38,14 +42,14 @@ function sendMsg() {
 
 <template>
   <div class="parent">
-    <span class="chatname">chat: {{ props.chatName }}</span>
+    <span class="chatname">chat: {{ props.currentChannel.name }}</span>
     <div id="container" class="messages">
       <template v-for="message in messages">
         <span
           v-if="
-            message.to.name === props.chatName ||
-            (message.from.name === props.chatName &&
-              message.to.name === userStore.username)
+            message.to.id === props.currentChannel.id ||
+            (message.from.id === props.currentChannel.id &&
+              message.to.id === userStore.id)
           "
           :key="`msg_${message.from.name}_${message.to.name}_${message.msg}`"
           >{{ message.from.name }}: {{ message.msg }}<br

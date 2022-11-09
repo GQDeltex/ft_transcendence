@@ -131,8 +131,11 @@ const UpdateChannels = (input: Channel) => {
 };
 
 const UpdateChat = (username: string) => {
+  let chatUser: User | undefined = users.value.find(
+    (client: User) => client.username == username,
+  );
   currentChannel.value = {
-    id: 0,
+    id: chatUser ? chatUser.id : 0,
     name: username,
     private: true,
     password: '',
@@ -191,7 +194,7 @@ const onUpdatePublic = (updatedChannel: Channel) => {
       <ParentRequestsComponent :clients="users" class="requestsComp" />
     </div>
     <ParentChatComponent
-      :chat-name="currentChannel.name"
+      :current-channel="currentChannel"
       class="chatChatComp"
     />
     <ParentOptionsComponent
