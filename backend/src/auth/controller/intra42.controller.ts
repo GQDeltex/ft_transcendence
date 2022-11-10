@@ -42,7 +42,7 @@ export class Intra42Controller {
       user = await this.usersService.findOne(+user.id);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
-        if (req.user.backdoor) user.coalition = 'Fluvius';
+        if (req.user.backdoor) user.coalition = 'Elytra';
         else
           user.coalition = await this.fetchCoalition(
             +user.id,
@@ -89,11 +89,11 @@ export class Intra42Controller {
         ),
     );
     if (data.length < 1 || typeof data[0].image_url === 'undefined')
-      return 'Fluvius';
+      return 'Elytra';
     const coalition = data[0].image_url
       .replace(/^.*[\\\/]/, '')
       .replace(/\.[^/.]+$/, '');
-    if (coalition.length === 0) return 'Fluvius';
+    if (coalition.length === 0) return 'Elytra';
     return coalition;
   }
 }
