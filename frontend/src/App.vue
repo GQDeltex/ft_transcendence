@@ -83,7 +83,7 @@ canvas.style.left = '0';
 canvas.style.width = '100%';
 canvas.style.height = '100%';
 canvas.style.pointerEvents = 'none';
-canvas.style.zIndex = '999';
+canvas.style.zIndex = '-1';
 document.body.appendChild(canvas);
 
 // Update the canvas width/height data when the window resizes.
