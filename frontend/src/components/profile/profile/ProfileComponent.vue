@@ -8,12 +8,14 @@ import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.
 import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
 const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
+const dropDownTitle = ref(false);
 
 const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
   user: null,
@@ -40,6 +42,11 @@ const onClose = () => {
   if (!userStore.twoFAEnable) {
     checked.value = false;
   }
+};
+
+const toggle = () => {
+  dropDownTitle.value = !dropDownTitle.value;
+  // console.log('dropDown toggled', dropDownTitle.value);
 };
 
 const errorStore = useErrorStore();
@@ -69,8 +76,13 @@ UserService.findLeaders()
       />
     </div>
     <div class="infoBox">
-      <span class="title">{{ user.title[0] }}</span>
-      <br />
+      <div class="title" @click="toggle">{{ user.title[0] }}</div>
+      <DropDownComponent
+        v-if="dropDownTitle"
+        :title="userStore.title[0]"
+        :items="userStore.title"
+      />
+      <!-- <br /> -->
       <div class="username">
         <span>
           {{ user.username }}
