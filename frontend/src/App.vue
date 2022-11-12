@@ -49,7 +49,7 @@ socket.on('onGameRequestAccepted', async (data: { gameId: number }) => {
   await router.push({ name: 'PongView', query: { gameId: data.gameId } });
 });
 
-// 
+//
 interface SnowFlake {
   /** The current x position. */
   x: number;
@@ -70,7 +70,7 @@ function random(min: number, max: number) {
 
 /** Helper functions to generate a random int inclusive of min and max. */
 function randomInt(min: number, max: number) {
-  return (Math.floor(Math.random() * (max - min + 1)) + min);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Create and attach our canvas.
@@ -99,9 +99,9 @@ for (var i = 0; i < numOfFlakes; i++) {
   flakes.push({
     x: randomInt(0, canvas.width),
     y: randomInt(0, canvas.height),
-    radius: random(.25, 2),
-    sway: random(-.3, .3),
-    drop: random(-.3, .3),
+    radius: random(0.25, 2),
+    sway: random(-0.3, 0.3),
+    drop: random(-0.3, 0.3),
   });
 }
 
