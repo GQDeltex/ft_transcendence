@@ -10,4 +10,6 @@ export const mockGame: Game = {
   score1: 0,
   score2: 0,
   state: GameState.STARTING,
+  player1BlurTime: new Date(0),
+  player2BlurTime: new Date(0),
 };

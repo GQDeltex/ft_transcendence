@@ -2,10 +2,11 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { Game, GameState } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { GameGateway } from './game.gateway';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class GameService {
@@ -33,16 +34,18 @@ export class GameService {
     await this.gameGateway.startGame(game);
   }
 
-  async findAll(searchState?: GameState, searchUserId?: number) {
+  async findAll(
+    searchWhere?: FindOptionsWhere<Game>[] | FindOptionsWhere<Game>,
+    searchUserId?: number,
+  ) {
     const games: Game[] = await this.gameRepository.find({
-      where: { state: searchState },
+      where: searchWhere,
     });
-    if (typeof searchUserId !== 'undefined')
-      return games.filter(
-        (game: Game) =>
-          game.player1Id == searchUserId || game.player2Id == searchUserId,
-      );
-    return games;
+    if (typeof searchUserId === 'undefined') return games;
+    return games.filter(
+      (game: Game) =>
+        game.player1Id == searchUserId || game.player2Id == searchUserId,
+    );
   }
 
   findOne(id: number) {
@@ -86,15 +89,12 @@ export class GameService {
   }
 
   async killGame(userId: number): Promise<number> {
-    const viableGames: Game[] = await this.gameRepository.find({
-      where: { state: GameState.RUNNING },
-      order: { id: 'DESC' },
-    });
-    const game: Game = viableGames.filter(
-      (thatgame) =>
-        thatgame.player1.id == userId || thatgame.player2.id == userId,
-    )[0];
-    if (typeof game === 'undefined') return -1;
+    const games: Game[] = await this.findAll(
+      [{ state: GameState.RUNNING }, { state: GameState.PAUSED }],
+      userId,
+    );
+    if (games.length <= 0) return -1;
+    const game: Game = games[0];
     game.state = GameState.ENDED;
     game.player1.status = 'online';
     game.player2.status = 'online';
@@ -108,5 +108,23 @@ export class GameService {
     }
     await this.gameRepository.save(game);
     return game.id;
+  }
+  async pauseGame(client: Socket, gameId: number, cowardId: number) {
+    const game: Game = await this.findOne(gameId);
+    if (game.state === GameState.ENDED) return;
+    if (game.player1Id === cowardId) game.player1BlurTime = new Date();
+    if (game.player2Id === cowardId) game.player2BlurTime = new Date();
+    game.state = GameState.PAUSED; //order problems? pls think about it
+    await this.gameRepository.save(game);
+    client.to(`&${gameId}`).emit('blur', cowardId);
+    client.emit('blur', cowardId);
+  }
+  async unpauseGame(client: Socket, gameId: number) {
+    const game: Game = await this.findOne(gameId);
+    if (game.state !== GameState.PAUSED) return;
+    game.state = GameState.RUNNING; //order problems? pls think about it
+    await this.gameRepository.save(game);
+    client.to(`&${gameId}`).emit('focus');
+    client.emit('focus');
   }
 }

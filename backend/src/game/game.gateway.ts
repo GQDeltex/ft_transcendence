@@ -53,6 +53,26 @@ export class GameGateway implements OnGatewayDisconnect {
     });
   }
 
+  @SubscribeMessage('blur')
+  async handleBlur(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('gameId') gameId: number,
+    @MessageBody('cowardId') cowardId: number,
+  ) {
+    await this.gameService.pauseGame(client, gameId, cowardId);
+    // await this.gameService.pauseGame(client, gameId);
+  }
+
+  @SubscribeMessage('focus')
+  async handleFocus(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('gameId') gameId: number,
+    // @MessageBody('cowardId') cowardId: number,
+  ) {
+    await this.gameService.unpauseGame(client, gameId);
+    // await this.gameService.unpauseGame(client, gameId, cowardId);
+  }
+
   @SubscribeMessage('gameData')
   async handleMessage(
     @ConnectedSocket() client: Socket,

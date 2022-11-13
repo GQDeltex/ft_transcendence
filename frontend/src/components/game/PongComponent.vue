@@ -18,6 +18,7 @@ const ballImg = ref(
 const mapImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
 );
+const claimVictory = ref(false);
 
 const props = defineProps<{
   gameId: number;
@@ -40,7 +41,17 @@ const props = defineProps<{
   };
 }>();
 
-console.log(props);
+function onClaimVictory() {
+  console.log('lol');
+  const claimButton = document.getElementById(
+    'claimButton',
+  ) as HTMLButtonElement | null;
+  if (claimButton !== null) claimButton.disabled = true;
+  claimVictory.value = false;
+
+}
+
+// console.log(props);
 function graph() {
   let cur: Item;
   if (
@@ -153,10 +164,23 @@ onMounted(async () => {
       remotePad.changeDir(10, false, true);
     }
   }
+  function handleBlur(): void {
+    socket.emit('blur', {
+      gameId: props.gameId,
+      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
+    });
+  }
+  function handleFocus(): void {
+    socket.emit('focus', {
+      gameId: props.gameId,
+      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
+    });
+  }
 
   window.addEventListener('keydown', handleDown);
-
   window.addEventListener('keyup', handleUp);
+  window.addEventListener('blur', handleBlur);
+  window.addEventListener('focus', handleFocus);
 
   socket.on('gameData', (e) => {
     console.log(e);
@@ -191,6 +215,33 @@ onMounted(async () => {
       playerPad.sety(50);
       remotePad.sety(50);
     }
+  });
+
+  socket.on('blur', (cowardId: number) => {
+    window.removeEventListener('keydown', handleDown);
+    window.removeEventListener('keyup', handleUp);
+    if (
+      (props.priority == 0 && cowardId != props.player1ID.id) ||
+      (props.priority != 0 && cowardId != props.player2ID.id)
+    ) {
+      claimVictory.value = true;
+      setTimeout(() => {
+        const claimButton = document.getElementById(
+          'claimButton',
+        ) as HTMLButtonElement | null;
+        if (claimButton !== null) claimButton.disabled = false;
+      }, 10000);
+      //show pause modal or something, start timeout to make 'claim victory' button clickable
+    }
+    ball.set_speed(0);
+    playerPad.changeDir(0, false, false);
+    remotePad.changeDir(0, false, false);
+  });
+
+  socket.on('focus', () => {
+    window.addEventListener('keydown', handleDown);
+    window.addEventListener('keyup', handleUp);
+    ball.set_speed();
   });
 
   window.onresize = function () {
@@ -259,17 +310,29 @@ onMounted(async () => {
       <div id="playerPad" class="paddle paddle-left"></div>
       <div id="remotePad" class="paddle paddle-right"></div>
     </div>
+    <div v-if="claimVictory" class="modal">
+      <div class="modal-content">
+        <button id="claimButton" class="ok" disabled @click="onClaimVictory">
+          Claim victory
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .field {
-  background-color: #212121;
-  position: relative;
-  margin-left: 15vw;
+  /* object-fit: contain; */
+  /* min-width: 200px; */
+  /* min-height: 150px; */
+  aspect-ratio: 4 / 3;
+  background-color: #000;
+  position: absolute;
+  margin-left: 10vw;
+  /* margin-right: 15vw; */
   margin-top: 1vh;
-  height: 70vh;
-  width: 70vw;
+  width: 80%;
+  /* height: min(width * 0.75, 60%); */
   overflow: hidden;
   z-index: -1;
 }
@@ -308,8 +371,8 @@ onMounted(async () => {
   top: calc(var(--y) * 1%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  width: 4vh;
-  height: 4vh;
+  width: 2vw;
+  height: 2vw;
   z-index: 0;
 }
 .score {
@@ -320,7 +383,7 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   font-weight: bold;
-  font-size: 4vh;
+  font-size: 4vw;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
   z-index: 1;
@@ -349,5 +412,32 @@ onMounted(async () => {
 }
 .players {
   display: grid;
+}
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 696; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 2vw;
+  border: 1px solid #888;
+  width: 25%; /* Could be more or less, depending on screen size */
+  color: black;
+}
+
+.ok {
+  cursor: pointer;
 }
 </style>
