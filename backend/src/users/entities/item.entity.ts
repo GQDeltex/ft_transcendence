@@ -29,16 +29,27 @@ export class Item {
 }
 
 const itemList: Item[] = [
+//   new Item({
+//     id: 0,
+//     type: 'map',
+//     name: 'Blue map',
+//     description: 'Blue map',
+//     price: 6.69,
+//     picture:
+//       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
+//     metadata: 'blue',
+//   }),
   new Item({
     id: 0,
     type: 'map',
-    name: 'Blue map',
-    description: 'Blue map',
+    name: 'christmas map',
+    description: 'christmas map',
     price: 6.69,
     picture:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
+      'https://cdn.discordapp.com/attachments/830093692449587304/1041441336815009933/frosty_bg_frame.png',
     metadata: 'blue',
   }),
+
   new Item({
     id: 1,
     type: 'map',
@@ -79,14 +90,24 @@ const itemList: Item[] = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
     metadata: 'blue',
   }),
+//   new Item({
+//     id: 4,
+//     type: 'ball',
+//     name: 'Red ball',
+//     description: 'Red ball',
+//     price: 6.69,
+//     picture:
+//       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+//     metadata: 'red',
+//   }),
   new Item({
     id: 4,
     type: 'ball',
-    name: 'Red ball',
-    description: 'Red ball',
+    name: 'christmas ball',
+    description: 'christmas ball',
     price: 6.69,
     picture:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+      'https://cdn.discordapp.com/attachments/830093692449587304/1041450915405758525/christmas_ball.png',
     metadata: 'red',
   }),
   // new Item({
