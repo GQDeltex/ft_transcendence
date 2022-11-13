@@ -119,12 +119,28 @@ export class GameService {
     client.to(`&${gameId}`).emit('blur', cowardId);
     client.emit('blur', cowardId);
   }
-  async unpauseGame(client: Socket, gameId: number) {
+  async unpauseGame(client: Socket, gameId: number, cowardId: number) {
     const game: Game = await this.findOne(gameId);
     if (game.state !== GameState.PAUSED) return;
-    game.state = GameState.RUNNING; //order problems? pls think about it
+    if (game.player1Id === cowardId) game.player1BlurTime = new Date(0);
+    if (game.player2Id === cowardId) game.player2BlurTime = new Date(0);
+    if (game.player1BlurTime.getTime() == game.player2BlurTime.getTime()) {
+      game.state = GameState.RUNNING; //order problems? pls think about it
+      client.to(`&${gameId}`).emit('focus');
+      client.emit('focus');
+    }
     await this.gameRepository.save(game);
-    client.to(`&${gameId}`).emit('focus');
-    client.emit('focus');
+  }
+  async claimVictory(client: Socket, gameId: number) {
+    const game: Game = await this.findOne(gameId);
+    if (client.data.user.id == game.player1Id) {
+      if (new Date().getTime() - game.player2BlurTime.getTime() >= 10000)
+        await this.killGame(game.player2Id);
+    } else {
+      if (new Date().getTime() - game.player1BlurTime.getTime() >= 10000)
+        await this.killGame(game.player1Id);
+    }
+    client.to(`&${gameId}`).emit('Game', { gameId: -1 });
+    client.emit('Game', { gameId: -1 });
   }
 }

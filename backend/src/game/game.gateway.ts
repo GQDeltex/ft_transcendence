@@ -60,17 +60,23 @@ export class GameGateway implements OnGatewayDisconnect {
     @MessageBody('cowardId') cowardId: number,
   ) {
     await this.gameService.pauseGame(client, gameId, cowardId);
-    // await this.gameService.pauseGame(client, gameId);
   }
 
   @SubscribeMessage('focus')
   async handleFocus(
     @ConnectedSocket() client: Socket,
     @MessageBody('gameId') gameId: number,
-    // @MessageBody('cowardId') cowardId: number,
+    @MessageBody('cowardId') cowardId: number,
   ) {
-    await this.gameService.unpauseGame(client, gameId);
-    // await this.gameService.unpauseGame(client, gameId, cowardId);
+    await this.gameService.unpauseGame(client, gameId, cowardId);
+  }
+
+  @SubscribeMessage('claimVictory')
+  async claimVictory(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('gameId') gameId: number,
+  ) {
+    await this.gameService.claimVictory(client, gameId);
   }
 
   @SubscribeMessage('gameData')

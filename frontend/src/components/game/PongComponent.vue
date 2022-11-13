@@ -19,7 +19,7 @@ const mapImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
 );
 const claimVictory = ref(false);
-
+let timeoutId = -1;
 const props = defineProps<{
   gameId: number;
   priority: number;
@@ -42,13 +42,8 @@ const props = defineProps<{
 }>();
 
 function onClaimVictory() {
-  console.log('lol');
-  const claimButton = document.getElementById(
-    'claimButton',
-  ) as HTMLButtonElement | null;
-  if (claimButton !== null) claimButton.disabled = true;
   claimVictory.value = false;
-
+  socket.emit('claimVictory', { gameId: props.gameId });
 }
 
 // console.log(props);
@@ -225,7 +220,15 @@ onMounted(async () => {
       (props.priority != 0 && cowardId != props.player2ID.id)
     ) {
       claimVictory.value = true;
-      setTimeout(() => {
+      const claimButton = document.getElementById(
+        'claimButton',
+      ) as HTMLButtonElement | null;
+      if (claimButton !== null) claimButton.disabled = true;
+      if (timeoutId > -1) {
+        clearTimeout(timeoutId);
+        timeoutId = -1;
+      }
+      timeoutId = setTimeout(() => {
         const claimButton = document.getElementById(
           'claimButton',
         ) as HTMLButtonElement | null;
@@ -239,6 +242,7 @@ onMounted(async () => {
   });
 
   socket.on('focus', () => {
+    claimVictory.value = false;
     window.addEventListener('keydown', handleDown);
     window.addEventListener('keyup', handleUp);
     ball.set_speed();
@@ -322,17 +326,12 @@ onMounted(async () => {
 
 <style scoped>
 .field {
-  /* object-fit: contain; */
-  /* min-width: 200px; */
-  /* min-height: 150px; */
-  aspect-ratio: 4 / 3;
-  background-color: #000;
-  position: absolute;
-  margin-left: 10vw;
-  /* margin-right: 15vw; */
+  background-color: #212121;
+  position: relative;
+  margin-left: 15vw;
   margin-top: 1vh;
-  width: 80%;
-  /* height: min(width * 0.75, 60%); */
+  height: 70vh;
+  width: 70vw;
   overflow: hidden;
   z-index: -1;
 }
@@ -364,15 +363,14 @@ onMounted(async () => {
   --x: 50;
   --y: 50;
   --col: #fff;
-
   position: absolute;
   background-color: var(--col);
   left: calc(var(--x) * 1%);
   top: calc(var(--y) * 1%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  width: 2vw;
-  height: 2vw;
+  width: 4vh;
+  height: 4vh;
   z-index: 0;
 }
 .score {
@@ -383,7 +381,7 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   font-weight: bold;
-  font-size: 4vw;
+  font-size: 4vh;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
   z-index: 1;
