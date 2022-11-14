@@ -269,7 +269,8 @@ onMounted(async () => {
   margin-left: auto;
   margin-right: auto;
   margin-top: 1vh;
-  height: min(70vh, width * 0.75);
+  height: width * 0.75;
+  min-width: 400px;
   width: 60vw;
   overflow: hidden;
   z-index: -1;
