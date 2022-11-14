@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <div>
-    <router-link :to="`/profile/${player.id}`">
+    <router-link class="routerlink" :to="`/profile/${player.id}`">
       <div>
         <RoundPictureComponent
           v-if="player.picture"
@@ -31,6 +31,10 @@ defineProps<{
 </template>
 
 <style scoped>
+.routerlink {
+  text-decoration: none;
+}
+
 div {
   display: grid;
   margin: auto;

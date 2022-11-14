@@ -71,6 +71,15 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
+  async updateTitle(
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
+    @Args('title', { type: () => String }) updateTitleInput: string,
+  ) {
+    await this.usersService.updateTitle(jwtPayload.id, updateTitleInput);
+    return this.usersService.findOne(jwtPayload.id);
+  }
+
+  @Mutation(() => User)
   async updateFriendship(
     @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args() args: UpdateUserFriendshipInput,
