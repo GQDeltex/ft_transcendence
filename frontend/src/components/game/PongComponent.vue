@@ -275,10 +275,12 @@ onMounted(async () => {
 .field {
   background-color: #212121;
   position: relative;
-  margin-left: 15vw;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 1vh;
-  height: 70vh;
-  width: 70vw;
+  height: width * 0.75;
+  min-width: 400px;
+  width: 60vw;
   overflow: hidden;
   z-index: -1;
 }
@@ -322,8 +324,8 @@ onMounted(async () => {
   top: calc(var(--y) * 1%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  width: 4vh;
-  height: 4vh;
+  width: 2vw;
+  height: 2vw;
   z-index: 0;
 }
 .score {
@@ -334,7 +336,7 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   font-weight: bold;
-  font-size: 4vh;
+  font-size: 4vw;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
   z-index: 1;
