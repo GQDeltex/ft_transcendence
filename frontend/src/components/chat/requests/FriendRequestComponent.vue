@@ -66,8 +66,8 @@ const declineButton = async () => {
 .acceptButton {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   cursor: pointer;
   font-size: 0.8vw;
   border-color: transparent;
@@ -78,7 +78,7 @@ const declineButton = async () => {
   text-decoration: none;
   border-radius: 5px;
   color: white;
-  background-color: #202020;
+  background-color: black;
   cursor: pointer;
   font-size: 0.8vw;
   border-color: transparent;

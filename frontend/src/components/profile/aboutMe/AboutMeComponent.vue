@@ -13,7 +13,7 @@ const capitalize = (str: string) => {
 
 <template>
   <div v-if="user" class="about">
-    <span style="font-size: 2vw">
+    <span style="font-size: 2vw" class="headtext">
       About
       <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
     </span>
@@ -43,6 +43,9 @@ const capitalize = (str: string) => {
 </template>
 
 <style scoped>
+.headtext {
+  color: #c00000;
+}
 .about {
   padding: 1vw;
   border: 1px solid grey;

@@ -69,23 +69,24 @@ function sendMsg() {
 .parent {
   display: flex;
   flex-direction: column;
-  border: 1px solid #202020;
+  border: 1px solid gray;
   height: inherit;
   width: 60vw;
 }
 .chatname {
-  color: #f8971d;
+  color: #c00000;
   padding: 1vw;
   font-size: 1vw;
 }
 .messages {
   height: 100%;
-  border-top: 1px solid #202020;
-  border-bottom: 1px solid #202020;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid grey;
   font-size: 1vw;
   padding: 0.5vw;
   overflow-y: scroll;
   overflow-wrap: break-word;
+  color: white;
 }
 .lower {
   display: flex;
@@ -99,7 +100,7 @@ function sendMsg() {
   text-decoration: none;
   border-radius: 5px;
   color: black;
-  background-color: #f8971d;
+  background-color: #c00000;
   font-size: 1vw;
   border-color: transparent;
   cursor: pointer;

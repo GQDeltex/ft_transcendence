@@ -10,14 +10,14 @@ const props = defineProps<{
 }>();
 
 const activeChannel = computed(() => {
-  if (props.channelName === props.selectedChannel) return { color: '#f8971d' };
+  if (props.channelName === props.selectedChannel) return { color: '#c00000' };
   if (!props.isUserInside) return { color: 'grey' };
   else return { color: 'white' };
 });
 
 const activePicture = computed(() => {
   if (props.channelName === props.selectedChannel)
-    return { 'border-color': '#f8971d' };
+    return { 'border-color': '#c00000' };
   if (!props.isUserInside) return { 'border-color': 'grey' };
   else return { 'border-color': 'white' };
 });

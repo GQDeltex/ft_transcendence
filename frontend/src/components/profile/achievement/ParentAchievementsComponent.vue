@@ -205,5 +205,6 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 .text {
   font-size: 2vw;
   margin-bottom: 1vw;
+  color: #c00000;
 }
 </style>
