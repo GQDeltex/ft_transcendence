@@ -37,7 +37,7 @@ socket.on('status', (status) => {
 });
 
 socket.on('newclient', async () => {
-  console.log('New client connected, loggin this one out');
+  console.log('New client connected, logging this one out');
   await userStore.logout();
   await router.push({ path: '/login' });
   errorStore.setError(
@@ -95,7 +95,7 @@ window.addEventListener('resize', () => {
 // Generate some snow flakes.
 const flakes: SnowFlake[] = [];
 const numOfFlakes = randomInt(300, 600);
-for (var i = 0; i < numOfFlakes; i++) {
+for (let i = 0; i < numOfFlakes; i++) {
   flakes.push({
     x: randomInt(0, canvas.width),
     y: randomInt(0, canvas.height),
@@ -105,9 +105,10 @@ for (var i = 0; i < numOfFlakes; i++) {
   });
 }
 
+const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
 // Setup and draw our flakes.
-const ctx = canvas.getContext('2d')!;
 function draw() {
+  if (ctx === null) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = 'rgba(255,255,255,0.66)';
   ctx.beginPath();
