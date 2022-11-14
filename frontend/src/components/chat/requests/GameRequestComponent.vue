@@ -79,8 +79,8 @@ const declineButton = async () => {
 .declineButton {
   text-decoration: none;
   border-radius: 5px;
-  color: white;
-  background-color: black;
+  color: red;
+  background-color: white;
   cursor: pointer;
   font-size: 0.8vw;
   border-color: transparent;

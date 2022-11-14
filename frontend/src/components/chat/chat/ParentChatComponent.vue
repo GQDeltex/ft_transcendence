@@ -76,8 +76,8 @@ watch([() => props.chatName, () => [...messages.value]], async () => {
   height: inherit;
   width: 60vw;
 }
-.chatname {
-  color: #c00000;
+.chatName {
+  color: red;
   padding: 1vw;
   font-size: 1vw;
 }

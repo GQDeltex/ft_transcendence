@@ -28,7 +28,7 @@ const activePicture = computed(() => {
     <img
       class="picture"
       alt="channel picture"
-      src="@/assets/pongking_boi.svg"
+      src="@/assets/xmas.png"
       :style="activePicture"
     />
     <div class="infoBox">
