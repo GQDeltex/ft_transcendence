@@ -23,26 +23,24 @@ const itemSelected = (item: string) => {
 .subMenu {
   position: fixed;
   z-index: 800; /* Sit on top */
-  background-color: white;
+  background-color: #123;
   left: inherit;
   top: inherit;
   width: 18vw;
   height: 6vw;
   overflow: auto; /* Enable scroll if needed */
-  background-color: whitesmoke;
 }
 
 /* Modal Content/Box */
 .menuItem {
-  background-color: #fefefe;
-  color: black;
+  color: #c00000;
   font-size: 1.5vw;
   cursor: pointer;
 }
 
 .menuItem.active,
 .menuItem:hover {
-  background-color: #f8971d;
+  background-color: #c00000;
   color: white;
 }
 </style>
