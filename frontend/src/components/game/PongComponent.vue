@@ -18,6 +18,9 @@ const ballImg = ref(
 const mapImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
 );
+const paddleImg = ref(
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
+);
 
 const props = defineProps<{
   gameId: number;
@@ -60,6 +63,8 @@ function graph() {
         ballImg.value = cur.picture;
       } else if (cur.type == 'map') {
         mapImg.value = cur.picture;
+      } else if (cur.type == 'paddle') {
+        paddleImg.value = cur.picture;
       }
     }
   }
@@ -203,12 +208,12 @@ onMounted(async () => {
       me,
     );
     const pPlay = new Paddle(
-      document.getElementById('player'),
+      document.getElementById('playerPad'),
       field.getRect(),
       props.gameId,
     );
     const pRemo = new Paddle(
-      document.getElementById('remote'),
+      document.getElementById('remotePad'),
       field.getRect(),
       props.gameId,
     );
@@ -256,8 +261,12 @@ onMounted(async () => {
       <div id="ball" class="ball">
         <img class="ball" :src="ballImg" />
       </div>
-      <div id="playerPad" class="paddle paddle-left"></div>
-      <div id="remotePad" class="paddle paddle-right"></div>
+      <div id="playerPad" class="paddle paddle-left">
+        <img class="pad" :src="paddleImg" />
+      </div>
+      <div id="remotePad" class="paddle paddle-right">
+        <img class="pad" :src="paddleImg" />
+      </div>
     </div>
   </div>
 </template>
@@ -280,6 +289,11 @@ onMounted(async () => {
   width: 106%;
   transform: translate(-3%, -6%);
   z-index: -1;
+}
+.pad {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
 }
 .paddle {
   --y: 50;
