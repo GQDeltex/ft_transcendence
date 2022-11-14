@@ -46,6 +46,10 @@ GameService.findAll('running').then(
   (gamesreturn: Game[]) => (games.value = gamesreturn),
 );
 
+GameService.findAll('paused').then(
+  (gamesreturn: Game[]) => (games.value = gamesreturn),
+);
+
 socket.on('Game', async ({ gameId }) => {
   if (gameId < 0) {
     displayEnd.value = true;

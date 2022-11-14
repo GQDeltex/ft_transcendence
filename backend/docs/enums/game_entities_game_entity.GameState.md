@@ -9,6 +9,7 @@
 ### Enumeration Members
 
 - [ENDED](game_entities_game_entity.GameState.md#ended)
+- [PAUSED](game_entities_game_entity.GameState.md#paused)
 - [RUNNING](game_entities_game_entity.GameState.md#running)
 - [STARTING](game_entities_game_entity.GameState.md#starting)
 
@@ -21,6 +22,16 @@
 #### Defined in
 
 [src/game/entities/game.entity.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L14)
+
+___
+
+### PAUSED
+
+• **PAUSED** = ``"paused"``
+
+#### Defined in
+
+[src/game/entities/game.entity.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L15)
 
 ___
 
