@@ -264,14 +264,14 @@ function getChannelUserStatus(client: User) {
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
-  border: 1px solid #202020;
+  border: 1px solid gray;
   height: inherit;
   width: 15vw;
 }
 
 .headerText {
   font-size: 1vw;
-  color: #f8971d;
+  color: #c00000;
 }
 
 .list {
@@ -299,8 +299,8 @@ function getChannelUserStatus(client: User) {
 .button {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   cursor: pointer;
   font-size: 0.8vw;
   border-color: transparent;

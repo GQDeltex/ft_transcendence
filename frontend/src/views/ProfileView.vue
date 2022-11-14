@@ -95,7 +95,7 @@ const logout = async () => {
   text-decoration: none;
   border-radius: 25px;
   color: white;
-  background-color: #f8971d;
+  background-color: #c00000;
   cursor: pointer;
   float: right;
   font-size: 1vw;

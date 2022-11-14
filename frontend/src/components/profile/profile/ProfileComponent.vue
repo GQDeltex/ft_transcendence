@@ -138,7 +138,7 @@ async function updateTitle(title: string) {
       <span class="friends">{{ userStore.friends.length }} Friends</span>
     </div>
 
-    <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
+    <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
 
     <span v-if="isMe" class="twoFA"
       >2 Factor Authentication
@@ -157,12 +157,13 @@ async function updateTitle(title: string) {
 <style scoped>
 .title {
   font-size: 2vw;
+  color: white;
 }
 
 .onSwitch {
   color: white;
   margin-top: 10%;
-  margin-left: 6%;
+  margin-left: 15%;
   margin-right: 0;
 }
 
@@ -186,7 +187,7 @@ async function updateTitle(title: string) {
   padding: 10px 10px 1%;
   border-width: 1px;
   border-style: solid;
-  border-image: linear-gradient(to bottom, white, #f8971d, #f8971d, #202020) 1;
+  border-image: linear-gradient(to bottom, #c00000, #c00000, white, gray) 1;
 }
 
 .infoBox {
@@ -198,7 +199,7 @@ async function updateTitle(title: string) {
 }
 
 .username {
-  color: #f8971d;
+  color: #c00000;
   font-size: 2vw;
 }
 
@@ -258,7 +259,7 @@ async function updateTitle(title: string) {
 }
 
 input:checked + .slider {
-  background-color: #f8971d;
+  background-color: #c00000;
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }

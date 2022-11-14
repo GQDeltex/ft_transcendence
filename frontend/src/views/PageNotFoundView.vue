@@ -152,9 +152,12 @@
 </template>
 
 <style scoped>
+h1 {
+  color: white;
+}
+
 marquee {
   font-family: monospace;
-  --color: 255;
-  color: var(--color);
+  color: white;
 }
 </style>

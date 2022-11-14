@@ -24,7 +24,7 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const activeChat = computed(() => {
-  if (props.highlight) return { color: '#f8971d' };
+  if (props.highlight) return { color: '#c00000' };
   return { color: 'white' };
 });
 
@@ -233,6 +233,7 @@ const onChat = (username: string) => {
   margin-right: 1em;
   cursor: pointer;
   font-size: 1.5vw;
+  color: white;
 }
 
 .client {
@@ -269,8 +270,8 @@ const onChat = (username: string) => {
 .butt {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   cursor: pointer;
   font-size: 0.5vw;
   border-color: transparent;

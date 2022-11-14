@@ -204,5 +204,6 @@ onMounted(async () => {
 .text {
   font-size: 2vw;
   margin-bottom: 1vw;
+  color: #c00000;
 }
 </style>
