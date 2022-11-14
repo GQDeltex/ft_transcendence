@@ -101,7 +101,7 @@ UserService.findLeaders()
       <span class="friends">{{ userStore.friends.length }} Friends</span>
     </div>
 
-    <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
+    <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
 
     <span v-if="isMe" class="twoFA"
       >2 Factor Authentication
@@ -126,7 +126,7 @@ UserService.findLeaders()
 .onSwitch {
   color: white;
   margin-top: 10%;
-  margin-left: 6%;
+  margin-left: 15%;
   margin-right: 0;
 }
 
