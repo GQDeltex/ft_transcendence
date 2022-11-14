@@ -21,8 +21,7 @@ const onChat = (username: string) => {
 };
 
 function userInChatWith(input: User) {
-  if (input.username == props.currentChannel.name) return true;
-  return false;
+  return input.username == props.currentChannel.name;
 }
 </script>
 
@@ -103,6 +102,7 @@ function userInChatWith(input: User) {
   color: gray;
   font-weight: bold;
 }
+
 .people {
   padding-left: 5%;
 }
