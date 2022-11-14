@@ -42,7 +42,7 @@ const itemList: Item[] = [
   new Item({
     id: 0,
     type: 'map',
-    name: 'christmas map',
+    name: 'Christmas map',
     description: 'christmas map',
     price: 6.69,
     picture:
@@ -60,26 +60,26 @@ const itemList: Item[] = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
     metadata: 'red',
   }),
-  // new Item({
-  //   id: 2,
-  //   type: 'map',
-  //   name: 'Yellow map',
-  //   description: 'Yellow map',
-  //   price: 6.69,
-  //   picture:
-  //     'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
-  //   metadata: 'yellow',
-  // }),
   new Item({
     id: 2,
     type: 'map',
-    name: 'Soccer Court',
-    description: 'Soccer Court',
+    name: 'Yellow map',
+    description: 'Yellow map',
     price: 6.69,
     picture:
-      'https://cdn.discordapp.com/attachments/809463378435244073/1035934712457334804/Soccer_field_-_empty.png',
-    metadata: 'green',
+      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+    metadata: 'yellow',
   }),
+  // new Item({
+  //   id: 2,
+  //   type: 'map',
+  //   name: 'Soccer Court',
+  //   description: 'Soccer Court',
+  //   price: 6.69,
+  //   picture:
+  //     'https://cdn.discordapp.com/attachments/809463378435244073/1035934712457334804/Soccer_field_-_empty.png',
+  //   metadata: 'green',
+  // }),
   new Item({
     id: 3,
     type: 'ball',
@@ -103,33 +103,33 @@ const itemList: Item[] = [
   new Item({
     id: 4,
     type: 'ball',
-    name: 'christmas ball',
+    name: 'Christmas ball',
     description: 'christmas ball',
     price: 6.69,
     picture:
-      'https://cdn.discordapp.com/attachments/830093692449587304/1041450915405758525/christmas_ball.png',
+      'https://cdn.discordapp.com/attachments/830093692449587304/1041674533041602560/christmas_ball.png',
     metadata: 'red',
+  }),
+  new Item({
+    id: 5,
+    type: 'ball',
+    name: 'Yellow ball',
+    description: 'Yellow ball',
+    price: 6.69,
+    picture:
+      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+    metadata: 'yellow',
   }),
   // new Item({
   //   id: 5,
   //   type: 'ball',
-  //   name: 'Yellow ball',
-  //   description: 'Yellow ball',
+  //   name: 'socccer ball',
+  //   description: 'socccer ball',
   //   price: 6.69,
   //   picture:
-  //     'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+  //     'https://cdn.discordapp.com/attachments/809463378435244073/1035934712994222100/soccer-ball.gif',
   //   metadata: 'yellow',
   // }),
-  new Item({
-    id: 5,
-    type: 'ball',
-    name: 'socccer ball',
-    description: 'socccer ball',
-    price: 6.69,
-    picture:
-      'https://cdn.discordapp.com/attachments/809463378435244073/1035934712994222100/soccer-ball.gif',
-    metadata: 'yellow',
-  }),
 ];
 
 export default itemList;
