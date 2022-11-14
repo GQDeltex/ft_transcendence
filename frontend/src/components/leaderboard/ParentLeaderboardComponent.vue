@@ -49,7 +49,7 @@ UserService.findLeaders()
 <style scoped>
 h3 {
   padding: 5px;
-  color: orange;
+  color: white;
 }
 .categories {
   display: flex;

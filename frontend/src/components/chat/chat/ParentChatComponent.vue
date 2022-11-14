@@ -72,25 +72,25 @@ watch([() => props.chatName, () => [...messages.value]], async () => {
 .parent {
   display: flex;
   flex-direction: column;
-  border: 1px solid #202020;
+  border: 1px solid gray;
   height: inherit;
   width: 60vw;
 }
-
 .chatName {
-  color: #f8971d;
+  color: red;
   padding: 1vw;
   font-size: 1vw;
 }
 
 .messages {
   height: 100%;
-  border-top: 1px solid #202020;
-  border-bottom: 1px solid #202020;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid grey;
   font-size: 1vw;
   padding: 0.5vw;
   overflow-y: scroll;
   overflow-wrap: break-word;
+  color: white;
 }
 
 .lower {
@@ -107,7 +107,7 @@ watch([() => props.chatName, () => [...messages.value]], async () => {
   text-decoration: none;
   border-radius: 5px;
   color: black;
-  background-color: #f8971d;
+  background-color: #c00000;
   font-size: 1vw;
   border-color: transparent;
   cursor: pointer;

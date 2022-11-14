@@ -129,8 +129,8 @@ onUnmounted(() => {
 }
 
 .loader {
-  border: 16px solid #f8971d;
-  border-top: 16px solid gray;
+  border: 16px solid #c00000;
+  border-top: 16px solid white;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -161,6 +161,7 @@ onUnmounted(() => {
 .saving {
   font-size: 5em;
   margin-bottom: 0.3em;
+  color: white;
 }
 
 .saving span {

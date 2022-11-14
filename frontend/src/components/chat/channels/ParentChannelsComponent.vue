@@ -78,13 +78,13 @@ function userInChannel(input: Channel) {
   flex-direction: column;
   padding: 0.5vw;
   padding-bottom: 0.5vw;
-  border: 1px solid #202020;
+  border: 1px solid grey;
 }
 .text {
   display: flex;
   font-size: 1vw;
   padding-bottom: 0.5vw;
-  color: #f8971d;
+  color: #c00000;
   justify-content: space-between;
 }
 .list {
@@ -99,8 +99,8 @@ function userInChannel(input: Channel) {
 button {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   cursor: pointer;
   font-size: 0.8vw;
   border-color: transparent;

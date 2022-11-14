@@ -116,6 +116,7 @@ const onProfile = async () => {
   margin-right: 1em;
   cursor: pointer;
   font-size: 1.5vw;
+  color: white;
 }
 
 .client {
@@ -151,8 +152,8 @@ const onProfile = async () => {
 .button {
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   cursor: pointer;
   font-size: 0.5vw;
   border-color: transparent;

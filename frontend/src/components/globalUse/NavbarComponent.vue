@@ -9,13 +9,8 @@ const userStore = useUserStore();
 <template>
   <div class="column1">
     <router-link to="/" class="columncontent">
-      <img
-        alt="page logo"
-        class="logo"
-        src="@/assets/pongking_boi.svg"
-        height="50"
-      />
-      <span>pongking</span>
+      <img alt="page logo" class="logo" src="@/assets/xmas.png" height="50" />
+      <span>christmasballs</span>
     </router-link>
   </div>
   <div class="column2">
@@ -84,13 +79,13 @@ li {
 }
 li a {
   display: block;
-  color: #f8971d;
+  color: #c00000;
   text-align: center;
   padding: 1% 1%;
   text-decoration: none;
 }
 li a:hover {
-  background-color: #f8971d;
-  color: black;
+  background-color: #c00000;
+  color: white;
 }
 </style>
