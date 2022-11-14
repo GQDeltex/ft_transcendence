@@ -8,12 +8,18 @@ import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.
 import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
+import { cloneDeep } from 'lodash';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
 const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
+const dropDownTitle = ref(false);
+let dropDownContent = ref<string[]>(cloneDeep(userStore.title));
+
+dropDownContent.value[0] = '--- no title ---';
 
 const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
   user: null,
@@ -42,11 +48,27 @@ const onClose = () => {
   }
 };
 
+const toggle = () => {
+  dropDownTitle.value = !dropDownTitle.value;
+};
+
 const errorStore = useErrorStore();
 const leaders = ref<Partial<User>[]>([]);
 UserService.findLeaders()
   .then((users) => (leaders.value = users))
   .catch((error) => errorStore.setError(error.message));
+
+async function updateTitle(title: string) {
+  // console.log('new title selected! ', title);
+  if (title == '--- no title ---') title = '';
+  dropDownTitle.value = false;
+  try {
+    userStore.title = (await UserService.changeTitle(title)).title;
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+    return;
+  }
+}
 </script>
 
 <template>
@@ -69,8 +91,23 @@ UserService.findLeaders()
       />
     </div>
     <div class="infoBox">
-      <span class="title">{{ user.title[0] }}</span>
-      <br />
+      <div class="title">
+        {{ user.title[0] }}
+        <img
+          v-if="isMe"
+          alt="pen"
+          class="pen"
+          title="Change picture"
+          src="@/assets/pen.png"
+          @click="toggle"
+        />
+      </div>
+      <DropDownComponent
+        v-if="dropDownTitle"
+        :items="dropDownContent"
+        @close="updateTitle"
+      />
+      <!-- <br /> -->
       <div class="username">
         <span>
           {{ user.username }}
@@ -86,7 +123,7 @@ UserService.findLeaders()
         />
       </div>
       <ModalChangeUsernameComponent
-        v-show="modalChangeUsername"
+        v-if="modalChangeUsername"
         :user-id="user.id"
         :input-username="user.username"
         @close="modalChangeUsername = false"
