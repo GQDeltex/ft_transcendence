@@ -42,6 +42,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 <style scoped>
 .title {
   font-size: 2vw;
+  color: #c00000;
 }
 
 .scroll {
@@ -49,7 +50,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
   max-height: 96%;
 }
 .frame {
-  border: 1px solid #202020;
+  border: 1px solid gray;
   padding: 1vw;
   max-height: inherit;
 }

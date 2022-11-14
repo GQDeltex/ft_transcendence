@@ -86,12 +86,16 @@ onMounted(async () => {
     />
     <p class="saving">{{ player.username }} wins!</p>
     <div class="btns">
-      <button class="home-page flex-btn" @click="homepage">Home page</button>
+      <button class="home-page flex-btn" @click="homepage">Home</button>
     </div>
   </div>
 </template>
 
 <style scoped>
+.saving {
+  color: white;
+  font-size: 2vw;
+}
 .parent {
   height: 80vh;
   display: flex;
@@ -110,7 +114,12 @@ onMounted(async () => {
 }
 
 .flex-btn {
-  width: 11vh;
-  height: 4vh;
+  text-decoration: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #c00000;
+  font-size: 3vw;
+  border-color: transparent;
+  cursor: pointer;
 }
 </style>
