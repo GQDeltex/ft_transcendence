@@ -29,16 +29,16 @@ export class Item {
 }
 
 const itemList: Item[] = [
-//   new Item({
-//     id: 0,
-//     type: 'map',
-//     name: 'Blue map',
-//     description: 'Blue map',
-//     price: 6.69,
-//     picture:
-//       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
-//     metadata: 'blue',
-//   }),
+  //   new Item({
+  //     id: 0,
+  //     type: 'map',
+  //     name: 'Blue map',
+  //     description: 'Blue map',
+  //     price: 6.69,
+  //     picture:
+  //       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
+  //     metadata: 'blue',
+  //   }),
   new Item({
     id: 0,
     type: 'map',
@@ -90,16 +90,16 @@ const itemList: Item[] = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
     metadata: 'blue',
   }),
-//   new Item({
-//     id: 4,
-//     type: 'ball',
-//     name: 'Red ball',
-//     description: 'Red ball',
-//     price: 6.69,
-//     picture:
-//       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
-//     metadata: 'red',
-//   }),
+  //   new Item({
+  //     id: 4,
+  //     type: 'ball',
+  //     name: 'Red ball',
+  //     description: 'Red ball',
+  //     price: 6.69,
+  //     picture:
+  //       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+  //     metadata: 'red',
+  //   }),
   new Item({
     id: 4,
     type: 'ball',
@@ -138,7 +138,7 @@ const itemList: Item[] = [
     price: 6.69,
     picture:
       'https://cdn.discordapp.com/attachments/830093692449587304/1041680391121141790/paddle.png',
-    metadata: 'yellow',
+    metadata: 'christmas',
   }),
 ];
 
