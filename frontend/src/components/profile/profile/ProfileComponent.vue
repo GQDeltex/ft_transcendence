@@ -18,10 +18,9 @@ const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
 const dropDownTitle = ref(false);
 let dropDownContent = ref<string[]>(cloneDeep(userStore.title));
-// let dropDownContent = (cloneDeep(userStore.title));
 
 dropDownContent.value[0] = '--- no title ---';
-console.log(dropDownContent);
+
 const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
   user: null,
   isMe: false,
@@ -50,10 +49,7 @@ const onClose = () => {
 };
 
 const toggle = () => {
-  // console.log('isMe ', isMe.valueOf());
-  // if (isMe.valueOf() == true)
   dropDownTitle.value = !dropDownTitle.value;
-  // console.log('dropDown toggled', dropDownTitle.value);
 };
 
 const errorStore = useErrorStore();
@@ -62,9 +58,16 @@ UserService.findLeaders()
   .then((users) => (leaders.value = users))
   .catch((error) => errorStore.setError(error.message));
 
-function updateTitle(title: string) {
-  console.log('new title selected! ', title);
+async function updateTitle(title: string) {
+  // console.log('new title selected! ', title);
+  if (title == '--- no title ---') title = '';
   dropDownTitle.value = false;
+  try {
+    userStore.title = (await UserService.changeTitle(title)).title;
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+    return;
+  }
 }
 </script>
 
