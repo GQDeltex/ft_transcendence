@@ -167,12 +167,14 @@ onMounted(async () => {
     }
   }
   function handleBlur(): void {
+    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
     socket.emit('blur', {
       gameId: props.gameId,
       cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
     });
   }
   function handleFocus(): void {
+    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
     socket.emit('focus', {
       gameId: props.gameId,
       cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
