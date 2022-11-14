@@ -114,7 +114,7 @@ export class GameService {
     if (game.state === GameState.ENDED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date();
     if (game.player2Id === cowardId) game.player2BlurTime = new Date();
-    game.state = GameState.PAUSED; //order problems? pls think about it
+    game.state = GameState.PAUSED;
     await this.gameRepository.save(game);
     client.to(`&${gameId}`).emit('blur', cowardId);
     client.emit('blur', cowardId);
@@ -125,7 +125,7 @@ export class GameService {
     if (game.player1Id === cowardId) game.player1BlurTime = new Date(0);
     if (game.player2Id === cowardId) game.player2BlurTime = new Date(0);
     if (game.player1BlurTime.getTime() == game.player2BlurTime.getTime()) {
-      game.state = GameState.RUNNING; //order problems? pls think about it
+      game.state = GameState.RUNNING;
       client.to(`&${gameId}`).emit('focus');
       client.emit('focus');
     }
