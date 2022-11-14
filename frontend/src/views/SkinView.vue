@@ -18,11 +18,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="header">
+  <!-- <div class="header">
     <button class="button">Profile Pictures</button>
     <button class="button button-wide">Maps</button>
     <button class="button">Sounds</button>
-  </div>
+  </div> -->
   <template v-for="item in items" :key="item.id">
     <SkinShopComponent :item="item" />
   </template>
