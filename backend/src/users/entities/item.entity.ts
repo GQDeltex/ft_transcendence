@@ -130,6 +130,16 @@ const itemList: Item[] = [
   //     'https://cdn.discordapp.com/attachments/809463378435244073/1035934712994222100/soccer-ball.gif',
   //   metadata: 'yellow',
   // }),
+  new Item({
+    id: 6,
+    type: 'paddle',
+    name: 'Sugar Cane',
+    description: 'Sugar Cane',
+    price: 6.69,
+    picture:
+      'https://cdn.discordapp.com/attachments/830093692449587304/1041680391121141790/paddle.png',
+    metadata: 'yellow',
+  }),
 ];
 
 export default itemList;
