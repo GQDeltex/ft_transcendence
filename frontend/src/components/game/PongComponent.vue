@@ -167,6 +167,11 @@ onMounted(async () => {
     }
   }
   function handleBlur(): void {
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
     socket.emit('blur', {
       gameId: props.gameId,
@@ -174,6 +179,11 @@ onMounted(async () => {
     });
   }
   function handleFocus(): void {
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
     socket.emit('focus', {
       gameId: props.gameId,
@@ -222,6 +232,14 @@ onMounted(async () => {
   });
 
   socket.on('blur', (cowardId: number) => {
+    ball.set_speed(0);
+    playerPad.changeDir(0, false, false);
+    remotePad.changeDir(0, false, false);
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     window.removeEventListener('keydown', handleDown);
     window.removeEventListener('keyup', handleUp);
     if (
@@ -243,18 +261,19 @@ onMounted(async () => {
         ) as HTMLButtonElement | null;
         if (claimButton !== null) claimButton.disabled = false;
       }, 10000);
-      //show pause modal or something, start timeout to make 'claim victory' button clickable
     }
-    ball.set_speed(0);
-    playerPad.changeDir(0, false, false);
-    remotePad.changeDir(0, false, false);
   });
 
   socket.on('focus', () => {
+    ball.set_speed();
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
     claimVictory.value = false;
     window.addEventListener('keydown', handleDown);
     window.addEventListener('keyup', handleUp);
-    ball.set_speed();
   });
 
   window.onresize = function () {
