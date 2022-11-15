@@ -5,7 +5,7 @@ import { socket } from '@/service/socket';
 import { useMessagesStore } from '@/store/message';
 import { useUserStore } from '@/store/user';
 import { storeToRefs } from 'pinia';
-import type { Channel } from '@/store/message';
+import type { Channel, Message } from '@/store/message';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
@@ -38,9 +38,26 @@ async function sendMsg() {
   await scrollToBottom();
 }
 
-watch([() => props.chatName, () => [...messages.value]], async () => {
-  await scrollToBottom();
-});
+watch(
+  [() => props.currentChannel.name, () => [...messages.value]],
+  async () => {
+    await scrollToBottom();
+  },
+);
+
+function correctMessage(message: Message) {
+  // If message belongs to a channel, also check the name
+  if (
+    message.to.name.startsWith('#') &&
+    message.to.name != props.currentChannel.name
+  )
+    return false;
+  return (
+    message.to.id === props.currentChannel.id ||
+    (message.from.id === props.currentChannel.id &&
+      message.to.id === userStore.id)
+  );
+}
 </script>
 
 <template>
@@ -49,11 +66,7 @@ watch([() => props.chatName, () => [...messages.value]], async () => {
     <div id="container" class="messages">
       <template v-for="message in messages">
         <span
-          v-if="
-            message.to.id === props.currentChannel.id ||
-            (message.from.id === props.currentChannel.id &&
-              message.to.id === userStore.id)
-          "
+          v-if="correctMessage(message)"
           :key="`msg_${message.from.name}_${message.to.name}_${message.msg}`"
           >{{ message.from.name }}: {{ message.msg }}<br
         /></span>
