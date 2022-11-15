@@ -3,9 +3,28 @@ import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import RoundPictureComponent from './RoundPictureComponent.vue';
 import { useMessagesStore } from '@/store/message';
+import DropDownComponent from './DropDownComponent.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
+const dropDownContent = ref<string[]>(['Profile', 'Logout']);
+const showDropDown = ref(false);
+const router = useRouter();
+
+async function dropDownClicked(selected: string) {
+  if (selected == 'Profile')
+  {
+    await router.push({ path: `/profile/${userStore.id}` });
+    showDropDown.value = false;
+  }
+  if (selected == 'Logout')
+  {
+    await userStore.logout();
+    await router.push({ path: '/login' });
+  }
+};
 </script>
 
 <template>
@@ -16,14 +35,28 @@ const messagesStore = useMessagesStore();
     </router-link>
   </div>
   <div class="column2">
-    <router-link :to="`/profile/${userStore.id}`" class="columncontent">
-      <span>{{ userStore.title[0] }} {{ userStore.username }}</span>
-      <RoundPictureComponent
-        :picture="userStore.picture"
-        size="50px"
-        border-color="transparent"
-      />
-    </router-link>
+    <!-- <router-link :to="`/profile/${userStore.id}`" class="columncontent"> -->
+      <!-- <div class="columncontent" > -->
+        <span>{{ userStore.title[0] }} </span>
+        <div class="userAndPicture" @click="showDropDown = !showDropDown">
+          {{ userStore.username }}
+          <RoundPictureComponent
+            :picture="userStore.picture"
+            size="50px"
+            border-color="transparent"
+            class="profilePicture"
+          />
+          <DropDownComponent
+          v-if="showDropDown"
+          :items="dropDownContent"
+          width="6vw"
+          height="4vw"
+          left="inherit"
+          @close="dropDownClicked"
+          />
+        </div>
+        <!-- </router-link> -->
+    <!-- </div> -->
   </div>
   <nav>
     <li><RouterLink to="/leaderboard">Leaderboard</RouterLink></li>
@@ -69,8 +102,13 @@ img {
 }
 .column2 {
   grid-column: 2 / 3;
-  justify-self: end;
+  display: flex;
+  text-decoration: none;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-self:flex-end;
   font-size: 2vw;
+  color: white;
 }
 .columncontent {
   display: flex;
@@ -113,5 +151,11 @@ li a {
 li a:hover {
   background-color: #c00000;
   color: white;
+}
+
+.userAndPicture {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 </style>

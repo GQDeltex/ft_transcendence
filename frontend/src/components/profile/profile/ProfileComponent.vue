@@ -105,6 +105,9 @@ async function updateTitle(title: string) {
       <DropDownComponent
         v-if="dropDownTitle"
         :items="dropDownContent"
+        width="18vw"
+        height="6vw"
+        left="inherit"
         @close="updateTitle"
       />
       <!-- <br /> -->
@@ -196,6 +199,8 @@ async function updateTitle(title: string) {
 
 .parentPicture {
   grid-column: 1 / 2;
+  display: flex;
+  align-items:baseline;
 }
 
 .username {

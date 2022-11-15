@@ -3,6 +3,9 @@ const emits = defineEmits(['close']);
 
 const props = defineProps<{
   items: string[];
+  width: string;
+  height: string;
+  left: string;
 }>();
 
 const itemSelected = (item: string) => {
@@ -24,10 +27,12 @@ const itemSelected = (item: string) => {
   position: fixed;
   z-index: 800; /* Sit on top */
   background-color: #123;
-  left: inherit;
+  width: v-bind(width);
+  height: v-bind(height);
+  /* right: v-bind(left); */
+  left:auto;
   top: inherit;
-  width: 18vw;
-  height: 6vw;
+
   overflow: auto; /* Enable scroll if needed */
 }
 
