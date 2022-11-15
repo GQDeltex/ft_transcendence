@@ -16,7 +16,7 @@ const hasScores = computed(() => {
 </script>
 
 <template>
-  <router-link :to="`/stream/${gameId}`">
+  <router-link class="routerlink" :to="`/stream/${gameId}`">
     <div>
       <img class="thumbnail" src="@/assets/pong.png" />
       <span v-if="hasScores" class="playernames">
@@ -28,6 +28,10 @@ const hasScores = computed(() => {
 </template>
 
 <style scoped>
+.routerlink {
+  text-decoration: none;
+}
+
 div {
   display: grid;
   margin: auto;

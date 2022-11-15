@@ -40,13 +40,13 @@ export class Paddle extends Element {
       return parseFloat(
         getComputedStyle(this._htmlElem).getPropertyValue('--y'),
       );
-    else console.log('8 failiure, no object assigned\n');
+    else console.log('8 failure, no object assigned\n');
     return 2147483647;
   }
   sety(value: number) {
     if (this._htmlElem != null)
       this._htmlElem.style.setProperty('--y', String(value));
-    else console.log('9 failiure, no object assigned\n');
+    else console.log('9 failure, no object assigned\n');
   }
 
   changeDir(dir: number, isOpponent = false, emitter: boolean) {

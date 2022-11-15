@@ -19,14 +19,17 @@
 
 ### Methods
 
+- [claimVictory](game_game_service.GameService.md#claimvictory)
 - [create](game_game_service.GameService.md#create)
 - [dequeuePlayer](game_game_service.GameService.md#dequeueplayer)
 - [endGame](game_game_service.GameService.md#endgame)
 - [findAll](game_game_service.GameService.md#findall)
 - [findOne](game_game_service.GameService.md#findone)
 - [killGame](game_game_service.GameService.md#killgame)
+- [pauseGame](game_game_service.GameService.md#pausegame)
 - [queuePlayer](game_game_service.GameService.md#queueplayer)
 - [saveScore](game_game_service.GameService.md#savescore)
+- [unpauseGame](game_game_service.GameService.md#unpausegame)
 
 ## Constructors
 
@@ -45,7 +48,7 @@
 
 #### Defined in
 
-[src/game/game.service.ts:12](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L12)
+[src/game/game.service.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L13)
 
 ## Properties
 
@@ -55,7 +58,7 @@
 
 #### Defined in
 
-[src/game/game.service.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L18)
+[src/game/game.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L19)
 
 ___
 
@@ -65,7 +68,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L13)
+[src/game/game.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L14)
 
 ___
 
@@ -75,7 +78,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L15)
+[src/game/game.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L16)
 
 ___
 
@@ -85,9 +88,30 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L16)
+[src/game/game.service.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L17)
 
 ## Methods
+
+### claimVictory
+
+▸ **claimVictory**(`client`, `gameId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `gameId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.service.ts:134](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L134)
+
+___
 
 ### create
 
@@ -106,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:21](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L21)
+[src/game/game.service.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L22)
 
 ___
 
@@ -126,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:61](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L61)
+[src/game/game.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L64)
 
 ___
 
@@ -147,19 +171,19 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:76](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L76)
+[src/game/game.service.ts:79](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L79)
 
 ___
 
 ### findAll
 
-▸ **findAll**(`searchState?`, `searchUserId?`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
+▸ **findAll**(`searchWhere?`, `searchUserId?`): `Promise`<[`Game`](game_entities_game_entity.Game.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `searchState?` | [`GameState`](../enums/game_entities_game_entity.GameState.md) |
+| `searchWhere?` | `FindOptionsWhere`<[`Game`](game_entities_game_entity.Game.md)\> \| `FindOptionsWhere`<[`Game`](game_entities_game_entity.Game.md)\>[] |
 | `searchUserId?` | `number` |
 
 #### Returns
@@ -168,7 +192,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L36)
+[src/game/game.service.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L37)
 
 ___
 
@@ -188,7 +212,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:48](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L48)
+[src/game/game.service.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L51)
 
 ___
 
@@ -208,7 +232,29 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:88](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L88)
+[src/game/game.service.ts:91](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L91)
+
+___
+
+### pauseGame
+
+▸ **pauseGame**(`client`, `gameId`, `cowardId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `gameId` | `number` |
+| `cowardId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.service.ts:112](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L112)
 
 ___
 
@@ -228,7 +274,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:52](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L52)
+[src/game/game.service.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L55)
 
 ___
 
@@ -249,4 +295,26 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:67](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L67)
+[src/game/game.service.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L70)
+
+___
+
+### unpauseGame
+
+▸ **unpauseGame**(`client`, `gameId`, `cowardId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `gameId` | `number` |
+| `cowardId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.service.ts:122](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L122)

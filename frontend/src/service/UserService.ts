@@ -248,6 +248,21 @@ class UserService {
     return updateUsername;
   }
 
+  async changeTitle(title: string) {
+    const { updateTitle } = await graphQLService.mutation(
+      `
+      mutation updateTitle( $title: String! ){
+        updateTitle( title: $title ) {
+          title
+        }
+      }
+      `,
+      { title },
+    );
+    if (typeof updateTitle === 'undefined') throw new Error('Empty users data');
+    return updateTitle;
+  }
+
   async updateFriendship(
     method: AllowedUpdateFriendshipMethod,
     id: number,

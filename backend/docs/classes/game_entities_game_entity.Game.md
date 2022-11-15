@@ -14,8 +14,10 @@
 
 - [id](game_entities_game_entity.Game.md#id)
 - [player1](game_entities_game_entity.Game.md#player1)
+- [player1BlurTime](game_entities_game_entity.Game.md#player1blurtime)
 - [player1Id](game_entities_game_entity.Game.md#player1id)
 - [player2](game_entities_game_entity.Game.md#player2)
+- [player2BlurTime](game_entities_game_entity.Game.md#player2blurtime)
 - [player2Id](game_entities_game_entity.Game.md#player2id)
 - [score1](game_entities_game_entity.Game.md#score1)
 - [score2](game_entities_game_entity.Game.md#score2)
@@ -35,7 +37,7 @@
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L22)
+[src/game/entities/game.entity.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L23)
 
 ___
 
@@ -45,7 +47,17 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:27](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L27)
+[src/game/entities/game.entity.ts:28](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L28)
+
+___
+
+### player1BlurTime
+
+• **player1BlurTime**: `Date`
+
+#### Defined in
+
+[src/game/entities/game.entity.ts:50](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L50)
 
 ___
 
@@ -55,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:30](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L30)
+[src/game/entities/game.entity.ts:31](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L31)
 
 ___
 
@@ -65,7 +77,17 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L35)
+[src/game/entities/game.entity.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L36)
+
+___
+
+### player2BlurTime
+
+• **player2BlurTime**: `Date`
+
+#### Defined in
+
+[src/game/entities/game.entity.ts:53](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L53)
 
 ___
 
@@ -75,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L38)
+[src/game/entities/game.entity.ts:39](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L39)
 
 ___
 
@@ -85,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:42](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L42)
+[src/game/entities/game.entity.ts:43](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L43)
 
 ___
 
@@ -95,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:46](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L46)
+[src/game/entities/game.entity.ts:47](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L47)
 
 ___
 
@@ -105,4 +127,4 @@ ___
 
 #### Defined in
 
-[src/game/entities/game.entity.ts:54](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L54)
+[src/game/entities/game.entity.ts:61](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/entities/game.entity.ts#L61)

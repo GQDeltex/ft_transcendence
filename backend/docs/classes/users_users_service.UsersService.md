@@ -39,6 +39,7 @@
 - [updatePicture](users_users_service.UsersService.md#updatepicture)
 - [updateSocketId](users_users_service.UsersService.md#updatesocketid)
 - [updateStatus](users_users_service.UsersService.md#updatestatus)
+- [updateTitle](users_users_service.UsersService.md#updatetitle)
 - [updateUsername](users_users_service.UsersService.md#updateusername)
 
 ## Constructors
@@ -130,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:360](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L360)
+[src/users/users.service.ts:366](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L366)
 
 ___
 
@@ -239,7 +240,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:521](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L521)
+[src/users/users.service.ts:527](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L527)
 
 ___
 
@@ -343,7 +344,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:291](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L291)
+[src/users/users.service.ts:297](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L297)
 
 ___
 
@@ -364,7 +365,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:409](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L409)
+[src/users/users.service.ts:415](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L415)
 
 ___
 
@@ -386,7 +387,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:197](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L197)
+[src/users/users.service.ts:203](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L203)
 
 ___
 
@@ -407,7 +408,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:430](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L430)
+[src/users/users.service.ts:436](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L436)
 
 ___
 
@@ -428,7 +429,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:399](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L399)
+[src/users/users.service.ts:405](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L405)
 
 ___
 
@@ -470,7 +471,7 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:164](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L164)
+[src/users/users.service.ts:170](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L170)
 
 ___
 
@@ -491,7 +492,28 @@ ___
 
 #### Defined in
 
-[src/users/users.service.ts:179](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L179)
+[src/users/users.service.ts:185](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L185)
+
+___
+
+### updateTitle
+
+▸ **updateTitle**(`id`, `title`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `title` | `string` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/users/users.service.ts:164](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/users.service.ts#L164)
 
 ___
 

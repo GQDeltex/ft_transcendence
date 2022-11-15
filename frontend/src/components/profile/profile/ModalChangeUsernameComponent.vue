@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import type { Ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useUserStore } from '@/store/user';
@@ -32,6 +32,11 @@ function closeCancel() {
   outputUsername.value = '';
   emits('close');
 }
+
+onMounted(() => {
+  const element = document.getElementById('mytext');
+  if (element != null) element.focus();
+});
 </script>
 
 <template>
@@ -42,6 +47,7 @@ function closeCancel() {
       </h1>
       <label>new Username</label>
       <input
+        id="mytext"
         v-model="outputUsername"
         type="text"
         :placeholder="props.inputUsername"
