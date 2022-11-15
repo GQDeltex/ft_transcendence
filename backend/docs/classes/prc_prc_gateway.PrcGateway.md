@@ -142,7 +142,7 @@ It creates a new channel and adds the user to it.
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:162](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L162)
+[src/prc/prc.gateway.ts:163](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L163)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:192](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L192)
+[src/prc/prc.gateway.ts:194](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L194)
 
 ___
 
