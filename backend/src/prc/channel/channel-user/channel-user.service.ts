@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PrcGateway } from '../../../prc/prc.gateway';
+import { PrcGateway } from '../../prc.gateway';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
 import { ChannelUser } from './entities/channel-user.entity';
 import { WsException } from '@nestjs/websockets';
-import { Message } from '../../../prc/message/message';
+import { Message } from '../../message/message';
 import { User } from '../../../users/entities/user.entity';
 
 @Injectable()
@@ -93,6 +93,7 @@ export class ChannelUserService {
       msg:
         channelUser.user_id +
         ' has been banned from your channel for 42 seconds.',
+      isNew: true,
     };
     sockets[0].emit('status', message);
     const result: UpdateResult = await this.channelUserRepository.update(

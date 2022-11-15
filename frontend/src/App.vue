@@ -36,7 +36,7 @@ socket.on('status', (status) => {
   messagesStore.saveMessage(status);
 });
 
-socket.on('newclient', async () => {
+socket.on('newClient', async () => {
   console.log('New client connected, logging this one out');
   await userStore.logout();
   await router.push({ path: '/login' });

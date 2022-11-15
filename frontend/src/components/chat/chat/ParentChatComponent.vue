@@ -29,6 +29,7 @@ async function sendMsg() {
     from: { id: +userStore.id, name: userStore.username },
     to: { name: props.chatName },
     msg: text.value,
+    isNew: false,
   });
   text.value = '';
   await scrollToBottom();
@@ -37,6 +38,16 @@ async function sendMsg() {
 watch([() => props.chatName, () => [...messages.value]], async () => {
   await scrollToBottom();
 });
+
+watch(
+  () => [...messagesStore.notifiedList],
+  () => {
+    if (messagesStore.notifiedList.includes(props.chatName))
+      messagesStore.notifiedList = messagesStore.notifiedList.filter(
+        (name) => name !== props.chatName,
+      );
+  },
+);
 </script>
 
 <template>
