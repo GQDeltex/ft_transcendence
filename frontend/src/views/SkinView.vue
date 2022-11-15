@@ -44,10 +44,12 @@ onMounted(async () => {
   width: 25%;
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   padding: 10px;
   margin: 20px;
+  border: none;
+  font-weight: bolder;
 }
 
 .button-wide {

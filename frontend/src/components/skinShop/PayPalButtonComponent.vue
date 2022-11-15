@@ -90,27 +90,16 @@ const updateEquip = async () => {
 
 <style scoped>
 button {
-  /* display: flex; */
-  justify-content: center;
-  margin: 30px 0;
   text-decoration: none;
-  border-radius: 10px;
+  border-radius: 5px;
   color: white;
-  /* overflow: hidden; */
   background-color: #c00000;
   padding: 10px;
-  align-content: center;
   cursor: pointer;
-  /* width:50%; */
-  align-items: center;
   border: none;
-  font-size: 1.3vw;
   font-weight: bolder;
-  text-decoration: none;
 }
 .paypal-button {
-  /* display: flex; */
   justify-content: center;
-  margin: 30px 0;
 }
 </style>
