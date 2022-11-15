@@ -38,8 +38,8 @@ type User {
   lastLoggedIn: Timestamp!
   twoFAEnable: Boolean!
   channelList: [ChannelUser!]
-  sentGameRequests_id: [Int]!
-  receivedGameRequests_id: [Int]!
+  sentGameRequests: [Int]!
+  receivedGameRequests: [Int]!
   status: String!
   rank: Int!
   friends: [Int]!

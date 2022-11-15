@@ -26,8 +26,8 @@ export type User = {
   blockedBy?: number[];
   inventory?: number[];
   equipped?: Item[];
-  sentGameRequests_id?: number[];
-  receivedGameRequests_id?: number[];
+  sentGameRequests?: number[];
+  receivedGameRequests?: number[];
   rank?: number;
 };
 
@@ -109,8 +109,8 @@ export const useUserStore = defineStore('user', {
     blockedBy: [] as number[],
     inventory: [] as number[],
     equipped: [] as Item[],
-    sentGameRequests_id: [] as number[],
-    receivedGameRequests_id: [] as number[],
+    sentGameRequests: [] as number[],
+    receivedGameRequests: [] as number[],
     rank: -1,
   }),
   getters: {
@@ -137,9 +137,8 @@ export const useUserStore = defineStore('user', {
     },
     getGameRequestStatus: (state) => {
       return (userId: number) => {
-        if (state.sentGameRequests_id.includes(userId))
-          return GameStatusEnum.SENT;
-        if (state.receivedGameRequests_id.includes(userId))
+        if (state.sentGameRequests.includes(userId)) return GameStatusEnum.SENT;
+        if (state.receivedGameRequests.includes(userId))
           return GameStatusEnum.RECEIVED;
         return GameStatusEnum.NOT_SEND;
       };
@@ -189,8 +188,8 @@ export const useUserStore = defineStore('user', {
       this.blockedBy = user.blockedBy ?? [];
       this.inventory = user.inventory ?? [];
       this.equipped = user.equipped ?? [];
-      this.sentGameRequests_id = user.sentGameRequests_id ?? [];
-      this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+      this.sentGameRequests = user.sentGameRequests ?? [];
+      this.receivedGameRequests = user.receivedGameRequests ?? [];
       this.rank = user.rank ?? -1;
     },
     async logout(): Promise<void> {
@@ -268,8 +267,8 @@ export const useUserStore = defineStore('user', {
         this.receivedFriendRequests = user.receivedFriendRequests ?? [];
         this.blocks = user.blocks ?? [];
         this.blockedBy = user.blockedBy ?? [];
-        this.sentGameRequests_id = user.sentGameRequests_id ?? [];
-        this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+        this.sentGameRequests = user.sentGameRequests ?? [];
+        this.receivedGameRequests = user.receivedGameRequests ?? [];
       } catch (error) {
         useErrorStore().setError((error as Error).message);
       }
@@ -304,8 +303,8 @@ export const useUserStore = defineStore('user', {
           method,
           userId,
         );
-        this.sentGameRequests_id = user.sentGameRequests_id ?? [];
-        this.receivedGameRequests_id = user.receivedGameRequests_id ?? [];
+        this.sentGameRequests = user.sentGameRequests ?? [];
+        this.receivedGameRequests = user.receivedGameRequests ?? [];
         return true;
       } catch (error) {
         useErrorStore().setError((error as Error).message);

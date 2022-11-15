@@ -76,6 +76,12 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
       );
       userStore.receivedFriendRequests =
         userStore.receivedFriendRequests.filter((friendId) => friendId !== id);
+      userStore.sentGameRequests = userStore.sentGameRequests.filter(
+        (userId) => userId !== id,
+      );
+      userStore.receivedGameRequests = userStore.receivedGameRequests.filter(
+        (userId) => userId !== id,
+      );
       break;
     case AllowedUpdateBlockingMethod.UNBLOCK:
       userStore.blockedBy = userStore.blockedBy.filter(
@@ -88,19 +94,17 @@ socket.on('onBlock', ({ method, id }: { method: string; id: number }) => {
 socket.on('onGameRequest', ({ method, id }: { method: string; id: number }) => {
   switch (method) {
     case AllowedUpdateGameRequestMethod.SEND:
-      userStore.receivedGameRequests_id = [
-        ...userStore.receivedGameRequests_id,
-        id,
-      ];
+      userStore.receivedGameRequests = [...userStore.receivedGameRequests, id];
       break;
     case AllowedUpdateGameRequestMethod.DECLINE:
-      userStore.sentGameRequests_id = userStore.sentGameRequests_id.filter(
+      userStore.sentGameRequests = userStore.sentGameRequests.filter(
         (userId) => userId !== id,
       );
       break;
     case AllowedUpdateGameRequestMethod.CANCEL:
-      userStore.receivedGameRequests_id =
-        userStore.receivedGameRequests_id.filter((userId) => userId !== id);
+      userStore.receivedGameRequests = userStore.receivedGameRequests.filter(
+        (userId) => userId !== id,
+      );
       break;
   }
 });
