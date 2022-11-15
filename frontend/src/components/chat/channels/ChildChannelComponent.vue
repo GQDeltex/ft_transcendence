@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useMessagesStore } from '@/store/message';
 
 const props = defineProps<{
   channelId: number;
@@ -8,6 +9,8 @@ const props = defineProps<{
   selectedChannel: string;
   isUserInside: boolean;
 }>();
+
+const messagesStore = useMessagesStore();
 
 const activeChannel = computed(() => {
   if (props.channelName === props.selectedChannel) return { color: '#c00000' };
@@ -25,12 +28,12 @@ const activePicture = computed(() => {
 
 <template>
   <div class="channel">
-    <img
-      class="picture"
-      alt="channel picture"
-      src="@/assets/xmas.png"
-      :style="activePicture"
-    />
+    <div class="item">
+      <span v-show="messagesStore.isNotified(channelName)" class="notify-badge">
+        NEW
+      </span>
+      <img class="picture" alt="channel picture" src="@/assets/xmas.png" />
+    </div>
     <div class="infoBox">
       <span class="channelName" :style="activeChannel">{{ channelName }}</span>
     </div>
@@ -50,12 +53,12 @@ const activePicture = computed(() => {
 }
 .picture {
   object-fit: cover;
-  object-position: 50% 0%;
+  object-position: 50% 0;
   height: 1.5vw;
   width: 1.5vw;
   border-radius: 50%;
-  border: 1px solid white;
   font-size: 1vw;
+  border: 1px solid v-bind(activePicture);
 }
 .channelName {
   color: white;

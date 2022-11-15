@@ -33,6 +33,7 @@ async function sendMsg() {
     from: { id: +userStore.id, name: userStore.username },
     to: { id: +props.currentChannel.id, name: props.currentChannel.name },
     msg: text.value,
+    isNew: false,
   });
   text.value = '';
   await scrollToBottom();
@@ -58,6 +59,16 @@ function correctMessage(message: Message) {
       message.to.id === userStore.id)
   );
 }
+
+watch(
+  () => [...messagesStore.notifiedList],
+  () => {
+    if (messagesStore.notifiedList.includes(props.chatName))
+      messagesStore.notifiedList = messagesStore.notifiedList.filter(
+        (name) => name !== props.chatName,
+      );
+  },
+);
 </script>
 
 <template>

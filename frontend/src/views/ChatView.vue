@@ -17,9 +17,11 @@ import {
 } from '@/store/user';
 import type { User } from '@/store/user';
 import type { Channel } from '@/store/message';
+import { useMessagesStore } from '@/store/message';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
+const messagesStore = useMessagesStore();
 const currentChannel = ref<Channel>({
   id: 0,
   name: '',
@@ -172,6 +174,12 @@ const onUpdatePublic = (updatedChannel: Channel) => {
   currentChannel.value = updatedChannel;
   console.log('current channel updated public');
 };
+
+watch(currentChannel, (newChat) => {
+  messagesStore.notifiedList = messagesStore.notifiedList.filter(
+    (name) => name !== newChat.name,
+  );
+});
 </script>
 
 <template>

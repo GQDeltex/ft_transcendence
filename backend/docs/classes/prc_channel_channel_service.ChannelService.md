@@ -289,4 +289,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:220](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L220)
+[src/prc/channel/channel.service.ts:223](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L223)
