@@ -46,13 +46,14 @@ export class UsersService {
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<void> {
+    createUserInput.default_picture = createUserInput.picture;
     try {
       await this.userRepository.insert(createUserInput);
     } catch (error) {
       if (!(error instanceof QueryFailedError)) return Promise.reject(error);
       const existingUsers: User[] = await this.userRepository.find({
         // This Like might be susceptible to SQL Injection attacks.
-        // https://github.com/typeorm/typeorm/issues/7784 says it should be fine.
+        // https://github.com/typeorm/typeorm/issues/778  4 says it should be fine.
         // And the data is coming from Intra... So... It should be fine... I guess?
         where: { username: Like(`${createUserInput.username}%`) },
       });
@@ -108,12 +109,6 @@ export class UsersService {
       order: { points: 'DESC' },
       take: 6,
     });
-  }
-
-  async findSocketUser(socketId: string): Promise<User> {
-    if (typeof socketId === 'undefined')
-      throw new EntityNotFoundError(User, {});
-    return this.userRepository.findOneByOrFail({ socketId: socketId });
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {

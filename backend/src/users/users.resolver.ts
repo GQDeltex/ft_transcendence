@@ -21,6 +21,7 @@ import { UpdateUserBlockingInput } from './dto/update-blocking.input';
 import itemList, { Item } from './entities/item.entity';
 import { UpdateUserEquippedItemsInput } from './dto/update-equipped-items.input';
 import { UpdateGameRequestInput } from './dto/update-gamerequest.input';
+import { CurrentUser } from './decorator/current-user.decorator';
 
 @UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
@@ -139,6 +140,13 @@ export class UsersResolver {
       updateGameRequestInput,
     );
     return await this.usersService.findOne(jwtPayload.id);
+  }
+
+  @Mutation(() => User)
+  async resetPicture(@CurrentUser() user: User) {
+    user.picture = user.default_picture;
+    await this.usersService.updatePicture(user.id, user.default_picture);
+    return user;
   }
 
   @ResolveField(() => String)

@@ -47,6 +47,9 @@ export class User {
   @Column()
   picture: string;
 
+  @Column()
+  default_picture: string;
+
   @Field()
   @Column({ default: 'Fluvius' })
   coalition: string;
