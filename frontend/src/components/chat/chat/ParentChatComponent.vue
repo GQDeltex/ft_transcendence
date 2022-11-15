@@ -63,9 +63,9 @@ function correctMessage(message: Message) {
 watch(
   () => [...messagesStore.notifiedList],
   () => {
-    if (messagesStore.notifiedList.includes(props.chatName))
+    if (messagesStore.notifiedList.includes(props.currentChannel.name))
       messagesStore.notifiedList = messagesStore.notifiedList.filter(
-        (name) => name !== props.chatName,
+        (name) => name !== props.currentChannel.name,
       );
   },
 );
