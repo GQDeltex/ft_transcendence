@@ -83,7 +83,7 @@ const updateEquip = async () => {
 
 <template>
   <div v-show="!owned" :id="paypalButtonId" class="paypal-button"></div>
-  <button class="button" v-show="owned" @click="updateEquip">
+  <button v-show="owned" class="button" @click="updateEquip">
     {{ userStore.isItemEquipped(item.id) ? 'Unequip' : 'Equip' }}
   </button>
 </template>

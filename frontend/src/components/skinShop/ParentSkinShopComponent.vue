@@ -18,7 +18,7 @@ defineProps<{
     />
     <span class="item-name">{{ item.name }}</span>
     <span class="item-price">{{ item.price }}€</span>
-    <PayButtonComponent :item="item" class="payPal"/>
+    <PayButtonComponent :item="item" class="payPal" />
   </div>
 </template>
 
