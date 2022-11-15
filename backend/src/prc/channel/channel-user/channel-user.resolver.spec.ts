@@ -15,7 +15,6 @@ import {
 import { ChannelUserService } from './channel-user.service';
 import { PrcGateway } from '../../prc.gateway';
 import { JwtPayload } from '../../../auth/strategy/jwt.strategy';
-import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 import { HttpModule } from '@nestjs/axios';
 import { Game } from '../../../game/entities/game.entity';
@@ -25,7 +24,6 @@ describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
   let channelResolver: ChannelResolver;
   let channelUserService: ChannelUserService;
-  let usersService: UsersService;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -65,7 +63,6 @@ describe('ChannelUserResolver', () => {
     channelUserResolver = module.get<ChannelUserResolver>(ChannelUserResolver);
     channelResolver = module.get<ChannelResolver>(ChannelResolver);
     channelUserService = module.get<ChannelUserService>(ChannelUserService);
-    usersService = module.get<UsersService>(UsersService);
   });
 
   afterEach(async () => {
@@ -161,7 +158,7 @@ describe('ChannelUserResolver', () => {
     const name = '#test';
     await expect(
       channelUserResolver.updatePassword(JwtUser, name, 'new'),
-    ).rejects.toThrow(JwtUser.id + ' not in ' + name);
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not update password because user not channel owner', async () => {
@@ -207,7 +204,7 @@ describe('ChannelUserResolver', () => {
     };
     await expect(
       channelUserResolver.updateBan(admin, '#test', mockUser2.id),
-    ).rejects.toThrow(WsException);
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not ban user because user to be banned is not on channel', async () => {
@@ -222,7 +219,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateBan(admin, '#test', banUser.id),
-    ).rejects.toThrow(banUser.id + ' not in #test');
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not ban user because admin is not an admin on channel', async () => {
@@ -332,7 +329,7 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelResolver.joinChannel({ name: '#test', password: '' }, banUser),
     ).resolves.not.toThrow();
-    const channelUserNew: ChannelUser = await usersService.findChannelUser(
+    const channelUserNew: ChannelUser = await channelUserService.findChannelUserInChannel(
       banUser.id,
       '#test',
     );
@@ -359,7 +356,7 @@ describe('ChannelUserResolver', () => {
     };
     await expect(
       channelUserResolver.updateMute(admin, '#test', mockUser2.id),
-    ).rejects.toThrow(WsException);
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not mute user because user to be muted is not on channel', async () => {
@@ -374,7 +371,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
-    ).rejects.toThrow(muteUser.id + ' not in #test');
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not mute user because admin is not an admin on channel', async () => {
@@ -483,10 +480,8 @@ describe('ChannelUserResolver', () => {
     await expect(
       channelResolver.joinChannel({ name: '#test', password: '' }, muteUser),
     ).resolves.not.toThrow();
-    const channelUserNew: ChannelUser = await usersService.findChannelUser(
-      muteUser.id,
-      '#test',
-    );
+    const channelUserNew: ChannelUser =
+      await channelUserService.findChannelUserInChannel(muteUser.id, '#test');
     await expect(
       channelUserResolver.updateMute(admin, '#test', muteUser.id),
     ).resolves.not.toThrow();

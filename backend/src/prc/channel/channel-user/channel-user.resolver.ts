@@ -37,14 +37,15 @@ export class ChannelUserResolver {
 
   @Mutation(() => Channel)
   async updatePassword(
-    @CurrentJwtPayload() JwtUser: JwtPayload,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args('channel_name', { type: () => String }) channel_name: string,
     @Args('newPassword', { type: () => String }) newPassword: string,
   ) {
-    const channelUser: ChannelUser = await this.usersService.findChannelUser(
-      JwtUser.id,
-      channel_name,
-    );
+    const channelUser: ChannelUser =
+      await this.channelUserService.findChannelUserInChannel(
+        jwtPayload.id,
+        channel_name,
+      );
     if (typeof channelUser === 'undefined')
       throw new WsException('ChannelUser undefined');
     if (channelUser.ban)
@@ -76,10 +77,11 @@ export class ChannelUserResolver {
   ) {
     if (jwtPayload.id === banUser)
       throw new WsException(`${jwtPayload.id} cannot ban themself`);
-    const channelBanUser: ChannelUser = await this.usersService.findChannelUser(
-      jwtPayload.id,
-      channel_name,
-    );
+    const channelBanUser: ChannelUser =
+      await this.channelUserService.findChannelUserInChannel(
+        jwtPayload.id,
+        channel_name,
+      );
     if (typeof channelBanUser === 'undefined')
       throw new WsException('channelBanUser undefined');
     if (banUser == 0) throw new WsException('You cannot ban God(ie Vincent)');
@@ -87,10 +89,11 @@ export class ChannelUserResolver {
       throw new WsException(
         'You are temporarily banned. Please wait till you are no longer banned',
       );
-    const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
-      banUser,
-      channel_name,
-    );
+    const channelUserNew: ChannelUser =
+      await this.channelUserService.findChannelUserInChannel(
+        banUser,
+        channel_name,
+      );
     if (typeof channelUserNew === 'undefined')
       throw new WsException('channelBanUserNew undefined');
     if (!channelBanUser.admin)
@@ -117,12 +120,15 @@ export class ChannelUserResolver {
 
   @Mutation(() => ChannelUser)
   async updateMute(
-    @CurrentJwtPayload() JwtUser: JwtPayload,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
     @Args('channel_name', { type: () => String }) channel_name: string,
     @Args('muteUser', { type: () => Int }) muteUser: number,
   ) {
     const channelMuteUser: ChannelUser =
-      await this.usersService.findChannelUser(JwtUser.id, channel_name);
+      await this.channelUserService.findChannelUserInChannel(
+        jwtPayload.id,
+        channel_name,
+      );
     if (typeof channelMuteUser === 'undefined')
       throw new WsException('channelMuteUser undefined');
     if (channelMuteUser.ban)
@@ -131,18 +137,18 @@ export class ChannelUserResolver {
       );
     if (muteUser == 0)
       throw new WsException('You cannot mute God (ie Vincent)');
-    const channelUserNew: ChannelUser = await this.usersService.findChannelUser(
-      muteUser,
-      channel_name,
-    );
+    const channelUserNew: ChannelUser =
+      await this.channelUserService.findChannelUserInChannel(
+        muteUser,
+        channel_name,
+      );
     if (typeof channelUserNew === 'undefined')
       throw new WsException('channelMuteUserNew undefined');
     if (channelMuteUser.id == channelUserNew.id)
       throw new WsException(`${channelMuteUser.user_id} cannot mute itself`);
-    //console.log('both users are good'); //DEBUG
     if (!channelMuteUser.admin)
       throw new WsException(
-        JwtUser.id + ' is not a Channel Admin on ' + channel_name,
+        jwtPayload.id + ' is not a Channel Admin on ' + channel_name,
       );
     if (channelUserNew.owner)
       throw new WsException(

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PrcGateway } from '../../prc.gateway';
 import { EntityNotFoundError, Repository, UpdateResult } from 'typeorm';
@@ -12,6 +12,7 @@ export class ChannelUserService {
   constructor(
     @InjectRepository(ChannelUser)
     private readonly channelUserRepository: Repository<ChannelUser>,
+    @Inject(forwardRef(() => PrcGateway))
     private readonly prcGateway: PrcGateway,
   ) {}
 
