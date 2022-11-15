@@ -4,11 +4,11 @@ class ChannelUserService {
   async updatePassword(channel_name: string, newPassword: string) {
     const updatedChannel = await graphQLService.mutation(
       `
-      mutation updatePassword( $channel_name: String!, $newPassword: String! ){
-        updatePassword ( channel_name: $channel_name, newPassword: $newPassword ){
+      mutation updatePassword( $channel_name: String!, $newPassword: String! ) {
+        updatePassword ( channel_name: $channel_name, newPassword: $newPassword ) {
           name
           password
-          }
+        }
       }
       `,
       { channel_name, newPassword },
@@ -21,13 +21,13 @@ class ChannelUserService {
   async updateAdmin(channel_name: string, newAdmin: number) {
     const updatedChannelUser = await graphQLService.mutation(
       `
-            mutation updateAdmin( $channel_name: String!, $newAdmin: Int! ){
-              updateAdmin ( channel_name: $channel_name, newAdmin: $newAdmin ){
-                id
-                admin
-              }
-            }
-            `,
+      mutation updateAdmin( $channel_name: String!, $newAdmin: Int! ) {
+        updateAdmin ( channel_name: $channel_name, newAdmin: $newAdmin ) {
+          id
+          admin
+        }
+      }
+      `,
       { channel_name, newAdmin },
     );
     if (typeof updatedChannelUser === 'undefined')
@@ -38,13 +38,13 @@ class ChannelUserService {
   async banUser(channel_name: string, banUser: number) {
     const updatedChannelUser = await graphQLService.mutation(
       `
-            mutation updateBan( $channel_name: String!, $banUser: Int! ){
-              updateBan ( channel_name: $channel_name, banUser: $banUser ){
-                id
-                ban
-              }
-            }
-            `,
+      mutation updateBan( $channel_name: String!, $banUser: Int! ) {
+        updateBan ( channel_name: $channel_name, banUser: $banUser ) {
+          id
+          ban
+        }
+      }
+      `,
       { channel_name, banUser },
     );
     if (typeof updatedChannelUser === 'undefined')
@@ -55,13 +55,13 @@ class ChannelUserService {
   async muteUser(channel_name: string, muteUser: number) {
     const updatedChannelUser = await graphQLService.mutation(
       `
-              mutation updateMute( $channel_name: String!, $muteUser: Int! ){
-                updateMute ( channel_name: $channel_name, muteUser: $muteUser ){
-                  id
-                  mute
-                }
-              }
-              `,
+      mutation updateMute( $channel_name: String!, $muteUser: Int! ) {
+        updateMute ( channel_name: $channel_name, muteUser: $muteUser ) {
+          id
+          mute
+        }
+      }
+      `,
       { channel_name, muteUser },
     );
     if (typeof updatedChannelUser === 'undefined')

@@ -47,14 +47,36 @@ export class ChannelUserService {
     });
   }
 
-  async updateAdmin(channelUser: ChannelUser): Promise<ChannelUser> {
-    const result: UpdateResult = await this.channelUserRepository.update(
-      { id: channelUser.id },
-      { admin: true },
-    ); //Is it possible to search by the channelUser? if not, only send channelUser.id to this function to save mem
-    if (typeof result.affected != 'undefined' && result.affected != 1)
-      throw new EntityNotFoundError(ChannelUser, { id: channelUser.id });
-    return await this.findOne(channelUser.id);
+  findChannelUserInChannel(userId: number, channelName: string) {
+    return this.channelUserRepository.findOneOrFail({
+      where: { channel_name: channelName, user_id: userId },
+    });
+  }
+
+  async updateAdmin(
+    userId: number,
+    otherId: number,
+    channelName: string,
+  ): Promise<ChannelUser> {
+    if (otherId === 0)
+      throw new WsException('You God(ie Vincent) is already an admin');
+    const channelUser: ChannelUser = await this.findChannelUserInChannel(
+      userId,
+      channelName,
+    );
+    if (!channelUser.admin)
+      throw new WsException(userId + ' is not an admin on ' + channelName);
+    if (channelUser.ban)
+      throw new WsException(
+        'You are temporarily banned. Please wait till you are no longer banned',
+      );
+    const otherChannelUser: ChannelUser = await this.findChannelUserInChannel(
+      otherId,
+      channelName,
+    );
+    otherChannelUser.admin = !otherChannelUser.admin;
+    await this.channelUserRepository.save(otherChannelUser);
+    return otherChannelUser;
   }
 
   async unban(

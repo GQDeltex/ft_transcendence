@@ -19,6 +19,7 @@ import { WsException } from '@nestjs/websockets';
 import { ChannelResolver } from '../channel.resolver';
 import { HttpModule } from '@nestjs/axios';
 import { Game } from '../../../game/entities/game.entity';
+import { EntityNotFoundError } from 'typeorm';
 
 describe('ChannelUserResolver', () => {
   let channelUserResolver: ChannelUserResolver;
@@ -95,7 +96,7 @@ describe('ChannelUserResolver', () => {
     };
     await expect(
       channelUserResolver.updateAdmin(oldAdmin, '#test', mockUser2.id),
-    ).rejects.toThrow(WsException);
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not update admin because newAdmin not on channel', async () => {
@@ -110,7 +111,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
-    ).rejects.toThrow(newAdmin.id + ' not in #test');
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should not update admin because oldAdmin is not an admin on channel', async () => {
@@ -128,7 +129,7 @@ describe('ChannelUserResolver', () => {
     ).resolves.not.toThrow();
     await expect(
       channelUserResolver.updateAdmin(oldAdmin, '#test', newAdmin.id),
-    ).rejects.toThrow(`${oldAdmin.id} is not a Channel Admin on #test`);
+    ).rejects.toThrow(`${oldAdmin.id} is not an admin on #test`);
   });
 
   it('should update newAdmin to admin', async () => {
