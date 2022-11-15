@@ -73,7 +73,7 @@ watch(
 
 <template>
   <div class="parent">
-    <span class="chatname">chat: {{ props.currentChannel.name }}</span>
+    <span class="chatName">chat: {{ props.currentChannel.name }}</span>
     <div id="container" class="messages">
       <template v-for="message in messages">
         <span
