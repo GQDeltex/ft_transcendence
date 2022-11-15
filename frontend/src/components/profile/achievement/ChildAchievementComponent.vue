@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div class="achieve">
-    <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
+    <img alt="page logo" class="logo" src="@/assets/xmas.png" />
     <p class="infoBox">
       {{ header }}: <span class="info"> {{ text }}</span>
     </p>
@@ -39,7 +39,7 @@ defineProps<{
   /* grid-column: 1 / 2; */
   object-position: 50% 0%;
   border-radius: 50%;
-  border: 1px solid #f8971d;
+  border: 1px solid #c00000;
   height: 5vw;
   width: 5vw;
 }

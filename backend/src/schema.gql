@@ -90,6 +90,7 @@ type Query {
 
 type Mutation {
   updateUsername(username: String!): User!
+  updateTitle(title: String!): User!
   updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
   updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
   updateInventory(orderId: String!): User!

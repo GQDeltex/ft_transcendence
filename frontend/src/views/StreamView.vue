@@ -46,6 +46,10 @@ GameService.findAll('running').then(
   (gamesreturn: Game[]) => (games.value = gamesreturn),
 );
 
+GameService.findAll('paused').then(
+  (gamesreturn: Game[]) => (games.value = gamesreturn),
+);
+
 socket.on('Game', async ({ gameId }) => {
   if (gameId < 0) {
     displayEnd.value = true;
@@ -57,7 +61,7 @@ socket.on('Game', async ({ gameId }) => {
 <template>
   <div>
     <div v-if="routExist && !displayEnd">
-      <h1>stream overview</h1>
+      <h1 class="title">Stream Overview</h1>
       <ChildStreamComponent
         v-for="game in games"
         :key="game.id"
@@ -86,4 +90,9 @@ socket.on('Game', async ({ gameId }) => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  color: white;
+  margin-left: 1ch;
+}
+</style>

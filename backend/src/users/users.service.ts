@@ -161,6 +161,12 @@ export class UsersService {
       throw new EntityNotFoundError(User, { id: id });
   }
 
+  async updateTitle(id: number, title: string): Promise<void> {
+    const user = await this.findOne(id);
+    user.title[0] = title;
+    await this.userRepository.save(user);
+  }
+
   async updateSocketId(
     identification: number | string,
     socketId: string,

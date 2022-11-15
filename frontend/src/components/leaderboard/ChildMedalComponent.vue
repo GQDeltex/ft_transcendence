@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <div>
-    <router-link :to="`/profile/${medalPlayer.id}`">
+    <router-link class="routerlink" :to="`/profile/${medalPlayer.id}`">
       <div>
         <RoundPictureComponent
           v-if="medalPlayer.picture"
@@ -36,6 +36,9 @@ div {
   display: flex;
   justify-content: center;
   color: white;
+  text-decoration: none;
+}
+.routerlink {
   text-decoration: none;
 }
 .sub {

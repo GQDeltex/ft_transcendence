@@ -8,12 +8,18 @@ import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.
 import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
+import { cloneDeep } from 'lodash';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
 const show = ref(false);
 const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
+const dropDownTitle = ref(false);
+let dropDownContent = ref<string[]>(cloneDeep(userStore.title));
+
+dropDownContent.value[0] = '--- no title ---';
 
 const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
   user: null,
@@ -42,11 +48,27 @@ const onClose = () => {
   }
 };
 
+const toggle = () => {
+  dropDownTitle.value = !dropDownTitle.value;
+};
+
 const errorStore = useErrorStore();
 const leaders = ref<Partial<User>[]>([]);
 UserService.findLeaders()
   .then((users) => (leaders.value = users))
   .catch((error) => errorStore.setError(error.message));
+
+async function updateTitle(title: string) {
+  // console.log('new title selected! ', title);
+  if (title == '--- no title ---') title = '';
+  dropDownTitle.value = false;
+  try {
+    userStore.title = (await UserService.changeTitle(title)).title;
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+    return;
+  }
+}
 </script>
 
 <template>
@@ -69,8 +91,23 @@ UserService.findLeaders()
       />
     </div>
     <div class="infoBox">
-      <span class="title">{{ user.title[0] }}</span>
-      <br />
+      <div class="title">
+        {{ user.title[0] }}
+        <img
+          v-if="isMe"
+          alt="pen"
+          class="pen"
+          title="Change picture"
+          src="@/assets/pen.png"
+          @click="toggle"
+        />
+      </div>
+      <DropDownComponent
+        v-if="dropDownTitle"
+        :items="dropDownContent"
+        @close="updateTitle"
+      />
+      <!-- <br /> -->
       <div class="username">
         <span>
           {{ user.username }}
@@ -86,7 +123,7 @@ UserService.findLeaders()
         />
       </div>
       <ModalChangeUsernameComponent
-        v-show="modalChangeUsername"
+        v-if="modalChangeUsername"
         :user-id="user.id"
         :input-username="user.username"
         @close="modalChangeUsername = false"
@@ -101,7 +138,7 @@ UserService.findLeaders()
       <span class="friends">{{ userStore.friends.length }} Friends</span>
     </div>
 
-    <img class="banner" alt="banner" src="@/assets/PongKingBanner3D.png" />
+    <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
 
     <span v-if="isMe" class="twoFA"
       >2 Factor Authentication
@@ -120,12 +157,13 @@ UserService.findLeaders()
 <style scoped>
 .title {
   font-size: 2vw;
+  color: white;
 }
 
 .onSwitch {
   color: white;
   margin-top: 10%;
-  margin-left: 6%;
+  margin-left: 15%;
   margin-right: 0;
 }
 
@@ -149,7 +187,7 @@ UserService.findLeaders()
   padding: 10px 10px 1%;
   border-width: 1px;
   border-style: solid;
-  border-image: linear-gradient(to bottom, white, #f8971d, #f8971d, #202020) 1;
+  border-image: linear-gradient(to bottom, #c00000, #c00000, white, gray) 1;
 }
 
 .infoBox {
@@ -161,7 +199,7 @@ UserService.findLeaders()
 }
 
 .username {
-  color: #f8971d;
+  color: #c00000;
   font-size: 2vw;
 }
 
@@ -221,7 +259,7 @@ UserService.findLeaders()
 }
 
 input:checked + .slider {
-  background-color: #f8971d;
+  background-color: #c00000;
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }

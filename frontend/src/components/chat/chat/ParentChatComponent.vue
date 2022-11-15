@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '@/service/socket';
 import { useMessagesStore } from '@/store/message';
@@ -16,15 +16,15 @@ const props = defineProps<{
 let text: Ref<string> = ref('');
 const { messages } = storeToRefs(messagesStore);
 
-/*function scrollToBottom() {
-  const container = document.getElementById('container');
-  if (container == null) return;
+async function scrollToBottom() {
+  const container: HTMLElement | null = document.getElementById('container');
+  if (container === null) return;
+  await nextTick();
   container.scrollTop = container.scrollHeight;
-}*/
+}
 
-function sendMsg() {
+async function sendMsg() {
   if (text.value == '') return;
-  // console.log(props.currentChannel.name, text.value);
   socket.emit('prc', {
     to: { id: props.currentChannel.id, name: props.currentChannel.name },
     msg: text.value,
@@ -35,9 +35,12 @@ function sendMsg() {
     msg: text.value,
   });
   text.value = '';
+  await scrollToBottom();
 }
 
-//onUnmounted(() => socket.off('prc'));
+watch([() => props.chatName, () => [...messages.value]], async () => {
+  await scrollToBottom();
+});
 </script>
 
 <template>
@@ -62,9 +65,9 @@ function sendMsg() {
         alt="inputBox"
         type="text"
         class="text"
-        @keyup.enter="sendMsg()"
+        @keyup.enter="sendMsg"
       />
-      <button class="sendbutton" @click="sendMsg()">Send</button>
+      <button class="sendButton" @click="sendMsg">Send</button>
     </div>
   </div>
 </template>
@@ -73,37 +76,42 @@ function sendMsg() {
 .parent {
   display: flex;
   flex-direction: column;
-  border: 1px solid #202020;
+  border: 1px solid gray;
   height: inherit;
   width: 60vw;
 }
-.chatname {
-  color: #f8971d;
+.chatName {
+  color: red;
   padding: 1vw;
   font-size: 1vw;
 }
+
 .messages {
   height: 100%;
-  border-top: 1px solid #202020;
-  border-bottom: 1px solid #202020;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid grey;
   font-size: 1vw;
   padding: 0.5vw;
   overflow-y: scroll;
   overflow-wrap: break-word;
+  color: white;
 }
+
 .lower {
   display: flex;
   width: 100%;
 }
+
 .text {
   flex-grow: 1;
   font-size: 1vw;
 }
-.sendbutton {
+
+.sendButton {
   text-decoration: none;
   border-radius: 5px;
   color: black;
-  background-color: #f8971d;
+  background-color: #c00000;
   font-size: 1vw;
   border-color: transparent;
   cursor: pointer;

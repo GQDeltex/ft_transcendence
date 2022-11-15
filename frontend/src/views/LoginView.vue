@@ -14,12 +14,12 @@ const login = () => {
 <template>
   <div class="loginParent">
     <div class="buttons">
-      <img alt="page logo" class="logo" src="@/assets/pongking_boi.svg" />
+      <img alt="page logo" class="logo" src="@/assets/xmas.png" />
     </div>
     <span class="text"
       >please log in
       <p>to experience the full fun of</p>
-      <p>PongKing</p>
+      <p>christmasballs</p>
     </span>
     <div
       v-if="!userStore.isLoggedIn && !userStore.require2FAVerify"
@@ -63,7 +63,7 @@ const login = () => {
   text-decoration: none;
   border-radius: 20px;
   color: white;
-  background-color: #f8971d;
+  background-color: #c00000;
   padding: 10px;
   align-content: center;
   cursor: pointer;
@@ -78,32 +78,33 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 10vh;
-  background: #f8971d;
+  background: #c00000;
 }
 
 button {
   border-radius: 50%;
-  border: 2px outset grey;
+  /* border: 2px outset grey; */
   position: relative;
   color: white;
   overflow: hidden;
+  border-style: none;
 
-  box-shadow: 0 0 10px rgb(0, 0, 0, 1);
+  /* box-shadow: 0 0 10px rgb(0, 0, 0, 1); */
 
   font-size: 2vw;
   font-weight: bolder;
   text-decoration: none;
-  background: linear-gradient(160deg, white, grey, grey, black);
-  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
-  transition: 0.3s;
+  background: #c00000;
+  /* text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+  transition: 0.3s; */
 }
 
-button:hover {
+/* button:hover {
   border: 2px outset #ddd;
   color: white;
-  background: linear-gradient(160deg, white, #f8971d, #f8971d, black);
+  background: linear-gradient(160deg, white, #c00000, #c00000, black);
   text-shadow: 0px 0px 4px #202020;
   box-shadow: 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
   transition-delay: 0.2s;
-}
+} */
 </style>

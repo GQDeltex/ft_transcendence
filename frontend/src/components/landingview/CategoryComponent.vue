@@ -26,6 +26,10 @@ defineProps<{
 </template>
 
 <style scoped>
+h3 {
+  color: white;
+}
+
 div {
   display: flex;
   justify-content: space-evenly;

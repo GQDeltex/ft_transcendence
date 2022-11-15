@@ -12,6 +12,7 @@ export enum GameState {
   STARTING = 'starting',
   RUNNING = 'running',
   ENDED = 'ended',
+  PAUSED = 'paused',
 }
 
 @ObjectType()
@@ -44,6 +45,12 @@ export class Game {
   @Field(() => Int)
   @Column({ default: 0 })
   score2: number;
+
+  @Column({ default: new Date(0) })
+  player1BlurTime: Date;
+
+  @Column({ default: new Date(0) })
+  player2BlurTime: Date;
 
   @Field()
   @Column({
