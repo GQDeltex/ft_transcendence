@@ -2,8 +2,10 @@
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import RoundPictureComponent from './RoundPictureComponent.vue';
+import { useMessagesStore } from '@/store/message';
 
 const userStore = useUserStore();
+const messagesStore = useMessagesStore();
 </script>
 
 <template>
@@ -28,11 +30,35 @@ const userStore = useUserStore();
     <li><RouterLink to="/play">Play Now</RouterLink></li>
     <li><RouterLink to="/skin">Skin Selection</RouterLink></li>
     <li><RouterLink to="/stream">Stream</RouterLink></li>
-    <li><RouterLink to="/chat">Chat</RouterLink></li>
+    <li>
+      <div class="item">
+        <span
+          v-show="messagesStore.notifiedList.length > 0"
+          class="notify-badge"
+          >NEW</span
+        >
+        <RouterLink to="/chat">Chat</RouterLink>
+      </div>
+    </li>
   </nav>
 </template>
 
 <style scoped>
+.item {
+  position: relative;
+}
+
+.notify-badge {
+  position: absolute;
+  right: 2.69vw;
+  background: red;
+  text-align: center;
+  border-radius: 0.3vw;
+  color: white;
+  padding: 0.1vw 0.2vw;
+  font-size: 1vw;
+}
+
 img {
   margin-left: 1vw;
 }

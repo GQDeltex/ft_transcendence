@@ -35,10 +35,8 @@ const channelSelect = (input: Channel) => {
 };
 
 function userInChannel(input: Channel) {
-  // console.log('input', input);
   return input.userList.some((inside) => {
-    if (inside.user_id == props.userId) return true;
-    return false;
+    return inside.user_id === props.userId;
   });
 }
 </script>
@@ -77,7 +75,6 @@ function userInChannel(input: Channel) {
   display: flex;
   flex-direction: column;
   padding: 0.5vw;
-  padding-bottom: 0.5vw;
   border: 1px solid grey;
 }
 .text {
