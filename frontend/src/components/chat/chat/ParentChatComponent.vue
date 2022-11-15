@@ -5,11 +5,12 @@ import { socket } from '@/service/socket';
 import { useMessagesStore } from '@/store/message';
 import { useUserStore } from '@/store/user';
 import { storeToRefs } from 'pinia';
+import type { Channel, Message } from '@/store/message';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
 const props = defineProps<{
-  chatName: string;
+  currentChannel: Channel;
 }>();
 
 let text: Ref<string> = ref('');
@@ -24,10 +25,13 @@ async function scrollToBottom() {
 
 async function sendMsg() {
   if (text.value == '') return;
-  socket.emit('prc', { to: props.chatName, msg: text.value });
+  socket.emit('prc', {
+    to: { id: props.currentChannel.id, name: props.currentChannel.name },
+    msg: text.value,
+  });
   messagesStore.saveMessage({
     from: { id: +userStore.id, name: userStore.username },
-    to: { name: props.chatName },
+    to: { id: +props.currentChannel.id, name: props.currentChannel.name },
     msg: text.value,
     isNew: false,
   });
@@ -35,16 +39,33 @@ async function sendMsg() {
   await scrollToBottom();
 }
 
-watch([() => props.chatName, () => [...messages.value]], async () => {
-  await scrollToBottom();
-});
+watch(
+  [() => props.currentChannel.name, () => [...messages.value]],
+  async () => {
+    await scrollToBottom();
+  },
+);
+
+function correctMessage(message: Message) {
+  // If message belongs to a channel, also check the name
+  if (
+    message.to.name.startsWith('#') &&
+    message.to.name != props.currentChannel.name
+  )
+    return false;
+  return (
+    message.to.id === props.currentChannel.id ||
+    (message.from.id === props.currentChannel.id &&
+      message.to.id === userStore.id)
+  );
+}
 
 watch(
   () => [...messagesStore.notifiedList],
   () => {
-    if (messagesStore.notifiedList.includes(props.chatName))
+    if (messagesStore.notifiedList.includes(props.currentChannel.name))
       messagesStore.notifiedList = messagesStore.notifiedList.filter(
-        (name) => name !== props.chatName,
+        (name) => name !== props.currentChannel.name,
       );
   },
 );
@@ -52,15 +73,11 @@ watch(
 
 <template>
   <div class="parent">
-    <span class="chatName">chat: {{ props.chatName }}</span>
+    <span class="chatName">chat: {{ props.currentChannel.name }}</span>
     <div id="container" class="messages">
       <template v-for="message in messages">
         <span
-          v-if="
-            message.to.name === props.chatName ||
-            (message.from.name === props.chatName &&
-              message.to.name === userStore.username)
-          "
+          v-if="correctMessage(message)"
           :key="`msg_${message.from.name}_${message.to.name}_${message.msg}`"
           >{{ message.from.name }}: {{ message.msg }}<br
         /></span>
