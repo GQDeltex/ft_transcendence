@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/prc/channel/channel.input.ts:34](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.input.ts#L34)
+[src/prc/channel/channel.input.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.input.ts#L35)
 
 ___
 
@@ -39,4 +39,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.input.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.input.ts#L37)
+[src/prc/channel/channel.input.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.input.ts#L38)
