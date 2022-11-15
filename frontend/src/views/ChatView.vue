@@ -18,6 +18,7 @@ import {
 import type { User } from '@/store/user';
 import type { Channel } from '@/store/message';
 import { useMessagesStore } from '@/store/message';
+import { cloneDeep } from 'lodash';
 
 const errorStore = useErrorStore();
 const userStore = useUserStore();
@@ -146,7 +147,6 @@ const UpdateChat = (username: string) => {
 };
 
 const joinChannel = async (channel: Channel) => {
-  // Somehow channels.value.push does not work. This seems to be fine.
   channels.value = await ChannelService.findAll({
     fetchPolicy: 'network-only',
   });
@@ -172,7 +172,30 @@ const onUpdatePublic = (updatedChannel: Channel) => {
     updatedChannel,
   ];
   currentChannel.value = updatedChannel;
-  console.log('current channel updated public');
+};
+
+const onUpdateAdmin = ({
+  updateAdmin,
+}: {
+  updateAdmin: { id: number; admin: boolean };
+}) => {
+  let updatedChannel = channels.value.find((channel) =>
+    channel.userList.some((user) => user.id === updateAdmin.id),
+  );
+  if (typeof updatedChannel === 'undefined') return;
+  updatedChannel = cloneDeep(updatedChannel);
+  updatedChannel.userList.forEach((user) => {
+    if (user.id === updateAdmin.id) {
+      user.admin = updateAdmin.admin;
+    }
+  });
+  channels.value = [
+    ...channels.value.filter(
+      (channel) => channel.name !== updatedChannel?.name,
+    ),
+    updatedChannel,
+  ];
+  currentChannel.value = updatedChannel;
 };
 
 watch(currentChannel, (newChat) => {
@@ -211,6 +234,7 @@ watch(currentChannel, (newChat) => {
       class="optionsComp"
       @leave="leaveChannel"
       @update-public="onUpdatePublic"
+      @update-admin="onUpdateAdmin"
       @chat="UpdateChat"
     />
   </div>

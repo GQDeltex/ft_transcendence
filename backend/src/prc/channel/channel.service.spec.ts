@@ -11,10 +11,11 @@ import { UsersService } from '../../users/users.service';
 import { PrcGateway } from '../prc.gateway';
 import { HttpModule } from '@nestjs/axios';
 import { Game } from '../../game/entities/game.entity';
+import { ChannelUserService } from './channel-user/channel-user.service';
 
 describe('ChannelService', () => {
   let channelService: ChannelService;
-  let userService: UsersService;
+  let channelUserService: ChannelUserService;
   let mockRepoChannel: MockRepo;
   let mockRepoChannelUser: MockRepo;
   let mockRepoUser: MockRepo;
@@ -36,6 +37,7 @@ describe('ChannelService', () => {
         ConfigService,
         ChannelService,
         UsersService,
+        ChannelUserService,
         PrcGateway,
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
@@ -45,7 +47,7 @@ describe('ChannelService', () => {
     }).compile();
 
     channelService = module.get<ChannelService>(ChannelService);
-    userService = module.get<UsersService>(UsersService);
+    channelUserService = module.get<ChannelUserService>(ChannelUserService);
   });
 
   afterEach(async () => {
@@ -95,10 +97,8 @@ describe('ChannelService', () => {
     await expect(
       channelService.join({ name: '#test4', password: '' }, newUser),
     ).resolves.toEqual(expect.any(Channel));
-    const newChannelUser: ChannelUser = await userService.findChannelUser(
-      newUser.id,
-      '#test4',
-    );
+    const newChannelUser: ChannelUser =
+      await channelUserService.findChannelUserInChannel(newUser.id, '#test4');
     expect(newChannelUser.owner).toEqual(true);
   });
 
@@ -129,10 +129,8 @@ describe('ChannelService', () => {
     await expect(
       channelService.join({ name: '#test7', password: '' }, joiner),
     ).resolves.toEqual(expect.any(Channel));
-    const newChannelUser: ChannelUser = await userService.findChannelUser(
-      joiner.id,
-      '#test7',
-    );
+    const newChannelUser: ChannelUser =
+      await channelUserService.findChannelUserInChannel(joiner.id, '#test7');
     expect(newChannelUser.owner).toEqual(false);
   });
 

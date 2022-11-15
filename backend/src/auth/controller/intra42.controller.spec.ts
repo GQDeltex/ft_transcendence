@@ -12,6 +12,7 @@ import { ChannelService } from '../../prc/channel/channel.service';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
 import { Game } from '../../game/entities/game.entity';
+import { ChannelUserService } from '../../prc/channel/channel-user/channel-user.service';
 
 describe('Intra42Controller', () => {
   let controller: Intra42Controller;
@@ -39,6 +40,7 @@ describe('Intra42Controller', () => {
         ConfigService,
         PrcGateway,
         ChannelService,
+        ChannelUserService,
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),
