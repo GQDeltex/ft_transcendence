@@ -6,9 +6,9 @@ export class Ball extends Element {
   public _shape: Vector;
   // private _direction: Vector; get-set- soon™
   public _direction: Vector;
+  private _stdspeed = 30;
   private _speed: number;
   private _priority: number;
-
   private invinc = 0;
   private maxinvinc: number;
   constructor(
@@ -21,7 +21,7 @@ export class Ball extends Element {
     super(ballElem, gameId);
     this._priority = priority;
     this._direction = new Vector(0, 0);
-    this._speed = 30;
+    this._speed = this._stdspeed;
     this.maxinvinc = this._speed * 10;
     this._shape = new Vector(
       field !== null
@@ -117,6 +117,10 @@ export class Ball extends Element {
     else console.log('7 failiure, no object assigned\n');
   }
 
+  set_speed(value: number = this._stdspeed) {
+    this._speed = value;
+  }
+
   step(paddleOp: null | DOMRect, emitter: boolean) {
     //move step
     this.set_pos_x(
@@ -176,8 +180,8 @@ export class Ball extends Element {
         3 *
         (((ballBox.top + (ballBox.bottom - ballBox.top) / 2 - padBox.top) /
           (padBox.bottom - padBox.top)) *
-          3 -
-          1.5);
+          2 -
+          1);
       return true;
     }
     return false;
