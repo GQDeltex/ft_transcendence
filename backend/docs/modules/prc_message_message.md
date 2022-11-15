@@ -21,6 +21,7 @@
 | `from` | { `id`: `number` ; `name`: `string`  } |
 | `from.id` | `number` |
 | `from.name` | `string` |
+| `isNew` | `boolean` |
 | `msg` | `string` |
 | `to` | { `id?`: `number` ; `name`: `string`  } |
 | `to.id?` | `number` |

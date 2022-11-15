@@ -11,6 +11,7 @@ export class CreateChannelInput {
   name: string;
 
   @Field()
+  @Length(0, 72)
   password: string;
 }
 

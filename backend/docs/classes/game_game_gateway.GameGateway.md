@@ -21,7 +21,10 @@
 
 ### Methods
 
+- [claimVictory](game_game_gateway.GameGateway.md#claimvictory)
+- [handleBlur](game_game_gateway.GameGateway.md#handleblur)
 - [handleDisconnect](game_game_gateway.GameGateway.md#handledisconnect)
+- [handleFocus](game_game_gateway.GameGateway.md#handlefocus)
 - [handleInviteGame](game_game_gateway.GameGateway.md#handleinvitegame)
 - [handleMessage](game_game_gateway.GameGateway.md#handlemessage)
 - [handleQueueIn](game_game_gateway.GameGateway.md#handlequeuein)
@@ -66,6 +69,49 @@ ___
 
 ## Methods
 
+### claimVictory
+
+▸ **claimVictory**(`client`, `gameId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `gameId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.gateway.ts:74](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L74)
+
+___
+
+### handleBlur
+
+▸ **handleBlur**(`client`, `gameId`, `cowardId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `gameId` | `number` |
+| `cowardId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.gateway.ts:56](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L56)
+
+___
+
 ### handleDisconnect
 
 ▸ **handleDisconnect**(`client`): `Promise`<`void`\>
@@ -90,6 +136,28 @@ OnGatewayDisconnect.handleDisconnect
 
 ___
 
+### handleFocus
+
+▸ **handleFocus**(`client`, `gameId`, `cowardId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
+| `gameId` | `number` |
+| `cowardId` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.gateway.ts:65](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L65)
+
+___
+
 ### handleInviteGame
 
 ▸ **handleInviteGame**(`client`, `jwtPayload`, `gameId`): `Promise`<`void`\>
@@ -108,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:116](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L116)
+[src/game/game.gateway.ts:142](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L142)
 
 ___
 
@@ -133,7 +201,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:56](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L56)
+[src/game/game.gateway.ts:82](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L82)
 
 ___
 
@@ -155,7 +223,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:81](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L81)
+[src/game/game.gateway.ts:107](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L107)
 
 ___
 
@@ -178,7 +246,7 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:100](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L100)
+[src/game/game.gateway.ts:126](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L126)
 
 ___
 
@@ -198,4 +266,4 @@ ___
 
 #### Defined in
 
-[src/game/game.gateway.ts:126](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L126)
+[src/game/game.gateway.ts:152](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.gateway.ts#L152)

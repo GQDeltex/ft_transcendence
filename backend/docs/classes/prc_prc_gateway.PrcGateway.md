@@ -142,7 +142,7 @@ It creates a new channel and adds the user to it.
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:162](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L162)
+[src/prc/prc.gateway.ts:165](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L165)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[src/prc/prc.gateway.ts:192](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L192)
+[src/prc/prc.gateway.ts:196](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/prc.gateway.ts#L196)
 
 ___
 
@@ -187,7 +187,9 @@ Nothing.
 | Name | Type |
 | :------ | :------ |
 | `user` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
-| `to` | `string` |
+| `to` | `Object` |
+| `to.id` | `number` |
+| `to.name` | `string` |
 | `msg` | `string` |
 | `client` | `Socket`<`DefaultEventsMap`, `DefaultEventsMap`, `DefaultEventsMap`, `any`\> |
 

@@ -71,7 +71,7 @@ export class PrcGateway implements OnGatewayDisconnect {
     const user: User = await this.usersService.findOne(jwtToken.id);
     if (user.socketId != '') {
       const sockets = await this.server.in(user.socketId).fetchSockets();
-      if (sockets.length >= 1) sockets[0].emit('newclient');
+      if (sockets.length >= 1) sockets[0].emit('newClient');
     }
     await this.usersService.updateSocketId(jwtToken.id, client.id);
     await this.usersService.updateStatus(jwtToken.id, 'online');
@@ -82,12 +82,12 @@ export class PrcGateway implements OnGatewayDisconnect {
       this.channelService
         .findMessagesForRecipient(channelUser.channel_name)
         .filter(({ to }) => to.name.startsWith('#'))
-        .forEach((message) => client.emit('prc', message));
+        .forEach((message) => client.emit('prc', { ...message, isNew: false }));
     });
     this.channelService
       .findMessagesForRecipient(user.username)
       .filter(({ to }) => !to.name.startsWith('#'))
-      .forEach((message) => client.emit('prc', message));
+      .forEach((message) => client.emit('prc', { ...message, isNew: false }));
   }
 
   /**
@@ -104,23 +104,26 @@ export class PrcGateway implements OnGatewayDisconnect {
   @SubscribeMessage('prc')
   async prcMessage(
     @CurrentUserFromWs() user: JwtPayload,
-    @MessageBody('to') to: string,
+    @MessageBody('to') to: { id: number; name: string },
     @MessageBody('msg') msg: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
 
-    console.log(`Message from ${user.id}(${client.id}) to ${to}: ${msg}`);
+    console.log(
+      `Message from ${user.id}(${client.id}) to ${to.name}(${to.id}): ${msg}`,
+    );
     let recipient: User | Channel;
-    if (to[0] == '#' || to[0] == '&')
-      recipient = await this.channelService.findOne(to);
-    else recipient = await this.usersService.findOne(to);
+    if (to.name[0] == '#' || to.name[0] == '&')
+      recipient = await this.channelService.findOne(to.id);
+    else recipient = await this.usersService.findOne(to.id);
     const sender: User = await this.usersService.findOne(user.id);
     let recClient;
     const message: Message = {
       from: { id: sender.id, name: sender.username },
-      to: { name: to },
+      to: { name: to.name, id: to.id },
       msg: msg,
+      isNew: true,
     };
     if (recipient instanceof User) {
       if (sender.blocking_id?.includes(recipient.id)) {
@@ -139,7 +142,7 @@ export class PrcGateway implements OnGatewayDisconnect {
         throw new WsException('Could not find Recipients socket');
       recClient = sockets[0];
     } else {
-      if (!sender.isInChannel(to))
+      if (!sender.isInChannel(to.name))
         throw new WsException(
           'Recipient not found ###DEBUG Sender not on channel',
         );
@@ -147,7 +150,7 @@ export class PrcGateway implements OnGatewayDisconnect {
         await this.usersService.findChannelUser(sender.id, recipient.name);
       if (sendChannelUser.mute || sendChannelUser.ban)
         throw new WsException(
-          'Sender does not have permision to send messages',
+          'Sender does not have permission to send messages',
         );
       recClient = client.to(recipient.name);
     }
@@ -174,6 +177,7 @@ export class PrcGateway implements OnGatewayDisconnect {
       from: { id: -1, name: '' },
       to: { name: channel.name },
       msg: sender.username + ' has joined your channel.',
+      isNew: true,
     };
     //this.channelService.saveMessage(message);
     client.broadcast.to(channel.name).emit('status', message);
@@ -206,6 +210,7 @@ export class PrcGateway implements OnGatewayDisconnect {
       from: { id: -1, name: '' },
       to: { name: leaveChannelInput.name },
       msg: user.username + ' has left your channel.',
+      isNew: true,
     };
     client.broadcast.to(leaveChannelInput.name).emit('status', leaveMessage);
     return true;

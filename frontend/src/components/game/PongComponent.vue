@@ -18,6 +18,9 @@ const ballImg = ref(
 const mapImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
 );
+
+const claimVictory = ref(false);
+let timeoutId = -1;
 const paddleImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
 );
@@ -43,7 +46,12 @@ const props = defineProps<{
   };
 }>();
 
-console.log(props);
+function onClaimVictory() {
+  claimVictory.value = false;
+  socket.emit('claimVictory', { gameId: props.gameId });
+}
+
+// console.log(props);
 function graph() {
   let cur: Item;
   if (
@@ -158,10 +166,35 @@ onMounted(async () => {
       remotePad.changeDir(10, false, true);
     }
   }
+  function handleBlur(): void {
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
+    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
+    socket.emit('blur', {
+      gameId: props.gameId,
+      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
+    });
+  }
+  function handleFocus(): void {
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
+    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
+    socket.emit('focus', {
+      gameId: props.gameId,
+      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
+    });
+  }
 
   window.addEventListener('keydown', handleDown);
-
   window.addEventListener('keyup', handleUp);
+  window.addEventListener('blur', handleBlur);
+  window.addEventListener('focus', handleFocus);
 
   socket.on('gameData', (e) => {
     console.log(e);
@@ -196,6 +229,51 @@ onMounted(async () => {
       playerPad.sety(50);
       remotePad.sety(50);
     }
+  });
+
+  socket.on('blur', (cowardId: number) => {
+    ball.set_speed(0);
+    playerPad.changeDir(0, false, false);
+    remotePad.changeDir(0, false, false);
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
+    window.removeEventListener('keydown', handleDown);
+    window.removeEventListener('keyup', handleUp);
+    if (
+      (props.priority == 0 && cowardId != props.player1ID.id) ||
+      (props.priority != 0 && cowardId != props.player2ID.id)
+    ) {
+      claimVictory.value = true;
+      const claimButton = document.getElementById(
+        'claimButton',
+      ) as HTMLButtonElement | null;
+      if (claimButton !== null) claimButton.disabled = true;
+      if (timeoutId > -1) {
+        clearTimeout(timeoutId);
+        timeoutId = -1;
+      }
+      timeoutId = setTimeout(() => {
+        const claimButton = document.getElementById(
+          'claimButton',
+        ) as HTMLButtonElement | null;
+        if (claimButton !== null) claimButton.disabled = false;
+      }, 10000);
+    }
+  });
+
+  socket.on('focus', () => {
+    ball.set_speed();
+    if (
+      userStore.id !== props.player1ID.id &&
+      userStore.id !== props.player2ID.id
+    )
+      return;
+    claimVictory.value = false;
+    window.addEventListener('keydown', handleDown);
+    window.addEventListener('keyup', handleUp);
   });
 
   window.onresize = function () {
@@ -268,6 +346,13 @@ onMounted(async () => {
         <img class="pad" :src="paddleImg" />
       </div>
     </div>
+    <div v-if="claimVictory" class="modal">
+      <div class="modal-content">
+        <button id="claimButton" class="ok" disabled @click="onClaimVictory">
+          Claim victory
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -317,7 +402,6 @@ onMounted(async () => {
   --x: 50;
   --y: 50;
   --col: #fff;
-
   position: absolute;
   background-color: var(--col);
   left: calc(var(--x) * 1%);
@@ -365,5 +449,32 @@ onMounted(async () => {
 }
 .players {
   display: grid;
+}
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 696; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 2vw;
+  border: 1px solid #888;
+  width: 25%; /* Could be more or less, depending on screen size */
+  color: black;
+}
+
+.ok {
+  cursor: pointer;
 }
 </style>

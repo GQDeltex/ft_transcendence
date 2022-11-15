@@ -207,6 +207,9 @@ export class ChannelService {
     await this.channelUserRepository.delete({ id: channelUser.id });
     if (channel.userList.length === 1) {
       await this.channelRepository.delete({ id: channel.id });
+      this.messages = this.messages.filter(
+        (message) => message.to.name !== channel.name,
+      );
       return null;
     }
     return this.findOne(channel.id);

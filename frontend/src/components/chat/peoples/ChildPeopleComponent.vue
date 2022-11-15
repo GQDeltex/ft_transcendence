@@ -12,6 +12,7 @@ import {
   GameStatusEnum,
   useUserStore,
 } from '@/store/user';
+import { useMessagesStore } from '@/store/message';
 
 const emits = defineEmits(['chat']);
 
@@ -22,6 +23,7 @@ const props = defineProps<{
 
 const router = useRouter();
 const userStore = useUserStore();
+const messagesStore = useMessagesStore();
 
 const activeChat = computed(() => {
   if (props.highlight) return { color: '#c00000' };
@@ -164,6 +166,7 @@ const onChat = (username: string) => {
         :picture="client.picture"
         size="1.5vw"
         :border-color="statusBorder"
+        :is-notified="messagesStore.isNotified(client.username)"
       />
       <div class="infoBox">
         <span class="username" :style="activeChat"
