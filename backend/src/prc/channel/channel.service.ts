@@ -136,13 +136,12 @@ export class ChannelService {
     );
     const channelOwner: ChannelUser | undefined = channel.userList.find(
       (channelUser) => {
-        if (channelUser.user_id == user.id) return true;
-        return false;
+        return channelUser.user_id == user.id;
       },
     );
     if (typeof channelOwner == 'undefined')
       throw new UserInputError('You are not in this channel');
-    if (channelOwner.owner == false)
+    if (!channelOwner.owner)
       throw new UserInputError('You are not allowed to change this property');
     if (toggleChannelPpInput.private != channel.private) {
       channel.private = toggleChannelPpInput.private;

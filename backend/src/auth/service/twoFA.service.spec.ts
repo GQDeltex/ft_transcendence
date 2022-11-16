@@ -11,6 +11,7 @@ import { ChannelService } from '../../prc/channel/channel.service';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
 import { Game } from '../../game/entities/game.entity';
+import { ChannelUserService } from '../../prc/channel/channel-user/channel-user.service';
 
 describe('TwoFAService', () => {
   let service: TwoFAService;
@@ -37,6 +38,7 @@ describe('TwoFAService', () => {
         ConfigService,
         PrcGateway,
         ChannelService,
+        ChannelUserService,
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),

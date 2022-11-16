@@ -28,6 +28,7 @@ import { Channel } from './channel/entities/channel.entity';
 import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
 import { CurrentUserFromWs } from '../tools/UserFromWs';
 import { Message } from './message/message';
+import { ChannelUserService } from './channel/channel-user/channel-user.service';
 
 @Injectable()
 @UsePipes(new ValidationPipe())
@@ -48,6 +49,8 @@ export class PrcGateway implements OnGatewayDisconnect {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly channelService: ChannelService,
+    @Inject(forwardRef(() => ChannelUserService))
+    private readonly channelUserService: ChannelUserService,
   ) {}
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
@@ -147,7 +150,10 @@ export class PrcGateway implements OnGatewayDisconnect {
           'Recipient not found ###DEBUG Sender not on channel',
         );
       const sendChannelUser: ChannelUser =
-        await this.usersService.findChannelUser(sender.id, recipient.name);
+        await this.channelUserService.findChannelUserInChannel(
+          sender.id,
+          recipient.name,
+        );
       if (sendChannelUser.mute || sendChannelUser.ban)
         throw new WsException(
           'Sender does not have permission to send messages',
