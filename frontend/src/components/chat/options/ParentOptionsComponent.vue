@@ -9,6 +9,7 @@ import { socket } from '@/service/socket';
 import ChannelService from '@/service/ChannelService';
 import ChannelUserService from '@/service/ChannelUserService';
 import type { Channel } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const passModalActive = ref(false);
 const emits = defineEmits(['leave', 'updatePublic', 'chat', 'updateAdmin']);
@@ -137,9 +138,9 @@ function getChannelUserStatus(client: User) {
 
 <template>
   <div class="optionsParent">
-    <span class="headerText">Chat Options</span>
+    <span class="headerText">{{ useI18n().t('chatoptions') }}</span>
     <div class="list">
-      <div class="subheader" @click="chatToggle = !chatToggle">In Chat ▾</div>
+      <div class="subheader" @click="chatToggle = !chatToggle">{{ useI18n().t('inchat') }} ▾</div>
       <div v-show="chatToggle" class="people">
         <template v-for="client in userList" :key="client.id">
           <ChildOptionsPeopleComponent
@@ -158,10 +159,10 @@ function getChannelUserStatus(client: User) {
         </template>
       </div>
       <div class="buttonList">
-        <span class="headerText"> Options </span>
+        <span class="headerText"> {{ useI18n().t('options') }} </span>
         <span v-if="isOwner">
           <button class="button" @click="passModalActive = true">
-            Change Password
+            {{ useI18n().t('changepassword') }}
           </button>
           <ModalUpdatePasswordComponent
             v-if="passModalActive"
@@ -170,11 +171,11 @@ function getChannelUserStatus(client: User) {
           />
         </span>
         <span v-if="props.currentChannel.name.startsWith('#')">
-          <button class="button" @click="leave">Leave Chat</button>
+          <button class="button" @click="leave">{{ useI18n().t('leavechat') }}</button>
         </span>
         <span v-if="isOwner">
           <button class="button" @click="makePublic">
-            Make {{ props.currentChannel.private ? 'Public' : 'Private' }}
+            {{ props.currentChannel.private ? useI18n().t('makepublic') : useI18n().t('makeprivate') }}
           </button>
         </span>
       </div>

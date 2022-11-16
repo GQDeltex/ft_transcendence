@@ -4,6 +4,8 @@ import type { Ref } from 'vue';
 import ChannelUserService from '@/service/ChannelUserService';
 import { useErrorStore } from '@/store/error';
 import type { Channel } from '@/store/message';
+import { useI18n } from 'vue-i18n';
+
 const emits = defineEmits(['close']);
 const errorStore = useErrorStore();
 
@@ -41,14 +43,14 @@ onMounted(() => {
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
       <h1>
-        Change Password<span class="close" @click="closeCancel()">&times;</span>
+        {{ useI18n().t('changepassword') }}<span class="close" @click="closeCancel()">&times;</span>
       </h1>
-      <label>Channel Name</label>
+      <label>{{ useI18n().t('channelname') }}</label>
       <span>{{ props.currentChannel.name }}</span>
-      <label>Password</label>
+      <label>{{ useI18n().t('password') }}</label>
       <input id="inputBox" v-model="password" type="password" />
       <br />
-      <button class="ok" @click="closeOk()">OK</button>
+      <button class="ok" @click="closeOk()">{{ useI18n().t('confirm') }}</button>
     </div>
   </div>
 </template>

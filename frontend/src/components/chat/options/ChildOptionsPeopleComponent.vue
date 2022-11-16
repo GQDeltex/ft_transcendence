@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import type { User } from '@/store/user';
 import { useUserStore } from '@/store/user';
 import type { Channel } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const emits = defineEmits(['chat', 'updateAdmin', 'banUser', 'muteUser']);
 
@@ -87,21 +88,21 @@ const onProfile = async () => {
 
   <div v-if="props.client.id !== userStore.id" v-show="toggle" class="popup">
     <span>
-      <button class="button" @click="onProfile">Show Profile</button>
+      <button class="button" @click="onProfile">{{ useI18n().t('showprofile') }}</button>
     </span>
     <span v-if="props.isOwner">
       <button class="button" @click="emits('updateAdmin', props.client.id)">
-        {{ isClientAdmin ? 'Remove' : 'Make' }} Admin
+        {{ isClientAdmin ? useI18n().t('removeadmin') : useI18n().t('makeadmin') }}
       </button>
     </span>
     <span v-if="props.isAdmin || props.isOwner">
       <button class="button" @click="emits('banUser', props.client.id)">
-        Ban User
+        {{ useI18n().t('banuser') }}
       </button>
     </span>
     <span v-if="props.isAdmin || props.isOwner">
       <button class="button" @click="emits('muteUser', props.client.id)">
-        Mute User
+        {{ useI18n().t('muteuser') }}
       </button>
     </span>
   </div>

@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import RoundPictureComponent from './RoundPictureComponent.vue';
 import { useMessagesStore } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
@@ -26,10 +27,10 @@ const messagesStore = useMessagesStore();
     </router-link>
   </div>
   <nav>
-    <li><RouterLink to="/leaderboard">Leaderboard</RouterLink></li>
-    <li><RouterLink to="/play">Play Now</RouterLink></li>
-    <li><RouterLink to="/skin">Skin Selection</RouterLink></li>
-    <li><RouterLink to="/stream">Stream</RouterLink></li>
+    <li><RouterLink to="/leaderboard">{{ useI18n().t('leaderboard') }}</RouterLink></li>
+    <li><RouterLink to="/play">{{ useI18n().t('playnow') }}</RouterLink></li>
+    <li><RouterLink to="/skin">{{ useI18n().t('skinselection') }}</RouterLink></li>
+    <li><RouterLink to="/stream">{{ useI18n().t('stream') }}</RouterLink></li>
     <li>
       <div class="item">
         <span
@@ -37,7 +38,7 @@ const messagesStore = useMessagesStore();
           class="notify-badge"
           >NEW</span
         >
-        <RouterLink to="/chat">Chat</RouterLink>
+        <RouterLink to="/chat">{{ useI18n().t('chat') }}</RouterLink>
       </div>
     </li>
   </nav>

@@ -13,6 +13,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { Item } from '@/store/user';
 import type { _RouteLocationBase } from 'vue-router';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 
 const route = useRoute();
 const router = useRouter();
@@ -106,7 +107,7 @@ onUnmounted(() => {
 
 <template>
   <div v-if="displayState === 'queue'" class="parent">
-    <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
+    <p class="saving">{{ useI18n().t('inqueue') }}<span>.</span><span>.</span><span>.</span></p>
     <div class="loader"></div>
   </div>
   <EndScreenComponent v-else-if="displayState === 'end'" :game-id="gameIdRef" />

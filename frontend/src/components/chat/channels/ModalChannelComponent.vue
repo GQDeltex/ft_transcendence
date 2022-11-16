@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import type { Ref } from 'vue';
 import { socket } from '@/service/socket';
 import type { Channel } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const emits = defineEmits(['close', 'join']);
 
@@ -44,16 +45,16 @@ onMounted(() => {
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
       <h1>
-        Join / Create Channel<span class="close" @click="closeCancel()"
+        {{ useI18n().t('joincreatechannel') }}<span class="close" @click="closeCancel()"
           >&times;</span
         >
       </h1>
-      <label>Name</label>
+      <label>{{ useI18n().t('name') }}</label>
       <input id="mytext" v-model="channelName" type="text" />
-      <label>Password</label>
+      <label>{{ useI18n().t('password') }}</label>
       <input v-model="password" type="password" />
       <br />
-      <button class="ok" @click="closeOk()">OK</button>
+      <button class="ok" @click="closeOk()">{{ useI18n().t('confirm') }}</button>
     </div>
   </div>
 </template>

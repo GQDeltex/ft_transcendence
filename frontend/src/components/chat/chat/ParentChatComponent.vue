@@ -6,6 +6,7 @@ import { useMessagesStore } from '@/store/message';
 import { useUserStore } from '@/store/user';
 import { storeToRefs } from 'pinia';
 import type { Channel, Message } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
@@ -73,7 +74,7 @@ watch(
 
 <template>
   <div class="parent">
-    <span class="chatName">chat: {{ props.currentChannel.name }}</span>
+    <span class="chatName">{{ useI18n().t('chat') }}: {{ props.currentChannel.name }}</span>
     <div id="container" class="messages">
       <template v-for="message in messages">
         <span

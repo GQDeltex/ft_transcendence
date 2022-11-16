@@ -13,6 +13,7 @@ import {
   useUserStore,
 } from '@/store/user';
 import { useMessagesStore } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const emits = defineEmits(['chat']);
 
@@ -179,7 +180,7 @@ const onChat = (username: string) => {
   </div>
 
   <div v-show="toggle" class="popup">
-    <button class="butt" @click="onChat(client.username)">Chat</button>
+    <button class="butt" @click="onChat(client.username)">{{ useI18n().t('chat') }}</button>
     <button
       v-show="
         userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
@@ -198,7 +199,7 @@ const onChat = (username: string) => {
       class="butt"
       @click="onFriendDecline"
     >
-      Decline friend request
+      {{ useI18n().t('declinefriendrequest') }}
     </button>
     <button class="butt" @click="onBlock">
       {{ userStore.getBlockStatus(client.id) }}
@@ -220,9 +221,9 @@ const onChat = (username: string) => {
       class="butt"
       @click="onGameDecline"
     >
-      Decline game request
+      {{ useI18n().t('declinegamerequest') }}
     </button>
-    <button class="butt" @click="onProfile">Show Profile</button>
+    <button class="butt" @click="onProfile">{{ useI18n().t('showprofile') }}</button>
   </div>
 </template>
 

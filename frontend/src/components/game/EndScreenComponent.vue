@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 
 const errorStore = useErrorStore();
 
@@ -84,9 +85,9 @@ onMounted(async () => {
       size="15vw"
       :border-color="status"
     />
-    <p class="saving">{{ player.username }} wins!</p>
+    <p class="saving">{{ player.username }} {{ useI18n().t('wins') }}!</p>
     <div class="btns">
-      <button class="home-page flex-btn" @click="homepage">Home</button>
+      <button class="home-page flex-btn" @click="homepage">{{ useI18n().t('home') }}</button>
     </div>
   </div>
 </template>
