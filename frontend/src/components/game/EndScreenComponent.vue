@@ -115,11 +115,25 @@ onMounted(async () => {
 
 .flex-btn {
   text-decoration: none;
+  border-radius: 20px;
+  color: white;
+  overflow: hidden;
+  background-color: #c00000;
+  padding: 15px;
+  align-content: center;
+  cursor: pointer;
+  width: min-content;
+  align-items: center;
+  border: none;
+  font-size: 2vw;
+  font-weight: bolder;
+  text-decoration: none;
+  /* text-decoration: none;
   border-radius: 5px;
   color: white;
   background-color: #c00000;
   font-size: 3vw;
   border-color: transparent;
-  cursor: pointer;
+  cursor: pointer; */
 }
 </style>
