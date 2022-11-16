@@ -5,7 +5,6 @@ const props = defineProps<{
   items: string[];
   width: string;
   height: string;
-  left: string;
 }>();
 
 const itemSelected = (item: string) => {
@@ -29,10 +28,8 @@ const itemSelected = (item: string) => {
   background-color: #123;
   width: v-bind(width);
   height: v-bind(height);
-  /* right: v-bind(left); */
-  left:auto;
+  left: inherit;
   top: inherit;
-
   overflow: auto; /* Enable scroll if needed */
 }
 
@@ -41,7 +38,6 @@ const itemSelected = (item: string) => {
   color: #c00000;
   font-size: 1.5vw;
   cursor: pointer;
-
 }
 
 .subItem {

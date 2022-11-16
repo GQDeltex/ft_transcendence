@@ -90,7 +90,7 @@ async function updateTitle(title: string) {
         @click="modalChangePicture = true"
       />
     </div>
-    <div class="infoBox">
+    <div class="infoBox" @mouseleave="dropDownTitle = false">
       <div class="title">
         {{ user.title[0] }}
         <img
@@ -107,10 +107,8 @@ async function updateTitle(title: string) {
         :items="dropDownContent"
         width="18vw"
         height="6vw"
-        left="inherit"
         @close="updateTitle"
       />
-      <!-- <br /> -->
       <div class="username">
         <span>
           {{ user.username }}
@@ -200,7 +198,7 @@ async function updateTitle(title: string) {
 .parentPicture {
   grid-column: 1 / 2;
   display: flex;
-  align-items:baseline;
+  align-items: baseline;
 }
 
 .username {
