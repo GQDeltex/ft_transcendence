@@ -51,7 +51,9 @@ const logout = async () => {
 </script>
 
 <template>
-  <button v-if="isMe" class="button" @click="logout">{{useI18n().t('logoutbutton')}}</button>
+  <button v-if="isMe" class="button" @click="logout">
+    {{ useI18n().t('logoutbutton') }}
+  </button>
   <div v-if="user" class="profileViewParent">
     <ProfileComponent class="profile" />
     <div class="lowerPart">

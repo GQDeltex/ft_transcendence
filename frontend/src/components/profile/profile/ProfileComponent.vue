@@ -112,7 +112,9 @@ async function updateTitle(title: string) {
       <div class="username">
         <span>
           {{ user.username }}
-          <span v-if="user.rank && user.rank > 0">({{useI18n().t('rank')}} {{ user.rank }}) </span>
+          <span v-if="user.rank && user.rank > 0"
+            >({{ useI18n().t('rank') }} {{ user.rank }})
+          </span>
         </span>
         <img
           v-if="isMe"
@@ -134,20 +136,22 @@ async function updateTitle(title: string) {
         @close="modalChangePicture = false"
       />
       <br />
-      <span class="campus">{{ user.campus}}, {{user.country}}</span>
+      <span class="campus">{{ user.campus }}, {{ user.country }}</span>
       <br />
-      <span class="friends">{{ useI18n().t('friends', user.friends ? user.friends.length : 0) }}</span>
+      <span class="friends">{{
+        useI18n().t('friends', user.friends ? user.friends.length : 0)
+      }}</span>
     </div>
 
     <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
 
     <span v-if="isMe" class="twoFA"
-      >{{useI18n().t('twofa')}}
+      >{{ useI18n().t('twofa') }}
       <label class="switch">
         <input v-model="checked" type="checkbox" />
         <span class="slider round">
-          <p v-if="checked" class="onSwitch">{{useI18n().t('on')}}</p>
-          <p v-else class="offSwitch">{{useI18n().t('off')}}</p>
+          <p v-if="checked" class="onSwitch">{{ useI18n().t('on') }}</p>
+          <p v-else class="offSwitch">{{ useI18n().t('off') }}</p>
         </span>
       </label>
       <Enable2FAComponent v-if="show" @close="onClose" />

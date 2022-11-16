@@ -44,9 +44,10 @@ onMounted(() => {
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
       <h1>
-        {{useI18n().t('changeusername')}}<span class="close" @click="closeCancel()">&times;</span>
+        {{ useI18n().t('changeusername')
+        }}<span class="close" @click="closeCancel()">&times;</span>
       </h1>
-      <label>{{useI18n().t('newusername')}}</label>
+      <label>{{ useI18n().t('newusername') }}</label>
       <input
         id="mytext"
         v-model="outputUsername"
@@ -54,7 +55,9 @@ onMounted(() => {
         :placeholder="props.inputUsername"
       />
       <br />
-      <button class="ok" @click="closeOk()">{{useI18n().t('confirm')}}</button>
+      <button class="ok" @click="closeOk()">
+        {{ useI18n().t('confirm') }}
+      </button>
     </div>
   </div>
 </template>

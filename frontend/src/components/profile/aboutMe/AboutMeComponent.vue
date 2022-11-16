@@ -19,15 +19,20 @@ const capitalize = (str: string) => {
       <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
     </span>
     <div class="infoBox">
-      {{ useI18n().t('username') }}: <span class="info">{{ user.username }}</span>
+      {{ useI18n().t('username') }}:
+      <span class="info">{{ user.username }}</span>
       <br />
-      {{ useI18n().t('firstname') }}: <span class="info">{{ user.firstname }}</span>
+      {{ useI18n().t('firstname') }}:
+      <span class="info">{{ user.firstname }}</span>
       <br />
-      {{ useI18n().t('lastname') }}: <span class="info">{{ user.lastname }}</span>
+      {{ useI18n().t('lastname') }}:
+      <span class="info">{{ user.lastname }}</span>
       <br />
-      {{ useI18n().t('intralogin') }}: <span class="info">{{ user.intra }}</span>
+      {{ useI18n().t('intralogin') }}:
+      <span class="info">{{ user.intra }}</span>
       <br />
-      {{ useI18n().t('coalition') }}: <span class="info">{{ user.coalition }}</span>
+      {{ useI18n().t('coalition') }}:
+      <span class="info">{{ user.coalition }}</span>
       <br />
       {{ useI18n().t('lastlogin') }}:
       <span class="info">
@@ -38,7 +43,8 @@ const capitalize = (str: string) => {
         }}
       </span>
       <br />
-      {{ useI18n().t('campus') }}: <span class="info">{{ user.campus }}, {{ user.country }}</span>
+      {{ useI18n().t('campus') }}:
+      <span class="info">{{ user.campus }}, {{ user.country }}</span>
     </div>
   </div>
 </template>
