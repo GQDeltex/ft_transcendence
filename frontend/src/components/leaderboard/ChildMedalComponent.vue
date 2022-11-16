@@ -25,7 +25,11 @@ defineProps<{
       </div>
     </router-link>
     <span class="sub">{{
-      useI18n().t('points', { n: useI18n().n(medalPlayer.points, 'shortnumber') }, 2)
+      useI18n().t(
+        'points',
+        { n: useI18n().n(medalPlayer.points || 0, 'shortnumber') },
+        2,
+      )
     }}</span>
   </div>
 </template>

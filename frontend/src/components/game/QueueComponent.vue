@@ -107,7 +107,9 @@ onUnmounted(() => {
 
 <template>
   <div v-if="displayState === 'queue'" class="parent">
-    <p class="saving">{{ useI18n().t('inqueue') }}<span>.</span><span>.</span><span>.</span></p>
+    <p class="saving">
+      {{ useI18n().t('inqueue') }}<span>.</span><span>.</span><span>.</span>
+    </p>
     <div class="loader"></div>
   </div>
   <EndScreenComponent v-else-if="displayState === 'end'" :game-id="gameIdRef" />

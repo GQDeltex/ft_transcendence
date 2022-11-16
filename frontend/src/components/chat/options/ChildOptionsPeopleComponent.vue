@@ -88,11 +88,15 @@ const onProfile = async () => {
 
   <div v-if="props.client.id !== userStore.id" v-show="toggle" class="popup">
     <span>
-      <button class="button" @click="onProfile">{{ useI18n().t('showprofile') }}</button>
+      <button class="button" @click="onProfile">
+        {{ useI18n().t('showprofile') }}
+      </button>
     </span>
     <span v-if="props.isOwner">
       <button class="button" @click="emits('updateAdmin', props.client.id)">
-        {{ isClientAdmin ? useI18n().t('removeadmin') : useI18n().t('makeadmin') }}
+        {{
+          isClientAdmin ? useI18n().t('removeadmin') : useI18n().t('makeadmin')
+        }}
       </button>
     </span>
     <span v-if="props.isAdmin || props.isOwner">

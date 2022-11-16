@@ -2,6 +2,7 @@
 import type { User } from '@/store/user';
 import { useUserStore, AllowedUpdateGameRequestMethod } from '@/store/user';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   client: User;
@@ -31,12 +32,18 @@ const declineButton = async () => {
       <img class="picture" alt="user picture" :src="client.picture" />
       <span class="sender">
         {{ client.username }}
-        <span class="requestText"><br />has send a game request</span>
+        <span class="requestText"
+          ><br />{{ useI18n().t('hassentgamerequest') }}</span
+        >
       </span>
     </div>
     <div class="buttonBox">
-      <button class="acceptButton" @click="acceptButton">Accept</button>
-      <button class="declineButton" @click="declineButton">Decline</button>
+      <button class="acceptButton" @click="acceptButton">
+        {{ useI18n().t('accept') }}
+      </button>
+      <button class="declineButton" @click="declineButton">
+        {{ useI18n().t('decline') }}
+      </button>
     </div>
   </div>
 </template>

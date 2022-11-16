@@ -7,6 +7,7 @@ import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
 import { useUserStore } from '@/store/user';
 import type { Item } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
 const userStore = useUserStore();
 const remoteScore = ref(0);
@@ -349,7 +350,7 @@ onMounted(async () => {
     <div v-if="claimVictory" class="modal">
       <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
-          Claim victory
+          {{ useI18n().t('claimvictory') }}
         </button>
       </div>
     </div>

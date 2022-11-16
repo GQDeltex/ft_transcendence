@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import UserService from '@/service/UserService';
 import { useErrorStore } from './error';
-import { useI18n } from 'vue-i18n';
 
 export type User = {
   isLogged?: boolean;

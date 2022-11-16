@@ -109,6 +109,18 @@ export const en = {
   lostagame: 'Lost a Game!',
   lplusr: 'L+R',
   lostfivegames: 'Lost Five Games',
+  block: 'Block',
+  unblock: 'Unblock',
+  sendgamerequest: 'Send game request',
+  cancelgamerequest: 'Cancel game request',
+  acceptgamerequest: 'Accept game request',
+  requests: 'Requests',
+  accept: 'Accept',
+  decline: 'Decline',
+  hassentfriendrequest: 'has sent a friend request',
+  hassentgamerequest: 'has sent a game request',
+  send: 'Send',
+  claimvictory: 'Claim Victory',
 };
 
 export const NF_en = {

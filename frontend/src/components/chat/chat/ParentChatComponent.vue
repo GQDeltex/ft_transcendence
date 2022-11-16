@@ -74,7 +74,9 @@ watch(
 
 <template>
   <div class="parent">
-    <span class="chatName">{{ useI18n().t('chat') }}: {{ props.currentChannel.name }}</span>
+    <span class="chatName"
+      >{{ useI18n().t('chat') }}: {{ props.currentChannel.name }}</span
+    >
     <div id="container" class="messages">
       <template v-for="message in messages">
         <span
@@ -92,7 +94,9 @@ watch(
         class="text"
         @keyup.enter="sendMsg"
       />
-      <button class="sendButton" @click="sendMsg">Send</button>
+      <button class="sendButton" @click="sendMsg">
+        {{ useI18n().t('send') }}
+      </button>
     </div>
   </div>
 </template>
