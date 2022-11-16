@@ -4,7 +4,9 @@ import ParentLeaderboardComponent from '../components/leaderboard/ParentLeaderbo
 </script>
 
 <template>
-  <ParentLeaderboardComponent :category-name="useI18n().t('topperformplayer')" />
+  <ParentLeaderboardComponent
+    :category-name="useI18n().t('topperformplayer')"
+  />
 </template>
 
 <style scoped></style>

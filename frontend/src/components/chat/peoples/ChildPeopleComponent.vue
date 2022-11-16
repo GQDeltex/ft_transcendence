@@ -55,6 +55,31 @@ const statusBorder = computed(() => {
 
 const toggle = ref(false);
 
+function localizedFriendStatus(friendStatus: FriendStatusEnum) {
+  if (friendStatus == FriendStatusEnum.FRIEND)
+    return useI18n().t('removefriend');
+  if (friendStatus == FriendStatusEnum.NOT_FRIEND)
+    return useI18n().t('addfriend');
+  if (friendStatus == FriendStatusEnum.REQUEST_SENT)
+    return useI18n().t('cancelfriendrequest');
+  if (friendStatus == FriendStatusEnum.REQUEST_RECEIVED)
+    return useI18n().t('acceptfriendrequest');
+}
+
+function localizedBlockStatus(blockStatus: BlockStatusEnum) {
+  if (blockStatus == BlockStatusEnum.BLOCKED) return useI18n().t('unblock');
+  if (blockStatus == BlockStatusEnum.NOT_BLOCKED) return useI18n().t('block');
+}
+
+function localizedGameRequestStatus(gameStatus: GameStatusEnum) {
+  if (gameStatus == GameStatusEnum.NOT_SEND)
+    return useI18n().t('sendgamerequest');
+  if (gameStatus == GameStatusEnum.SENT)
+    return useI18n().t('cancelgamerequest');
+  if (gameStatus == GameStatusEnum.RECEIVED)
+    return useI18n().t('acceptgamerequest');
+}
+
 const onFriend = async () => {
   switch (userStore.getFriendStatus(props.client.id)) {
     case FriendStatusEnum.NOT_FRIEND:
@@ -180,7 +205,9 @@ const onChat = (username: string) => {
   </div>
 
   <div v-show="toggle" class="popup">
-    <button class="butt" @click="onChat(client.username)">{{ useI18n().t('chat') }}</button>
+    <button class="butt" @click="onChat(client.username)">
+      {{ useI18n().t('chat') }}
+    </button>
     <button
       v-show="
         userStore.getBlockStatus(client.id) === BlockStatusEnum.NOT_BLOCKED
@@ -188,7 +215,7 @@ const onChat = (username: string) => {
       class="butt"
       @click="onFriend"
     >
-      {{ userStore.getFriendStatus(client.id) }}
+      {{ localizedFriendStatus(userStore.getFriendStatus(client.id)) }}
     </button>
     <button
       v-show="
@@ -202,7 +229,7 @@ const onChat = (username: string) => {
       {{ useI18n().t('declinefriendrequest') }}
     </button>
     <button class="butt" @click="onBlock">
-      {{ userStore.getBlockStatus(client.id) }}
+      {{ localizedBlockStatus(userStore.getBlockStatus(client.id)) }}
     </button>
     <button
       v-show="
@@ -211,7 +238,9 @@ const onChat = (username: string) => {
       class="butt"
       @click="onInvite"
     >
-      {{ userStore.getGameRequestStatus(client.id) }}
+      {{
+        localizedGameRequestStatus(userStore.getGameRequestStatus(client.id))
+      }}
     </button>
     <button
       v-show="
@@ -223,7 +252,9 @@ const onChat = (username: string) => {
     >
       {{ useI18n().t('declinegamerequest') }}
     </button>
-    <button class="butt" @click="onProfile">{{ useI18n().t('showprofile') }}</button>
+    <button class="butt" @click="onProfile">
+      {{ useI18n().t('showprofile') }}
+    </button>
   </div>
 </template>
 

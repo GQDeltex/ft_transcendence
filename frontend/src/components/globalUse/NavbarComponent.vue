@@ -27,10 +27,20 @@ const messagesStore = useMessagesStore();
     </router-link>
   </div>
   <nav>
-    <li><RouterLink to="/leaderboard">{{ useI18n().t('leaderboard') }}</RouterLink></li>
-    <li><RouterLink to="/play">{{ useI18n().t('playnow') }}</RouterLink></li>
-    <li><RouterLink to="/skin">{{ useI18n().t('skinselection') }}</RouterLink></li>
-    <li><RouterLink to="/stream">{{ useI18n().t('stream') }}</RouterLink></li>
+    <li>
+      <RouterLink to="/leaderboard">{{
+        useI18n().t('leaderboard')
+      }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="/play">{{ useI18n().t('playnow') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="/skin">{{ useI18n().t('skinselection') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="/stream">{{ useI18n().t('stream') }}</RouterLink>
+    </li>
     <li>
       <div class="item">
         <span

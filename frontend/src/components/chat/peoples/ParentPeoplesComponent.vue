@@ -64,7 +64,9 @@ function userInChatWith(input: User) {
           />
         </template>
       </div>
-      <div class="subheader" @click="blockToggle = !blockToggle">{{ useI18n().t('blocked') }} ▾</div>
+      <div class="subheader" @click="blockToggle = !blockToggle">
+        {{ useI18n().t('blocked') }} ▾
+      </div>
       <div v-show="blockToggle" class="people">
         <template v-for="client in clients" :key="client.id">
           <ChildPeopleComponent

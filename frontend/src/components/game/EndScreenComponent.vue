@@ -87,7 +87,9 @@ onMounted(async () => {
     />
     <p class="saving">{{ player.username }} {{ useI18n().t('wins') }}!</p>
     <div class="btns">
-      <button class="home-page flex-btn" @click="homepage">{{ useI18n().t('home') }}</button>
+      <button class="home-page flex-btn" @click="homepage">
+        {{ useI18n().t('home') }}
+      </button>
     </div>
   </div>
 </template>

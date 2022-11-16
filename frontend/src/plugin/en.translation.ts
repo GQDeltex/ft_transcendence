@@ -46,6 +46,16 @@ export const en = {
   addfriend: 'Add friend',
   cancelfriendrequest: 'Cancel friend request',
   acceptfriendrequest: 'Accept friend request',
+  block: 'Block',
+  unblock: 'Unblock',
+  sendgamerequest: 'Send game request',
+  cancelgamerequest: 'Cancel game request',
+  acceptgamerequest: 'Accept game request',
+  requests: 'Requests',
+  accept: 'Accept',
+  decline: 'Decline',
+  hassentfriendrequest: 'has sent a friend request',
+  hassentgamerequest: 'has sent a game request',
 };
 
 export const NF_en = {

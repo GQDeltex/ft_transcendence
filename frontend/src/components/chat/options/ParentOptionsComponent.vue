@@ -140,7 +140,9 @@ function getChannelUserStatus(client: User) {
   <div class="optionsParent">
     <span class="headerText">{{ useI18n().t('chatoptions') }}</span>
     <div class="list">
-      <div class="subheader" @click="chatToggle = !chatToggle">{{ useI18n().t('inchat') }} ▾</div>
+      <div class="subheader" @click="chatToggle = !chatToggle">
+        {{ useI18n().t('inchat') }} ▾
+      </div>
       <div v-show="chatToggle" class="people">
         <template v-for="client in userList" :key="client.id">
           <ChildOptionsPeopleComponent
@@ -171,11 +173,17 @@ function getChannelUserStatus(client: User) {
           />
         </span>
         <span v-if="props.currentChannel.name.startsWith('#')">
-          <button class="button" @click="leave">{{ useI18n().t('leavechat') }}</button>
+          <button class="button" @click="leave">
+            {{ useI18n().t('leavechat') }}
+          </button>
         </span>
         <span v-if="isOwner">
           <button class="button" @click="makePublic">
-            {{ props.currentChannel.private ? useI18n().t('makepublic') : useI18n().t('makeprivate') }}
+            {{
+              props.currentChannel.private
+                ? useI18n().t('makepublic')
+                : useI18n().t('makeprivate')
+            }}
           </button>
         </span>
       </div>

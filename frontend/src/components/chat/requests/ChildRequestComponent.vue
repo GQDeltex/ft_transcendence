@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 defineProps<{
   clientId: number;
   sender: string;
@@ -25,8 +26,12 @@ const declineButton = async () => {
       </span>
     </div>
     <div class="buttonBox">
-      <button class="acceptButton" @click="acceptButton">Accept</button>
-      <button class="declineButton" @click="declineButton">Decline</button>
+      <button class="acceptButton" @click="acceptButton">
+        {{ useI18n().t('accept') }}
+      </button>
+      <button class="declineButton" @click="declineButton">
+        {{ useI18n().t('decline') }}
+      </button>
     </div>
   </div>
 </template>

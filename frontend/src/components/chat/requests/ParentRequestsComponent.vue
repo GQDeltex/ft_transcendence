@@ -4,6 +4,7 @@ import FriendRequestComponent from './FriendRequestComponent.vue';
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
 import GameRequestComponent from '@/components/chat/requests/GameRequestComponent.vue';
+import { useI18n } from 'vue-i18n';
 
 defineProps<{
   clients: User[];
@@ -14,7 +15,7 @@ const userStore = useUserStore();
 
 <template>
   <div class="requestsParent">
-    <span class="text">Requests</span>
+    <span class="text">{{ useI18n().t('requests') }}</span>
     <div class="list">
       <template v-for="client in clients" :key="client.id">
         <FriendRequestComponent
