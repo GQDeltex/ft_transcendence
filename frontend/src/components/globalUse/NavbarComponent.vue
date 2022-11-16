@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router';
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
 const dropDownContent = ref<string[]>(['Profile', 'Logout']);
-let showDropDown = ref(false);
+const showDropDown = ref(false);
 const router = useRouter();
 
 async function dropDownClicked(selected: string) {
