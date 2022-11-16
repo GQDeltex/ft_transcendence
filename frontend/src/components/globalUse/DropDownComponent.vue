@@ -41,8 +41,14 @@ const itemSelected = (item: string) => {
   color: #c00000;
   font-size: 1.5vw;
   cursor: pointer;
+
 }
 
+.subItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .menuItem.active,
 .menuItem:hover {
   background-color: #c00000;

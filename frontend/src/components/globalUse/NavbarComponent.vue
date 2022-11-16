@@ -36,9 +36,9 @@ async function dropDownClicked(selected: string) {
   </div>
   <div class="column2">
     <!-- <router-link :to="`/profile/${userStore.id}`" class="columncontent"> -->
-      <!-- <div class="columncontent" > -->
-        <span>{{ userStore.title[0] }} </span>
-        <div class="userAndPicture" @click="showDropDown = !showDropDown">
+      <span>{{ userStore.title[0] }}&nbsp</span>
+      <div class="userAndPicture" @click="showDropDown = !showDropDown">
+        <div class="columncontent" >
           {{ userStore.username }}
           <RoundPictureComponent
             :picture="userStore.picture"
@@ -46,17 +46,17 @@ async function dropDownClicked(selected: string) {
             border-color="transparent"
             class="profilePicture"
           />
-          <DropDownComponent
-          v-if="showDropDown"
-          :items="dropDownContent"
-          width="6vw"
-          height="4vw"
-          left="inherit"
-          @close="dropDownClicked"
-          />
         </div>
         <!-- </router-link> -->
-    <!-- </div> -->
+        <DropDownComponent
+        v-if="showDropDown"
+        :items="dropDownContent"
+        width="12vw"
+        height="4vw"
+        left="inherit"
+        @close="dropDownClicked"
+        />
+      </div>
   </div>
   <nav>
     <li><RouterLink to="/leaderboard">Leaderboard</RouterLink></li>
@@ -154,8 +154,8 @@ li a:hover {
 }
 
 .userAndPicture {
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: center; */
   cursor: pointer;
 }
 </style>
