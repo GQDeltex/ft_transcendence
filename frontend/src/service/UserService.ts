@@ -157,8 +157,8 @@ class UserService {
               picture
               metadata
             }
-            sentGameRequests_id
-            receivedGameRequests_id
+            sentGameRequests
+            receivedGameRequests
             ${withRank ? 'rank' : ''}
           }
         }
@@ -297,8 +297,8 @@ class UserService {
             receivedFriendRequests
             blocks
             blockedBy
-            sentGameRequests_id
-            receivedGameRequests_id
+            sentGameRequests
+            receivedGameRequests
           }
         }
       `,
@@ -397,8 +397,8 @@ class UserService {
       `
       mutation updateGameRequest($method: AllowedUpdateGameRequestMethod!, $userId: Int!) {
         updateGameRequest(method: $method, userId: $userId) {
-          sentGameRequests_id
-          receivedGameRequests_id
+          sentGameRequests
+          receivedGameRequests
         }
       }
       `,
@@ -407,6 +407,21 @@ class UserService {
     if (typeof updateGameRequest === 'undefined')
       throw new Error('Empty game request data');
     return updateGameRequest;
+  }
+
+  async resetPicture() {
+    const { resetPicture } = await graphQLService.mutation(
+      `
+      mutation resetPicture {
+        resetPicture {
+          picture
+        }
+      }
+      `,
+    );
+    if (typeof resetPicture === 'undefined')
+      throw new Error('Empty picture data');
+    return resetPicture;
   }
 }
 

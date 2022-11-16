@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
-import { useErrorStore } from '@/store/error';
 import { useI18n } from 'vue-i18n';
+
 const emits = defineEmits(['close']);
 
 const userStore = useUserStore();
-const errorStore = useErrorStore();
 
 const file = ref<HTMLInputElement | null>(null);
 
 async function uploadPicture() {
   if (file.value?.files) {
-    try {
-      await userStore.uploadPicture(file.value.files[0]);
-    } catch (error) {
-      errorStore.setError((error as Error).message);
-      return;
-    }
+    await userStore.uploadPicture(file.value.files[0]);
     emits('close');
   }
+}
+
+async function resetPicture() {
+  await userStore.resetPicture();
+  emits('close');
 }
 
 function closeCancel() {
@@ -28,7 +27,7 @@ function closeCancel() {
 </script>
 
 <template>
-  <div class="modal" @keyup.enter="uploadPicture()">
+  <div class="modal" @keyup.enter="uploadPicture">
     <div class="modal-content">
       <h1>
         {{ useI18n().t('changeprofilepicture')
@@ -40,6 +39,9 @@ function closeCancel() {
       <button class="ok" @click="uploadPicture">
         {{ useI18n().t('uploadpicture') }}
       </button>
+      <br />
+      <button class="ok" @click="resetPicture">
+        {{ useI18n().t('resetpicture') }}</button>
     </div>
   </div>
 </template>

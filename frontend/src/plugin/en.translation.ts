@@ -124,6 +124,7 @@ export const en = {
   hassentgamerequest: 'has sent a game request',
   send: 'Send',
   claimvictory: 'Claim Victory',
+  resetpicture: 'Reset Picture',
 };
 
 export const NF_en = {

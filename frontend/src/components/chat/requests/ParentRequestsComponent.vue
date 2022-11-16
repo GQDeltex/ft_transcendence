@@ -29,7 +29,7 @@ const userStore = useUserStore();
         <GameRequestComponent
           v-if="
             client.id !== userStore.id &&
-            userStore.receivedGameRequests_id.includes(client.id) &&
+            userStore.receivedGameRequests.includes(client.id) &&
             !userStore.blocks.includes(client.id)
           "
           :client="client"

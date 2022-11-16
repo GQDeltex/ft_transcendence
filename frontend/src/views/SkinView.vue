@@ -19,11 +19,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="header">
+  <!-- <div class="header">
     <button class="button">{{ useI18n().t('profilepictures') }}</button>
     <button class="button button-wide">{{ useI18n().t('maps') }}</button>
     <button class="button">{{ useI18n().t('sounds') }}</button>
-  </div>
+  </div> -->
   <template v-for="item in items" :key="item.id">
     <SkinShopComponent :item="item" />
   </template>
@@ -45,11 +45,12 @@ onMounted(async () => {
   width: 25%;
   text-decoration: none;
   border-radius: 5px;
-  border-color: black;
-  color: black;
-  background-color: red;
+  color: white;
+  background-color: #c00000;
   padding: 10px;
   margin: 20px;
+  border: none;
+  font-weight: bolder;
 }
 
 .button-wide {

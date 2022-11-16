@@ -126,6 +126,7 @@ export const de = {
   hassentgamerequest: 'hat dich zu einem Spiel eingeladen',
   send: 'Senden',
   claimvictory: 'Sieg beanspruchen',
+  resetpicture: 'Bild zurücksetzen',
 };
 
 export const NF_de = {
