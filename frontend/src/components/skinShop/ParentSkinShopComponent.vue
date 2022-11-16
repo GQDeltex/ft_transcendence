@@ -14,35 +14,44 @@ defineProps<{
       :picture="item.picture"
       size="100px"
       border-color="transparent"
+      class="roundPic"
     />
     <span class="item-name">{{ item.name }}</span>
     <span class="item-price">{{ item.price }}€</span>
-    <PayButtonComponent :item="item" />
+    <PayButtonComponent :item="item" class="payPal" />
   </div>
 </template>
 
 <style scoped>
 .parent {
-  display: flex;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
   margin-left: 10%;
   margin-right: 10%;
-  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid gray;
   padding: 10px;
+  overflow-y: scroll;
 }
-
+.roundPic {
+  grid-column: 1/2;
+}
 .item-name {
   text-decoration: none;
-  color: grey;
-  width: 50%;
+  color: white;
   padding: 10px;
+  grid-column: 2/3;
+  text-align: left;
 }
 
 .item-price {
   text-decoration: none;
-  color: gray;
-  width: 20%;
+  color: white;
   padding: 10px;
+  grid-column: 3/4;
+  text-align: left;
+}
+.payPal {
+  grid-column: 5/6;
 }
 </style>

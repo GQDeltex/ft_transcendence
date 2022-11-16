@@ -32,6 +32,9 @@ export class CreateUserInput {
   picture: string;
 
   @Field()
+  default_picture?: string;
+
+  @Field()
   campus: string;
 
   @Field()

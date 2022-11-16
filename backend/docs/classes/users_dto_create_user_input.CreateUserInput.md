@@ -15,6 +15,7 @@
 - [campus](users_dto_create_user_input.CreateUserInput.md#campus)
 - [coalition](users_dto_create_user_input.CreateUserInput.md#coalition)
 - [country](users_dto_create_user_input.CreateUserInput.md#country)
+- [default\_picture](users_dto_create_user_input.CreateUserInput.md#default_picture)
 - [email](users_dto_create_user_input.CreateUserInput.md#email)
 - [firstname](users_dto_create_user_input.CreateUserInput.md#firstname)
 - [id](users_dto_create_user_input.CreateUserInput.md#id)
@@ -39,7 +40,7 @@
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L35)
+[src/users/dto/create-user.input.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L38)
 
 ___
 
@@ -49,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L41)
+[src/users/dto/create-user.input.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L44)
 
 ___
 
@@ -59,7 +60,17 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L38)
+[src/users/dto/create-user.input.ts:41](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L41)
+
+___
+
+### default\_picture
+
+• `Optional` **default\_picture**: `string`
+
+#### Defined in
+
+[src/users/dto/create-user.input.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L35)
 
 ___
 
@@ -139,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/users/dto/create-user.input.ts:44](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L44)
+[src/users/dto/create-user.input.ts:47](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/dto/create-user.input.ts#L47)
 
 ___
 

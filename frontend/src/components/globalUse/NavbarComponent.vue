@@ -3,9 +3,26 @@ import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import RoundPictureComponent from './RoundPictureComponent.vue';
 import { useMessagesStore } from '@/store/message';
+import DropDownComponent from './DropDownComponent.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
+const dropDownContent = ref<string[]>(['Profile', 'Logout']);
+const showDropDown = ref(false);
+const router = useRouter();
+
+async function dropDownClicked(selected: string) {
+  showDropDown.value = false;
+  if (selected == 'Profile') {
+    await router.push({ path: `/profile/${userStore.id}` });
+  }
+  if (selected == 'Logout') {
+    await userStore.logout();
+    await router.push({ path: '/login' });
+  }
+}
 </script>
 
 <template>
@@ -16,14 +33,26 @@ const messagesStore = useMessagesStore();
     </router-link>
   </div>
   <div class="column2">
-    <router-link :to="`/profile/${userStore.id}`" class="columncontent">
-      <span>{{ userStore.title[0] }} {{ userStore.username }}</span>
-      <RoundPictureComponent
-        :picture="userStore.picture"
-        size="50px"
-        border-color="transparent"
+    <span>{{ userStore.title[0] }}&nbsp;</span>
+    <div class="userAndPicture">
+      <div class="columncontent" @click="showDropDown = !showDropDown">
+        {{ userStore.username }}
+        <RoundPictureComponent
+          :picture="userStore.picture"
+          size="50px"
+          border-color="transparent"
+          class="profilePicture"
+        />
+      </div>
+      <DropDownComponent
+        v-if="showDropDown"
+        :items="dropDownContent"
+        width="12vw"
+        height="4vw"
+        @close="dropDownClicked"
+        @mouseleave="showDropDown = false"
       />
-    </router-link>
+    </div>
   </div>
   <nav>
     <li><RouterLink to="/leaderboard">Leaderboard</RouterLink></li>
@@ -69,8 +98,13 @@ img {
 }
 .column2 {
   grid-column: 2 / 3;
-  justify-self: end;
+  display: flex;
+  text-decoration: none;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-self: flex-end;
   font-size: 2vw;
+  color: white;
 }
 .columncontent {
   display: flex;
@@ -113,5 +147,9 @@ li a {
 li a:hover {
   background-color: #c00000;
   color: white;
+}
+
+.userAndPicture {
+  cursor: pointer;
 }
 </style>

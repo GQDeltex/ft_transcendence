@@ -17,8 +17,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AllowedUpdateFriendshipMethod } from './dto/update-friendship.input';
 import { UserInputError } from 'apollo-server-express';
 import { PrcGateway } from '../prc/prc.gateway';
-import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
-import { WsException } from '@nestjs/websockets';
 import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
@@ -46,6 +44,7 @@ export class UsersService {
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<void> {
+    createUserInput.default_picture = createUserInput.picture;
     try {
       await this.userRepository.insert(createUserInput);
     } catch (error) {
@@ -90,30 +89,11 @@ export class UsersService {
     });
   }
 
-  async findChannelUser(
-    identifier: number | string,
-    channelName: string,
-  ): Promise<ChannelUser> {
-    const user: User = await this.findUserChannelList(identifier);
-    const channelUser: ChannelUser | undefined = user.channelList?.find(
-      (channelUser) => channelUser.channel_name === channelName,
-    );
-    if (typeof channelUser === 'undefined')
-      throw new WsException(identifier + ' not in ' + channelName);
-    return channelUser;
-  }
-
   async findLeaders(): Promise<User[]> {
     return await this.userRepository.find({
       order: { points: 'DESC' },
       take: 6,
     });
-  }
-
-  async findSocketUser(socketId: string): Promise<User> {
-    if (typeof socketId === 'undefined')
-      throw new EntityNotFoundError(User, {});
-    return this.userRepository.findOneByOrFail({ socketId: socketId });
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {

@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[src/users/entities/user.entity.mock.ts:35](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L35)
+[src/users/entities/user.entity.mock.ts:36](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/users/entities/user.entity.mock.ts#L36)
 
 ___
 

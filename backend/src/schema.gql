@@ -96,6 +96,7 @@ type Mutation {
   updateInventory(orderId: String!): User!
   updateEquippedItems(method: AllowedUpdateEquippedItemsMethod!, itemId: Int!): User!
   updateGameRequest(method: AllowedUpdateGameRequestMethod!, userId: Int!): User!
+  resetPicture: User!
   joinChannel(name: String!, password: String!): Channel!
   leaveChannel(name: String!): Channel
   updateChannelPublic(channelName: String!, private: Boolean!): Channel!

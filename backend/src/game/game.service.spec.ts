@@ -14,6 +14,7 @@ import { ChannelService } from '../prc/channel/channel.service';
 import { Channel } from '../prc/channel/entities/channel.entity';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
+import { ChannelUserService } from '../prc/channel/channel-user/channel-user.service';
 
 describe('GameService', () => {
   let service: GameService;
@@ -37,6 +38,7 @@ describe('GameService', () => {
         UsersService,
         GameGateway,
         PrcGateway,
+        ChannelUserService,
         ChannelService,
       ],
     }).compile();

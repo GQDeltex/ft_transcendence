@@ -17,6 +17,7 @@ import { AllowedUpdateBlockingMethod } from './dto/update-blocking.input';
 import { HttpModule } from '@nestjs/axios';
 import { AllowedUpdateEquippedItemsMethod } from './dto/update-equipped-items.input';
 import { Game } from '../game/entities/game.entity';
+import { ChannelUserService } from '../prc/channel/channel-user/channel-user.service';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -42,6 +43,7 @@ describe('UsersService', () => {
         UsersService,
         PrcGateway,
         ChannelService,
+        ChannelUserService,
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),

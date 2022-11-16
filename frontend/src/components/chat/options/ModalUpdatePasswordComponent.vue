@@ -14,15 +14,11 @@ const props = defineProps<{
 }>();
 
 async function closeOk() {
-  // console.log(
-  //   'channelName= ' + channelName.value + ' password= ' + password.value, //DEBUG
-  // );
   try {
     await ChannelUserService.updatePassword(
       props.currentChannel.name,
       password.value,
     );
-    // console.log(channelName.value + ' password is now ' + password.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -36,8 +32,8 @@ function closeCancel() {
 }
 
 onMounted(() => {
-  const element = document.getElementById('mytext');
-  if (element != null) element.focus();
+  const element: HTMLElement | null = document.getElementById('inputBox');
+  if (element !== null) element.focus();
 });
 </script>
 
@@ -50,7 +46,7 @@ onMounted(() => {
       <label>Channel Name</label>
       <span>{{ props.currentChannel.name }}</span>
       <label>Password</label>
-      <input id="mytext" v-model="password" type="password" />
+      <input id="inputBox" v-model="password" type="password" />
       <br />
       <button class="ok" @click="closeOk()">OK</button>
     </div>

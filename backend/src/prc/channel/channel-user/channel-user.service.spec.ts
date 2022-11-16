@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrcGateway } from '../../../prc/prc.gateway';
+import { PrcGateway } from '../../prc.gateway';
 import { UsersService } from '../../../users/users.service';
 import { MockRepo } from '../../../tools/memdb.mock';
 import { ChannelService } from '../channel.service';

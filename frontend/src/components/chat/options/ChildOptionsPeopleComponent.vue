@@ -12,6 +12,7 @@ const props = defineProps<{
   client: User;
   isOwner: boolean;
   isAdmin: boolean;
+  isClientAdmin: boolean;
   currentChannel: Channel;
   channelUserRank: string;
   channelUserStatus: string;
@@ -84,13 +85,13 @@ const onProfile = async () => {
     <div class="dot" @click="toggle = !toggle">⋮</div>
   </div>
 
-  <div v-if="props.client.id != userStore.id" v-show="toggle" class="popup">
+  <div v-if="props.client.id !== userStore.id" v-show="toggle" class="popup">
     <span>
       <button class="button" @click="onProfile">Show Profile</button>
     </span>
     <span v-if="props.isOwner">
       <button class="button" @click="emits('updateAdmin', props.client.id)">
-        Make Admin
+        {{ isClientAdmin ? 'Remove' : 'Make' }} Admin
       </button>
     </span>
     <span v-if="props.isAdmin || props.isOwner">

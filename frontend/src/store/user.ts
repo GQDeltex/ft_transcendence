@@ -237,6 +237,14 @@ export const useUserStore = defineStore('user', {
         useErrorStore().setError((error as Error).message);
       }
     },
+    async resetPicture(): Promise<void> {
+      try {
+        const user: Partial<User> = await UserService.resetPicture();
+        this.picture = user.picture ?? '';
+      } catch (error) {
+        useErrorStore().setError((error as Error).message);
+      }
+    },
     async updateFriendship(
       method: AllowedUpdateFriendshipMethod,
       id: number,

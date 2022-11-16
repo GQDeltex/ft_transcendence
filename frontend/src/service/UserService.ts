@@ -408,6 +408,21 @@ class UserService {
       throw new Error('Empty game request data');
     return updateGameRequest;
   }
+
+  async resetPicture() {
+    const { resetPicture } = await graphQLService.mutation(
+      `
+      mutation resetPicture {
+        resetPicture {
+          picture
+        }
+      }
+      `,
+    );
+    if (typeof resetPicture === 'undefined')
+      throw new Error('Empty picture data');
+    return resetPicture;
+  }
 }
 
 export default new UserService();

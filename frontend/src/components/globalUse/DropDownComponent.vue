@@ -3,6 +3,8 @@ const emits = defineEmits(['close']);
 
 const props = defineProps<{
   items: string[];
+  width: string;
+  height: string;
 }>();
 
 const itemSelected = (item: string) => {
@@ -24,11 +26,12 @@ const itemSelected = (item: string) => {
   position: fixed;
   z-index: 800; /* Sit on top */
   background-color: #123;
+  width: v-bind(width);
+  height: v-bind(height);
   left: inherit;
   top: inherit;
-  width: 18vw;
-  height: 6vw;
   overflow: auto; /* Enable scroll if needed */
+  border: solid #fff6f9 1px;
 }
 
 /* Modal Content/Box */
@@ -38,6 +41,11 @@ const itemSelected = (item: string) => {
   cursor: pointer;
 }
 
+.subItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .menuItem.active,
 .menuItem:hover {
   background-color: #c00000;
