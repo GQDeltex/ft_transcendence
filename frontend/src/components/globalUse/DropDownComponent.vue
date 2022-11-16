@@ -31,6 +31,7 @@ const itemSelected = (item: string) => {
   left: inherit;
   top: inherit;
   overflow: auto; /* Enable scroll if needed */
+  border: solid white 1px;
 }
 
 /* Modal Content/Box */
