@@ -42,15 +42,9 @@ onBeforeRouteUpdate((to) => {
 });
 
 provide('user', { user, isMe });
-
-const logout = async () => {
-  await userStore.logout();
-  await router.push({ path: '/login' });
-};
 </script>
 
 <template>
-  <button v-if="isMe" class="button" @click="logout">Log out</button>
   <div v-if="user" class="profileViewParent">
     <ProfileComponent class="profile" />
     <div class="lowerPart">
@@ -101,6 +95,7 @@ const logout = async () => {
   float: right;
   font-size: 1vw;
 }
+
 .aboutMe {
   grid-row: 1 / 2;
   height: 20vh;
