@@ -157,8 +157,8 @@ class UserService {
               picture
               metadata
             }
-            sentGameRequests_id
-            receivedGameRequests_id
+            sentGameRequests
+            receivedGameRequests
             ${withRank ? 'rank' : ''}
           }
         }
@@ -297,8 +297,8 @@ class UserService {
             receivedFriendRequests
             blocks
             blockedBy
-            sentGameRequests_id
-            receivedGameRequests_id
+            sentGameRequests
+            receivedGameRequests
           }
         }
       `,
@@ -397,8 +397,8 @@ class UserService {
       `
       mutation updateGameRequest($method: AllowedUpdateGameRequestMethod!, $userId: Int!) {
         updateGameRequest(method: $method, userId: $userId) {
-          sentGameRequests_id
-          receivedGameRequests_id
+          sentGameRequests
+          receivedGameRequests
         }
       }
       `,

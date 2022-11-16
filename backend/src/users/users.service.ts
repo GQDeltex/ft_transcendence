@@ -190,79 +190,85 @@ export class UsersService {
 
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: friendId }],
-      relations: ['following', 'followers'],
     });
     const user: User | undefined = users.find((user) => user.id === id);
     const friend: User | undefined = users.find((user) => user.id === friendId);
-    if (typeof user == 'undefined') {
-      throw new EntityNotFoundError(User, id);
-    }
-    if (typeof friend == 'undefined') {
+    if (typeof user == 'undefined') throw new EntityNotFoundError(User, id);
+    if (typeof friend == 'undefined')
       throw new EntityNotFoundError(User, friendId);
-    }
 
     if (method === AllowedUpdateFriendshipMethod.ADD) {
       if (
-        user.following_id?.includes(friendId) ||
-        friend.following_id?.includes(id) ||
-        user.blocking_id?.includes(friendId)
+        user.following_id.includes(friendId) ||
+        friend.following_id.includes(id) ||
+        user.blocking_id.includes(friendId)
       )
         throw new UserInputError('Failed to send friend request');
 
-      user.following?.push(friend);
+      user.following_id.push(friendId);
+      user.following = user.following_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(user);
     }
 
     if (method === AllowedUpdateFriendshipMethod.REMOVE) {
       if (
-        !user.following_id?.includes(friendId) ||
-        !friend.following_id?.includes(id)
+        !user.following_id.includes(friendId) ||
+        !friend.following_id.includes(id)
       )
         throw new UserInputError('Failed to remove friend');
 
-      user.following = user.following?.filter(
-        (following) => following.id !== friendId,
-      );
-      friend.following = friend.following?.filter(
-        (following) => following.id !== id,
-      );
+      user.following_id = user.following_id.filter((id) => id !== friendId);
+      user.following = user.following_id.map((id) => {
+        return { id } as User;
+      });
+      friend.following_id = friend.following_id.filter((id) => id !== id);
+      friend.following = friend.following_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save([friend, user]);
     }
 
     if (method === AllowedUpdateFriendshipMethod.ACCEPT) {
       if (
-        user.following_id?.includes(friendId) ||
-        !friend.following_id?.includes(id)
-      ) {
+        user.following_id.includes(friendId) ||
+        !friend.following_id.includes(id)
+      )
         throw new UserInputError('Failed to accept friend request');
-      }
-      user.following?.push(friend);
+
+      user.following_id.push(friendId);
+      user.following = user.following_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(user);
     }
 
     if (method === AllowedUpdateFriendshipMethod.DECLINE) {
       if (
-        user.following_id?.includes(friendId) ||
-        !friend.following_id?.includes(id)
+        user.following_id.includes(friendId) ||
+        !friend.following_id.includes(id)
       )
         throw new UserInputError('Failed to decline friend request');
 
-      friend.following = friend.following?.filter(
-        (following) => following.id !== id,
-      );
+      friend.following_id = friend.following_id.filter((id) => id !== id);
+      friend.following = friend.following_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(friend);
     }
 
     if (method === AllowedUpdateFriendshipMethod.CANCEL) {
       if (
-        !user.following_id?.includes(friendId) ||
-        friend.following_id?.includes(id)
-      ) {
+        !user.following_id.includes(friendId) ||
+        friend.following_id.includes(id)
+      )
         throw new UserInputError('Failed to cancel friend request');
-      }
-      user.following = user.following?.filter(
-        (following) => following.id !== friendId,
-      );
+
+      user.following_id = user.following_id.filter((id) => id !== friendId);
+      user.following = user.following_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(user);
     }
 
@@ -283,14 +289,6 @@ export class UsersService {
 
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: userId }],
-      relations: [
-        'following',
-        'followers',
-        'blocking',
-        'blockedBy',
-        'sentGameRequests',
-        'receivedGameRequests',
-      ],
     });
     const user: User | undefined = users.find((user) => user.id === id);
     const blockedUser: User | undefined = users.find(
@@ -304,33 +302,49 @@ export class UsersService {
     }
 
     if (method === AllowedUpdateBlockingMethod.BLOCK) {
-      if (user.blocking_id?.includes(userId)) {
+      if (user.blocking_id.includes(userId)) {
         throw new UserInputError('You already block this user');
       }
 
-      user.blocking?.push(blockedUser);
-      user.following = user.following?.filter(
-        (following) => following.id !== userId,
+      user.blocking_id.push(userId);
+      user.blocking = user.blocking_id.map((id) => {
+        return { id } as User;
+      });
+      user.following_id = user.following_id.filter((id) => id !== userId);
+      user.following = user.following_id.map((id) => {
+        return { id } as User;
+      });
+      user.sentGameRequests_id = user.sentGameRequests_id.filter(
+        (id) => id !== userId,
       );
-      blockedUser.following = blockedUser.following?.filter(
-        (following) => following.id !== id,
+      user.sentGameRequests = user.sentGameRequests_id.map((id) => {
+        return { id } as User;
+      });
+      blockedUser.following_id = blockedUser.following_id.filter(
+        (id) => id !== id,
       );
-      user.sentGameRequests = user.sentGameRequests?.filter(
-        (user) => user.id !== userId,
+      blockedUser.following = blockedUser.following_id.map((id) => {
+        return { id } as User;
+      });
+      blockedUser.sentGameRequests_id = blockedUser.sentGameRequests_id.filter(
+        (id) => id !== id,
       );
-      blockedUser.sentGameRequests = blockedUser.sentGameRequests?.filter(
-        (user) => user.id !== id,
+      blockedUser.sentGameRequests = blockedUser.sentGameRequests_id.map(
+        (id) => {
+          return { id } as User;
+        },
       );
       await this.userRepository.save([user, blockedUser]);
     }
 
     if (method === AllowedUpdateBlockingMethod.UNBLOCK) {
-      if (!user.blocking_id?.includes(userId))
+      if (!user.blocking_id.includes(userId))
         throw new UserInputError('You already unblock user');
 
-      user.blocking = user.blocking?.filter(
-        (blocking) => blocking.id !== userId,
-      );
+      user.blocking_id = user.blocking_id.filter((id) => id !== userId);
+      user.blocking = user.blocking_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(user);
     }
 
@@ -387,6 +401,7 @@ export class UsersService {
     const itemId = await this.checkValidOrderId(id, orderId);
     if (user.inventory.includes(itemId))
       throw new UserInputError('You already have this item');
+
     user.inventory.push(itemId);
     await this.userRepository.save(user);
     return user;
@@ -399,16 +414,20 @@ export class UsersService {
         throw new UserInputError('You do not have this item');
       if (user.equipped.includes(input.itemId))
         throw new UserInputError('You already have this item equipped');
+
       user.equipped = user.equipped.filter(
         (itemId) => itemList[itemId].type !== itemList[input.itemId].type,
       );
       user.equipped.push(input.itemId);
     }
+
     if (input.method == AllowedUpdateEquippedItemsMethod.UNEQUIP) {
       if (!user.equipped.includes(input.itemId))
         throw new UserInputError('You do not have this item equipped');
+
       user.equipped = user.equipped.filter((itemId) => itemId !== input.itemId);
     }
+
     await this.userRepository.save(user);
     return user;
   }
@@ -422,7 +441,6 @@ export class UsersService {
 
     const users: User[] = await this.userRepository.find({
       where: [{ id }, { id: input.userId }],
-      relations: ['sentGameRequests', 'receivedGameRequests'],
     });
     const user: User | undefined = users.find((user) => user.id === id);
     const invitedUser: User | undefined = users.find(
@@ -434,17 +452,21 @@ export class UsersService {
 
     if (input.method === AllowedUpdateGameRequestMethod.SEND) {
       if (
-        user.sentGameRequests_id?.includes(input.userId) ||
-        user.receivedGameRequests_id?.includes(input.userId) ||
-        user.blocking_id?.includes(input.userId)
+        user.sentGameRequests_id.includes(input.userId) ||
+        user.receivedGameRequests_id.includes(input.userId) ||
+        user.blocking_id.includes(input.userId)
       )
         throw new UserInputError('Failed to send a game request to this user.');
-      user.sentGameRequests?.push(invitedUser);
+
+      user.sentGameRequests_id.push(input.userId);
+      user.sentGameRequests = user.sentGameRequests_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(user);
     }
 
     if (input.method === AllowedUpdateGameRequestMethod.ACCEPT) {
-      if (!user.receivedGameRequests_id?.includes(input.userId))
+      if (!user.receivedGameRequests_id.includes(input.userId))
         throw new UserInputError(
           'You do not received game request from this user',
         );
@@ -452,13 +474,22 @@ export class UsersService {
         throw new UserInputError('User is not online');
       if (invitedUser.status === 'in game')
         throw new UserInputError('Player is in game');
-      invitedUser.sentGameRequests = invitedUser.sentGameRequests?.filter(
-        (user) => user.id !== id,
+
+      invitedUser.sentGameRequests_id = invitedUser.sentGameRequests_id.filter(
+        (id) => id !== id,
       );
-      user.receivedGameRequests = user.receivedGameRequests?.filter(
-        (user) => user.id !== input.userId,
+      invitedUser.sentGameRequests = invitedUser.sentGameRequests_id.map(
+        (id) => {
+          return { id } as User;
+        },
       );
       invitedUser.status = 'in game';
+      user.receivedGameRequests_id = user.receivedGameRequests_id.filter(
+        (id) => id !== input.userId,
+      );
+      user.receivedGameRequests = user.receivedGameRequests_id.map((id) => {
+        return { id } as User;
+      });
       user.status = 'in game';
       await this.userRepository.save([invitedUser, user]);
       const game: Game = await this.gameRepository.save({
@@ -477,22 +508,32 @@ export class UsersService {
     }
 
     if (input.method === AllowedUpdateGameRequestMethod.DECLINE) {
-      if (!user.receivedGameRequests_id?.includes(input.userId))
+      if (!user.receivedGameRequests_id.includes(input.userId))
         throw new UserInputError(
           'You do not received game request from this user',
         );
-      invitedUser.sentGameRequests = invitedUser.sentGameRequests?.filter(
-        (user) => user.id !== id,
+
+      invitedUser.sentGameRequests_id = invitedUser.sentGameRequests_id.filter(
+        (id) => id !== id,
+      );
+      invitedUser.sentGameRequests = invitedUser.sentGameRequests_id.map(
+        (id) => {
+          return { id } as User;
+        },
       );
       await this.userRepository.save(invitedUser);
     }
 
     if (input.method === AllowedUpdateGameRequestMethod.CANCEL) {
-      if (!user.sentGameRequests_id?.includes(input.userId))
+      if (!user.sentGameRequests_id.includes(input.userId))
         throw new UserInputError('You do not sent game request to this user');
-      user.sentGameRequests = user.sentGameRequests?.filter(
-        (user) => user.id !== input.userId,
+
+      user.sentGameRequests_id = user.sentGameRequests_id.filter(
+        (id) => id !== input.userId,
       );
+      user.sentGameRequests = user.sentGameRequests_id.map((id) => {
+        return { id } as User;
+      });
       await this.userRepository.save(user);
     }
 

@@ -94,7 +94,7 @@ export class User {
   following?: User[];
 
   @RelationId('following')
-  following_id: number[] | null;
+  following_id: number[];
 
   @ManyToMany(() => User, (user) => user.following, {
     cascade: true,
@@ -104,7 +104,7 @@ export class User {
   followers?: User[];
 
   @RelationId('followers')
-  followers_id: number[] | null;
+  followers_id: number[];
 
   @ManyToMany(() => User, (user) => user.blockedBy, {
     nullable: true,
@@ -113,7 +113,7 @@ export class User {
   blocking?: User[];
 
   @RelationId('blocking')
-  blocking_id: number[] | null;
+  blocking_id: number[];
 
   @ManyToMany(() => User, (user) => user.blocking, {
     cascade: true,
@@ -123,7 +123,7 @@ export class User {
   blockedBy?: User[];
 
   @RelationId('blockedBy')
-  blockedBy_id: number[] | null;
+  blockedBy_id: number[];
 
   @Field(() => [ChannelUser], { nullable: true })
   @OneToMany(() => ChannelUser, (channelUser) => channelUser.user, {
@@ -143,9 +143,9 @@ export class User {
   @JoinTable()
   sentGameRequests?: User[];
 
-  @Field(() => [Int], { nullable: 'items' })
+  @Field(() => [Int], { nullable: 'items', name: 'sentGameRequests' })
   @RelationId('sentGameRequests')
-  sentGameRequests_id: number[] | null;
+  sentGameRequests_id: number[];
 
   @ManyToMany(() => User, (user) => user.sentGameRequests, {
     cascade: true,
@@ -154,9 +154,9 @@ export class User {
   })
   receivedGameRequests?: User[];
 
-  @Field(() => [Int], { nullable: 'items' })
+  @Field(() => [Int], { nullable: 'items', name: 'receivedGameRequests' })
   @RelationId('receivedGameRequests')
-  receivedGameRequests_id: number[] | null;
+  receivedGameRequests_id: number[];
 
   public isInChannel(channelName: string): boolean {
     const result = this.channelList?.some(

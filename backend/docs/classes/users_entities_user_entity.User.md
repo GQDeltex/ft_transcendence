@@ -76,7 +76,7 @@ ___
 
 ### blockedBy\_id
 
-• **blockedBy\_id**: ``null`` \| `number`[]
+• **blockedBy\_id**: `number`[]
 
 #### Defined in
 
@@ -96,7 +96,7 @@ ___
 
 ### blocking\_id
 
-• **blocking\_id**: ``null`` \| `number`[]
+• **blocking\_id**: `number`[]
 
 #### Defined in
 
@@ -196,7 +196,7 @@ ___
 
 ### followers\_id
 
-• **followers\_id**: ``null`` \| `number`[]
+• **followers\_id**: `number`[]
 
 #### Defined in
 
@@ -216,7 +216,7 @@ ___
 
 ### following\_id
 
-• **following\_id**: ``null`` \| `number`[]
+• **following\_id**: `number`[]
 
 #### Defined in
 
@@ -306,7 +306,7 @@ ___
 
 ### receivedGameRequests\_id
 
-• **receivedGameRequests\_id**: ``null`` \| `number`[]
+• **receivedGameRequests\_id**: `number`[]
 
 #### Defined in
 
@@ -326,7 +326,7 @@ ___
 
 ### sentGameRequests\_id
 
-• **sentGameRequests\_id**: ``null`` \| `number`[]
+• **sentGameRequests\_id**: `number`[]
 
 #### Defined in
 
