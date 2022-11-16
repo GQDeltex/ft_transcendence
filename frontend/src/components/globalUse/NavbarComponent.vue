@@ -34,12 +34,8 @@ async function dropDownClicked(selected: string) {
   </div>
   <div class="column2">
     <span>{{ userStore.title[0] }}&nbsp;</span>
-    <div
-      class="userAndPicture"
-      @click="showDropDown = !showDropDown"
-      @mouseleave="showDropDown = false"
-    >
-      <div class="columncontent">
+    <div class="userAndPicture">
+      <div class="columncontent" @click="showDropDown = !showDropDown">
         {{ userStore.username }}
         <RoundPictureComponent
           :picture="userStore.picture"
@@ -54,6 +50,7 @@ async function dropDownClicked(selected: string) {
         width="12vw"
         height="4vw"
         @close="dropDownClicked"
+        @mouseleave="showDropDown = false"
       />
     </div>
   </div>
