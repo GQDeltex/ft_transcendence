@@ -57,6 +57,7 @@ export const en = {
   hassentfriendrequest: 'has sent a friend request',
   hassentgamerequest: 'has sent a game request',
   send: 'Send',
+  claimvictory: 'Claim Victory',
 };
 
 export const NF_en = {
