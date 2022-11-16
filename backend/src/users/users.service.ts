@@ -51,7 +51,7 @@ export class UsersService {
       if (!(error instanceof QueryFailedError)) return Promise.reject(error);
       const existingUsers: User[] = await this.userRepository.find({
         // This Like might be susceptible to SQL Injection attacks.
-        // https://github.com/typeorm/typeorm/issues/778  4 says it should be fine.
+        // https://github.com/typeorm/typeorm/issues/7784 says it should be fine.
         // And the data is coming from Intra... So... It should be fine... I guess?
         where: { username: Like(`${createUserInput.username}%`) },
       });
