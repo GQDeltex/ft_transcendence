@@ -13,6 +13,7 @@ import { PrcGateway } from '../prc/prc.gateway';
 import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
 import { HttpModule } from '@nestjs/axios';
 import { Game } from '../game/entities/game.entity';
+import { ChannelUserService } from '../prc/channel/channel-user/channel-user.service';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
@@ -39,6 +40,7 @@ describe('UsersResolver', () => {
         ConfigService,
         PrcGateway,
         ChannelService,
+        ChannelUserService,
         mockRepoUser.getProvider(),
         mockRepoChannel.getProvider(),
         mockRepoChannelUser.getProvider(),

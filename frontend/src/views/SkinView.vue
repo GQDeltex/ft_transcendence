@@ -18,11 +18,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="header">
+  <!-- <div class="header">
     <button class="button">Profile Pictures</button>
     <button class="button button-wide">Maps</button>
     <button class="button">Sounds</button>
-  </div>
+  </div> -->
   <template v-for="item in items" :key="item.id">
     <SkinShopComponent :item="item" />
   </template>
@@ -44,10 +44,12 @@ onMounted(async () => {
   width: 25%;
   text-decoration: none;
   border-radius: 5px;
-  color: black;
-  background-color: #f8971d;
+  color: white;
+  background-color: #c00000;
   padding: 10px;
   margin: 20px;
+  border: none;
+  font-weight: bolder;
 }
 
 .button-wide {
