@@ -56,6 +56,7 @@ export const en = {
   decline: 'Decline',
   hassentfriendrequest: 'has sent a friend request',
   hassentgamerequest: 'has sent a game request',
+  send: 'Send',
 };
 
 export const NF_en = {

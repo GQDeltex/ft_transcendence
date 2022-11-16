@@ -56,6 +56,7 @@ export const de = {
   decline: 'Ablehnen',
   hassentfriendrequest: 'hat eine Freundschaftsanfrage gesendet',
   hassentgamerequest: 'hat dich zu einem Spiel eingeladen',
+  send: 'Senden',
 };
 
 export const NF_de = {

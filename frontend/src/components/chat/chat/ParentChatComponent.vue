@@ -94,7 +94,9 @@ watch(
         class="text"
         @keyup.enter="sendMsg"
       />
-      <button class="sendButton" @click="sendMsg">Send</button>
+      <button class="sendButton" @click="sendMsg">
+        {{ useI18n().t('send') }}
+      </button>
     </div>
   </div>
 </template>
