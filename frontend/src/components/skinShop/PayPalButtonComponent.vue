@@ -90,6 +90,7 @@ const updateEquip = async () => {
 
 <style scoped>
 button {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: white;

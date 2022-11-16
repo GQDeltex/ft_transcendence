@@ -92,6 +92,7 @@ const logout = async () => {
 }
 
 .button {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 25px;
   color: white;

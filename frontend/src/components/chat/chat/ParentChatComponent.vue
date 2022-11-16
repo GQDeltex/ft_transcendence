@@ -105,7 +105,7 @@ watch(
   width: 60vw;
 }
 .chatName {
-  color: red;
+  color: #c00000;
   padding: 1vw;
   font-size: 1vw;
 }
@@ -132,9 +132,10 @@ watch(
 }
 
 .sendButton {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
-  color: black;
+  color: white;
   background-color: #c00000;
   font-size: 1vw;
   border-color: transparent;

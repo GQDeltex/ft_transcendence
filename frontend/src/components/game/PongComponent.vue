@@ -413,6 +413,7 @@ onMounted(async () => {
   z-index: 0;
 }
 .score {
+  font-family: 'Silkscreen', cursive;
   position: relative;
   top: 1em;
   right: calc(100% / -2);
@@ -421,11 +422,12 @@ onMounted(async () => {
   justify-content: center;
   font-weight: bold;
   font-size: 4vw;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
   color: white;
   z-index: 1;
 }
 .score > * {
+  font-family: 'Silkscreen', cursive;
   flex-grow: 1;
   flex-basis: 0;
   padding: 0 1%;
