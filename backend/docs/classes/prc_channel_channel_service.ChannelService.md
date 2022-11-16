@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:154](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L154)
+[src/prc/channel/channel.service.ts:153](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L153)
 
 ___
 
@@ -289,4 +289,4 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel.service.ts:223](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L223)
+[src/prc/channel/channel.service.ts:222](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel.service.ts#L222)

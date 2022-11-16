@@ -117,13 +117,13 @@ ___
 
 ### updateAdmin
 
-▸ **updateAdmin**(`JwtUser`, `channel_name`, `newAdmin`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+▸ **updateAdmin**(`jwtPayload`, `channel_name`, `newAdmin`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JwtUser` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `channel_name` | `string` |
 | `newAdmin` | `number` |
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:58](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L58)
+[src/prc/channel/channel-user/channel-user.resolver.ts:59](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L59)
 
 ___
 
@@ -155,19 +155,19 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:91](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L91)
+[src/prc/channel/channel-user/channel-user.resolver.ts:72](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L72)
 
 ___
 
 ### updateMute
 
-▸ **updateMute**(`JwtUser`, `channel_name`, `muteUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
+▸ **updateMute**(`jwtPayload`, `channel_name`, `muteUser`): `Promise`<[`ChannelUser`](prc_channel_channel_user_entities_channel_user_entity.ChannelUser.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JwtUser` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `channel_name` | `string` |
 | `muteUser` | `number` |
 
@@ -177,19 +177,19 @@ ___
 
 #### Defined in
 
-[src/prc/channel/channel-user/channel-user.resolver.ts:138](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L138)
+[src/prc/channel/channel-user/channel-user.resolver.ts:121](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/prc/channel/channel-user/channel-user.resolver.ts#L121)
 
 ___
 
 ### updatePassword
 
-▸ **updatePassword**(`JwtUser`, `channel_name`, `newPassword`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
+▸ **updatePassword**(`jwtPayload`, `channel_name`, `newPassword`): `Promise`<[`Channel`](prc_channel_entities_channel_entity.Channel.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `JwtUser` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
+| `jwtPayload` | [`JwtPayload`](../interfaces/auth_strategy_jwt_strategy.JwtPayload.md) |
 | `channel_name` | `string` |
 | `newPassword` | `string` |
 
