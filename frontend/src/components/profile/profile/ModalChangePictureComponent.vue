@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
-import { useErrorStore } from '@/store/error';
+
 const emits = defineEmits(['close']);
 
 const userStore = useUserStore();
-const errorStore = useErrorStore();
 
 const file = ref<HTMLInputElement | null>(null);
 
 async function uploadPicture() {
   if (file.value?.files) {
-    try {
-      await userStore.uploadPicture(file.value.files[0]);
-    } catch (error) {
-      errorStore.setError((error as Error).message);
-      return;
-    }
+    await userStore.uploadPicture(file.value.files[0]);
     emits('close');
   }
+}
+
+async function resetPicture() {
+  await userStore.resetPicture();
+  emits('close');
 }
 
 function closeCancel() {
@@ -27,17 +26,18 @@ function closeCancel() {
 </script>
 
 <template>
-  <div class="modal" @keyup.enter="uploadPicture()">
+  <div class="modal" @keyup.enter="uploadPicture">
     <div class="modal-content">
       <h1>
-        Change Profile Picture<span class="close" @click="closeCancel()"
-          >&times;</span
-        >
+        Change Profile Picture
+        <span class="close" @click="closeCancel">&times;</span>
       </h1>
       <label>new Picture</label>
       <input ref="file" name="picture" type="file" accept="image/*" />
       <br />
       <button class="ok" @click="uploadPicture">upload picture</button>
+      <br />
+      <button class="ok" @click="resetPicture">reset picture</button>
     </div>
   </div>
 </template>

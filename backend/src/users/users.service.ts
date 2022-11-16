@@ -44,6 +44,7 @@ export class UsersService {
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<void> {
+    createUserInput.default_picture = createUserInput.picture;
     try {
       await this.userRepository.insert(createUserInput);
     } catch (error) {
@@ -93,12 +94,6 @@ export class UsersService {
       order: { points: 'DESC' },
       take: 6,
     });
-  }
-
-  async findSocketUser(socketId: string): Promise<User> {
-    if (typeof socketId === 'undefined')
-      throw new EntityNotFoundError(User, {});
-    return this.userRepository.findOneByOrFail({ socketId: socketId });
   }
 
   async update2FASecret(id: number, secret: string): Promise<void> {
