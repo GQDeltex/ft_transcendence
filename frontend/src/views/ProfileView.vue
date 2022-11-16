@@ -9,6 +9,7 @@ import AboutMeComponent from '../components/profile/aboutMe/AboutMeComponent.vue
 import ParentAchievementsComponent from '../components/profile/achievement/ParentAchievementsComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -50,7 +51,7 @@ const logout = async () => {
 </script>
 
 <template>
-  <button v-if="isMe" class="button" @click="logout">Log out</button>
+  <button v-if="isMe" class="button" @click="logout">{{useI18n().t('logoutbutton')}}</button>
   <div v-if="user" class="profileViewParent">
     <ProfileComponent class="profile" />
     <div class="lowerPart">

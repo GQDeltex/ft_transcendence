@@ -5,6 +5,7 @@ import type { Game } from '@/service/GameService';
 import type { User } from '@/store/user';
 import { ref, inject, computed, onMounted } from 'vue';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 
 const { user } = inject<{ user: User | null }>('user', {
   user: null,
@@ -48,89 +49,89 @@ onMounted(async () => {
 
 <template>
   <div v-if="user" class="achievementsParent">
-    <span class="text">Achievements</span>
+    <span class="text">{{ useI18n().t('achievements') }}</span>
     <div class="achievements">
       <ChildAchievementComponent
-        header="Smol PongKing"
-        text="First Login"
+        :header="useI18n().t('gamename')"
+        :text="useI18n().t('firstlogin')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'hlehmann' && user.id !== 835543"
-        header="Fake News"
-        text="You are not the President"
+        :header="useI18n().t('fakenews')"
+        :text="useI18n().t('yourarenotpresident')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 835543"
-        header="President"
-        text="Welcome Mr. President"
+        :header="useI18n().t('president')"
+        :text="useI18n().t('welcomemrpresident')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'shazam'"
-        header="Baggette"
-        text="Hon hon hon I am ze french. Baggette baggette fromage"
+        :header="useI18n().t('baguette')"
+        :text="useI18n().t('notbaguette')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'mamuller'"
-        header="Design"
-        text="Buisness, Buisness, Buisness. Design, Design, Design"
+        :header="useI18n().t('desgin')"
+        :text="useI18n().t('business')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'rkaufman'"
-        header="Not my department"
-        text="I need a cubical, this is not my department"
+        :header="useI18n().t('notmydepartment')"
+        :text="useI18n().t('ineedcubical')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'cthien-h'"
-        header="No need to test"
-        text="If I throw a rock at the computer, it'll also break the shop"
+        :header="useI18n().t('noneedtotest')"
+        :text="useI18n().t('throwarock')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'kmeixner'"
-        header="25 Hours"
-        text="I can fix my IRC in one day"
+        :header="useI18n().t('hours25')"
+        :text="useI18n().t('fixirconeday')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'pstengl'"
-        header="Techlead"
-        text="I dont know why Java does that"
+        :header="useI18n().t('techlead')"
+        :text="useI18n().t('idontknow')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'cdahlhof'"
-        header="Hamster"
-        text="He said that he would be here 3 hours ago. Probably is sleeping"
+        :header="useI18n().t('hamster')"
+        :text="useI18n().t('propablysleeping')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'vheymans'"
-        header="TBA"
-        text="TBA"
+        :header="useI18n().t('java')"
+        :text="useI18n().t('javaisland')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'dzivanov'"
-        header="You look good"
-        text="Man, your hair looks so good right now. You look so well rested."
+        :header="useI18n().t('youlookgood')"
+        :text="useI18n().t('hairlooksgood')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'ehosu'"
-        header="Complicated"
-        text="Why go the easy way when thats the boring way."
+        :header="useI18n().t('complicated')"
+        :text="useI18n().t('whyeasytheway')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'backlog'"
-        header="TBA"
-        text="THATS BACKLOG, WE'LL DO IT LATER"
+        :header="useI18n().t('backlog')"
+        :text="useI18n().t('thatsbacklog')"
         picture=""
       />
       <ChildAchievementComponent
@@ -146,44 +147,44 @@ onMounted(async () => {
           user.username === 'dzivanov' ||
           user.username === 'ehosu'
         "
-        header="Bonding time"
-        text="Time to do some family bonding. ;)"
+        :header="useI18n().t('bondingtime')"
+        :text="useI18n().t('timetofamily')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="games.length > 0"
-        header="Gamer"
-        text="Played First Game"
+        :header="useI18n().t('gamer')"
+        :text="useI18n().t('playedfirstgame')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="games.length > 4"
-        header="Warming Up"
-        text="Five Games"
+        :header="useI18n().t('warmingup')"
+        :text="useI18n().t('fimegames')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="wonCount > 0"
-        header="Alpha"
-        text="Won a Game"
+        :header="useI18n().t('alpha')"
+        :text="useI18n().t('wonagame')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="wonCount > 4"
-        header="Sigma"
-        text="Won Five Games"
+        :header="useI18n().t('sigma')"
+        :text="useI18n().t('wonfivegames')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="lostCount > 0"
-        header="Noob"
-        text="Lost a Game"
+        :header="useI18n().t('noob')"
+        :text="useI18n().t('lostagame')"
         picture=""
       />
       <ChildAchievementComponent
         v-if="lostCount > 4"
-        header="L+R"
-        text="Lost Five Games"
+        :header="useI18n().t('lplusr')"
+        :text="useI18n().t('lostfivegames')"
         picture=""
       />
     </div>

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 const emits = defineEmits(['close']);
 
 const userStore = useUserStore();
@@ -30,14 +31,14 @@ function closeCancel() {
   <div class="modal" @keyup.enter="uploadPicture()">
     <div class="modal-content">
       <h1>
-        Change Profile Picture<span class="close" @click="closeCancel()"
+        {{useI18n().t('changeprofilepicture')}}<span class="close" @click="closeCancel()"
           >&times;</span
         >
       </h1>
-      <label>new Picture</label>
+      <label>{{useI18n().t('newpicture')}}</label>
       <input ref="file" name="picture" type="file" accept="image/*" />
       <br />
-      <button class="ok" @click="uploadPicture">upload picture</button>
+      <button class="ok" @click="uploadPicture">{{useI18n().t('uploadpicture')}}</button>
     </div>
   </div>
 </template>

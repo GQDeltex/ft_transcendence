@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject } from 'vue';
 import type { User } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
 const { user } = inject<{ user: User | null }>('user', {
   user: null,
@@ -14,21 +15,21 @@ const capitalize = (str: string) => {
 <template>
   <div v-if="user" class="about">
     <span style="font-size: 2vw" class="headtext">
-      About
+      {{ useI18n().t('about') }}
       <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
     </span>
     <div class="infoBox">
-      User name: <span class="info">{{ user.username }}</span>
+      {{ useI18n().t('username') }}: <span class="info">{{ user.username }}</span>
       <br />
-      First name: <span class="info">{{ user.firstname }}</span>
+      {{ useI18n().t('firstname') }}: <span class="info">{{ user.firstname }}</span>
       <br />
-      Last name: <span class="info">{{ user.lastname }}</span>
+      {{ useI18n().t('lastname') }}: <span class="info">{{ user.lastname }}</span>
       <br />
-      Intra login: <span class="info">{{ user.intra }}</span>
+      {{ useI18n().t('intralogin') }}: <span class="info">{{ user.intra }}</span>
       <br />
-      Coalition: <span class="info">{{ user.coalition }}</span>
+      {{ useI18n().t('coalition') }}: <span class="info">{{ user.coalition }}</span>
       <br />
-      Last Login:
+      {{ useI18n().t('lastlogin') }}:
       <span class="info">
         {{
           new Date(user.lastLoggedIn ?? 0).toLocaleTimeString() +
@@ -37,7 +38,7 @@ const capitalize = (str: string) => {
         }}
       </span>
       <br />
-      Campus: <span class="info">{{ user.campus }}, {{ user.country }}</span>
+      {{ useI18n().t('campus') }}: <span class="info">{{ user.campus }}, {{ user.country }}</span>
     </div>
   </div>
 </template>

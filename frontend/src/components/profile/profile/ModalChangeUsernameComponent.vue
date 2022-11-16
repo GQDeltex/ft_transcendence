@@ -4,6 +4,7 @@ import type { Ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useUserStore } from '@/store/user';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 const emits = defineEmits(['close']);
 
 let outputUsername: Ref<string> = ref('');
@@ -43,9 +44,9 @@ onMounted(() => {
   <div class="modal" @keyup.enter="closeOk()">
     <div class="modal-content">
       <h1>
-        Change Username<span class="close" @click="closeCancel()">&times;</span>
+        {{useI18n().t('changeusername')}}<span class="close" @click="closeCancel()">&times;</span>
       </h1>
-      <label>new Username</label>
+      <label>{{useI18n().t('newusername')}}</label>
       <input
         id="mytext"
         v-model="outputUsername"
@@ -53,7 +54,7 @@ onMounted(() => {
         :placeholder="props.inputUsername"
       />
       <br />
-      <button class="ok" @click="closeOk()">OK</button>
+      <button class="ok" @click="closeOk()">{{useI18n().t('confirm')}}</button>
     </div>
   </div>
 </template>

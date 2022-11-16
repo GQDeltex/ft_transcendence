@@ -13,7 +13,7 @@ const messagesStore = useMessagesStore();
   <div class="column1">
     <router-link to="/" class="columncontent">
       <img alt="page logo" class="logo" src="@/assets/xmas.png" height="50" />
-      <span>christmasballs</span>
+      <span>{{useI18n().t('gamename')}}</span>
     </router-link>
   </div>
   <div class="column2">

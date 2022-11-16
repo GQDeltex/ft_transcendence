@@ -6,6 +6,7 @@ import type { User } from '@/store/user';
 import type { Ref } from 'vue';
 import { ref, inject, watchEffect } from 'vue';
 import { cloneDeep } from 'lodash';
+import { useI18n } from 'vue-i18n';
 
 const user = inject<{ user: Ref<User>; isMe: Ref<boolean> }>('user');
 const games = ref<Game[]>([]);
@@ -25,7 +26,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 
 <template>
   <div class="frame">
-    <div class="title">History</div>
+    <div class="title">{{ useI18n().t('history') }}</div>
     <div class="scroll">
       <UserPlayedGameComponent
         v-for="game in sortedGames"
