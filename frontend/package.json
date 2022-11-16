@@ -21,6 +21,7 @@
   "devDependencies": {
     "@apollo/client": "^3.7.0",
     "@paypal/paypal-js": "^5.1.1",
+    "@types/lodash": "^4.14.188",
     "@types/node": "^16.11.56",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",

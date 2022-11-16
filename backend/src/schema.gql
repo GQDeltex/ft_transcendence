@@ -1,0 +1,131 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Channel {
+  id: Int!
+  name: String!
+  private: Boolean!
+  userList: [ChannelUser!]!
+  password: Boolean!
+}
+
+type ChannelUser {
+  id: Int!
+  user: User
+  user_id: Int!
+  channel_name: String!
+  admin: Boolean!
+  owner: Boolean!
+  ban: Boolean!
+  mute: Boolean!
+}
+
+type User {
+  id: Int!
+  email: String!
+  intra: String!
+  firstname: String!
+  lastname: String!
+  username: String!
+  title: [String!]!
+  picture: String!
+  coalition: String!
+  campus: String!
+  country: String!
+  points: Int!
+  inventory: [Int!]!
+  lastLoggedIn: Timestamp!
+  twoFAEnable: Boolean!
+  channelList: [ChannelUser!]
+  sentGameRequests_id: [Int]!
+  receivedGameRequests_id: [Int]!
+  status: String!
+  rank: Int!
+  friends: [Int]!
+  sentFriendRequests: [Int]!
+  receivedFriendRequests: [Int]!
+  blocks: [Int]!
+  blockedBy: [Int]!
+  equipped: [Item]!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type Item {
+  id: Int!
+  type: String!
+  name: String!
+  description: String!
+  price: Float!
+  picture: String!
+  metadata: String!
+}
+
+type Game {
+  id: Int!
+  player1: User!
+  player2: User!
+  score1: Int!
+  score2: Int!
+  state: String!
+}
+
+type Query {
+  users: [User!]!
+  user(id: Int): User!
+  userByName(username: String!): User!
+  userChannelList(username: String!): User!
+  leaders: [User!]!
+  getItems: [Item!]!
+  channels: [Channel!]!
+  channelUsers: [ChannelUser!]!
+  channelUsersInChannel(channelName: String!): [ChannelUser!]!
+  games(state: String, user: Int): [Game!]!
+  game(id: Int!): Game!
+}
+
+type Mutation {
+  updateUsername(username: String!): User!
+  updateTitle(title: String!): User!
+  updateFriendship(method: AllowedUpdateFriendshipMethod!, friendId: Int!): User!
+  updateBlocking(method: AllowedUpdateBlockingMethod!, userId: Int!): User!
+  updateInventory(orderId: String!): User!
+  updateEquippedItems(method: AllowedUpdateEquippedItemsMethod!, itemId: Int!): User!
+  updateGameRequest(method: AllowedUpdateGameRequestMethod!, userId: Int!): User!
+  joinChannel(name: String!, password: String!): Channel!
+  leaveChannel(name: String!): Channel
+  updateChannelPublic(channelName: String!, private: Boolean!): Channel!
+  updatePassword(channel_name: String!, newPassword: String!): Channel!
+  updateAdmin(channel_name: String!, newAdmin: Int!): ChannelUser!
+  updateBan(channel_name: String!, banUser: Int!): ChannelUser!
+  updateMute(channel_name: String!, muteUser: Int!): ChannelUser!
+}
+
+enum AllowedUpdateFriendshipMethod {
+  ADD
+  REMOVE
+  ACCEPT
+  DECLINE
+  CANCEL
+}
+
+enum AllowedUpdateBlockingMethod {
+  BLOCK
+  UNBLOCK
+}
+
+enum AllowedUpdateEquippedItemsMethod {
+  EQUIP
+  UNEQUIP
+}
+
+enum AllowedUpdateGameRequestMethod {
+  SEND
+  ACCEPT
+  DECLINE
+  CANCEL
+}

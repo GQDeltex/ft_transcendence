@@ -5,50 +5,33 @@ import {
   MessageBody,
   ConnectedSocket,
   WsException,
-  BaseWsExceptionFilter,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import {
   UseGuards,
-  createParamDecorator,
-  ExecutionContext,
   UseFilters,
-  Catch,
-  ArgumentsHost,
+  UsePipes,
+  ValidationPipe,
+  Injectable,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { WsJwtAuthGuard } from '../auth/guard/jwt.guard';
+import { WsJwt2FAAuthGuard } from '../auth/guard/wsJwt.guard';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
-import { EntityNotFoundError } from 'typeorm';
-import { TokenExpiredError } from 'jsonwebtoken';
+import { CreateChannelInput, LeaveChannelInput } from './channel/channel.input';
+import { ChannelService } from './channel/channel.service';
+import { JwtPayload } from 'src/auth/strategy/jwt.strategy';
+import { ChannelUser } from './channel/channel-user/entities/channel-user.entity';
+import { Channel } from './channel/entities/channel.entity';
+import { CustomPrcExceptionFilter } from '../tools/ExceptionFilter';
+import { CurrentUserFromWs } from '../tools/UserFromWs';
+import { Message } from './message/message';
+import { ChannelUserService } from './channel/channel-user/channel-user.service';
 
-export const CurrentUserFromWs = createParamDecorator(
-  (data: string, ctx: ExecutionContext) => {
-    const client = ctx.switchToWs().getClient<Socket>();
-    const user = client.data.user;
-
-    if (!user) {
-      return null;
-    }
-
-    return data ? user[data] : user; // extract a specific property only if specified or get a user object
-  },
-);
-
-@Catch(WsException, EntityNotFoundError, TokenExpiredError)
-export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
-  catch(
-    exception: WsException | EntityNotFoundError | TokenExpiredError,
-    host: ArgumentsHost,
-  ) {
-    // For some reason this throws an 'Error' again?
-    //super.catch(exception, host);
-    const client = host.switchToWs().getClient<Socket>();
-    client.emit('exception', { status: 'error', message: exception.message });
-  }
-}
-
+@Injectable()
+@UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
     origin: `http://${process.env.DOMAIN}`,
@@ -56,13 +39,19 @@ export class CustomPrcExceptionFilter extends BaseWsExceptionFilter {
     credentials: true,
   },
 })
-@UseGuards(WsJwtAuthGuard)
+@UseGuards(WsJwt2FAAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
 export class PrcGateway implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
+    private readonly channelService: ChannelService,
+    @Inject(forwardRef(() => ChannelUserService))
+    private readonly channelUserService: ChannelUserService,
+  ) {}
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('Client disconnected', client.id);
@@ -76,34 +65,160 @@ export class PrcGateway implements OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('newconnection')
+  @SubscribeMessage('newConnection')
   async connect(
-    @CurrentUserFromWs() user: any,
+    @CurrentUserFromWs() jwtToken: JwtPayload,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Client connected', client.id, user.username);
-    await this.usersService.updateSocketId(user.id, client.id);
-    await this.usersService.updateStatus(user.id, 'online');
+    console.log('Client connected', client.id, jwtToken.id);
+    const user: User = await this.usersService.findOne(jwtToken.id);
+    if (user.socketId != '') {
+      const sockets = await this.server.in(user.socketId).fetchSockets();
+      if (sockets.length >= 1) sockets[0].emit('newClient');
+    }
+    await this.usersService.updateSocketId(jwtToken.id, client.id);
+    await this.usersService.updateStatus(jwtToken.id, 'online');
+    const channelUsers: ChannelUser[] | undefined = user.channelList;
+    if (typeof channelUsers === 'undefined') return;
+    channelUsers.forEach((channelUser) => {
+      client.join(channelUser.channel_name);
+      this.channelService
+        .findMessagesForRecipient(channelUser.channel_name)
+        .filter(({ to }) => to.name.startsWith('#'))
+        .forEach((message) => client.emit('prc', { ...message, isNew: false }));
+    });
+    this.channelService
+      .findMessagesForRecipient(user.username)
+      .filter(({ to }) => !to.name.startsWith('#'))
+      .forEach((message) => client.emit('prc', { ...message, isNew: false }));
   }
 
+  /**
+    It sends message to a channel or user.
+
+  Args:
+    user: The user who sent the message.
+    to: The recipient of the message.
+    msg: The message that was sent.
+    client: The socket that sent the message.
+  Returns:
+    Nothing.
+  */
   @SubscribeMessage('prc')
   async prcMessage(
-    @CurrentUserFromWs() user: any,
-    @MessageBody('to') to: string,
+    @CurrentUserFromWs() user: JwtPayload,
+    @MessageBody('to') to: { id: number; name: string },
     @MessageBody('msg') msg: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     if (typeof user == 'undefined') throw new WsException('Not connected');
-    console.log(`Message from ${user.username}(${client.id}) to ${to}: ${msg}`);
-    const recipient: User | null = await this.usersService.findOne(to);
-    if (recipient == null) throw new WsException('Recipient not in database');
-    if (recipient.socketId == '')
-      throw new WsException('Recipient socketId empty');
-    const sockets = await this.server.in(recipient.socketId).fetchSockets();
-    if (sockets.length < 1)
-      throw new WsException('Could not find Recipients socket');
-    const recClient = sockets[0];
-    recClient.emit('prc', { from: user, to: recipient, msg: msg });
+
+    console.log(
+      `Message from ${user.id}(${client.id}) to ${to.name}(${to.id}): ${msg}`,
+    );
+    let recipient: User | Channel;
+    if (to.name[0] == '#' || to.name[0] == '&')
+      recipient = await this.channelService.findOne(to.id);
+    else recipient = await this.usersService.findOne(to.id);
+    const sender: User = await this.usersService.findOne(user.id);
+    let recClient;
+    const message: Message = {
+      from: { id: sender.id, name: sender.username },
+      to: { name: to.name, id: to.id },
+      msg: msg,
+      isNew: true,
+    };
+    if (recipient instanceof User) {
+      if (sender.blocking_id?.includes(recipient.id)) {
+        throw new WsException('Unable to send message to blocked user.');
+      }
+      if (sender.blockedBy_id?.includes(recipient.id)) {
+        throw new WsException('Unable to send message.');
+      }
+      if (recipient.socketId == '') {
+        //throw new WsException('Recipient socketId empty');
+        this.channelService.saveMessage(message);
+        return;
+      }
+      const sockets = await this.server.in(recipient.socketId).fetchSockets();
+      if (sockets.length < 1)
+        throw new WsException('Could not find Recipients socket');
+      recClient = sockets[0];
+    } else {
+      if (!sender.isInChannel(to.name))
+        throw new WsException(
+          'Recipient not found ###DEBUG Sender not on channel',
+        );
+      const sendChannelUser: ChannelUser =
+        await this.channelUserService.findChannelUserInChannel(
+          sender.id,
+          recipient.name,
+        );
+      if (sendChannelUser.mute || sendChannelUser.ban)
+        throw new WsException(
+          'Sender does not have permission to send messages',
+        );
+      recClient = client.to(recipient.name);
+    }
+    recClient.emit('prc', message);
+    this.channelService.saveMessage(message);
     console.log('Sent message!');
+  }
+
+  /**
+  It creates a new channel and adds the user to it.
+  */
+  @SubscribeMessage('join')
+  async joinChannel(
+    @CurrentUserFromWs() user: JwtPayload,
+    @ConnectedSocket() client: Socket,
+    @MessageBody('channel') channelInput: CreateChannelInput,
+  ) {
+    if (typeof user == 'undefined') throw new WsException('Not connected');
+    console.log(`Join attempt from ${user.id} for ${channelInput.name}`); //DEBUG
+    const sender: User = await this.usersService.findOne(user.id);
+    const channel = await this.channelService.join(channelInput, sender);
+    client.join(channel.name);
+    const message: Message = {
+      from: { id: -1, name: '' },
+      to: { name: channel.name },
+      msg: sender.username + ' has joined your channel.',
+      isNew: true,
+    };
+    //this.channelService.saveMessage(message);
+    client.broadcast.to(channel.name).emit('status', message);
+    this.channelService
+      .findMessagesForRecipient(channel.name)
+      .forEach((message) => client.emit('prc', message));
+    console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
+    return {
+      id: channel.id,
+      name: channel.name,
+      private: channel.private,
+      userList: channel.userList,
+    };
+  }
+
+  @SubscribeMessage('leave')
+  async leaveChannel(
+    @CurrentUserFromWs() jwtPayload: JwtPayload,
+    @ConnectedSocket() client: Socket,
+    @MessageBody('channel') leaveChannelInput: LeaveChannelInput,
+  ): Promise<boolean> {
+    const user: User = await this.usersService.findOne(jwtPayload.id);
+    const channel: Channel | null = await this.channelService.leave(
+      leaveChannelInput.name,
+      user,
+    );
+    client.leave(leaveChannelInput.name);
+    if (channel === null) return false;
+    const leaveMessage: Message = {
+      from: { id: -1, name: '' },
+      to: { name: leaveChannelInput.name },
+      msg: user.username + ' has left your channel.',
+      isNew: true,
+    };
+    client.broadcast.to(leaveChannelInput.name).emit('status', leaveMessage);
+    return true;
   }
 }

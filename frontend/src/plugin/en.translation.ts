@@ -5,12 +5,10 @@ export const en = {
   stream: 'Stream',
   chat: 'Chat',
   welcome1: 'please log in',
-  welcome2: 'to experience the full fun with',
-  welcome3: 'PongKing',
+  welcome2: 'to experience the full fun of',
+  welcome3: 'Christmasballs',
   loginbutton: 'Login',
-  matches: 'No Matches | 1 Match | {n} Matches',
-  views: 'No Views | 1 View | {n} Views',
-  topviewedplayer: 'Top Viewed Player',
+  points: '0 Points | 1 Point | {n} Points',
   topperformplayer: 'Top Performer',
 };
 

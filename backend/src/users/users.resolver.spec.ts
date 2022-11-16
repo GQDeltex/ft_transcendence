@@ -1,35 +1,69 @@
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { mockUser } from './entities/user.entity.mock';
 import { MockRepo } from '../tools/memdb.mock';
-import { UpdateUserPictureInput } from './dto/update-userpicture.input';
-import { UpdateUserUsernameInput } from './dto/update-userusername.input';
+import { UpdateUsernameInput } from './dto/update-username.input';
 import { ConfigService } from '@nestjs/config';
 import { EntityNotFoundError } from 'typeorm';
+import { Channel } from '../prc/channel/entities/channel.entity';
+import { ChannelService } from '../prc/channel/channel.service';
+import { PrcGateway } from '../prc/prc.gateway';
+import { ChannelUser } from '../prc/channel/channel-user/entities/channel-user.entity';
+import { HttpModule } from '@nestjs/axios';
+import { Game } from '../game/entities/game.entity';
+import { ChannelUserService } from '../prc/channel/channel-user/channel-user.service';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
-  let mockRepo: MockRepo;
+  let mockRepoUser: MockRepo;
+  let mockRepoChannel: MockRepo;
+  let mockRepoChannelUser: MockRepo;
+  let mockRepoGame: MockRepo;
 
   beforeEach(async () => {
-    mockRepo = new MockRepo('UsersResolver', User, mockUser);
+    mockRepoUser = new MockRepo('UsersResolver', User, mockUser);
+    mockRepoChannel = new MockRepo('UsersResolver', Channel);
+    mockRepoChannelUser = new MockRepo('UsersResolver', ChannelUser);
+    mockRepoGame = new MockRepo('UsersResolver', Game);
+    await mockRepoUser.setupDb();
+    await mockRepoChannel.setupDb();
+    await mockRepoChannelUser.setupDb();
+    await mockRepoGame.setupDb();
 
     const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       providers: [
         UsersResolver,
         UsersService,
         ConfigService,
-        mockRepo.getProvider(),
+        PrcGateway,
+        ChannelService,
+        ChannelUserService,
+        mockRepoUser.getProvider(),
+        mockRepoChannel.getProvider(),
+        mockRepoChannelUser.getProvider(),
+        mockRepoGame.getProvider(),
       ],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);
   });
 
-  afterEach(async () => await mockRepo.clearRepo());
-  afterAll(async () => await mockRepo.destroyRepo());
+  afterEach(async () => {
+    await mockRepoUser.clearRepo();
+    await mockRepoChannel.clearRepo();
+    await mockRepoChannelUser.clearRepo();
+    await mockRepoGame.clearRepo();
+  });
+
+  afterAll(async () => {
+    await mockRepoUser.destroyRepo();
+    await mockRepoChannel.destroyRepo();
+    await mockRepoChannelUser.destroyRepo();
+    await mockRepoGame.destroyRepo();
+  });
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
@@ -37,25 +71,43 @@ describe('UsersResolver', () => {
 
   it('should find all users', async () => {
     await expect(resolver.findAll()).resolves.toEqual([
-      mockRepo.getTestEntity(),
+      mockRepoUser.getTestEntity(),
     ]);
   });
 
+  it('should find self by id in jwt token', async () => {
+    await expect(
+      resolver.findOneById(undefined, {
+        id: mockRepoUser.getTestEntity().id,
+        email: mockRepoUser.getTestEntity().email,
+        isAuthenticated: true,
+      }),
+    ).resolves.toEqual(mockRepoUser.getTestEntity());
+  });
+
   it('should find user by id', async () => {
-    await expect(resolver.findOneById(84364)).resolves.toEqual(
-      mockRepo.getTestEntity(),
-    );
+    await expect(
+      resolver.findOneById(84364, {
+        id: 12345,
+        email: mockRepoUser.getTestEntity().email,
+        isAuthenticated: true,
+      }),
+    ).resolves.toEqual(mockRepoUser.getTestEntity());
   });
 
   it('should not find non-existing user by id', async () => {
-    await expect(resolver.findOneById(76439)).rejects.toThrow(
-      EntityNotFoundError,
-    );
+    await expect(
+      resolver.findOneById(76439, {
+        id: 12345,
+        email: mockRepoUser.getTestEntity().email,
+        isAuthenticated: true,
+      }),
+    ).rejects.toThrow(EntityNotFoundError);
   });
 
   it('should find user by username', async () => {
     await expect(resolver.findOneByUsername('name')).resolves.toEqual(
-      mockRepo.getTestEntity(),
+      mockRepoUser.getTestEntity(),
     );
   });
 
@@ -65,51 +117,25 @@ describe('UsersResolver', () => {
     );
   });
 
-  it('should update a users picture', async () => {
-    const newUser = mockRepo.getTestEntity({
-      picture: 'http://test.whoknows.xyz',
-    });
-    const updateUserPictureInput: UpdateUserPictureInput = {
-      id: newUser.id,
-      picture: newUser.picture,
-    };
-    await expect(
-      resolver.updatePicture(updateUserPictureInput),
-    ).resolves.toEqual(newUser);
-  });
-
-  it('should not update a users picture if user not exist', async () => {
-    const newUser = mockRepo.getTestEntity({
-      id: 12345,
-      picture: 'http://test.whoknows.xyz',
-    });
-    const updateUserPictureInput: UpdateUserPictureInput = {
-      id: newUser.id,
-      picture: newUser.picture,
-    };
-    await expect(
-      resolver.updatePicture(updateUserPictureInput),
-    ).rejects.toThrow(EntityNotFoundError);
-  });
-
   it('should update a users username', async () => {
-    const newUser = mockRepo.getTestEntity({ username: 'testUser' });
-    const updateUserUsernameInput: UpdateUserUsernameInput = {
-      id: newUser.id,
+    const newUser = mockRepoUser.getTestEntity({ username: 'testUser' });
+    const updateUserUsernameInput: UpdateUsernameInput = {
       username: newUser.username,
     };
     await expect(
-      resolver.updateUsername(updateUserUsernameInput),
+      resolver.updateUsername(newUser, updateUserUsernameInput),
     ).resolves.toEqual(newUser);
   });
 
   it('should not update a users username if not exist', async () => {
-    const updateUserUsernameInput: UpdateUserUsernameInput = {
-      id: 948624,
-      username: 'nothingtwice',
+    const newUser = mockRepoUser.getTestEntity({
+      id: 8974632,
+    });
+    const updateUserUsernameInput: UpdateUsernameInput = {
+      username: 'nothingTwice',
     };
     await expect(
-      resolver.updateUsername(updateUserUsernameInput),
+      resolver.updateUsername(newUser, updateUserUsernameInput),
     ).rejects.toThrow(EntityNotFoundError);
   });
 });

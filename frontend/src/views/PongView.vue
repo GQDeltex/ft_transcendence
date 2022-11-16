@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import GameComponent from '../components/PongComponent.vue';
+import QueueComponent from '../components/game/QueueComponent.vue';
 </script>
 
 <template>
-  <GameComponent game="henneHugs" />
+  <QueueComponent />
 </template>
 
 <style scoped></style>

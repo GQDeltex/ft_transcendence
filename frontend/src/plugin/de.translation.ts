@@ -5,12 +5,10 @@ export const de = {
   stream: 'Übertragungen',
   chat: 'Chat',
   welcome1: 'Bitte melde dich an',
-  welcome2: 'um den ganzen Spaß mit',
-  welcome3: 'PongKing zu erleben',
+  welcome2: 'um den ganzen Spaß von',
+  welcome3: 'Weihnachtsbälle zu erleben',
   loginbutton: 'Anmelden',
-  matches: 'Keine Spiele | 1 Spiel | {n} Spiele',
-  views: 'Keine Ansichten | 1 Ansicht | {n} Ansichten',
-  topviewedplayer: 'Meistgesehener Spieler',
+  points: '0 Spiele | 1 Spiel | {n} Spiele',
   topperformplayer: 'Top Performer',
 };
 

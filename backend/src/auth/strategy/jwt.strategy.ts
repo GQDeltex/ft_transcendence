@@ -4,6 +4,12 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
 import { Request } from 'express';
 
+export interface JwtPayload {
+  id: number;
+  email: string;
+  isAuthenticated: boolean;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService) {

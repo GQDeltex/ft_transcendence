@@ -7,9 +7,11 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { TwoFAController } from './controller/twoFA.controller';
 import { TwoFAService } from './service/twoFA.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => {
         return {

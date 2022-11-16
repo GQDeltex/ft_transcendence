@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CategoryComponent from '../components/CategoryComponent.vue';
+import CategoryComponent from '../components/landingview/CategoryComponent.vue';
 </script>
 
 <template>
