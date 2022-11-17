@@ -117,6 +117,7 @@ onMounted(async () => {
 }
 
 .flex-btn {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 20px;
   color: white;

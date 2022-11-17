@@ -156,8 +156,10 @@ window.requestAnimationFrame(draw);
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Mountains of Christmas', cursive;
   padding: 0;
   margin: 0;
   width: 100vw;
