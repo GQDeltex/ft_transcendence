@@ -28,14 +28,15 @@ function closeCancel() {
 <template>
   <div class="modal" @keyup.enter="uploadPicture">
     <div class="modal-content">
-      <h1>
+      <span class="modal-header">
         Change Profile Picture
         <span class="close" @click="closeCancel">&times;</span>
-      </h1>
+      </span>
       <div>
-        <label class="picLabel" for="picUpload"
+        <label class="buttonLabel" for="picUpload"
           >Click here to choose file</label
         >
+        <br />
         <input
           id="picUpload"
           ref="file"
@@ -45,17 +46,19 @@ function closeCancel() {
           accept="image/*"
         />
       </div>
-      <!-- <div class="preview">
-    <p>No files currently selected for upload</p>
-  </div> -->
-      <button class="ok" @click="uploadPicture">upload picture</button>
+      <button class="ok" @click="uploadPicture">Upload picture</button>
       <br />
-      <button class="ok" @click="resetPicture">reset picture</button>
+      <button class="ok" @click="resetPicture">Reset picture</button>
     </div>
   </div>
 </template>
 
 <style scoped>
+.modal-header {
+  font-size: 2.7vw;
+  margin: 0;
+}
+
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
@@ -78,26 +81,24 @@ function closeCancel() {
   background-position-y: top;
   display: flex;
   flex-direction: column;
-  justify-content: right;
+  justify-content: center;
+  flex-shrink: inherit;
   background-color: #112;
   margin: 25% auto; /* 15% from the top and centered */
-  padding: 1vw;
-  /* border: 1px solid grey; */
-  width: 500px;
-  height: 350px;
-  /* Could be more or less, depending on screen size */
+  /* padding-top: 5%; */
+  padding-left: 15%;
+  width: 50%;
+  aspect-ratio: 4/3;
   color: #c00000;
   opacity: 80%;
 }
-.modal-content label {
-  padding-top: 10%;
-  padding-bottom: 5%;
-}
 
 /* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 850px) {
   .modal-content {
     width: 100%;
+    /* padding-top: 20%; */
+    padding-left: 30%;
   }
 }
 .modal-content h1 {
@@ -121,32 +122,46 @@ function closeCancel() {
 .ok {
   font-family: 'Mountains of Christmas', cursive;
   cursor: pointer;
-  width: 30%;
-}
-
-.fileSelect {
-  font-family: 'Mountains of Christmas', cursive;
-  opacity: 0;
-  width: 0%;
-}
-.picLabel {
-  font-family: 'Mountains of Christmas', cursive;
-  display: inline-block;
-  /* line-height: 2.2em; */
-  padding: 0 0.62em;
-  /* border: 1px solid #666; */
+  width: 60%;
   border-radius: 5px;
-  height: 20%;
-  width: 30%;
-
-  /* text-decoration: none; */
-  /* border-radius: 3px; */
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  /* font-size: 0.5vw; */
   border-color: transparent;
-  /* margin-top: 1px; */
+  margin-bottom: 1%;
+}
+
+input, label {
+  font-family: 'Mountains of Christmas', cursive;
+  margin: 0.4rem 0;
+  color: white;
+  /* text-align-last: center; */
+}
+
+input[type="file"]::file-selector-button{
+  font-family: 'Mountains of Christmas', cursive;
+  opacity: 0;
+  width: 0%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.buttonLabel {
+  font-family: 'Mountains of Christmas', cursive;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  padding-top: 2%;
+  padding-bottom: 8%;
+  padding-left: 2%;
+  padding-right: 2%;
+  border-radius: 5px;
+  height: 10%;
+  width: 60%;
+  color: #c00000;
+  background-color: white;
+  cursor: pointer;
+  border-color: transparent;
 }
 
 /* Add Animation */
