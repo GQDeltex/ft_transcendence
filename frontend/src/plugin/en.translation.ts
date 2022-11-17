@@ -127,7 +127,9 @@ export const en = {
   resetpicture: 'Reset Picture',
   enter2fa: 'Please enter your 2FA code',
   submit: 'Submit',
-
+  category: 'Category',
+  profile: 'Profile',
+  
 };
 
 export const NF_en = {

@@ -129,6 +129,8 @@ export const de = {
   resetpicture: 'Bild zurücksetzen',
   enter2fa: 'Bitte geben Sie Ihren 2FA-Code ein',
   submit: 'Übermitteln',
+  category: 'Rubrik',
+  profile: 'Profil',
 };
 
 export const NF_de = {
