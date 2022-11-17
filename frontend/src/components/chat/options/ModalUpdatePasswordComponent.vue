@@ -101,6 +101,7 @@ onMounted(() => {
   text-decoration: none;
 }
 .ok {
+  font-family: 'Mountains of Christmas', cursive;
   cursor: pointer;
 }
 </style>

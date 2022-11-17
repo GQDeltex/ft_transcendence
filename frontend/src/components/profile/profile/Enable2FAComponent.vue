@@ -64,6 +64,7 @@ function closeCancel() {
 }
 
 .button {
+  font-family: 'Mountains of Christmas', cursive;
   color: #aaa;
   font-size: 28px;
   font-weight: bold;

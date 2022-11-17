@@ -477,6 +477,7 @@ onMounted(async () => {
 }
 
 .ok {
+  font-family: 'Mountains of Christmas', cursive;
   cursor: pointer;
 }
 </style>
