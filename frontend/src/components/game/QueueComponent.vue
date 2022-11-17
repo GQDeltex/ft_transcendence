@@ -24,6 +24,7 @@ const emits = defineEmits(['hide', 'unhide']);
 const displayState = ref('queue');
 const gameIdRef = ref(0);
 const playerPriorityRef = ref(1);
+const isHost = ref(false);
 
 const player1User = ref<{
   id: number;
@@ -71,6 +72,11 @@ socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
   displayState.value = 'start';
+  if (
+    (priority === 0 && userStore.id === player1Id.id) ||
+    (priority === 1 && userStore.id === player2Id.id)
+  )
+    isHost.value = true;
   emits('hide');
 });
 
@@ -114,6 +120,7 @@ onUnmounted(() => {
     v-else
     :game-id="gameIdRef"
     :priority="playerPriorityRef"
+    :is-host="isHost"
     :player1-i-d="player1User"
     :player2-i-d="player2User"
   />

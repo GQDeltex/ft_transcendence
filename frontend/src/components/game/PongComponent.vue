@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/service/socket';
 import { Element } from './element';
 import { Ball } from './ball';
@@ -18,16 +18,23 @@ const ballImg = ref(
 const mapImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
 );
+const map2Img = ref(
+  'https://cdn.discordapp.com/attachments/830093692449587304/1041441336815009933/frosty_bg_frame.png',
+);
 
 const claimVictory = ref(false);
 let timeoutId = -1;
 const paddleImg = ref(
   'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
 );
+let ball: Ball | null = null;
+let leftPaddle: Paddle | null = null;
+let rightPaddle: Paddle | null = null;
 
 const props = defineProps<{
   gameId: number;
   priority: number;
+  isHost: boolean;
   player1ID: {
     id: number;
     username: string;
@@ -46,267 +53,275 @@ const props = defineProps<{
   };
 }>();
 
-function onClaimVictory() {
-  claimVictory.value = false;
-  socket.emit('claimVictory', { gameId: props.gameId });
-}
+// function onClaimVictory() {
+//   claimVictory.value = false;
+//   socket.emit('claimVictory', { gameId: props.gameId });
+// }
 
 // console.log(props);
-function graph() {
-  let cur: Item;
-  if (
-    typeof props.player1ID.equipped !== 'undefined' &&
-    typeof props.player2ID.equipped !== 'undefined'
-  ) {
-    for (
-      let i = 0;
-      (cur =
-        props.priority === 0
-          ? props.player1ID.equipped[i]
-          : props.player2ID.equipped[i]);
-      i++
-    ) {
-      console.log(cur);
-      if (cur.type == 'ball') {
-        ballImg.value = cur.picture;
-      } else if (cur.type == 'map') {
-        mapImg.value = cur.picture;
-      } else if (cur.type == 'paddle') {
-        paddleImg.value = cur.picture;
-      }
-    }
-  }
-}
+// function graph() {
+//   let cur: Item;
+//   if (
+//     typeof props.player1ID.equipped !== 'undefined' &&
+//     typeof props.player2ID.equipped !== 'undefined'
+//   ) {
+//     for (
+//       let i = 0;
+//       (cur =
+//         props.priority === 0
+//           ? props.player1ID.equipped[i]
+//           : props.player2ID.equipped[i]);
+//       i++
+//     ) {
+//       console.log(cur);
+//       if (cur.type == 'ball') {
+//         ballImg.value = cur.picture;
+//       } else if (cur.type == 'map') {
+//         mapImg.value = cur.picture;
+//       } else if (cur.type == 'paddle') {
+//         paddleImg.value = cur.picture;
+//       }
+//     }
+//   }
+// }
+
+const canvasWidth = 0.69 * window.innerWidth;
+const canvasHeight = (canvasWidth * 9) / 16;
 
 onUnmounted(() => {
   gameLoader.value = false;
 });
 
+const canvMapImage = new Image();
+canvMapImage.src =
+  'https://cdn.discordapp.com/attachments/830093692449587304/1041441336815009933/frosty_bg_frame.png';
+const canvBallImage = new Image();
+canvBallImage.src =
+  'https://cdn.discordapp.com/attachments/830093692449587304/1041674533041602560/christmas_ball.png';
+const canvPaddleImage = new Image();
+canvPaddleImage.src =
+  'https://cdn.discordapp.com/attachments/830093692449587304/1041680391121141790/paddle.png';
+
+function handleUp(e: KeyboardEvent): void {
+  if (
+    userStore.id !== props.player1ID.id &&
+    userStore.id !== props.player2ID.id
+  )
+    return;
+  if (e.repeat) return;
+  if (e.code === 'ArrowUp' || e.code === 'ArrowDown') rightPaddle?.setDir(0);
+}
+
+function handleDown(e: KeyboardEvent): void {
+  if (
+    userStore.id !== props.player1ID.id &&
+    userStore.id !== props.player2ID.id
+  )
+    return;
+  if (e.repeat) return;
+  if (e.code === 'ArrowUp') rightPaddle?.setDir(-1);
+  if (e.code === 'ArrowDown') rightPaddle?.setDir(1);
+}
+
+function draw() {
+  const canvas = document.getElementById('game') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  if (ctx === null) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(canvMapImage, 0, 0, canvas.width, canvas.height);
+  if (leftPaddle === null || rightPaddle === null) return;
+  ball?.draw(leftPaddle, rightPaddle, playerScore, remoteScore);
+  leftPaddle?.draw();
+  rightPaddle?.draw();
+  if (gameLoader.value) window.requestAnimationFrame(draw);
+}
+
 onMounted(async () => {
-  graph();
-  // console.log(props.player1ID);
-  // console.log(props.player2ID);
-  // player1.value = await UserService.findOneById(p   rops.player1ID);
-  // player2.value = await UserService.findOneById(props.player2ID);
-  // console.log('player1 = ' + player1.value.username + ' player2 ' + player2.value.username)
-  console.log(props.gameId);
-  let me: boolean =
-    userStore.id === props.player1ID.id || userStore.id === props.player2ID.id;
-  const field = new Element(document.getElementById('feld'), props.gameId);
-  const ball = new Ball(
-    document.getElementById('ball'),
-    field.getRect(),
-    props.gameId,
-    props.priority,
-    me,
-  );
-  const playerPad = new Paddle(
-    document.getElementById('playerPad'),
-    field.getRect(),
-    props.gameId,
-  );
-  let remotePad = new Paddle(
-    document.getElementById('remotePad'),
-    field.getRect(),
-    props.gameId,
-  );
+  await nextTick();
+  const canvas = document.getElementById('game') as HTMLCanvasElement;
+  ball = new Ball(props.gameId, canvas, canvBallImage, props.isHost);
+  leftPaddle = new Paddle(props.gameId, canvas, canvPaddleImage, true);
+  rightPaddle = new Paddle(props.gameId, canvas, canvPaddleImage, false);
 
-  let lastTime: number | null = null;
-  let delta: number;
+  window.onresize = () => {
+    const canvas = document.getElementById('game') as HTMLCanvasElement;
+    const oldWidth: number = canvas.width;
+    const oldHeight: number = canvas.height;
+    canvas.width = 0.69 * window.innerWidth;
+    canvas.height = (canvas.width * 9) / 16;
+    ball?.resize(oldWidth, oldHeight);
+    leftPaddle?.resize(oldWidth, oldHeight);
+    rightPaddle?.resize(oldWidth, oldHeight);
+  };
 
-  async function pupdate(time: number) {
-    if (lastTime != null) {
-      delta = time - lastTime;
-      ball.update(delta, remotePad.getRect(), me);
-      remotePad.update(delta, time);
-      playerPad.update(delta, time);
-      if (props.priority === 0) loseCase();
-    }
-    lastTime = time;
-    if (gameLoader.value) window.requestAnimationFrame(pupdate);
-  }
-
-  function loseCase() {
-    if (ball.get_pos_x() >= 100 + ball._shape.x / 2) {
-      playerScore.value++;
-      ball.reset([playerScore.value, remoteScore.value], me);
-      playerPad.sety(50);
-      remotePad.sety(50);
-    }
-    if (ball.get_pos_x() <= 0 - ball._shape.x / 2) {
-      remoteScore.value++;
-      ball.reset([playerScore.value, remoteScore.value], me);
-      playerPad.sety(50);
-      remotePad.sety(50);
-    }
-  }
-
-  function handleUp(e: KeyboardEvent): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir(0, false, true);
-    }
-  }
-
-  function handleDown(e: KeyboardEvent): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp') {
-      remotePad.changeDir(-10, false, true);
-    } else if (e.code == 'ArrowDown') {
-      remotePad.changeDir(10, false, true);
-    }
-  }
-  function handleBlur(): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
-    socket.emit('blur', {
-      gameId: props.gameId,
-      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
-    });
-  }
-  function handleFocus(): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
-    socket.emit('focus', {
-      gameId: props.gameId,
-      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
-    });
-  }
-
+  // let lastTime: number | null = null;
+  // let delta: number;
+  // async function pupdate(time: number) {
+  //   if (lastTime != null) {
+  //     delta = time - lastTime;
+  //     ball.update(delta, remotePad.getRect(), me);
+  //     remotePad.update(delta, time);
+  //     playerPad.update(delta, time);
+  //     if (props.priority === 0) loseCase();
+  //   }
+  //   lastTime = time;
+  //   if (gameLoader.value) window.requestAnimationFrame(pupdate);
+  // }
+  // function loseCase() {
+  //   if (ball.get_pos_x() >= 100 + ball._shape.x / 2) {
+  //     playerScore.value++;
+  //     ball.reset([playerScore.value, remoteScore.value], me);
+  //     playerPad.sety(50);
+  //     remotePad.sety(50);
+  //   }
+  //   if (ball.get_pos_x() <= 0 - ball._shape.x / 2) {
+  //     remoteScore.value++;
+  //     ball.reset([playerScore.value, remoteScore.value], me);
+  //     playerPad.sety(50);
+  //     remotePad.sety(50);
+  //   }
+  // }
+  // function handleBlur(): void {
+  //   if (
+  //     userStore.id !== props.player1ID.id &&
+  //     userStore.id !== props.player2ID.id
+  //   )
+  //     return;
+  //   if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
+  //   socket.emit('blur', {
+  //     gameId: props.gameId,
+  //     cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
+  //   });
+  // }
+  // function handleFocus(): void {
+  //   if (
+  //     userStore.id !== props.player1ID.id &&
+  //     userStore.id !== props.player2ID.id
+  //   )
+  //     return;
+  //   if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
+  //   socket.emit('focus', {
+  //     gameId: props.gameId,
+  //     cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
+  //   });
+  // }
   window.addEventListener('keydown', handleDown);
   window.addEventListener('keyup', handleUp);
-  window.addEventListener('blur', handleBlur);
-  window.addEventListener('focus', handleFocus);
-
+  // window.addEventListener('blur', handleBlur);
+  // window.addEventListener('focus', handleFocus);
   socket.on('gameData', (e) => {
-    console.log(e);
-    let me: boolean =
-      userStore.id === props.player1ID.id ||
-      userStore.id === props.player2ID.id;
+    // console.log(e);
+    // let me: boolean =
+    //   userStore.id === props.player1ID.id ||
+    //   userStore.id === props.player2ID.id;
+
     if (e.name === 'opponent') {
-      if (props.priority === 2) {
-        if (e.from === props.player1ID.id)
-          playerPad.changeDir(e.changeDir, false, me);
-        if (e.from === props.player2ID.id)
-          remotePad.changeDir(e.changeDir, false, me);
-      } else {
-        console.log(e.from, props.priority);
-        if (e.from === props.player2ID.id && props.priority === 0)
-          playerPad.changeDir(e.changeDir, true, me);
-        if (e.from === props.player1ID.id && props.priority === 1)
-          playerPad.changeDir(e.changeDir, true, me);
-      }
+      // if (props.priority === 2) {
+      //   if (e.from === props.player1ID.id)
+      //     playerPad.changeDir(e.changeDir, false, me);
+      //   if (e.from === props.player2ID.id)
+      //     remotePad.changeDir(e.changeDir, false, me);
+      // } else {
+      // console.log(e.from, props.priority);
+      // if (e.from === props.player2ID.id && props.priority === 0)
+      //   playerPad.changeDir(e.changeDir, true, me);
+      // if (e.from === props.player1ID.id && props.priority === 1)
+      //   playerPad.changeDir(e.changeDir, true, me);
+      // }
+      if (e.from === props.player2ID.id && props.priority === 0)
+        leftPaddle?.setDir(e.paddleDir, false);
+      if (e.from === props.player1ID.id && props.priority === 1)
+        leftPaddle?.setDir(e.paddleDir, false);
     }
 
-    if (e.name === 'ball') {
-      if (props.priority === 2 && e.from === props.player2ID.id) {
-        e.changeDir[2] = 100 - e.changeDir[2];
-        e.changeDir[0] = e.changeDir[0] * -1;
-      }
-      ball.changeDir(e.changeDir);
+    if (e.name === 'ball' && e.from !== userStore.id) {
+      // if (props.priority === 2 && e.from === props.player2ID.id) {
+      //   e.changeDir[2] = 100 - e.changeDir[2];
+      //   e.changeDir[0] = e.changeDir[0] * -1;
+      // }
+      ball?.setDir(e.direction);
+      ball?.setPos(e.position);
     }
-    if (typeof e.score != 'undefined') {
+
+    if (typeof e.score !== 'undefined') {
       remoteScore.value = e.score[0];
       playerScore.value = e.score[1];
-      playerPad.sety(50);
-      remotePad.sety(50);
     }
   });
 
-  socket.on('blur', (cowardId: number) => {
-    ball.set_speed(0);
-    playerPad.changeDir(0, false, false);
-    remotePad.changeDir(0, false, false);
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    window.removeEventListener('keydown', handleDown);
-    window.removeEventListener('keyup', handleUp);
-    if (
-      (props.priority == 0 && cowardId != props.player1ID.id) ||
-      (props.priority != 0 && cowardId != props.player2ID.id)
-    ) {
-      claimVictory.value = true;
-      const claimButton = document.getElementById(
-        'claimButton',
-      ) as HTMLButtonElement | null;
-      if (claimButton !== null) claimButton.disabled = true;
-      if (timeoutId > -1) {
-        clearTimeout(timeoutId);
-        timeoutId = -1;
-      }
-      timeoutId = setTimeout(() => {
-        const claimButton = document.getElementById(
-          'claimButton',
-        ) as HTMLButtonElement | null;
-        if (claimButton !== null) claimButton.disabled = false;
-      }, 10000);
-    }
-  });
-
-  socket.on('focus', () => {
-    ball.set_speed();
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    claimVictory.value = false;
-    window.addEventListener('keydown', handleDown);
-    window.addEventListener('keyup', handleUp);
-  });
-
-  window.onresize = function () {
-    const pField = new Element(document.getElementById('feld'), props.gameId);
-    const pBall = new Ball(
-      document.getElementById('ball'),
-      field.getRect(),
-      props.gameId,
-      props.priority,
-      me,
-    );
-    const pPlay = new Paddle(
-      document.getElementById('playerPad'),
-      field.getRect(),
-      props.gameId,
-    );
-    const pRemo = new Paddle(
-      document.getElementById('remotePad'),
-      field.getRect(),
-      props.gameId,
-    );
-
-    ball.reeesize(pField.getRect(), pBall.getRect());
-    playerPad.reeesize(pField.getRect(), pPlay.getRect());
-    remotePad.reeesize(pField.getRect(), pRemo.getRect());
-  };
-  window.requestAnimationFrame(pupdate);
+  // socket.on('blur', (cowardId: number) => {
+  //   ball.set_speed(0);
+  //   playerPad.changeDir(0, false, false);
+  //   remotePad.changeDir(0, false, false);
+  //   if (
+  //     userStore.id !== props.player1ID.id &&
+  //     userStore.id !== props.player2ID.id
+  //   )
+  //     return;
+  //   window.removeEventListener('keydown', handleDown);
+  //   window.removeEventListener('keyup', handleUp);
+  //   if (
+  //     (props.priority == 0 && cowardId != props.player1ID.id) ||
+  //     (props.priority != 0 && cowardId != props.player2ID.id)
+  //   ) {
+  //     claimVictory.value = true;
+  //     const claimButton = document.getElementById(
+  //       'claimButton',
+  //     ) as HTMLButtonElement | null;
+  //     if (claimButton !== null) claimButton.disabled = true;
+  //     if (timeoutId > -1) {
+  //       clearTimeout(timeoutId);
+  //       timeoutId = -1;
+  //     }
+  //     timeoutId = setTimeout(() => {
+  //       const claimButton = document.getElementById(
+  //         'claimButton',
+  //       ) as HTMLButtonElement | null;
+  //       if (claimButton !== null) claimButton.disabled = false;
+  //     }, 10000);
+  //   }
+  // });
+  // socket.on('focus', () => {
+  //   ball.set_speed();
+  //   if (
+  //     userStore.id !== props.player1ID.id &&
+  //     userStore.id !== props.player2ID.id
+  //   )
+  //     return;
+  //   claimVictory.value = false;
+  //   window.addEventListener('keydown', handleDown);
+  //   window.addEventListener('keyup', handleUp);
+  // });
+  //   window.onresize = function () {
+  //     const pField = new Element(document.getElementById('feld'), props.gameId);
+  //     const pBall = new Ball(
+  //       document.getElementById('ball'),
+  //       field.getRect(),
+  //       props.gameId,
+  //       props.priority,
+  //       me,
+  //     );
+  //     const pPlay = new Paddle(
+  //       document.getElementById('playerPad'),
+  //       field.getRect(),
+  //       props.gameId,
+  //     );
+  //     const pRemo = new Paddle(
+  //       document.getElementById('remotePad'),
+  //       field.getRect(),
+  //       props.gameId,
+  //     );
+  //     ball.reeesize(pField.getRect(), pBall.getRect());
+  //     playerPad.reeesize(pField.getRect(), pPlay.getRect());
+  //     remotePad.reeesize(pField.getRect(), pRemo.getRect());
+  //   };
+  window.requestAnimationFrame(draw);
 });
 </script>
 
 <template>
   <div>
-    <div v-if="props.priority == 0" class="players">
+    <div v-if="props.priority === 0" class="players">
       <GamePeopleComponent
         :key="props.player2ID.id"
         :client="props.player2ID"
@@ -330,44 +345,28 @@ onMounted(async () => {
         class="player2"
       />
     </div>
-    <div id="feld" class="field">
-      <div class="score">
-        <div id="player">{{ playerScore }}</div>
-        <div id="remote">{{ remoteScore }}</div>
-      </div>
-      <img class="back" :src="mapImg" />
-      <div id="ball" class="ball">
-        <img class="ball" :src="ballImg" />
-      </div>
-      <div id="playerPad" class="paddle paddle-left">
-        <img class="pad" :src="paddleImg" />
-      </div>
-      <div id="remotePad" class="paddle paddle-right">
-        <img class="pad" :src="paddleImg" />
-      </div>
+    <div class="score">
+      <div id="player">{{ playerScore }}</div>
+      <div id="remote">{{ remoteScore }}</div>
     </div>
-    <div v-if="claimVictory" class="modal">
-      <div class="modal-content">
+    <canvas id="game" class="field" :width="canvasWidth" :height="canvasHeight">
+    </canvas>
+    <!-- <div v-if="claimVictory" class="modal"> -->
+    <!-- <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
           Claim victory
         </button>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </template>
 
 <style scoped>
 .field {
-  background-color: #212121;
-  position: relative;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1vh;
-  height: width * 0.75;
-  min-width: 400px;
-  width: 60vw;
-  overflow: hidden;
-  z-index: -1;
+  display: block;
+  z-index: 69;
 }
 .back {
   height: 100%;
@@ -413,21 +412,19 @@ onMounted(async () => {
   z-index: 0;
 }
 .score {
-  font-family: 'Silkscreen', cursive;
   position: relative;
   top: 1em;
   right: calc(100% / -2);
-  transform: translateX(-50%);
+  transform: translate(-50%, 30%);
   display: flex;
   justify-content: center;
   font-weight: bold;
   font-size: 4vw;
-
+  font-family: 'Silkscreen', cursive;
   color: white;
   z-index: 1;
 }
 .score > * {
-  font-family: 'Silkscreen', cursive;
   flex-grow: 1;
   flex-basis: 0;
   padding: 0 1%;

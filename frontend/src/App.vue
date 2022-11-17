@@ -94,7 +94,7 @@ window.addEventListener('resize', () => {
 
 // Generate some snow flakes.
 const flakes: SnowFlake[] = [];
-const numOfFlakes = randomInt(300, 600);
+const numOfFlakes = randomInt(300, 6969);
 for (let i = 0; i < numOfFlakes; i++) {
   flakes.push({
     x: randomInt(0, canvas.width),

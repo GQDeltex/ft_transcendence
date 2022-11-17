@@ -82,26 +82,34 @@ export class GameGateway implements OnGatewayDisconnect {
   @SubscribeMessage('gameData')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @CurrentUserFromWs() jwtPayload: JwtPayload,
-    @MessageBody('changeDir') changeDir: number | number[],
-    @MessageBody('score') score: number[],
     @MessageBody('name') name: number,
     @MessageBody('gameId') gameId: number,
+    @MessageBody('direction') direction?: { x: number; y: number },
+    @MessageBody('position') position?: { x: number; y: number },
+    @MessageBody('paddleDir') paddleDir?: number,
+    @MessageBody('score') score?: number[],
   ) {
     if (typeof score !== 'undefined') {
       if (score[0] >= 10 || score[1] >= 10) {
         await this.gameService.endGame(gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
-        // Game is over anyways, no need to send gameData anymore
         return;
       } else {
-        await this.gameService.saveScore(gameId, score); // slower?
+        await this.gameService.saveScore(gameId, score);
       }
     }
-    client
-      .to(`&${gameId}`)
-      .emit('gameData', { changeDir, score, name, from: jwtPayload.id });
+
+    const payload = {
+      direction,
+      position,
+      paddleDir,
+      score,
+      name,
+      from: client.data.user.id,
+    };
+    client.to(`&${gameId}`).emit('gameData', payload);
+    console.log(payload);
   }
 
   @SubscribeMessage('queue')
