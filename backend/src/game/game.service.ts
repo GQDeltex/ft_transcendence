@@ -67,19 +67,28 @@ export class GameService {
     });
   }
 
-  async saveScore(gameId: number, score: number[]) {
+  async saveScore(userId: number, gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
-    // if the game has already ended, don't try to write the score
     if (game.state == GameState.ENDED) return;
-    game.score1 = score[1];
-    game.score2 = score[0];
+    if (game.player1.id === userId) {
+      game.score1 = score[0];
+      game.score2 = score[1];
+    } else {
+      game.score1 = score[1];
+      game.score2 = score[0];
+    }
     await this.gameRepository.save(game);
   }
 
-  async endGame(gameId: number, score: number[]) {
+  async endGame(userId: number, gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
-    game.score1 = score[1];
-    game.score2 = score[0];
+    if (game.player1.id === userId) {
+      game.score1 = score[0];
+      game.score2 = score[1];
+    } else {
+      game.score1 = score[1];
+      game.score2 = score[0];
+    }
     game.state = GameState.ENDED;
     game.player1.status = 'online';
     game.player1.points += game.score1;

@@ -1,363 +1,255 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/service/socket';
-import { Element } from './element';
-import { Ball } from './ball';
+import { Ball, Priority } from './ball';
 import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
+import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
-import type { Item } from '@/store/user';
+
+const props = defineProps<{
+  gameId: number;
+  priority: Priority;
+  hostPlayer: User;
+  otherPlayer: User;
+}>();
 
 const userStore = useUserStore();
-const remoteScore = ref(0);
-const playerScore = ref(0);
-const gameLoader = ref(true);
-const ballImg = ref(
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
-);
-const mapImg = ref(
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
-);
-const map2Img = ref(
-  'https://cdn.discordapp.com/attachments/830093692449587304/1041441336815009933/frosty_bg_frame.png',
-);
 
-const claimVictory = ref(false);
+const yourScore = ref(0);
+const otherScore = ref(0);
+const isGameLoaded = ref(true);
+const showClaimVictory = ref(false);
 let timeoutId = -1;
-const paddleImg = ref(
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
-);
+
 let ball: Ball | null = null;
 let leftPaddle: Paddle | null = null;
 let rightPaddle: Paddle | null = null;
 
-const props = defineProps<{
-  gameId: number;
-  priority: number;
-  isHost: boolean;
-  player1ID: {
-    id: number;
-    username: string;
-    title: string[];
-    picture: string;
-    status?: string | undefined;
-    equipped?: Item[];
-  };
-  player2ID: {
-    id: number;
-    username: string;
-    title: string[];
-    picture: string;
-    status?: string | undefined;
-    equipped?: Item[] | undefined;
-  };
-}>();
+const initialCanvasWidth = 0.69 * window.innerWidth;
+const initialCanvasHeight = (initialCanvasWidth * 9) / 16;
 
-// function onClaimVictory() {
-//   claimVictory.value = false;
-//   socket.emit('claimVictory', { gameId: props.gameId });
-// }
-
-// console.log(props);
-// function graph() {
-//   let cur: Item;
-//   if (
-//     typeof props.player1ID.equipped !== 'undefined' &&
-//     typeof props.player2ID.equipped !== 'undefined'
-//   ) {
-//     for (
-//       let i = 0;
-//       (cur =
-//         props.priority === 0
-//           ? props.player1ID.equipped[i]
-//           : props.player2ID.equipped[i]);
-//       i++
-//     ) {
-//       console.log(cur);
-//       if (cur.type == 'ball') {
-//         ballImg.value = cur.picture;
-//       } else if (cur.type == 'map') {
-//         mapImg.value = cur.picture;
-//       } else if (cur.type == 'paddle') {
-//         paddleImg.value = cur.picture;
-//       }
-//     }
-//   }
-// }
-
-const canvasWidth = 0.69 * window.innerWidth;
-const canvasHeight = (canvasWidth * 9) / 16;
-
-onUnmounted(() => {
-  gameLoader.value = false;
+const isHost = computed(() => {
+  return props.priority === Priority.HOST;
 });
 
-const canvMapImage = new Image();
-canvMapImage.src =
-  'https://cdn.discordapp.com/attachments/830093692449587304/1041441336815009933/frosty_bg_frame.png';
-const canvBallImage = new Image();
-canvBallImage.src =
-  'https://cdn.discordapp.com/attachments/830093692449587304/1041674533041602560/christmas_ball.png';
-const canvPaddleImage = new Image();
-canvPaddleImage.src =
-  'https://cdn.discordapp.com/attachments/830093692449587304/1041680391121141790/paddle.png';
+const onClaimVictory = () => {
+  showClaimVictory.value = false;
+  socket.emit('claimVictory', { gameId: props.gameId });
+};
 
-function handleUp(e: KeyboardEvent): void {
-  if (
-    userStore.id !== props.player1ID.id &&
-    userStore.id !== props.player2ID.id
-  )
-    return;
+const ballImage = new Image();
+const mapImage = new Image();
+const paddleImage = new Image();
+
+let equipped: Item[];
+if (props.priority !== Priority.HOST)
+  equipped = props.otherPlayer.equipped ?? [];
+else equipped = props.otherPlayer.equipped ?? [];
+
+ballImage.src =
+  equipped.find((item) => item.name === 'ball')?.picture ??
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+mapImage.src =
+  equipped.find((item) => item.name === 'map')?.picture ??
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png';
+paddleImage.src =
+  equipped.find((item) => item.name === 'paddle')?.picture ??
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+
+const handleKeyUp = (e: KeyboardEvent): void => {
   if (e.repeat) return;
   if (e.code === 'ArrowUp' || e.code === 'ArrowDown') rightPaddle?.setDir(0);
-}
+};
 
-function handleDown(e: KeyboardEvent): void {
-  if (
-    userStore.id !== props.player1ID.id &&
-    userStore.id !== props.player2ID.id
-  )
-    return;
+const handleKeyDown = (e: KeyboardEvent): void => {
   if (e.repeat) return;
   if (e.code === 'ArrowUp') rightPaddle?.setDir(-1);
   if (e.code === 'ArrowDown') rightPaddle?.setDir(1);
-}
+};
 
-function draw() {
-  const canvas = document.getElementById('game') as HTMLCanvasElement;
-  const ctx = canvas.getContext('2d');
-  if (ctx === null) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(canvMapImage, 0, 0, canvas.width, canvas.height);
+const handleBlur = (): void => {
+  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  socket.emit('gameBlur', {
+    gameId: props.gameId,
+    cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
+  });
+};
+
+const handleFocus = (): void => {
+  socket.emit('gameFocus', {
+    gameId: props.gameId,
+    cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
+  });
+};
+
+const update = () => {
   if (leftPaddle === null || rightPaddle === null) return;
-  ball?.draw(leftPaddle, rightPaddle, playerScore, remoteScore);
+  const canvas = document.getElementById('game') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+  ball?.draw(rightPaddle, yourScore, otherScore);
   leftPaddle?.draw();
   rightPaddle?.draw();
-  if (gameLoader.value) window.requestAnimationFrame(draw);
-}
+  if (isGameLoaded.value) window.requestAnimationFrame(update);
+};
+
+socket.on('gameData', (gameData) => {
+  if (gameData.name === 'opponent') {
+    // if (props.priority === 2) {
+    //   if (e.from === props.player1ID.id)
+    //     playerPad.changeDir(e.changeDir, false, me);
+    //   if (e.from === props.player2ID.id)
+    //     remotePad.changeDir(e.changeDir, false, me);
+    // } else {
+    if (
+      (isHost.value && gameData.from === props.otherPlayer.id) ||
+      (!isHost.value && gameData.from === props.hostPlayer.id)
+    )
+      leftPaddle?.setDir(gameData.paddleDir, false);
+  }
+
+  if (gameData.name === 'ball' && gameData.from !== userStore.id) {
+    if (
+      props.priority === Priority.VIEWER &&
+      gameData.from === props.otherPlayer.id
+    ) {
+      gameData.direction.x = -gameData.direction.x;
+      // gameData.position.x = 2 * canvas.width - gameData.position.x; // TODO fix
+    }
+    ball?.setDir(gameData.direction);
+    ball?.setPos(gameData.position);
+  }
+
+  if (typeof gameData.score !== 'undefined') {
+    otherScore.value = gameData.score[0];
+    yourScore.value = gameData.score[1];
+  }
+});
+
+socket.on('gameBlur', (cowardId: number) => {
+  ball?.setSpeed(0);
+  leftPaddle?.setDir(0, false);
+  rightPaddle?.setDir(0, false);
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
+  if (
+    (isHost.value && cowardId != props.hostPlayer.id) ||
+    (!isHost.value && cowardId != props.otherPlayer.id)
+  ) {
+    showClaimVictory.value = true;
+    const claimButton = document.getElementById(
+      'claimButton',
+    ) as HTMLButtonElement | null;
+    if (claimButton !== null) claimButton.disabled = true;
+    if (timeoutId > -1) {
+      clearTimeout(timeoutId);
+      timeoutId = -1;
+    }
+    timeoutId = setTimeout(() => {
+      const claimButton = document.getElementById(
+        'claimButton',
+      ) as HTMLButtonElement | null;
+      if (claimButton !== null) claimButton.disabled = false;
+    }, 10000);
+  }
+});
+
+socket.on('gameFocus', () => {
+  showClaimVictory.value = false;
+  ball?.setSpeed();
+  if (props.priority !== Priority.VIEWER) {
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+  }
+});
 
 onMounted(async () => {
   await nextTick();
   const canvas = document.getElementById('game') as HTMLCanvasElement;
-  ball = new Ball(props.gameId, canvas, canvBallImage, props.isHost);
-  leftPaddle = new Paddle(props.gameId, canvas, canvPaddleImage, true);
-  rightPaddle = new Paddle(props.gameId, canvas, canvPaddleImage, false);
+  ball = new Ball(
+    props.gameId,
+    canvas,
+    ballImage,
+    props.priority !== Priority.VIEWER,
+    isHost.value,
+  );
+  leftPaddle = new Paddle(props.gameId, canvas, paddleImage, true);
+  rightPaddle = new Paddle(props.gameId, canvas, paddleImage, false);
 
   window.onresize = () => {
     const canvas = document.getElementById('game') as HTMLCanvasElement;
-    const oldWidth: number = canvas.width;
-    const oldHeight: number = canvas.height;
+    const oldCanvasWidth: number = canvas.width;
+    const oldCanvasHeight: number = canvas.height;
     canvas.width = 0.69 * window.innerWidth;
     canvas.height = (canvas.width * 9) / 16;
-    ball?.resize(oldWidth, oldHeight);
-    leftPaddle?.resize(oldWidth, oldHeight);
-    rightPaddle?.resize(oldWidth, oldHeight);
+    ball?.resize(oldCanvasWidth, oldCanvasHeight);
+    leftPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
+    rightPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
   };
 
-  // let lastTime: number | null = null;
-  // let delta: number;
-  // async function pupdate(time: number) {
-  //   if (lastTime != null) {
-  //     delta = time - lastTime;
-  //     ball.update(delta, remotePad.getRect(), me);
-  //     remotePad.update(delta, time);
-  //     playerPad.update(delta, time);
-  //     if (props.priority === 0) loseCase();
-  //   }
-  //   lastTime = time;
-  //   if (gameLoader.value) window.requestAnimationFrame(pupdate);
-  // }
-  // function loseCase() {
-  //   if (ball.get_pos_x() >= 100 + ball._shape.x / 2) {
-  //     playerScore.value++;
-  //     ball.reset([playerScore.value, remoteScore.value], me);
-  //     playerPad.sety(50);
-  //     remotePad.sety(50);
-  //   }
-  //   if (ball.get_pos_x() <= 0 - ball._shape.x / 2) {
-  //     remoteScore.value++;
-  //     ball.reset([playerScore.value, remoteScore.value], me);
-  //     playerPad.sety(50);
-  //     remotePad.sety(50);
-  //   }
-  // }
-  // function handleBlur(): void {
-  //   if (
-  //     userStore.id !== props.player1ID.id &&
-  //     userStore.id !== props.player2ID.id
-  //   )
-  //     return;
-  //   if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
-  //   socket.emit('blur', {
-  //     gameId: props.gameId,
-  //     cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
-  //   });
-  // }
-  // function handleFocus(): void {
-  //   if (
-  //     userStore.id !== props.player1ID.id &&
-  //     userStore.id !== props.player2ID.id
-  //   )
-  //     return;
-  //   if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
-  //   socket.emit('focus', {
-  //     gameId: props.gameId,
-  //     cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
-  //   });
-  // }
-  window.addEventListener('keydown', handleDown);
-  window.addEventListener('keyup', handleUp);
-  // window.addEventListener('blur', handleBlur);
-  // window.addEventListener('focus', handleFocus);
-  socket.on('gameData', (e) => {
-    // console.log(e);
-    // let me: boolean =
-    //   userStore.id === props.player1ID.id ||
-    //   userStore.id === props.player2ID.id;
+  if (props.priority !== Priority.VIEWER) {
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+  }
 
-    if (e.name === 'opponent') {
-      // if (props.priority === 2) {
-      //   if (e.from === props.player1ID.id)
-      //     playerPad.changeDir(e.changeDir, false, me);
-      //   if (e.from === props.player2ID.id)
-      //     remotePad.changeDir(e.changeDir, false, me);
-      // } else {
-      // console.log(e.from, props.priority);
-      // if (e.from === props.player2ID.id && props.priority === 0)
-      //   playerPad.changeDir(e.changeDir, true, me);
-      // if (e.from === props.player1ID.id && props.priority === 1)
-      //   playerPad.changeDir(e.changeDir, true, me);
-      // }
-      if (e.from === props.player2ID.id && props.priority === 0)
-        leftPaddle?.setDir(e.paddleDir, false);
-      if (e.from === props.player1ID.id && props.priority === 1)
-        leftPaddle?.setDir(e.paddleDir, false);
-    }
+  window.requestAnimationFrame(update);
+});
 
-    if (e.name === 'ball' && e.from !== userStore.id) {
-      // if (props.priority === 2 && e.from === props.player2ID.id) {
-      //   e.changeDir[2] = 100 - e.changeDir[2];
-      //   e.changeDir[0] = e.changeDir[0] * -1;
-      // }
-      ball?.setDir(e.direction);
-      ball?.setPos(e.position);
-    }
-
-    if (typeof e.score !== 'undefined') {
-      remoteScore.value = e.score[0];
-      playerScore.value = e.score[1];
-    }
-  });
-
-  // socket.on('blur', (cowardId: number) => {
-  //   ball.set_speed(0);
-  //   playerPad.changeDir(0, false, false);
-  //   remotePad.changeDir(0, false, false);
-  //   if (
-  //     userStore.id !== props.player1ID.id &&
-  //     userStore.id !== props.player2ID.id
-  //   )
-  //     return;
-  //   window.removeEventListener('keydown', handleDown);
-  //   window.removeEventListener('keyup', handleUp);
-  //   if (
-  //     (props.priority == 0 && cowardId != props.player1ID.id) ||
-  //     (props.priority != 0 && cowardId != props.player2ID.id)
-  //   ) {
-  //     claimVictory.value = true;
-  //     const claimButton = document.getElementById(
-  //       'claimButton',
-  //     ) as HTMLButtonElement | null;
-  //     if (claimButton !== null) claimButton.disabled = true;
-  //     if (timeoutId > -1) {
-  //       clearTimeout(timeoutId);
-  //       timeoutId = -1;
-  //     }
-  //     timeoutId = setTimeout(() => {
-  //       const claimButton = document.getElementById(
-  //         'claimButton',
-  //       ) as HTMLButtonElement | null;
-  //       if (claimButton !== null) claimButton.disabled = false;
-  //     }, 10000);
-  //   }
-  // });
-  // socket.on('focus', () => {
-  //   ball.set_speed();
-  //   if (
-  //     userStore.id !== props.player1ID.id &&
-  //     userStore.id !== props.player2ID.id
-  //   )
-  //     return;
-  //   claimVictory.value = false;
-  //   window.addEventListener('keydown', handleDown);
-  //   window.addEventListener('keyup', handleUp);
-  // });
-  //   window.onresize = function () {
-  //     const pField = new Element(document.getElementById('feld'), props.gameId);
-  //     const pBall = new Ball(
-  //       document.getElementById('ball'),
-  //       field.getRect(),
-  //       props.gameId,
-  //       props.priority,
-  //       me,
-  //     );
-  //     const pPlay = new Paddle(
-  //       document.getElementById('playerPad'),
-  //       field.getRect(),
-  //       props.gameId,
-  //     );
-  //     const pRemo = new Paddle(
-  //       document.getElementById('remotePad'),
-  //       field.getRect(),
-  //       props.gameId,
-  //     );
-  //     ball.reeesize(pField.getRect(), pBall.getRect());
-  //     playerPad.reeesize(pField.getRect(), pPlay.getRect());
-  //     remotePad.reeesize(pField.getRect(), pRemo.getRect());
-  //   };
-  window.requestAnimationFrame(draw);
+onUnmounted(() => {
+  isGameLoaded.value = false;
+  socket.off('gameData');
+  socket.off('gameBlur');
+  socket.off('gameFocus');
 });
 </script>
 
 <template>
   <div>
-    <div v-if="props.priority === 0" class="players">
+    <div v-if="isHost" class="players">
       <GamePeopleComponent
-        :key="props.player2ID.id"
-        :client="props.player2ID"
+        :key="props.otherPlayer.id"
+        :client="props.otherPlayer"
         class="player1"
       />
       <GamePeopleComponent
-        :key="props.player1ID.id"
-        :client="props.player1ID"
+        :key="props.hostPlayer.id"
+        :client="props.hostPlayer"
         class="player2"
       />
     </div>
     <div v-else class="players">
       <GamePeopleComponent
-        :key="props.player1ID.id"
-        :client="props.player1ID"
+        :key="props.hostPlayer.id"
+        :client="props.hostPlayer"
         class="player1"
       />
       <GamePeopleComponent
-        :key="props.player2ID.id"
-        :client="props.player2ID"
+        :key="props.otherPlayer.id"
+        :client="props.otherPlayer"
         class="player2"
       />
     </div>
     <div class="score">
-      <div id="player">{{ playerScore }}</div>
-      <div id="remote">{{ remoteScore }}</div>
+      <div id="player">{{ otherScore }}</div>
+      <div id="remote">{{ yourScore }}</div>
     </div>
-    <canvas id="game" class="field" :width="canvasWidth" :height="canvasHeight">
-    </canvas>
-    <!-- <div v-if="claimVictory" class="modal"> -->
-    <!-- <div class="modal-content">
+    <canvas
+      id="game"
+      class="field"
+      :width="initialCanvasWidth"
+      :height="initialCanvasHeight"
+    />
+    <div v-if="showClaimVictory" class="modal">
+      <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
           Claim victory
         </button>
-      </div> -->
-    <!-- </div> -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -368,49 +260,7 @@ onMounted(async () => {
   display: block;
   z-index: 69;
 }
-.back {
-  height: 100%;
-  width: 106%;
-  transform: translate(-3%, -6%);
-  z-index: -1;
-}
-.pad {
-  height: 100%;
-  width: 100%;
-  z-index: 0;
-}
-.paddle {
-  --y: 50;
-  position: absolute;
-  margin: auto;
-  background-color: #fff;
-  top: calc(var(--y) * 1%);
-  transform: translate(0%, -50%);
-  width: 1%;
-  height: 10%;
-  z-index: 0;
-}
 
-.paddle-left {
-  right: 98%;
-}
-.paddle-right {
-  right: 1%;
-}
-.ball {
-  --x: 50;
-  --y: 50;
-  --col: #fff;
-  position: absolute;
-  background-color: var(--col);
-  left: calc(var(--x) * 1%);
-  top: calc(var(--y) * 1%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  width: 2vw;
-  height: 2vw;
-  z-index: 0;
-}
 .score {
   position: relative;
   top: 1em;
@@ -424,52 +274,58 @@ onMounted(async () => {
   color: white;
   z-index: 1;
 }
+
 .score > * {
   flex-grow: 1;
   flex-basis: 0;
   padding: 0 1%;
   margin: 0 0;
 }
+
 .score > :first-child {
   text-align: right;
 }
+
 .score > :last-child {
   text-align: left;
 }
+
 .player1 {
   grid-column: 1/2;
   justify-content: center;
   text-align: center;
 }
+
 .player2 {
   grid-column: 2/3;
   justify-content: center;
   text-align: center;
 }
+
 .players {
   display: grid;
 }
+
 .modal {
-  position: fixed; /* Stay in place */
-  z-index: 696; /* Sit on top */
+  position: fixed;
+  z-index: 696;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Modal Content/Box */
 .modal-content {
   display: flex;
   flex-direction: column;
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 2vw;
   border: 1px solid #888;
-  width: 25%; /* Could be more or less, depending on screen size */
+  width: 25%;
   color: black;
 }
 

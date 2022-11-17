@@ -53,7 +53,7 @@ export class GameGateway implements OnGatewayDisconnect {
     });
   }
 
-  @SubscribeMessage('blur')
+  @SubscribeMessage('gameBlur')
   async handleBlur(
     @ConnectedSocket() client: Socket,
     @MessageBody('gameId') gameId: number,
@@ -62,7 +62,7 @@ export class GameGateway implements OnGatewayDisconnect {
     await this.gameService.pauseGame(client, gameId, cowardId);
   }
 
-  @SubscribeMessage('focus')
+  @SubscribeMessage('gameFocus')
   async handleFocus(
     @ConnectedSocket() client: Socket,
     @MessageBody('gameId') gameId: number,
@@ -91,25 +91,23 @@ export class GameGateway implements OnGatewayDisconnect {
   ) {
     if (typeof score !== 'undefined') {
       if (score[0] >= 10 || score[1] >= 10) {
-        await this.gameService.endGame(gameId, score);
+        await this.gameService.endGame(client.data.user.id, gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
         return;
       } else {
-        await this.gameService.saveScore(gameId, score);
+        await this.gameService.saveScore(client.data.user.id, gameId, score);
       }
     }
 
-    const payload = {
+    client.to(`&${gameId}`).emit('gameData', {
       direction,
       position,
       paddleDir,
       score,
       name,
       from: client.data.user.id,
-    };
-    client.to(`&${gameId}`).emit('gameData', payload);
-    console.log(payload);
+    });
   }
 
   @SubscribeMessage('queue')
