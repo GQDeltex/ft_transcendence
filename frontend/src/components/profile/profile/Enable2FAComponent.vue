@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { useUserStore } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
 const emits = defineEmits(['close']);
 const qrCode = ref('');
@@ -31,10 +32,10 @@ function closeCancel() {
         <span class="button cancel" @click="closeCancel">&times;</span>
       </div>
       <div class="input">
-        <span>Please enter your 2FA code</span>
+        <span>{{ useI18n().t('enter2fa') }}</span>
         <br />
         <input v-model="code" type="text" @keyup.enter="submit" /><br />
-        <button class="button" @click="submit">Submit</button>
+        <button class="button" @click="submit">{{ useI18n().t('submit') }}</button>
       </div>
     </div>
   </div>

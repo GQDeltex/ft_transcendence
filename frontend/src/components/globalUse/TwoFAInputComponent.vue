@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -16,11 +17,15 @@ const submit = async () => {
 </script>
 
 <template>
-  <div>
-    <span>Please enter your 2FA code</span><br />
+  <div class="input">
+    <span>{{ useI18n().t('enter2fa') }}</span><br />
     <input v-model="code" type="text" @keyup.enter="submit" />
-    <button @click="submit">Submit</button>
+    <button @click="submit">{{ useI18n().t('submit') }}</button>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.input {
+  color: #c00000;
+}
+</style>

@@ -125,6 +125,9 @@ export const en = {
   send: 'Send',
   claimvictory: 'Claim Victory',
   resetpicture: 'Reset Picture',
+  enter2fa: 'Please enter your 2FA code',
+  submit: 'Submit',
+
 };
 
 export const NF_en = {

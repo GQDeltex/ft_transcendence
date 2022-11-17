@@ -127,6 +127,8 @@ export const de = {
   send: 'Senden',
   claimvictory: 'Sieg beanspruchen',
   resetpicture: 'Bild zurücksetzen',
+  enter2fa: 'Bitte geben Sie Ihren 2FA-Code ein',
+  submit: 'Übermitteln',
 };
 
 export const NF_de = {
