@@ -66,6 +66,7 @@ const declineButton = async () => {
 }
 
 .acceptButton {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: white;
@@ -77,6 +78,7 @@ const declineButton = async () => {
 }
 
 .declineButton {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: red;

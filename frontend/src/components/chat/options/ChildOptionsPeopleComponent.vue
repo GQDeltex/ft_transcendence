@@ -151,6 +151,7 @@ const onProfile = async () => {
 }
 
 .button {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: white;

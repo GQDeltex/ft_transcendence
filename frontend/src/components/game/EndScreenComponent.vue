@@ -120,7 +120,10 @@ onMounted(async () => {
   color: white;
   overflow: hidden;
   background-color: #c00000;
-  padding: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   align-content: center;
   cursor: pointer;
   width: min-content;
