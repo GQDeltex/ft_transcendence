@@ -25,10 +25,12 @@
 - [endGame](game_game_service.GameService.md#endgame)
 - [findAll](game_game_service.GameService.md#findall)
 - [findOne](game_game_service.GameService.md#findone)
+- [handleBigGameDataRequest](game_game_service.GameService.md#handlebiggamedatarequest)
 - [killGame](game_game_service.GameService.md#killgame)
 - [pauseGame](game_game_service.GameService.md#pausegame)
 - [queuePlayer](game_game_service.GameService.md#queueplayer)
 - [saveScore](game_game_service.GameService.md#savescore)
+- [startGame](game_game_service.GameService.md#startgame)
 - [unpauseGame](game_game_service.GameService.md#unpausegame)
 
 ## Constructors
@@ -48,7 +50,7 @@
 
 #### Defined in
 
-[src/game/game.service.ts:13](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L13)
+[src/game/game.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L14)
 
 ## Properties
 
@@ -58,7 +60,7 @@
 
 #### Defined in
 
-[src/game/game.service.ts:19](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L19)
+[src/game/game.service.ts:20](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L20)
 
 ___
 
@@ -68,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:14](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L14)
+[src/game/game.service.ts:15](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L15)
 
 ___
 
@@ -78,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:16](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L16)
+[src/game/game.service.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L17)
 
 ___
 
@@ -88,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:17](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L17)
+[src/game/game.service.ts:18](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L18)
 
 ## Methods
 
@@ -109,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:134](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L134)
+[src/game/game.service.ts:159](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L159)
 
 ___
 
@@ -130,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:22](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L22)
+[src/game/game.service.ts:23](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L23)
 
 ___
 
@@ -150,18 +152,19 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:64](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L64)
+[src/game/game.service.ts:87](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L87)
 
 ___
 
 ### endGame
 
-▸ **endGame**(`gameId`, `score`): `Promise`<`void`\>
+▸ **endGame**(`userId`, `gameId`, `score`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `userId` | `number` |
 | `gameId` | `number` |
 | `score` | `number`[] |
 
@@ -171,7 +174,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:79](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L79)
+[src/game/game.service.ts:101](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L101)
 
 ___
 
@@ -192,7 +195,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:37](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L37)
+[src/game/game.service.ts:59](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L59)
 
 ___
 
@@ -212,7 +215,33 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:51](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L51)
+[src/game/game.service.ts:73](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L73)
+
+___
+
+### handleBigGameDataRequest
+
+▸ **handleBigGameDataRequest**(`clientId`, `gameId`, `requesterId?`, `leftPaddle?`, `rightPaddle?`, `ball?`, `scores?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `clientId` | `number` |
+| `gameId` | `number` |
+| `requesterId?` | `number` |
+| `leftPaddle?` | `any` |
+| `rightPaddle?` | `any` |
+| `ball?` | `any` |
+| `scores?` | `number`[] |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.service.ts:172](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L172)
 
 ___
 
@@ -232,7 +261,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:91](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L91)
+[src/game/game.service.ts:113](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L113)
 
 ___
 
@@ -254,7 +283,7 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:112](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L112)
+[src/game/game.service.ts:135](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L135)
 
 ___
 
@@ -274,18 +303,19 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:55](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L55)
+[src/game/game.service.ts:77](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L77)
 
 ___
 
 ### saveScore
 
-▸ **saveScore**(`gameId`, `score`): `Promise`<`void`\>
+▸ **saveScore**(`userId`, `gameId`, `score`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `userId` | `number` |
 | `gameId` | `number` |
 | `score` | `number`[] |
 
@@ -295,7 +325,27 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:70](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L70)
+[src/game/game.service.ts:93](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L93)
+
+___
+
+### startGame
+
+▸ **startGame**(`game`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `game` | [`Game`](game_entities_game_entity.Game.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/game/game.service.ts:38](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L38)
 
 ___
 
@@ -317,4 +367,4 @@ ___
 
 #### Defined in
 
-[src/game/game.service.ts:122](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L122)
+[src/game/game.service.ts:146](https://github.com/GQDeltex/ft_transcendence/blob/main/backend/src/game/game.service.ts#L146)
