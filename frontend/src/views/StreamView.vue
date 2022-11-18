@@ -101,7 +101,6 @@ socket.on('Game', async ({ gameId }) => {
       />
     </div>
     <div v-if="!routExist && !displayEnd">
-      <h1>path stream</h1>
       <PongComponent
         v-if="
           loadedData &&

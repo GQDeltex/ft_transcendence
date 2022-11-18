@@ -4,7 +4,7 @@ import { socket } from '@/service/socket';
 export class Paddle {
   private _position: Vector;
   private _direction: number;
-  private readonly _speed: number = 0.0069;
+  private readonly _speed: number = 0.00042;
   private _ctx: CanvasRenderingContext2D;
 
   constructor(
@@ -59,15 +59,28 @@ export class Paddle {
     return this._position.y;
   }
 
-  private step() {
+  getAll() {
+    return {
+      positionY: this._position.y,
+      direction: this._direction,
+    };
+  }
+
+  setAll(data: { positionY: number; direction: number }) {
+    this._position.y = data.positionY;
+    this._direction = data.direction;
+  }
+
+  private step(elapsedTime: number) {
     const newY =
-      this._position.y + this._direction * this._speed * this._canvas.width;
+      this._position.y +
+      this._direction * this._speed * this._canvas.width * elapsedTime;
     if (newY < 0 || newY + this.getHeight() > this._canvas.height) return;
     this._position.y = newY;
   }
 
-  draw() {
-    this.step();
+  draw(elapsedTime: number) {
+    this.step(elapsedTime);
     this._ctx.drawImage(
       this._img,
       this._position.x,

@@ -43,18 +43,20 @@ const mapImage = new Image();
 const paddleImage = new Image();
 
 let equipped: Item[];
-if (props.priority !== Priority.HOST)
+if (props.priority === Priority.HOST)
+  equipped = props.hostPlayer.equipped ?? [];
+else if (props.priority === Priority.CLIENT)
   equipped = props.otherPlayer.equipped ?? [];
-else equipped = props.otherPlayer.equipped ?? [];
+else equipped = userStore.equipped ?? [];
 
 ballImage.src =
-  equipped.find((item) => item.name === 'ball')?.picture ??
+  equipped.find((item) => item.type === 'ball')?.picture ??
   'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
 mapImage.src =
-  equipped.find((item) => item.name === 'map')?.picture ??
+  equipped.find((item) => item.type === 'map')?.picture ??
   'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png';
 paddleImage.src =
-  equipped.find((item) => item.name === 'paddle')?.picture ??
+  equipped.find((item) => item.type === 'paddle')?.picture ??
   'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
 
 const handleKeyUp = (e: KeyboardEvent): void => {
@@ -83,31 +85,37 @@ const handleFocus = (): void => {
   });
 };
 
-const update = () => {
+let lastTime = 0;
+let elapsedTime = 0;
+const update = (currentTime: number) => {
+  if (lastTime !== 0) elapsedTime = currentTime - lastTime;
   if (leftPaddle === null || rightPaddle === null) return;
-  const canvas = document.getElementById('game') as HTMLCanvasElement;
+  const canvas = document.getElementById('game') as HTMLCanvasElement | null;
+  if (canvas === null) return window.requestAnimationFrame(update);
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
-  ball?.draw(rightPaddle, yourScore, otherScore);
-  leftPaddle?.draw();
-  rightPaddle?.draw();
+  ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
+  leftPaddle?.draw(elapsedTime);
+  rightPaddle?.draw(elapsedTime);
+  lastTime = currentTime;
   if (isGameLoaded.value) window.requestAnimationFrame(update);
 };
 
 socket.on('gameData', (gameData) => {
   if (gameData.name === 'opponent') {
-    // if (props.priority === 2) {
-    //   if (e.from === props.player1ID.id)
-    //     playerPad.changeDir(e.changeDir, false, me);
-    //   if (e.from === props.player2ID.id)
-    //     remotePad.changeDir(e.changeDir, false, me);
-    // } else {
-    if (
-      (isHost.value && gameData.from === props.otherPlayer.id) ||
-      (!isHost.value && gameData.from === props.hostPlayer.id)
-    )
-      leftPaddle?.setDir(gameData.paddleDir, false);
+    if (props.priority === Priority.VIEWER) {
+      if (gameData.from === props.otherPlayer.id)
+        rightPaddle?.setDir(gameData.paddleDir, false);
+      if (gameData.from === props.hostPlayer.id)
+        leftPaddle?.setDir(gameData.paddleDir, false);
+    } else {
+      if (
+        (isHost.value && gameData.from === props.otherPlayer.id) ||
+        (!isHost.value && gameData.from === props.hostPlayer.id)
+      )
+        leftPaddle?.setDir(gameData.paddleDir, false);
+    }
   }
 
   if (gameData.name === 'ball' && gameData.from !== userStore.id) {
@@ -115,8 +123,11 @@ socket.on('gameData', (gameData) => {
       props.priority === Priority.VIEWER &&
       gameData.from === props.otherPlayer.id
     ) {
+      if (ball === null) return;
       gameData.direction.x = -gameData.direction.x;
-      // gameData.position.x = 2 * canvas.width - gameData.position.x; // TODO fix
+      gameData.position.x =
+        1 - gameData.position.x - ball.getRelativeBallSize();
+      console.log(gameData.position);
     }
     ball?.setDir(gameData.direction);
     ball?.setPos(gameData.position);
@@ -135,8 +146,9 @@ socket.on('gameBlur', (cowardId: number) => {
   window.removeEventListener('keydown', handleKeyDown);
   window.removeEventListener('keyup', handleKeyUp);
   if (
-    (isHost.value && cowardId != props.hostPlayer.id) ||
-    (!isHost.value && cowardId != props.otherPlayer.id)
+    props.priority !== Priority.VIEWER &&
+    ((isHost.value && cowardId != props.hostPlayer.id) ||
+      (!isHost.value && cowardId != props.otherPlayer.id))
   ) {
     showClaimVictory.value = true;
     const claimButton = document.getElementById(
@@ -165,6 +177,26 @@ socket.on('gameFocus', () => {
   }
 });
 
+socket.on('whoIsTheMillionaire', (bigGameData) => {
+  if (isHost.value) {
+    socket.emit('whoIsTheMillionaire', {
+      requesterId: bigGameData.requesterId,
+      gameId: props.gameId,
+      leftPaddle: leftPaddle?.getAll(),
+      rightPaddle: rightPaddle?.getAll(),
+      ball: ball?.getAll(),
+      scores: [otherScore, yourScore],
+    });
+  } else if (props.priority === Priority.VIEWER) {
+    console.log('i receive stuff');
+    leftPaddle?.setAll(bigGameData.leftPaddle);
+    rightPaddle?.setAll(bigGameData.rightPaddle);
+    ball?.setAll(bigGameData.ball);
+    otherScore.value = bigGameData.scores[0];
+    yourScore.value = bigGameData.scores[1];
+  }
+});
+
 onMounted(async () => {
   await nextTick();
   const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -177,6 +209,12 @@ onMounted(async () => {
   );
   leftPaddle = new Paddle(props.gameId, canvas, paddleImage, true);
   rightPaddle = new Paddle(props.gameId, canvas, paddleImage, false);
+
+  if (props.priority === Priority.VIEWER) {
+    socket.emit('whoIsTheMillionaire', {
+      gameId: props.gameId,
+    });
+  }
 
   window.onresize = () => {
     const canvas = document.getElementById('game') as HTMLCanvasElement;

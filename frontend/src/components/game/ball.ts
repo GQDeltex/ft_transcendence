@@ -13,7 +13,8 @@ export class Ball {
   private _direction: Vector;
   private _position: Vector;
   private _speed: number;
-  private readonly _defaultSpeed = 0.003;
+  private readonly _defaultSpeed = 0.00042;
+  private readonly _relativeBallSize = 0.0369;
   private _ctx: CanvasRenderingContext2D;
 
   constructor(
@@ -34,7 +35,11 @@ export class Ball {
    * Get ball size based on canvas width
    */
   getBallSize() {
-    return 0.0369 * this._canvas.width;
+    return this._relativeBallSize * this._canvas.width;
+  }
+
+  getRelativeBallSize() {
+    return this._relativeBallSize;
   }
 
   /**
@@ -61,6 +66,18 @@ export class Ball {
         },
         score: [yourScore, otherScore],
       });
+  }
+
+  getAll() {
+    return {
+      position: this._position,
+      direction: this._direction,
+    };
+  }
+
+  setAll(data: { position: Vector; direction: Vector }) {
+    this._position = data.position;
+    this._direction = data.direction;
   }
 
   /**
@@ -107,23 +124,32 @@ export class Ball {
   }
 
   private step(
+    elapsedTime: number,
     yourPaddle: Paddle,
     yourScore: Ref<number>,
     otherScore: Ref<number>,
   ) {
-    this._position.y += this._direction.y * this._speed * this._canvas.width;
-    this._position.x += this._direction.x * this._speed * this._canvas.width;
+    this._position.y +=
+      this._direction.y * this._speed * this._canvas.width * elapsedTime;
+    this._position.x +=
+      this._direction.x * this._speed * this._canvas.width * elapsedTime;
 
-    if (this.isTopBottomCollision()) this._direction.y *= -1;
+    if (this.isTopBottomCollision()) {
+      this._direction.y *= -1;
+      this._position.y +=
+        this._direction.y * this._speed * this._canvas.width * elapsedTime * 2;
+    }
 
     if (this.isPaddleCollision(yourPaddle) && this._isPlayer) {
       this._direction.x = -1;
       this._direction.y =
         3 *
-        (((this._position.x + this.getBallSize() / 2 - yourPaddle.getPosX()) /
+        (((this._position.y + this.getBallSize() / 2 - yourPaddle.getPosY()) /
           yourPaddle.getHeight()) *
           2 -
-          1); // TODO: fix this
+          1);
+      this._position.x +=
+        this._direction.x * this._speed * this._canvas.width * elapsedTime * 2;
       socket.emit('gameData', {
         name: 'ball',
         gameId: this._gameId,
@@ -140,14 +166,19 @@ export class Ball {
       });
     }
 
-    if (this.isLost()) {
+    if (this.isLost() && this._isPlayer) {
       otherScore.value++;
       this.reset(yourScore.value, otherScore.value);
     }
   }
 
-  draw(yourPaddle: Paddle, yourScore: Ref<number>, otherScore: Ref<number>) {
-    this.step(yourPaddle, yourScore, otherScore);
+  draw(
+    elapsedTime: number,
+    yourPaddle: Paddle,
+    yourScore: Ref<number>,
+    otherScore: Ref<number>,
+  ) {
+    this.step(elapsedTime, yourPaddle, yourScore, otherScore);
     this._ctx.drawImage(
       this._img,
       this._position.x,

@@ -118,6 +118,7 @@ export class GameService {
     await this.gameRepository.save(game);
     return game.id;
   }
+
   async pauseGame(client: Socket, gameId: number, cowardId: number) {
     const game: Game = await this.findOne(gameId);
     if (game.state === GameState.ENDED) return;
@@ -125,21 +126,23 @@ export class GameService {
     if (game.player2Id === cowardId) game.player2BlurTime = new Date();
     game.state = GameState.PAUSED;
     await this.gameRepository.save(game);
-    client.to(`&${gameId}`).emit('blur', cowardId);
-    client.emit('blur', cowardId);
+    client.to(`&${gameId}`).emit('gameBlur', cowardId);
+    client.emit('gameBlur', cowardId);
   }
+
   async unpauseGame(client: Socket, gameId: number, cowardId: number) {
     const game: Game = await this.findOne(gameId);
     if (game.state !== GameState.PAUSED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date(0);
     if (game.player2Id === cowardId) game.player2BlurTime = new Date(0);
-    if (game.player1BlurTime.getTime() == game.player2BlurTime.getTime()) {
+    if (game.player1BlurTime.getTime() === game.player2BlurTime.getTime()) {
       game.state = GameState.RUNNING;
-      client.to(`&${gameId}`).emit('focus');
-      client.emit('focus');
+      client.to(`&${gameId}`).emit('gameFocus');
+      client.emit('gameFocus');
     }
     await this.gameRepository.save(game);
   }
+
   async claimVictory(client: Socket, gameId: number) {
     const game: Game = await this.findOne(gameId);
     if (client.data.user.id == game.player1Id) {
@@ -151,5 +154,35 @@ export class GameService {
     }
     client.to(`&${gameId}`).emit('Game', { gameId: -1 });
     client.emit('Game', { gameId: -1 });
+  }
+
+  async handleBigGameDataRequest(
+    clientId: number,
+    gameId: number,
+    requesterId?: number,
+    leftPaddle?: any,
+    rightPaddle?: any,
+    ball?: any,
+    scores?: number[],
+  ) {
+    const game: Game = await this.findOne(gameId);
+    if (typeof scores === 'undefined' || typeof requesterId === 'undefined') {
+      this.gameGateway.server
+        .to(game.player1.socketId)
+        .emit('whoIsTheMillionaire', {
+          requesterId: clientId,
+        });
+    } else {
+      const requester: User = await this.usersService.findOne(requesterId);
+      this.gameGateway.server
+        .to(requester.socketId)
+        .emit('whoIsTheMillionaire', {
+          gameId,
+          leftPaddle,
+          rightPaddle,
+          ball,
+          scores,
+        });
+    }
   }
 }

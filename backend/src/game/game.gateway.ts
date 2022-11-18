@@ -155,6 +155,27 @@ export class GameGateway implements OnGatewayDisconnect {
     await this.startGame(game);
   }
 
+  @SubscribeMessage('whoIsTheMillionaire')
+  async handleBigGameDataRequest(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('gameId') gameId: number,
+    @MessageBody('requesterId') requesterId?: number,
+    @MessageBody('leftPaddle') leftPaddle?: any,
+    @MessageBody('rightPaddle') rightPaddle?: any,
+    @MessageBody('ball') ball?: any,
+    @MessageBody('scores') scores?: number[],
+  ) {
+    this.gameService.handleBigGameDataRequest(
+      client.data.user.id,
+      gameId,
+      requesterId,
+      leftPaddle,
+      rightPaddle,
+      ball,
+      scores,
+    );
+  }
+
   async startGame(game: Game) {
     const p1sockets = await this.server
       .in(game.player1.socketId)
