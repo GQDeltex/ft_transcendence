@@ -71,14 +71,19 @@ export class Ball {
   }
 
   getAll() {
+    const relativePos = new Vector(
+      this._position.x / this._canvas.width,
+      this._position.y / this._canvas.width,
+    );
     return {
-      position: this._position,
+      position: relativePos,
       direction: this._direction,
     };
   }
 
   setAll(data: { position: Vector; direction: Vector }) {
-    this._position = data.position;
+    this._position.x = data.position.x * this._canvas.width;
+    this._position.y = data.position.y * this._canvas.width;
     this._direction = data.direction;
   }
 

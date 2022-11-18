@@ -61,13 +61,13 @@ export class Paddle {
 
   getAll() {
     return {
-      positionY: this._position.y,
+      positionY: this._position.y / this._canvas.width,
       direction: this._direction,
     };
   }
 
   setAll(data: { positionY: number; direction: number }) {
-    this._position.y = data.positionY;
+    this._position.y = data.positionY * this._canvas.width;
     this._direction = data.direction;
   }
 
