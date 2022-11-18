@@ -244,6 +244,10 @@ onUnmounted(() => {
   socket.off('gameBlur');
   socket.off('gameFocus');
   socket.off('onStreamJoin');
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
+  window.removeEventListener('blur', handleBlur);
+  window.removeEventListener('focus', handleFocus);
 });
 </script>
 
@@ -274,10 +278,10 @@ onUnmounted(() => {
       />
     </div>
     <canvas
-    id="game"
-    class="field"
-    :width="initialCanvasWidth"
-    :height="initialCanvasHeight"
+      id="game"
+      class="field"
+      :width="initialCanvasWidth"
+      :height="initialCanvasHeight"
     />
     <div class="score">
       <div id="player">{{ otherScore }}</div>

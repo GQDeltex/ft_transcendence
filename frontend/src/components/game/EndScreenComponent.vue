@@ -68,9 +68,12 @@ onMounted(async () => {
     if (playerScore1.value > remoteScore2.value) {
       player.value.username = player1.value.username;
       player.value.picture = player1.value.picture;
-    } else {
+    } else if (playerScore1.value > remoteScore2.value) {
       player.value.username = player2.value.username;
       player.value.picture = player2.value.picture;
+    } else {
+      player.value.username = 'nobody';
+      player.value.picture = '';
     }
   }
 });
@@ -79,6 +82,7 @@ onMounted(async () => {
 <template>
   <div class="parent">
     <RoundPictureComponent
+      v-if="player.picture !== ''"
       class="picture"
       :picture="player.picture"
       size="15vw"
