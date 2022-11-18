@@ -7,6 +7,7 @@ import { Game, GameState } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { GameGateway } from './game.gateway';
 import { Socket } from 'socket.io';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class GameService {
@@ -31,7 +32,28 @@ export class GameService {
     });
     await this.dequeuePlayer(player1.playerId);
     await this.dequeuePlayer(player2.playerId);
-    await this.gameGateway.startGame(game);
+    await this.startGame(game);
+  }
+
+  async startGame(game: Game) {
+    this.gameGateway.server.to(game.player1.socketId).emit('Game', {
+      gameId: game.id,
+      player1Id: game.player1.id,
+      player2Id: game.player2.id,
+      priority: 0,
+    });
+    this.gameGateway.server.to(game.player2.socketId).emit('Game', {
+      gameId: game.id,
+      player1Id: game.player1.id,
+      player2Id: game.player2.id,
+      priority: 1,
+    });
+    this.gameGateway.server
+      .to(game.player1.socketId)
+      .socketsJoin(`&${game.id}`);
+    this.gameGateway.server
+      .to(game.player2.socketId)
+      .socketsJoin(`&${game.id}`);
   }
 
   async findAll(
@@ -54,7 +76,8 @@ export class GameService {
 
   async queuePlayer(id: number) {
     const user: User = await this.usersService.findOne(id);
-    if (user.status === 'in game') throw new Error('finish what you started');
+    if (user.status === 'in game')
+      throw new WsException('finish what you started');
     await this.queuedPlayerRepository.insert({
       playerId: id,
       user: user,
@@ -70,25 +93,15 @@ export class GameService {
   async saveScore(userId: number, gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
     if (game.state == GameState.ENDED) return;
-    if (game.player1.id === userId) {
-      game.score1 = score[0];
-      game.score2 = score[1];
-    } else {
-      game.score1 = score[1];
-      game.score2 = score[0];
-    }
+    game.score1 = score[0];
+    game.score2 = score[1];
     await this.gameRepository.save(game);
   }
 
   async endGame(userId: number, gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
-    if (game.player1.id === userId) {
-      game.score1 = score[0];
-      game.score2 = score[1];
-    } else {
-      game.score1 = score[1];
-      game.score2 = score[0];
-    }
+    game.score1 = score[0];
+    game.score2 = score[1];
     game.state = GameState.ENDED;
     game.player1.status = 'online';
     game.player1.points += game.score1;
@@ -107,11 +120,11 @@ export class GameService {
     game.state = GameState.ENDED;
     game.player1.status = 'online';
     game.player2.status = 'online';
-    if (game.player1.id == userId) {
+    if (game.player1.id === userId) {
       game.score1 = 0;
       game.player2.points += game.score2;
     }
-    if (game.player2.id == userId) {
+    if (game.player2.id === userId) {
       game.score2 = 0;
       game.player1.points += game.score1;
     }
@@ -167,22 +180,18 @@ export class GameService {
   ) {
     const game: Game = await this.findOne(gameId);
     if (typeof scores === 'undefined' || typeof requesterId === 'undefined') {
-      this.gameGateway.server
-        .to(game.player1.socketId)
-        .emit('whoIsTheMillionaire', {
-          requesterId: clientId,
-        });
+      this.gameGateway.server.to(game.player1.socketId).emit('onStreamJoin', {
+        requesterId: clientId,
+      });
     } else {
       const requester: User = await this.usersService.findOne(requesterId);
-      this.gameGateway.server
-        .to(requester.socketId)
-        .emit('whoIsTheMillionaire', {
-          gameId,
-          leftPaddle,
-          rightPaddle,
-          ball,
-          scores,
-        });
+      this.gameGateway.server.to(requester.socketId).emit('onStreamJoin', {
+        gameId,
+        leftPaddle,
+        rightPaddle,
+        ball,
+        scores,
+      });
     }
   }
 }

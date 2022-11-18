@@ -134,8 +134,13 @@ socket.on('gameData', (gameData) => {
   }
 
   if (typeof gameData.score !== 'undefined') {
-    otherScore.value = gameData.score[0];
-    yourScore.value = gameData.score[1];
+    if (props.priority === Priority.HOST) {
+      otherScore.value = gameData.score[1];
+      yourScore.value = gameData.score[0];
+    } else {
+      otherScore.value = gameData.score[0];
+      yourScore.value = gameData.score[1];
+    }
   }
 });
 
@@ -177,41 +182,37 @@ socket.on('gameFocus', () => {
   }
 });
 
-socket.on('whoIsTheMillionaire', (bigGameData) => {
+socket.on('onStreamJoin', (bigGameData) => {
   if (isHost.value) {
-    socket.emit('whoIsTheMillionaire', {
+    socket.emit('onStreamJoin', {
       requesterId: bigGameData.requesterId,
       gameId: props.gameId,
       leftPaddle: leftPaddle?.getAll(),
       rightPaddle: rightPaddle?.getAll(),
       ball: ball?.getAll(),
-      scores: [otherScore, yourScore],
+      scores:
+        props.priority === Priority.HOST
+          ? [yourScore, otherScore]
+          : [otherScore, yourScore],
     });
   } else if (props.priority === Priority.VIEWER) {
-    console.log('i receive stuff');
     leftPaddle?.setAll(bigGameData.leftPaddle);
     rightPaddle?.setAll(bigGameData.rightPaddle);
     ball?.setAll(bigGameData.ball);
-    otherScore.value = bigGameData.scores[0];
-    yourScore.value = bigGameData.scores[1];
+    yourScore.value = bigGameData.scores[0];
+    otherScore.value = bigGameData.scores[1];
   }
 });
 
 onMounted(async () => {
   await nextTick();
   const canvas = document.getElementById('game') as HTMLCanvasElement;
-  ball = new Ball(
-    props.gameId,
-    canvas,
-    ballImage,
-    props.priority !== Priority.VIEWER,
-    isHost.value,
-  );
+  ball = new Ball(props.gameId, canvas, ballImage, props.priority);
   leftPaddle = new Paddle(props.gameId, canvas, paddleImage, true);
   rightPaddle = new Paddle(props.gameId, canvas, paddleImage, false);
 
   if (props.priority === Priority.VIEWER) {
-    socket.emit('whoIsTheMillionaire', {
+    socket.emit('onStreamJoin', {
       gameId: props.gameId,
     });
   }
@@ -242,6 +243,7 @@ onUnmounted(() => {
   socket.off('gameData');
   socket.off('gameBlur');
   socket.off('gameFocus');
+  socket.off('onStreamJoin');
 });
 </script>
 

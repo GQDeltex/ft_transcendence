@@ -64,7 +64,6 @@ watch(
         player1User.value = await UserService.findOneById(data.player1Id);
         player2User.value = await UserService.findOneById(data.player2Id);
         loadedData.value = true;
-        console.log(data.player1Id, data.player2Id);
       },
     );
   },

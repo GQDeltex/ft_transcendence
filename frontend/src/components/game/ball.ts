@@ -13,7 +13,7 @@ export class Ball {
   private _direction: Vector;
   private _position: Vector;
   private _speed: number;
-  private readonly _defaultSpeed = 0.00042;
+  private readonly _defaultSpeed = 0.000042;
   private readonly _relativeBallSize = 0.0369;
   private _ctx: CanvasRenderingContext2D;
 
@@ -21,14 +21,13 @@ export class Ball {
     private readonly _gameId: number,
     private readonly _canvas: HTMLCanvasElement,
     private _img: HTMLImageElement,
-    private readonly _isPlayer: boolean,
-    isHost: boolean,
+    private readonly _priority: Priority,
   ) {
     this._ctx = this._canvas.getContext('2d') as CanvasRenderingContext2D;
     this._speed = this._defaultSpeed;
     this._direction = new Vector(0, 0);
     this._position = new Vector(0, 0);
-    this.reset(0, 0, isHost);
+    this.reset(0, 0, this._priority === Priority.HOST);
   }
 
   /**
@@ -46,13 +45,13 @@ export class Ball {
    * Reset the ball to the center of the screen and give it a random direction
    * Emit the new game data to the server if player is the host
    */
-  reset(yourScore: number, otherScore: number, isHost = true) {
+  reset(yourScore: number, otherScore: number, toEmit = true) {
     this._position.x = this._canvas.width / 2 - this.getBallSize() / 2;
     this._position.y = this._canvas.height / 2 - this.getBallSize() / 2;
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
 
-    if (isHost)
+    if (toEmit)
       socket.emit('gameData', {
         name: 'ball',
         gameId: this._gameId,
@@ -64,7 +63,10 @@ export class Ball {
           x: this._position.x / this._canvas.width,
           y: this._position.y / this._canvas.width,
         },
-        score: [yourScore, otherScore],
+        score:
+          this._priority === Priority.HOST
+            ? [yourScore, otherScore]
+            : [otherScore, yourScore],
       });
   }
 
@@ -140,7 +142,10 @@ export class Ball {
         this._direction.y * this._speed * this._canvas.width * elapsedTime * 2;
     }
 
-    if (this.isPaddleCollision(yourPaddle) && this._isPlayer) {
+    if (
+      this.isPaddleCollision(yourPaddle) &&
+      this._priority !== Priority.VIEWER
+    ) {
       this._direction.x = -1;
       this._direction.y =
         3 *
@@ -166,7 +171,7 @@ export class Ball {
       });
     }
 
-    if (this.isLost() && this._isPlayer) {
+    if (this.isLost() && this._priority !== Priority.VIEWER) {
       otherScore.value++;
       this.reset(yourScore.value, otherScore.value);
     }
