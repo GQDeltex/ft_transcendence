@@ -24,7 +24,7 @@ function close() {
         >{{ heading }}<span class="close" @click="close()">&times;</span></span
       >
       <p>{{ text }}</p>
-      <button @click="close()">OK</button>
+      <button class="ok" @click="close()">OK</button>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ function close() {
 /* The Modal (background) */
 .modal {
   position: fixed; /* Stay in place */
-  z-index: 800; /* Sit on top */
+  z-index: 900; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -106,6 +106,17 @@ function close() {
 .close:focus {
   color: #c00000;
   text-decoration: none;
+}
+.ok {
+  font-family: 'Mountains of Christmas', cursive;
+  cursor: pointer;
+  width: 60%;
+  border-radius: 5px;
+  color: white;
+  background-color: #c00000;
+  cursor: pointer;
+  border-color: transparent;
+  margin-bottom: 1%;
 }
 
 /* Add Animation */
