@@ -27,11 +27,14 @@ function closeCancel() {
 
 <template>
   <div class="modal" @keyup.enter="uploadPicture">
+    <div class="modal-dialog">
+
     <div class="modal-content">
       <span class="modal-header">
         Change Profile Picture
         <span class="close" @click="closeCancel">&times;</span>
       </span>
+
       <div>
         <label class="buttonLabel" for="picUpload"
           >Click here to choose file</label
@@ -50,6 +53,7 @@ function closeCancel() {
       <br />
       <button class="ok" @click="resetPicture">Reset picture</button>
     </div>
+  </div>
   </div>
 </template>
 
@@ -100,6 +104,11 @@ function closeCancel() {
     /* padding-top: 20%; */
     padding-left: 30%;
   }
+  .modal-content .close {
+    position: fixed;
+    right: 5vw;
+    top: 30vw;
+  }
 }
 .modal-content h1 {
   font-size: 1.5vw;
@@ -107,16 +116,20 @@ function closeCancel() {
 }
 /* The Close Button */
 .close {
-  color: #aaa;
+  font-size: 2.7vw;
+  color: white;
   float: right;
   font-size: 2vw;
   font-weight: bold;
   cursor: pointer;
+  position: fixed;
+  right: 27vw;
+  top: 26.5vw;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: #c00000;
   text-decoration: none;
 }
 .ok {
