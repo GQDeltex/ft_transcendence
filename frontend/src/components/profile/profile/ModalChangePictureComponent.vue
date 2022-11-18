@@ -27,14 +27,11 @@ function closeCancel() {
 
 <template>
   <div class="modal" @keyup.enter="uploadPicture">
-    <div class="modal-dialog">
-
     <div class="modal-content">
       <span class="modal-header">
         Change Profile Picture
         <span class="close" @click="closeCancel">&times;</span>
       </span>
-
       <div>
         <label class="buttonLabel" for="picUpload"
           >Click here to choose file</label
@@ -54,7 +51,6 @@ function closeCancel() {
       <button class="ok" @click="resetPicture">Reset picture</button>
     </div>
   </div>
-  </div>
 </template>
 
 <style scoped>
@@ -71,9 +67,10 @@ function closeCancel() {
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  overflow: auto;
+  /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
@@ -95,14 +92,18 @@ function closeCancel() {
   aspect-ratio: 4/3;
   color: #c00000;
   opacity: 80%;
+  position: absolute;
+  top: -15vw;
+  left: 25vw;
 }
 
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 850px) {
   .modal-content {
     width: 100%;
-    /* padding-top: 20%; */
     padding-left: 30%;
+    top: 0vw;
+    left: 0vw;
   }
   .modal-content .close {
     position: fixed;
@@ -123,8 +124,8 @@ function closeCancel() {
   font-weight: bold;
   cursor: pointer;
   position: fixed;
-  right: 27vw;
-  top: 26.5vw;
+  right: 26vw;
+  top: 11.5vw;
 }
 
 .close:hover,
@@ -144,14 +145,15 @@ function closeCancel() {
   margin-bottom: 1%;
 }
 
-input, label {
+input,
+label {
   font-family: 'Mountains of Christmas', cursive;
   margin: 0.4rem 0;
   color: white;
   /* text-align-last: center; */
 }
 
-input[type="file"]::file-selector-button{
+input[type='file']::file-selector-button {
   font-family: 'Mountains of Christmas', cursive;
   opacity: 0;
   width: 0%;
