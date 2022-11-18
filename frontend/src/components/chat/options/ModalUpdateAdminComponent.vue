@@ -75,15 +75,18 @@ function closeCancel() {
   color: black;
 }
 .modal-content label {
+  font-family: 'Mountains of Christmas', cursive;
   padding-top: 10%;
   padding-bottom: 5%;
 }
 .modal-content h1 {
+  font-family: 'Mountains of Christmas', cursive;
   font-size: 1.5vw;
   margin: 0;
 }
 /* The Close Button */
 .close {
+  font-family: 'Mountains of Christmas', cursive;
   color: #aaa;
   float: right;
   font-size: 2vw;
@@ -97,6 +100,7 @@ function closeCancel() {
   text-decoration: none;
 }
 .ok {
+  font-family: 'Mountains of Christmas', cursive;
   cursor: pointer;
 }
 </style>
