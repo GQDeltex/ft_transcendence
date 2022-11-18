@@ -192,8 +192,8 @@ socket.on('onStreamJoin', (bigGameData) => {
       ball: ball?.getAll(),
       scores:
         props.priority === Priority.HOST
-          ? [yourScore, otherScore]
-          : [otherScore, yourScore],
+          ? [yourScore.value, otherScore.value]
+          : [otherScore.value, yourScore.value],
     });
   } else if (props.priority === Priority.VIEWER) {
     leftPaddle?.setAll(bigGameData.leftPaddle);
@@ -273,16 +273,16 @@ onUnmounted(() => {
         class="player2"
       />
     </div>
+    <canvas
+    id="game"
+    class="field"
+    :width="initialCanvasWidth"
+    :height="initialCanvasHeight"
+    />
     <div class="score">
       <div id="player">{{ otherScore }}</div>
       <div id="remote">{{ yourScore }}</div>
     </div>
-    <canvas
-      id="game"
-      class="field"
-      :width="initialCanvasWidth"
-      :height="initialCanvasHeight"
-    />
     <div v-if="showClaimVictory" class="modal">
       <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
@@ -305,7 +305,7 @@ onUnmounted(() => {
   position: relative;
   top: 1em;
   right: calc(100% / -2);
-  transform: translate(-50%, 30%);
+  transform: translate(-50%, -825%);
   display: flex;
   justify-content: center;
   font-weight: bold;
