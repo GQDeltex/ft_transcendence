@@ -13,7 +13,7 @@ export class Ball {
   private _direction: Vector;
   private _position: Vector;
   private _speed: number;
-  private readonly _defaultSpeed = 0.00042;
+  private readonly _defaultSpeed = 0.00032;
   private readonly _relativeBallSize = 0.0369;
   private _ctx: CanvasRenderingContext2D;
 
@@ -143,7 +143,7 @@ export class Ball {
     if (this.isPaddleCollision(yourPaddle) && this._isPlayer) {
       this._direction.x = -1;
       this._direction.y =
-        3 *
+        2 *
         (((this._position.y + this.getBallSize() / 2 - yourPaddle.getPosY()) /
           yourPaddle.getHeight()) *
           2 -
