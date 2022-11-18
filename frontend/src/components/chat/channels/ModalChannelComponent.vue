@@ -51,7 +51,7 @@ onMounted(() => {
       <label>Name</label>
       <input id="mytext" v-model="channelName" class="inputField" type="text" />
       <label>Password</label>
-      <input v-model="password" class="inputField" type="password" />
+      <input v-model="password" class="inputField" type="password"/>
       <br />
       <button class="ok" @click="closeOk()">OK</button>
     </div>
