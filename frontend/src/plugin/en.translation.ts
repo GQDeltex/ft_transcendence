@@ -129,7 +129,14 @@ export const en = {
   submit: 'Submit',
   category: 'Category',
   profile: 'Profile',
-  
+  online: 'online',
+  ingame: 'in game',
+  offline: 'offline',
+  owner: 'Owner',
+  admin: 'Admin',
+  muted: 'muted',
+  banned: 'banned',
+
 };
 
 export const NF_en = {

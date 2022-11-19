@@ -53,6 +53,16 @@ const statusBorder = computed(() => {
   }
 });
 
+const statusText = computed(() => {
+  switch (props.client.status) {
+    case 'online':
+      return useI18n().t('online');
+    case 'in game':
+      return useI18n().t('ingame');
+    default:
+      return useI18n().t('offline');
+  }
+});
 const toggle = ref(false);
 
 function localizedFriendStatus(friendStatus: FriendStatusEnum) {
@@ -198,7 +208,7 @@ const onChat = (username: string) => {
         <span class="username" :style="activeChat"
           >{{ client.title[0] }} {{ client.username }}</span
         >
-        <span :style="statusStyle" class="status">{{ client.status }}</span>
+        <span :style="statusStyle" class="status">{{ statusText }}</span>
       </div>
     </div>
     <div class="dot" @click="toggle = !toggle">⋮</div>

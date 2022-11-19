@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, computed } from 'vue';
 import type { User } from '@/store/user';
 import { useI18n } from 'vue-i18n';
 
@@ -10,13 +10,24 @@ const { user } = inject<{ user: User | null }>('user', {
 const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+const statusText = computed(() => {
+  switch (user?.status) {
+    case 'online':
+      return useI18n().t('online');
+    case 'in game':
+      return useI18n().t('ingame');
+    default:
+      return useI18n().t('offline');
+  }
+});
 </script>
 
 <template>
   <div v-if="user" class="about">
     <span style="font-size: 2vw" class="headtext">
       {{ useI18n().t('about') }}
-      <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
+      <span style="float: right">{{ capitalize(statusText ?? '') }}</span>
     </span>
     <div class="infoBox">
       {{ useI18n().t('username') }}:

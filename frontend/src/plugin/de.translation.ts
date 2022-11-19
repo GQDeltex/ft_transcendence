@@ -131,6 +131,14 @@ export const de = {
   submit: 'Übermitteln',
   category: 'Rubrik',
   profile: 'Profil',
+  online: 'im Internet',
+  ingame: 'im Spiel',
+  offline: 'im realen Leben',
+  owner: 'Eigentümer',
+  admin: 'Administrator',
+  muted: 'stumm geschalted',
+  banned: 'verbannt',
+
 };
 
 export const NF_de = {

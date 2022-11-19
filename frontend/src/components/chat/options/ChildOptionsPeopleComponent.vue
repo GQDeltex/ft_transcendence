@@ -55,6 +55,26 @@ const statusBorder = computed(() => {
   }
 });
 
+const channelUserRankStatusText = computed(() => {
+  switch (props.channelUserRank) {
+    case 'in chat':
+      return useI18n().t('inchat');
+    case 'Owner':
+      return useI18n().t('owner');
+    case 'Admin':
+      return useI18n().t('admin');
+  }
+});
+
+const channelUserStatusText = computed(() => {
+  switch (props.channelUserStatus) {
+    case 'muted':
+      return useI18n().t('muted');
+    case 'banned':
+      return useI18n().t('banned');
+  }
+});
+
 const toggle = ref(false);
 
 const onProfile = async () => {
@@ -79,7 +99,7 @@ const onProfile = async () => {
           >{{ client.title[0] }} {{ client.username }}</span
         >
         <span :style="statusStyle" class="status">
-          {{ props.channelUserRank }} {{ props.channelUserStatus }}</span
+          {{ channelUserRankStatusText }} {{ channelUserStatusText }}</span
         >
       </div>
     </div>
