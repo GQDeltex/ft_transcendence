@@ -19,10 +19,10 @@ const router = useRouter();
 
 async function dropDownClicked(selected: string) {
   showDropDown.value = false;
-  if (selected == 'Profile') {
+  if (selected == dropDownContent.value[0]) {
     await router.push({ path: `/profile/${userStore.id}` });
   }
-  if (selected == 'Logout') {
+  if (selected == dropDownContent.value[1]) {
     await userStore.logout();
     await router.push({ path: '/login' });
   }
