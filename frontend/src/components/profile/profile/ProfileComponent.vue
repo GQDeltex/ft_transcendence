@@ -70,6 +70,30 @@ async function updateTitle(title: string) {
     return;
   }
 }
+
+const langShowDropDown = ref(false);
+const langDropDownContent = ref<string[]>([
+  '🇬🇧 English',
+  '🇩🇪 Deutsch',
+  '🇪🇸 Español',
+  '🇫🇷 Français',
+  '🇮🇹 Italiano',
+  '🇷🇺 Русский',
+  '🇺🇦 Ураїнська',
+  '🇵🇱 Polska',
+  '🇹🇷 Türkçe',
+]);
+
+async function dropDownClicked(selected: string) {
+  langShowDropDown.value = false;
+  // if (selected == dropDownContent.value[0]) {
+  //   await router.push({ path: `/profile/${userStore.id}` });
+  // }
+  // if (selected == dropDownContent.value[1]) {
+  //   await userStore.logout();
+  //   await router.push({ path: '/login' });
+  // }
+}
 </script>
 
 <template>
@@ -145,6 +169,25 @@ async function updateTitle(title: string) {
     </div>
 
     <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
+
+    <div v-if="isMe" class="langSetup" @mouseleave="langShowDropDown = false">
+      {{ useI18n().t('changelanguage') }}
+        <img
+          alt="pen"
+          class="pen"
+          title="Change picture"
+          src="@/assets/pen.png"
+          @click="langShowDropDown = !langShowDropDown"
+          />
+        <DropDownComponent
+          v-if="langShowDropDown"
+          :items="langDropDownContent"
+          width="12vw"
+          height="12vw"
+          @close="dropDownClicked"
+          @mouseleave="langShowDropDown = false"
+          />
+        </div>
 
     <span v-if="isMe" class="twoFA"
       >{{ useI18n().t('twofa') }}
@@ -290,5 +333,13 @@ input:checked + .slider:before {
   height: 1.5vw;
   width: 1.5vw;
   cursor: pointer;
+}
+
+.langSetup {
+  margin: 1vw;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1vw;
 }
 </style>

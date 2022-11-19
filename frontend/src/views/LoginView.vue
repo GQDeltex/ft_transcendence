@@ -2,6 +2,8 @@
 import { useI18n } from 'vue-i18n';
 import TwoFAInputComponent from '@/components/globalUse/TwoFAInputComponent.vue';
 import { useUserStore } from '@/store/user';
+import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
+import {ref} from 'vue';
 
 const userStore = useUserStore();
 
@@ -10,18 +12,62 @@ const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 const login = () => {
   location.href = uri;
 };
+
+const langShowDropDown = ref(false);
+const langDropDownContent = ref<string[]>([
+  '🇬🇧 English',
+  '🇩🇪 Deutsch',
+  '🇪🇸 Español',
+  '🇫🇷 Français',
+  '🇮🇹 Italiano',
+  '🇷🇺 Русский',
+  '🇺🇦 Ураїнська',
+  '🇵🇱 Polska',
+  '🇹🇷 Türkçe',
+]);
+
+async function dropDownClicked(selected: string) {
+  langShowDropDown.value = false;
+  // if (selected == dropDownContent.value[0]) {
+  //   await router.push({ path: `/profile/${userStore.id}` });
+  // }
+  // if (selected == dropDownContent.value[1]) {
+  //   await userStore.logout();
+  //   await router.push({ path: '/login' });
+  // }
+}
 </script>
 
 <template>
   <div class="loginParent">
     <div class="buttons">
       <img alt="page logo" class="logo" src="@/assets/xmas.png" />
+      <div class="langSetup">
+        {{ useI18n().t('changelanguage') }}
+        <img
+          alt="pen"
+          class="pen"
+          title="Change picture"
+          src="@/assets/pen.png"
+          @click="langShowDropDown = !langShowDropDown"
+          />
+        <DropDownComponent
+          v-if="langShowDropDown"
+          :items="langDropDownContent"
+          width="12vw"
+          height="12vw"
+          @close="dropDownClicked"
+          @mouseleave="langShowDropDown = false"
+          />
+        </div>
     </div>
-    <span class="text"
-      >{{ useI18n().t('welcome1') }}
-      <p>{{ useI18n().t('welcome2') }}</p>
-      <p>{{ useI18n().t('welcome3') }}</p>
-    </span>
+    <div class="welcomeText">
+      <span class="text"
+        >{{ useI18n().t('welcome1') }}
+        <p>{{ useI18n().t('welcome2') }}</p>
+        <p>{{ useI18n().t('welcome3') }}</p>
+      </span>
+    </div>
     <div
       v-if="!userStore.isLoggedIn && !userStore.require2FAVerify"
       class="buttons"
@@ -110,4 +156,22 @@ button {
   box-shadow: 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
   transition-delay: 0.2s;
 } */
+.welcomeText{
+  display:flex;
+  flex-direction: row;
+
+}
+.langSetup {
+  margin: 1vw;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5vw;
+}
+
+.pen{
+  width: 1.5vw;
+  height: 1.5vw;
+  cursor: pointer;
+}
 </style>

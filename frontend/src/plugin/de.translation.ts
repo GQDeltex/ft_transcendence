@@ -1,4 +1,5 @@
 export const de = {
+  changelanguage: 'Sprache ändern',
   gamename: 'Weihnachtsbälle',
   leaderboard: 'Bestenliste',
   playnow: 'Jetzt Spielen',

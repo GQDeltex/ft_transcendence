@@ -1,4 +1,5 @@
 export const en = {
+  changelanguage: 'Change Language',
   gamename: 'Christmasballs',
   leaderboard: 'Leaderboard',
   playnow: 'Play Now',
@@ -108,7 +109,7 @@ export const en = {
   alpha: 'Alpha',
   wonagame: 'Won a Game!',
   sigma: 'Sigma',
-  wonfivegames: 'Won Five Games',
+  wonfivegames: 'Won Five Games!',
   noob: 'Noob!',
   lostagame: 'Lost a Game!',
   lplusr: 'L+R',
