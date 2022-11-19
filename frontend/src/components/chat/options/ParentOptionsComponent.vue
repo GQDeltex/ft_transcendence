@@ -158,25 +158,28 @@ function getChannelUserStatus(client: User) {
         </template>
       </div>
       <div class="buttonList">
-        <span class="headerText"> Options </span>
-        <span v-if="isOwner">
-          <button class="button" @click="passModalActive = true">
-            Change Password
-          </button>
-          <ModalUpdatePasswordComponent
-            v-if="passModalActive"
-            :current-channel="props.currentChannel"
-            @close="passModalActive = false"
-          />
-        </span>
-        <span v-if="props.currentChannel.name.startsWith('#')">
-          <button class="button" @click="leave">Leave Chat</button>
-        </span>
-        <span v-if="isOwner">
-          <button class="button" @click="makePublic">
-            Make {{ props.currentChannel.private ? 'Public' : 'Private' }}
-          </button>
-        </span>
+        <span class="headerText optionsHeader"> Options </span>
+
+        <button v-if="isOwner" class="button" @click="passModalActive = true">
+          Change password
+        </button>
+        <ModalUpdatePasswordComponent
+          v-if="passModalActive"
+          :current-channel="props.currentChannel"
+          @close="passModalActive = false"
+        />
+
+        <button
+          v-if="props.currentChannel.name.startsWith('#')"
+          class="button"
+          @click="leave"
+        >
+          Leave chat
+        </button>
+
+        <button v-if="isOwner" class="button" @click="makePublic">
+          Make {{ props.currentChannel.private ? 'public' : 'private' }}
+        </button>
       </div>
     </div>
   </div>
@@ -193,8 +196,12 @@ function getChannelUserStatus(client: User) {
 }
 
 .headerText {
-  font-size: 1vw;
+  font-size: 2vw;
   color: #c00000;
+}
+
+.optionsHeader {
+  margin-top: 1vh;
 }
 
 .list {
@@ -204,7 +211,7 @@ function getChannelUserStatus(client: User) {
 
 .subheader {
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.5vw;
   color: grey;
   font-weight: bold;
   margin-top: 5px;
@@ -226,7 +233,7 @@ function getChannelUserStatus(client: User) {
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   border-color: transparent;
   margin-top: 5px;
 }

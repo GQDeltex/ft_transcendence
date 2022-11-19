@@ -164,7 +164,7 @@ const onChat = (username: string) => {
       <RoundPictureComponent
         class="picture"
         :picture="client.picture"
-        size="1.5vw"
+        size="2vw"
         :border-color="statusBorder"
         :is-notified="messagesStore.isNotified(client.username)"
       />
@@ -222,7 +222,7 @@ const onChat = (username: string) => {
     >
       Decline game request
     </button>
-    <button class="butt" @click="onProfile">Show Profile</button>
+    <button class="butt" @click="onProfile">Show profile</button>
   </div>
 </template>
 
@@ -254,12 +254,12 @@ const onChat = (username: string) => {
 
 .username {
   color: white;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   font-stretch: expanded;
 }
 
 .status {
-  font-size: 0.6vw;
+  font-size: 1vw;
   color: grey;
 }
 
@@ -277,7 +277,7 @@ const onChat = (username: string) => {
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  font-size: 0.5vw;
+  font-size: 1vw;
   border-color: transparent;
   margin-top: 3px;
 }

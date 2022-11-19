@@ -54,7 +54,7 @@ const userStore = useUserStore();
 }
 
 .text {
-  font-size: 1vw;
+  font-size: 2vw;
   padding-bottom: 0.5vw;
   color: #c00000;
 }
