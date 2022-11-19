@@ -8,14 +8,14 @@ import { fr, NF_fr } from './fr.translation';
 const messages = {
   'en-US': en,
   'de-DE': de,
-  'fr-FR' : fr,
+  'fr-FR': fr,
   'ru-RU': ru,
 };
 
 const numberFormats = {
   'en-US': NF_en,
   'de-DE': NF_de,
-  'fr-FR' : NF_fr,
+  'fr-FR': NF_fr,
   'ru-RU': NF_ru,
 } as { [key: string]: DefineNumberFormat };
 

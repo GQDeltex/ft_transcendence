@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n';
 import TwoFAInputComponent from '@/components/globalUse/TwoFAInputComponent.vue';
 import { useUserStore } from '@/store/user';
 import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 const userStore = useUserStore();
 
@@ -50,7 +50,7 @@ async function dropDownClicked(selected: string) {
           title="Change picture"
           src="@/assets/pen.png"
           @click="langShowDropDown = !langShowDropDown"
-          />
+        />
         <DropDownComponent
           v-if="langShowDropDown"
           :items="langDropDownContent"
@@ -58,8 +58,8 @@ async function dropDownClicked(selected: string) {
           height="12vw"
           @close="dropDownClicked"
           @mouseleave="langShowDropDown = false"
-          />
-        </div>
+        />
+      </div>
     </div>
     <div class="welcomeText">
       <span class="text"
@@ -156,10 +156,9 @@ button {
   box-shadow: 0 0 10px #fff, 0 0 40px #fff, 0 0 80px #fff;
   transition-delay: 0.2s;
 } */
-.welcomeText{
-  display:flex;
+.welcomeText {
+  display: flex;
   flex-direction: row;
-
 }
 .langSetup {
   margin: 1vw;
@@ -169,7 +168,7 @@ button {
   font-size: 1.5vw;
 }
 
-.pen{
+.pen {
   width: 1.5vw;
   height: 1.5vw;
   cursor: pointer;

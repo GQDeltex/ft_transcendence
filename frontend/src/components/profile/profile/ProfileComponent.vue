@@ -172,22 +172,22 @@ async function dropDownClicked(selected: string) {
 
     <div v-if="isMe" class="langSetup" @mouseleave="langShowDropDown = false">
       {{ useI18n().t('changelanguage') }}
-        <img
-          alt="pen"
-          class="pen"
-          title="Change picture"
-          src="@/assets/pen.png"
-          @click="langShowDropDown = !langShowDropDown"
-          />
-        <DropDownComponent
-          v-if="langShowDropDown"
-          :items="langDropDownContent"
-          width="12vw"
-          height="12vw"
-          @close="dropDownClicked"
-          @mouseleave="langShowDropDown = false"
-          />
-        </div>
+      <img
+        alt="pen"
+        class="pen"
+        title="Change picture"
+        src="@/assets/pen.png"
+        @click="langShowDropDown = !langShowDropDown"
+      />
+      <DropDownComponent
+        v-if="langShowDropDown"
+        :items="langDropDownContent"
+        width="12vw"
+        height="12vw"
+        @close="dropDownClicked"
+        @mouseleave="langShowDropDown = false"
+      />
+    </div>
 
     <span v-if="isMe" class="twoFA"
       >{{ useI18n().t('twofa') }}
