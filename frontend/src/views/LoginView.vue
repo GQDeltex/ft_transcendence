@@ -6,7 +6,7 @@ import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
 import { ref } from 'vue';
 
 const userStore = useUserStore();
-
+const i18n = useI18n();
 const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 
 const login = () => {
@@ -26,15 +26,30 @@ const langDropDownContent = ref<string[]>([
   '🇹🇷 Türkçe',
 ]);
 
-async function dropDownClicked(selected: string) {
+function dropDownClicked(selected: string) {
   langShowDropDown.value = false;
-  // if (selected == dropDownContent.value[0]) {
-  //   await router.push({ path: `/profile/${userStore.id}` });
-  // }
-  // if (selected == dropDownContent.value[1]) {
-  //   await userStore.logout();
-  //   await router.push({ path: '/login' });
-  // }
+  switch (selected) {
+    case '🇬🇧 English':
+      // console.log(useI18n().locale.value);
+      // useI18n().locale.value = 'en-US';
+    case langDropDownContent.value[1]:
+      return useI18n().locale.value = 'de-DE';
+    case langDropDownContent.value[2]:
+      return useI18n().locale.value = 'es-ES';
+    case langDropDownContent.value[3]:
+      return useI18n().locale.value = 'fr-FR';
+    case langDropDownContent.value[4]:
+      return useI18n().locale.value = 'it-IT';
+    case langDropDownContent.value[5]:
+      return useI18n().locale.value = 'ru-RU';
+    case langDropDownContent.value[6]:
+      return useI18n().locale.value = 'uk-UK';
+    case langDropDownContent.value[7]:
+      return useI18n().locale.value = 'pl-PL';
+    case langDropDownContent.value[8]:
+      return useI18n().locale.value = 'tr-TR';
+    default:
+  }
 }
 </script>
 
