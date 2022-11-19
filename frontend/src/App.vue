@@ -94,7 +94,7 @@ window.addEventListener('resize', () => {
 
 // Generate some snow flakes.
 const flakes: SnowFlake[] = [];
-const numOfFlakes = randomInt(300, 600);
+const numOfFlakes = randomInt(100, 300);
 for (let i = 0; i < numOfFlakes; i++) {
   flakes.push({
     x: randomInt(0, canvas.width),
@@ -152,7 +152,7 @@ window.requestAnimationFrame(draw);
     :text="error"
     :callback="errorStore.delError"
   />
-  <RouterView @hide="hide = true" @unhide="hide = false" />
+  <RouterView @hide="hide = true" @show="hide = false" />
 </template>
 
 <style>

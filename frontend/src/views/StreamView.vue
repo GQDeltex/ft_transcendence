@@ -11,8 +11,36 @@ import type { User } from '@/store/user';
 import UserService from '@/service/UserService';
 
 const games = ref<Game[]>([]);
-const player1User = ref<User>();
-const player2User = ref<User>();
+const player1User = ref<User>({
+  id: 0,
+  campus: '',
+  coalition: '',
+  country: '',
+  firstname: '',
+  intra: '',
+  lastname: '',
+  points: 0,
+  username: '',
+  title: [''],
+  picture: '',
+  status: '',
+  equipped: [],
+});
+const player2User = ref<User>({
+  id: 0,
+  campus: '',
+  coalition: '',
+  country: '',
+  firstname: '',
+  intra: '',
+  lastname: '',
+  points: 0,
+  username: '',
+  title: [''],
+  picture: '',
+  status: '',
+  equipped: [],
+});
 const route = useRoute();
 const routExist = computed(() => typeof route.params.id === 'undefined');
 const displayEnd = ref(false);
@@ -36,18 +64,17 @@ watch(
         player1User.value = await UserService.findOneById(data.player1Id);
         player2User.value = await UserService.findOneById(data.player2Id);
         loadedData.value = true;
-        console.log(data.player1Id, data.player2Id);
       },
     );
   },
 );
 
 GameService.findAll('running').then(
-  (gamesreturn: Game[]) => (games.value = gamesreturn),
+  (fetchGames: Game[]) => (games.value = fetchGames),
 );
 
 GameService.findAll('paused').then(
-  (gamesreturn: Game[]) => (games.value = gamesreturn),
+  (fetchGames: Game[]) => (games.value = fetchGames),
 );
 
 socket.on('Game', async ({ gameId }) => {
@@ -73,7 +100,6 @@ socket.on('Game', async ({ gameId }) => {
       />
     </div>
     <div v-if="!routExist && !displayEnd">
-      <h1>pathed stream</h1>
       <PongComponent
         v-if="
           loadedData &&
@@ -81,8 +107,8 @@ socket.on('Game', async ({ gameId }) => {
           typeof player2User !== 'undefined'
         "
         :game-id="gameId"
-        :player1-i-d="player1User"
-        :player2-i-d="player2User"
+        :host-player="player1User"
+        :other-player="player2User"
         :priority="2"
       />
     </div>

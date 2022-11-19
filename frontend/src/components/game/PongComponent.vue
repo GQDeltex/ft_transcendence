@@ -1,352 +1,293 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { socket } from '@/service/socket';
-import { Element } from './element';
-import { Ball } from './ball';
+import { Ball, Priority } from './ball';
 import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
+import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
-import type { Item } from '@/store/user';
-
-const userStore = useUserStore();
-const remoteScore = ref(0);
-const playerScore = ref(0);
-const gameLoader = ref(true);
-const ballImg = ref(
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
-);
-const mapImg = ref(
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png',
-);
-
-const claimVictory = ref(false);
-let timeoutId = -1;
-const paddleImg = ref(
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png',
-);
 
 const props = defineProps<{
   gameId: number;
-  priority: number;
-  player1ID: {
-    id: number;
-    username: string;
-    title: string[];
-    picture: string;
-    status?: string | undefined;
-    equipped?: Item[];
-  };
-  player2ID: {
-    id: number;
-    username: string;
-    title: string[];
-    picture: string;
-    status?: string | undefined;
-    equipped?: Item[] | undefined;
-  };
+  priority: Priority;
+  hostPlayer: User;
+  otherPlayer: User;
 }>();
 
-function onClaimVictory() {
-  claimVictory.value = false;
-  socket.emit('claimVictory', { gameId: props.gameId });
-}
+const userStore = useUserStore();
 
-// console.log(props);
-function graph() {
-  let cur: Item;
-  if (
-    typeof props.player1ID.equipped !== 'undefined' &&
-    typeof props.player2ID.equipped !== 'undefined'
-  ) {
-    for (
-      let i = 0;
-      (cur =
-        props.priority === 0
-          ? props.player1ID.equipped[i]
-          : props.player2ID.equipped[i]);
-      i++
-    ) {
-      console.log(cur);
-      if (cur.type == 'ball') {
-        ballImg.value = cur.picture;
-      } else if (cur.type == 'map') {
-        mapImg.value = cur.picture;
-      } else if (cur.type == 'paddle') {
-        paddleImg.value = cur.picture;
-      }
-    }
-  }
-}
+const yourScore = ref(0);
+const otherScore = ref(0);
+const isGameLoaded = ref(true);
+const showClaimVictory = ref(false);
+let timeoutId = -1;
 
-onUnmounted(() => {
-  gameLoader.value = false;
+let ball: Ball | null = null;
+let leftPaddle: Paddle | null = null;
+let rightPaddle: Paddle | null = null;
+
+const initialCanvasWidth = 0.69 * window.innerWidth;
+const initialCanvasHeight = (initialCanvasWidth * 9) / 16;
+
+const isHost = computed(() => {
+  return props.priority === Priority.HOST;
 });
 
-onMounted(async () => {
-  graph();
-  // console.log(props.player1ID);
-  // console.log(props.player2ID);
-  // player1.value = await UserService.findOneById(p   rops.player1ID);
-  // player2.value = await UserService.findOneById(props.player2ID);
-  // console.log('player1 = ' + player1.value.username + ' player2 ' + player2.value.username)
-  console.log(props.gameId);
-  let me: boolean =
-    userStore.id === props.player1ID.id || userStore.id === props.player2ID.id;
-  const field = new Element(document.getElementById('feld'), props.gameId);
-  const ball = new Ball(
-    document.getElementById('ball'),
-    field.getRect(),
-    props.gameId,
-    props.priority,
-    me,
-  );
-  const playerPad = new Paddle(
-    document.getElementById('playerPad'),
-    field.getRect(),
-    props.gameId,
-  );
-  let remotePad = new Paddle(
-    document.getElementById('remotePad'),
-    field.getRect(),
-    props.gameId,
-  );
+const onClaimVictory = () => {
+  showClaimVictory.value = false;
+  socket.emit('claimVictory', { gameId: props.gameId });
+};
 
-  let lastTime: number | null = null;
-  let delta: number;
+const ballImage = new Image();
+const mapImage = new Image();
+const paddleImage = new Image();
 
-  async function pupdate(time: number) {
-    if (lastTime != null) {
-      delta = time - lastTime;
-      ball.update(delta, remotePad.getRect(), me);
-      remotePad.update(delta, time);
-      playerPad.update(delta, time);
-      if (props.priority === 0) loseCase();
-    }
-    lastTime = time;
-    if (gameLoader.value) window.requestAnimationFrame(pupdate);
-  }
+let equipped: Item[];
+if (props.priority === Priority.HOST)
+  equipped = props.hostPlayer.equipped ?? [];
+else if (props.priority === Priority.CLIENT)
+  equipped = props.otherPlayer.equipped ?? [];
+else equipped = userStore.equipped ?? [];
 
-  function loseCase() {
-    if (ball.get_pos_x() >= 100 + ball._shape.x / 2) {
-      playerScore.value++;
-      ball.reset([playerScore.value, remoteScore.value], me);
-      playerPad.sety(50);
-      remotePad.sety(50);
-    }
-    if (ball.get_pos_x() <= 0 - ball._shape.x / 2) {
-      remoteScore.value++;
-      ball.reset([playerScore.value, remoteScore.value], me);
-      playerPad.sety(50);
-      remotePad.sety(50);
-    }
-  }
+ballImage.src =
+  equipped.find((item) => item.type === 'ball')?.picture ??
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+mapImage.src =
+  equipped.find((item) => item.type === 'map')?.picture ??
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png';
+paddleImage.src =
+  equipped.find((item) => item.type === 'paddle')?.picture ??
+  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
 
-  function handleUp(e: KeyboardEvent): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp' || e.code == 'ArrowDown') {
-      remotePad.changeDir(0, false, true);
-    }
-  }
+const handleKeyUp = (e: KeyboardEvent): void => {
+  if (e.repeat) return;
+  if (e.code === 'ArrowUp' || e.code === 'ArrowDown') rightPaddle?.setDir(0);
+};
 
-  function handleDown(e: KeyboardEvent): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (e.repeat) return;
-    if (e.code == 'ArrowUp') {
-      remotePad.changeDir(-10, false, true);
-    } else if (e.code == 'ArrowDown') {
-      remotePad.changeDir(10, false, true);
-    }
-  }
-  function handleBlur(): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
-    socket.emit('blur', {
-      gameId: props.gameId,
-      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
-    });
-  }
-  function handleFocus(): void {
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    if (props.player1ID.id === 42069 || props.player2ID.id == 42069) return;
-    socket.emit('focus', {
-      gameId: props.gameId,
-      cowardId: props.priority == 0 ? props.player1ID.id : props.player2ID.id,
-    });
-  }
+const handleKeyDown = (e: KeyboardEvent): void => {
+  if (e.repeat) return;
+  if (e.code === 'ArrowUp') rightPaddle?.setDir(-1);
+  if (e.code === 'ArrowDown') rightPaddle?.setDir(1);
+};
 
-  window.addEventListener('keydown', handleDown);
-  window.addEventListener('keyup', handleUp);
-  window.addEventListener('blur', handleBlur);
-  window.addEventListener('focus', handleFocus);
-
-  socket.on('gameData', (e) => {
-    console.log(e);
-    let me: boolean =
-      userStore.id === props.player1ID.id ||
-      userStore.id === props.player2ID.id;
-    if (e.name === 'opponent') {
-      if (props.priority === 2) {
-        if (e.from === props.player1ID.id)
-          playerPad.changeDir(e.changeDir, false, me);
-        if (e.from === props.player2ID.id)
-          remotePad.changeDir(e.changeDir, false, me);
-      } else {
-        console.log(e.from, props.priority);
-        if (e.from === props.player2ID.id && props.priority === 0)
-          playerPad.changeDir(e.changeDir, true, me);
-        if (e.from === props.player1ID.id && props.priority === 1)
-          playerPad.changeDir(e.changeDir, true, me);
-      }
-    }
-
-    if (e.name === 'ball') {
-      if (props.priority === 2 && e.from === props.player2ID.id) {
-        e.changeDir[2] = 100 - e.changeDir[2];
-        e.changeDir[0] = e.changeDir[0] * -1;
-      }
-      ball.changeDir(e.changeDir);
-    }
-    if (typeof e.score != 'undefined') {
-      remoteScore.value = e.score[0];
-      playerScore.value = e.score[1];
-      playerPad.sety(50);
-      remotePad.sety(50);
-    }
+const handleBlur = (): void => {
+  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  socket.emit('gameBlur', {
+    gameId: props.gameId,
+    cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
   });
+};
 
-  socket.on('blur', (cowardId: number) => {
-    ball.set_speed(0);
-    playerPad.changeDir(0, false, false);
-    remotePad.changeDir(0, false, false);
+const handleFocus = (): void => {
+  socket.emit('gameFocus', {
+    gameId: props.gameId,
+    cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
+  });
+};
+
+let lastTime = 0;
+let elapsedTime = 0;
+const update = (currentTime: number) => {
+  if (lastTime !== 0) elapsedTime = currentTime - lastTime;
+  if (leftPaddle === null || rightPaddle === null) return;
+  const canvas = document.getElementById('game') as HTMLCanvasElement | null;
+  if (canvas === null) return window.requestAnimationFrame(update);
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+  ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
+  leftPaddle?.draw(elapsedTime);
+  rightPaddle?.draw(elapsedTime);
+  lastTime = currentTime;
+  if (isGameLoaded.value) window.requestAnimationFrame(update);
+};
+
+socket.on('gameData', (gameData) => {
+  if (gameData.name === 'opponent') {
+    if (props.priority === Priority.VIEWER) {
+      if (gameData.from === props.otherPlayer.id)
+        rightPaddle?.setDir(gameData.paddleDir, false);
+      if (gameData.from === props.hostPlayer.id)
+        leftPaddle?.setDir(gameData.paddleDir, false);
+    } else {
+      if (
+        (isHost.value && gameData.from === props.otherPlayer.id) ||
+        (!isHost.value && gameData.from === props.hostPlayer.id)
+      )
+        leftPaddle?.setDir(gameData.paddleDir, false);
+    }
+  }
+
+  if (gameData.name === 'ball' && gameData.from !== userStore.id) {
     if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    window.removeEventListener('keydown', handleDown);
-    window.removeEventListener('keyup', handleUp);
-    if (
-      (props.priority == 0 && cowardId != props.player1ID.id) ||
-      (props.priority != 0 && cowardId != props.player2ID.id)
+      props.priority === Priority.VIEWER &&
+      gameData.from === props.otherPlayer.id
     ) {
-      claimVictory.value = true;
+      if (ball === null) return;
+      gameData.direction.x = -gameData.direction.x;
+      gameData.position.x =
+        1 - gameData.position.x - ball.getRelativeBallSize();
+      console.log(gameData.position);
+    }
+    ball?.setDir(gameData.direction);
+    ball?.setPos(gameData.position);
+  }
+
+  if (typeof gameData.score !== 'undefined') {
+    if (props.priority === Priority.HOST) {
+      otherScore.value = gameData.score[1];
+      yourScore.value = gameData.score[0];
+    } else {
+      otherScore.value = gameData.score[0];
+      yourScore.value = gameData.score[1];
+    }
+  }
+});
+
+socket.on('gameBlur', (cowardId: number) => {
+  ball?.setSpeed(0);
+  leftPaddle?.setDir(0, false);
+  rightPaddle?.setDir(0, false);
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
+  if (
+    props.priority !== Priority.VIEWER &&
+    ((isHost.value && cowardId != props.hostPlayer.id) ||
+      (!isHost.value && cowardId != props.otherPlayer.id))
+  ) {
+    showClaimVictory.value = true;
+    const claimButton = document.getElementById(
+      'claimButton',
+    ) as HTMLButtonElement | null;
+    if (claimButton !== null) claimButton.disabled = true;
+    if (timeoutId > -1) {
+      clearTimeout(timeoutId);
+      timeoutId = -1;
+    }
+    timeoutId = setTimeout(() => {
       const claimButton = document.getElementById(
         'claimButton',
       ) as HTMLButtonElement | null;
-      if (claimButton !== null) claimButton.disabled = true;
-      if (timeoutId > -1) {
-        clearTimeout(timeoutId);
-        timeoutId = -1;
-      }
-      timeoutId = setTimeout(() => {
-        const claimButton = document.getElementById(
-          'claimButton',
-        ) as HTMLButtonElement | null;
-        if (claimButton !== null) claimButton.disabled = false;
-      }, 10000);
-    }
-  });
+      if (claimButton !== null) claimButton.disabled = false;
+    }, 10000);
+  }
+});
 
-  socket.on('focus', () => {
-    ball.set_speed();
-    if (
-      userStore.id !== props.player1ID.id &&
-      userStore.id !== props.player2ID.id
-    )
-      return;
-    claimVictory.value = false;
-    window.addEventListener('keydown', handleDown);
-    window.addEventListener('keyup', handleUp);
-  });
+socket.on('gameFocus', () => {
+  showClaimVictory.value = false;
+  ball?.setSpeed();
+  if (props.priority !== Priority.VIEWER) {
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+  }
+});
 
-  window.onresize = function () {
-    const pField = new Element(document.getElementById('feld'), props.gameId);
-    const pBall = new Ball(
-      document.getElementById('ball'),
-      field.getRect(),
-      props.gameId,
-      props.priority,
-      me,
-    );
-    const pPlay = new Paddle(
-      document.getElementById('playerPad'),
-      field.getRect(),
-      props.gameId,
-    );
-    const pRemo = new Paddle(
-      document.getElementById('remotePad'),
-      field.getRect(),
-      props.gameId,
-    );
+socket.on('onStreamJoin', (bigGameData) => {
+  if (isHost.value) {
+    socket.emit('onStreamJoin', {
+      requesterId: bigGameData.requesterId,
+      gameId: props.gameId,
+      leftPaddle: leftPaddle?.getAll(),
+      rightPaddle: rightPaddle?.getAll(),
+      ball: ball?.getAll(),
+      scores:
+        props.priority === Priority.HOST
+          ? [yourScore.value, otherScore.value]
+          : [otherScore.value, yourScore.value],
+    });
+  } else if (props.priority === Priority.VIEWER) {
+    leftPaddle?.setAll(bigGameData.leftPaddle);
+    rightPaddle?.setAll(bigGameData.rightPaddle);
+    ball?.setAll(bigGameData.ball);
+    yourScore.value = bigGameData.scores[0];
+    otherScore.value = bigGameData.scores[1];
+  }
+});
 
-    ball.reeesize(pField.getRect(), pBall.getRect());
-    playerPad.reeesize(pField.getRect(), pPlay.getRect());
-    remotePad.reeesize(pField.getRect(), pRemo.getRect());
+onMounted(async () => {
+  await nextTick();
+  const canvas = document.getElementById('game') as HTMLCanvasElement;
+  ball = new Ball(props.gameId, canvas, ballImage, props.priority);
+  leftPaddle = new Paddle(props.gameId, canvas, paddleImage, true);
+  rightPaddle = new Paddle(props.gameId, canvas, paddleImage, false);
+
+  if (props.priority === Priority.VIEWER) {
+    socket.emit('onStreamJoin', {
+      gameId: props.gameId,
+    });
+  }
+
+  window.onresize = () => {
+    const canvas = document.getElementById('game') as HTMLCanvasElement;
+    const oldCanvasWidth: number = canvas.width;
+    const oldCanvasHeight: number = canvas.height;
+    canvas.width = 0.69 * window.innerWidth;
+    canvas.height = (canvas.width * 9) / 16;
+    ball?.resize(oldCanvasWidth, oldCanvasHeight);
+    leftPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
+    rightPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
   };
-  window.requestAnimationFrame(pupdate);
+
+  if (props.priority !== Priority.VIEWER) {
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+  }
+
+  window.requestAnimationFrame(update);
+});
+
+onUnmounted(() => {
+  isGameLoaded.value = false;
+  socket.off('gameData');
+  socket.off('gameBlur');
+  socket.off('gameFocus');
+  socket.off('onStreamJoin');
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
+  window.removeEventListener('blur', handleBlur);
+  window.removeEventListener('focus', handleFocus);
 });
 </script>
 
 <template>
   <div>
-    <div v-if="props.priority == 0" class="players">
+    <div v-if="isHost" class="players">
       <GamePeopleComponent
-        :key="props.player2ID.id"
-        :client="props.player2ID"
+        :key="props.otherPlayer.id"
+        :client="props.otherPlayer"
         class="player1"
       />
       <GamePeopleComponent
-        :key="props.player1ID.id"
-        :client="props.player1ID"
+        :key="props.hostPlayer.id"
+        :client="props.hostPlayer"
         class="player2"
       />
     </div>
     <div v-else class="players">
       <GamePeopleComponent
-        :key="props.player1ID.id"
-        :client="props.player1ID"
+        :key="props.hostPlayer.id"
+        :client="props.hostPlayer"
         class="player1"
       />
       <GamePeopleComponent
-        :key="props.player2ID.id"
-        :client="props.player2ID"
+        :key="props.otherPlayer.id"
+        :client="props.otherPlayer"
         class="player2"
       />
     </div>
-    <div id="feld" class="field">
-      <div class="score">
-        <div id="player">{{ playerScore }}</div>
-        <div id="remote">{{ remoteScore }}</div>
-      </div>
-      <img class="back" :src="mapImg" />
-      <div id="ball" class="ball">
-        <img class="ball" :src="ballImg" />
-      </div>
-      <div id="playerPad" class="paddle paddle-left">
-        <img class="pad" :src="paddleImg" />
-      </div>
-      <div id="remotePad" class="paddle paddle-right">
-        <img class="pad" :src="paddleImg" />
-      </div>
+    <canvas
+      id="game"
+      class="field"
+      :width="initialCanvasWidth"
+      :height="initialCanvasHeight"
+    />
+    <div class="score">
+      <div id="player">{{ otherScore }}</div>
+      <div id="remote">{{ yourScore }}</div>
     </div>
-    <div v-if="claimVictory" class="modal">
+    <div v-if="showClaimVictory" class="modal">
       <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
           Claim victory
@@ -358,97 +299,53 @@ onMounted(async () => {
 
 <style scoped>
 .field {
-  background-color: #212121;
-  position: relative;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1vh;
-  height: width * 0.75;
-  min-width: 400px;
-  width: 60vw;
-  overflow: hidden;
-  z-index: -1;
-}
-.back {
-  height: 100%;
-  width: 106%;
-  transform: translate(-3%, -6%);
-  z-index: -1;
-}
-.pad {
-  height: 100%;
-  width: 100%;
-  z-index: 0;
-}
-.paddle {
-  --y: 50;
-  position: absolute;
-  margin: auto;
-  background-color: #fff;
-  top: calc(var(--y) * 1%);
-  transform: translate(0%, -50%);
-  width: 1%;
-  height: 10%;
-  z-index: 0;
+  display: block;
+  z-index: 69;
 }
 
-.paddle-left {
-  right: 98%;
-}
-.paddle-right {
-  right: 1%;
-}
-.ball {
-  --x: 50;
-  --y: 50;
-  --col: #fff;
-  position: absolute;
-  background-color: var(--col);
-  left: calc(var(--x) * 1%);
-  top: calc(var(--y) * 1%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  width: 2vw;
-  height: 2vw;
-  z-index: 0;
-}
 .score {
-  font-family: 'Silkscreen', cursive;
   position: relative;
   top: 1em;
   right: calc(100% / -2);
-  transform: translateX(-50%);
+  transform: translate(-50%, -825%);
   display: flex;
   justify-content: center;
   font-weight: bold;
   font-size: 4vw;
-
+  font-family: 'Silkscreen', cursive;
   color: white;
   z-index: 1;
 }
+
 .score > * {
-  font-family: 'Silkscreen', cursive;
   flex-grow: 1;
   flex-basis: 0;
   padding: 0 1%;
   margin: 0 0;
 }
+
 .score > :first-child {
   text-align: right;
 }
+
 .score > :last-child {
   text-align: left;
 }
+
 .player1 {
   grid-column: 1/2;
   justify-content: center;
   text-align: center;
 }
+
 .player2 {
   grid-column: 2/3;
   justify-content: center;
   text-align: center;
 }
+
 .players {
   display: grid;
 }
@@ -466,7 +363,6 @@ onMounted(async () => {
   background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
 }
 
-/* Modal Content/Box */
 .modal-content {
   background-image: url('@/assets/frosty_bg_frame.png');
   background-repeat: no-repeat;
@@ -489,6 +385,7 @@ onMounted(async () => {
   top: -15vw;
   left: 25vw;
 }
+
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 850px) {
   .modal-content {
@@ -498,6 +395,7 @@ onMounted(async () => {
     left: 0vw;
   }
 }
+
 .modal-content h1 {
   font-size: 1.5vw;
   margin: 0;
@@ -514,6 +412,7 @@ onMounted(async () => {
   border-color: transparent;
   margin-bottom: 1%;
 }
+
 .ok:disabled {
   font-family: 'Mountains of Christmas', cursive;
   cursor: pointer;
