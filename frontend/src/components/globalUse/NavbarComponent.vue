@@ -33,7 +33,9 @@ async function dropDownClicked(selected: string) {
     </router-link>
   </div>
   <div class="column2">
-    <span>{{ userStore.title[0] }}&nbsp;</span>
+    <span class="clickme" @click="showDropDown = !showDropDown"
+      >{{ userStore.title[0] }}&nbsp;</span
+    >
     <div class="userAndPicture">
       <div class="columncontent" @click="showDropDown = !showDropDown">
         {{ userStore.username }}
@@ -73,6 +75,9 @@ async function dropDownClicked(selected: string) {
 </template>
 
 <style scoped>
+.clickme {
+  cursor: pointer;
+}
 .item {
   position: relative;
 }
