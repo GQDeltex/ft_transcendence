@@ -18,7 +18,8 @@ const submit = async () => {
 
 <template>
   <div class="input">
-    <span>{{ useI18n().t('enter2fa') }}</span><br />
+    <span>{{ useI18n().t('enter2fa') }}</span
+    ><br />
     <input v-model="code" type="text" @keyup.enter="submit" />
     <button @click="submit">{{ useI18n().t('submit') }}</button>
   </div>

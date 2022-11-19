@@ -10,7 +10,10 @@ import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
-const dropDownContent = ref<string[]>([useI18n().t('profile'), useI18n().t('logoutbutton')]);
+const dropDownContent = ref<string[]>([
+  useI18n().t('profile'),
+  useI18n().t('logoutbutton'),
+]);
 const showDropDown = ref(false);
 const router = useRouter();
 

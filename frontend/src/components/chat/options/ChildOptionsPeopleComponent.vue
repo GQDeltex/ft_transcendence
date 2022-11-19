@@ -63,6 +63,8 @@ const channelUserRankStatusText = computed(() => {
       return useI18n().t('owner');
     case 'Admin':
       return useI18n().t('admin');
+    default:
+      return '';
   }
 });
 
@@ -72,6 +74,8 @@ const channelUserStatusText = computed(() => {
       return useI18n().t('muted');
     case 'banned':
       return useI18n().t('banned');
+    default:
+      return '';
   }
 });
 

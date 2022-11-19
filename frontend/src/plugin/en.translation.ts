@@ -16,6 +16,7 @@ export const en = {
   equip: 'Equip',
   unequip: 'Unequip',
   profilepictures: 'Profile Pictures',
+  map: 'Map',
   maps: 'Maps',
   sounds: 'Sounds',
   streamoverview: 'Active Streams',
@@ -136,7 +137,13 @@ export const en = {
   admin: 'Admin',
   muted: 'muted',
   banned: 'banned',
-
+  christmasmap: 'Christmas Map',
+  redmap: 'Red Map',
+  yellowmap: 'Yellow Map',
+  blueball: 'Blue Ball',
+  christmasball: 'Christmas Ball',
+  yellowball: 'Yellow Ball',
+  sugarcane: 'Candy cane',
 };
 
 export const NF_en = {

@@ -35,7 +35,9 @@ function closeCancel() {
         <span>{{ useI18n().t('enter2fa') }}</span>
         <br />
         <input v-model="code" type="text" @keyup.enter="submit" /><br />
-        <button class="button" @click="submit">{{ useI18n().t('submit') }}</button>
+        <button class="button" @click="submit">
+          {{ useI18n().t('submit') }}
+        </button>
       </div>
     </div>
   </div>

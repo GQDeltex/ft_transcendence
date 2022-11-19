@@ -41,7 +41,8 @@ function closeCancel() {
       </button>
       <br />
       <button class="ok" @click="resetPicture">
-        {{ useI18n().t('resetpicture') }}</button>
+        {{ useI18n().t('resetpicture') }}
+      </button>
     </div>
   </div>
 </template>

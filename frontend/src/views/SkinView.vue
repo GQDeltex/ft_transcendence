@@ -4,7 +4,6 @@ import type { Item } from '@/store/user';
 import { onMounted, ref } from 'vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
-import { useI18n } from 'vue-i18n';
 
 const errorStore = useErrorStore();
 const items = ref<Item[]>([]);

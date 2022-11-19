@@ -2,10 +2,33 @@
 import PayButtonComponent from '@/components/skinShop/PayPalButtonComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import type { Item } from '@/store/user';
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
   item: Item;
 }>();
+
+const itemNameText = computed(() => {
+  switch (props.item.name) {
+    case 'Christmas map':
+      return useI18n().t('christmasmap');
+    case 'Red map':
+      return useI18n().t('redmap');
+    case 'Yellow map':
+      return useI18n().t('yellowmap');
+    case 'Blue ball':
+      return useI18n().t('blueball');
+    case 'Christmas ball':
+      return useI18n().t('christmasball');
+    case 'Yellow ball':
+      return useI18n().t('yellowball');
+    case 'Sugar Cane':
+      return useI18n().t('sugarcane');
+    default:
+      return props.item.name;
+  }
+});
 </script>
 
 <template>
@@ -16,7 +39,7 @@ defineProps<{
       border-color="transparent"
       class="roundPic"
     />
-    <span class="item-name">{{ item.name }}</span>
+    <span class="item-name">{{ itemNameText }}</span>
     <span class="item-price">{{ item.price }}€</span>
     <PayButtonComponent :item="item" class="payPal" />
   </div>

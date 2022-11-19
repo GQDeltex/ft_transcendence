@@ -16,6 +16,7 @@ export const de = {
   equip: 'Ausrüsten',
   unequip: 'Ablegen',
   profilepictures: 'Profilbilder',
+  map: 'Karte',
   maps: 'Karten',
   sounds: 'Geräusche',
   streamoverview: 'Aktive Übertragungen',
@@ -79,7 +80,8 @@ export const de = {
   desgin: 'Gestaltung',
   business: 'Geschäft, Geschäft, Geschäft. Gestaltung, Gestaltung, Gestaltung.',
   notmydepartment: 'Nicht meine Abteilung',
-  ineedcubical: 'Ich brauche eine Arbeitskabine, das ist nicht meine Abteilung!',
+  ineedcubical:
+    'Ich brauche eine Arbeitskabine, das ist nicht meine Abteilung!',
   noneedtotest: 'Keine Prüfung erforderlich',
   throwarock:
     'Wenn ich einen Stein auf den Computer werfe, geht auch der Laden kaputt!',
@@ -138,7 +140,13 @@ export const de = {
   admin: 'Administrator',
   muted: 'stumm geschalted',
   banned: 'verbannt',
-
+  christmasmap: 'Weihnachtskarte',
+  redmap: 'Rote Karte',
+  yellowmap: 'Gelbe Karte',
+  blueball: 'Blauer Ball',
+  christmasball: 'Weihnachtsball',
+  yellowball: 'Gelber Ball',
+  sugarcane: 'Zuckerstange',
 };
 
 export const NF_de = {
