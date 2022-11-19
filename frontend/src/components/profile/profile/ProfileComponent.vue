@@ -133,7 +133,7 @@ async function updateTitle(title: string) {
         v-show="modalChangePicture"
         @close="modalChangePicture = false"
       />
-      <br />
+
       <span class="campus">Wolfsburg, Germany</span>
       <br />
       <span class="friends">{{ userStore.friends.length }} Friends</span>
@@ -208,12 +208,12 @@ async function updateTitle(title: string) {
 
 .campus {
   color: white;
-  font-size: 1vw;
+  font-size: 1.2vw;
 }
 
 .friends {
   color: grey;
-  font-size: 1vw;
+  font-size: 1.2vw;
 }
 
 .twoFA {

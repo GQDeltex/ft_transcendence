@@ -71,6 +71,11 @@ function close() {
   top: -15vw;
   left: 25vw;
 }
+
+.modal-content p {
+  width: 50%;
+  color: white;
+}
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 850px) {
   .modal-content {

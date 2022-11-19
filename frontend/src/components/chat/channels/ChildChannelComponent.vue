@@ -62,7 +62,7 @@ const activePicture = computed(() => {
 }
 .channelName {
   color: white;
-  font-size: 0.8vw;
+  font-size: 1.5vw;
   font-stretch: expanded;
 }
 </style>
