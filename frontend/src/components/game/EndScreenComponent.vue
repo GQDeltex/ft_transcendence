@@ -68,7 +68,7 @@ onMounted(async () => {
     if (playerScore1.value > remoteScore2.value) {
       player.value.username = player1.value.username;
       player.value.picture = player1.value.picture;
-    } else if (playerScore1.value > remoteScore2.value) {
+    } else if (playerScore1.value < remoteScore2.value) {
       player.value.username = player2.value.username;
       player.value.picture = player2.value.picture;
     } else {
