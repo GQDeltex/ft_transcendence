@@ -57,6 +57,11 @@ const navRoutes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: '/replay/:id',
+    name: 'ReplayView',
+    component: () => import('../views/ReplayView.vue'),
+  },
+  {
     path: '/:catchAll(.*)*',
     name: 'PageNotFoundView',
     component: PageNotFoundView,

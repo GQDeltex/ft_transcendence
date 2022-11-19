@@ -1,18 +1,25 @@
+import type { Vector } from '@/components/game/element';
+import type { User } from '@/store/user';
 import graphQLService from './GraphQLService';
+
+export type GameLogData = {
+  timestamp: number;
+  name: string;
+  ballDirection: Vector;
+  ballPosition: Vector;
+  paddleHostDirection: number;
+  paddleClientDirection: number;
+  score: number[];
+};
 
 export type Game = {
   id: number;
-  player1: {
-    id: number;
-    username: string;
-  };
-  player2: {
-    id: number;
-    username: string;
-  };
+  player1: User;
+  player2: User;
   score1: number;
   score2: number;
   state: string;
+  logData: GameLogData[];
 };
 
 class GameService {
@@ -52,16 +59,67 @@ class GameService {
                 game(id: $gameId) {
                     id
                     player1 {
+                      id
+                      intra
+                      firstname
+                      lastname
+                      username
+                      title
+                      picture
+                      campus
+                      country
+                      coalition
+                      status
+                      lastLoggedIn
+                      equipped {
                         id
-                        username
+                        type
+                        name
+                        description
+                        picture
+                        metadata
+                      }
                     }
                     player2 {
+                      id
+                      intra
+                      firstname
+                      lastname
+                      username
+                      title
+                      picture
+                      campus
+                      country
+                      coalition
+                      status
+                      lastLoggedIn
+                      equipped {
                         id
-                        username
+                        type
+                        name
+                        description
+                        picture
+                        metadata
+                      }
                     }
                     score1
                     score2
                     state
+                    logData {
+                      name
+                      timestamp
+                      ballDirection {
+                        x
+                        y
+                      }
+                      ballPosition {
+                        x
+                        y
+                      }
+                      paddleHostDirection
+                      paddleClientDirection
+                      score
+                    }
                 }
             }
             `,

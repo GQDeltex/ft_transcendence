@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { Game, GameState } from './entities/game.entity';
+import { Game, GameLogData, GameState, Vector } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { GameGateway } from './game.gateway';
 import { Socket } from 'socket.io';
@@ -29,10 +29,60 @@ export class GameService {
       player1: player1.user,
       player2Id: player2.playerId,
       player2: player2.user,
+      logData: [],
+      totalPauseTime: 0,
     });
     await this.dequeuePlayer(player1.playerId);
     await this.dequeuePlayer(player2.playerId);
     await this.startGame(game);
+  }
+
+  async logGameData(
+    userId: number,
+    name: string,
+    gameId: number,
+    ballDirection?: Vector,
+    ballPosition?: Vector,
+    paddleDirection?: number,
+    score?: number[],
+  ) {
+    const game: Game = await this.findOne(gameId);
+    const newGameData: GameLogData = new GameLogData();
+    if (game.logData.length === 0) {
+      game.startTime = new Date();
+      newGameData.timestamp = 0;
+    } else {
+      newGameData.timestamp =
+        new Date().getTime() - game.startTime.getTime() - game.totalPauseTime;
+    }
+    newGameData.name = name;
+    newGameData.ballDirection =
+      ballDirection ?? game.logData[game.logData.length - 1].ballDirection;
+    if (userId === game.player2Id)
+      newGameData.ballDirection = new Vector(
+        -newGameData.ballDirection.x,
+        newGameData.ballDirection.y,
+      );
+    newGameData.ballPosition =
+      ballPosition ?? game.logData[game.logData.length - 1].ballPosition;
+    newGameData.score = score ?? game.logData[game.logData.length - 1].score;
+    newGameData.paddleHostDirection = 0;
+    newGameData.paddleClientDirection = 0;
+    if (game.logData.length > 0 && userId === game.player1Id) {
+      newGameData.paddleHostDirection =
+        paddleDirection ??
+        game.logData[game.logData.length - 1].paddleHostDirection;
+      newGameData.paddleClientDirection =
+        game.logData[game.logData.length - 1].paddleClientDirection;
+    } else if (game.logData.length > 0) {
+      newGameData.paddleClientDirection =
+        paddleDirection ??
+        game.logData[game.logData.length - 1].paddleClientDirection;
+      newGameData.paddleHostDirection =
+        game.logData[game.logData.length - 1].paddleHostDirection;
+    }
+    game.logData.push(newGameData);
+    await this.gameRepository.save(game);
   }
 
   async startGame(game: Game) {
@@ -90,7 +140,7 @@ export class GameService {
     });
   }
 
-  async saveScore(userId: number, gameId: number, score: number[]) {
+  async saveScore(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
     if (game.state == GameState.ENDED) return;
     game.score1 = score[0];
@@ -98,7 +148,7 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async endGame(userId: number, gameId: number, score: number[]) {
+  async endGame(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
     game.score1 = score[0];
     game.score2 = score[1];
@@ -117,6 +167,16 @@ export class GameService {
     );
     if (games.length <= 0) return -1;
     const game: Game = games[0];
+    if (game.state === GameState.PAUSED) {
+      game.logData = game.logData.filter((gameData, idx) => {
+        if (gameData.ballDirection.x === 0) {
+          game.totalPauseTime +=
+            new Date().getTime() - game.logData[idx].timestamp;
+          return false;
+        }
+        return true;
+      });
+    }
     game.state = GameState.ENDED;
     game.player1.status = 'online';
     game.player2.status = 'online';
@@ -128,6 +188,10 @@ export class GameService {
       game.score2 = 0;
       game.player1.points += game.score1;
     }
+    const newGameData = new GameLogData();
+    newGameData.timestamp =
+      new Date().getTime() - game.startTime.getTime() - game.totalPauseTime;
+    newGameData.score = [game.score1, game.score2];
     await this.gameRepository.save(game);
     return game.id;
   }
@@ -137,6 +201,11 @@ export class GameService {
     if (game.state === GameState.ENDED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date();
     if (game.player2Id === cowardId) game.player2BlurTime = new Date();
+    if (game.state !== GameState.PAUSED) {
+      const newGameData = new GameLogData();
+      newGameData.timestamp = new Date().getTime();
+      game.logData.push(newGameData);
+    }
     game.state = GameState.PAUSED;
     await this.gameRepository.save(game);
     client.to(`&${gameId}`).emit('gameBlur', cowardId);
@@ -149,6 +218,14 @@ export class GameService {
     if (game.player1Id === cowardId) game.player1BlurTime = new Date(0);
     if (game.player2Id === cowardId) game.player2BlurTime = new Date(0);
     if (game.player1BlurTime.getTime() === game.player2BlurTime.getTime()) {
+      game.logData = game.logData.filter((gameData, idx) => {
+        if (gameData.ballDirection.x === 0) {
+          game.totalPauseTime +=
+            new Date().getTime() - game.logData[idx].timestamp;
+          return false;
+        }
+        return true;
+      });
       game.state = GameState.RUNNING;
       client.to(`&${gameId}`).emit('gameFocus');
       client.emit('gameFocus');

@@ -65,6 +65,21 @@ type Item {
   metadata: String!
 }
 
+type Vector {
+  x: Float!
+  y: Float!
+}
+
+type GameLogData {
+  timestamp: Float!
+  name: String!
+  ballDirection: Vector!
+  ballPosition: Vector!
+  paddleHostDirection: Float!
+  paddleClientDirection: Float!
+  score: [Int!]!
+}
+
 type Game {
   id: Int!
   player1: User!
@@ -72,6 +87,7 @@ type Game {
   score1: Int!
   score2: Int!
   state: String!
+  logData: [GameLogData]!
 }
 
 type Query {

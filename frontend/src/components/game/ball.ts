@@ -7,6 +7,7 @@ export enum Priority {
   HOST,
   CLIENT,
   VIEWER,
+  REPLAYER,
 }
 
 export class Ball {
@@ -48,10 +49,11 @@ export class Ball {
   reset(yourScore: number, otherScore: number, toEmit = true) {
     this._position.x = this._canvas.width / 2 - this.getBallSize() / 2;
     this._position.y = this._canvas.height / 2 - this.getBallSize() / 2;
-    this._direction.x = Math.random() > 0.5 ? 1 : -1;
-    this._direction.y = Math.random() * 4 - 2;
+    this._direction = new Vector(0, 0);
 
-    if (toEmit)
+    if (toEmit) {
+      this._direction.x = Math.random() > 0.5 ? 1 : -1;
+      this._direction.y = Math.random() * 4 - 2;
       socket.emit('gameData', {
         name: 'ball',
         gameId: this._gameId,
@@ -68,6 +70,7 @@ export class Ball {
             ? [yourScore, otherScore]
             : [otherScore, yourScore],
       });
+    }
   }
 
   getAll() {
@@ -84,7 +87,7 @@ export class Ball {
   setAll(data: { position: Vector; direction: Vector }) {
     this._position.x = data.position.x * this._canvas.width;
     this._position.y = data.position.y * this._canvas.width;
-    this._direction = data.direction;
+    this._direction = new Vector(data.direction.x, data.direction.y);
   }
 
   /**
@@ -99,7 +102,7 @@ export class Ball {
   }
 
   setDir(newDir: Vector) {
-    this._direction = newDir;
+    this._direction = new Vector(newDir.x, newDir.y);
   }
 
   resize(oldCanvasWidth: number, oldCanvasHeight: number) {
@@ -149,7 +152,8 @@ export class Ball {
 
     if (
       this.isPaddleCollision(yourPaddle) &&
-      this._priority !== Priority.VIEWER
+      this._priority !== Priority.VIEWER &&
+      this._priority !== Priority.REPLAYER
     ) {
       this._direction.x = -1;
       this._direction.y =
@@ -176,7 +180,11 @@ export class Ball {
       });
     }
 
-    if (this.isLost() && this._priority !== Priority.VIEWER) {
+    if (
+      this.isLost() &&
+      this._priority !== Priority.VIEWER &&
+      this._priority !== Priority.REPLAYER
+    ) {
       otherScore.value++;
       this.reset(yourScore.value, otherScore.value);
     }

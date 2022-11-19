@@ -76,21 +76,31 @@ export class GameGateway implements OnGatewayDisconnect {
   @SubscribeMessage('gameData')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody('name') name: number,
+    @MessageBody('name') name: string,
     @MessageBody('gameId') gameId: number,
     @MessageBody('direction') direction?: { x: number; y: number },
     @MessageBody('position') position?: { x: number; y: number },
     @MessageBody('paddleDir') paddleDir?: number,
     @MessageBody('score') score?: number[],
   ) {
+    await this.gameService.logGameData(
+      client.data.user.id,
+      name,
+      gameId,
+      direction,
+      position,
+      paddleDir,
+      score,
+    );
+
     if (typeof score !== 'undefined') {
       if (score[0] >= 10 || score[1] >= 10) {
-        await this.gameService.endGame(client.data.user.id, gameId, score);
+        await this.gameService.endGame(gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
         return;
       } else {
-        await this.gameService.saveScore(client.data.user.id, gameId, score);
+        await this.gameService.saveScore(gameId, score);
       }
     }
 

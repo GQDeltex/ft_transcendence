@@ -37,8 +37,8 @@ onBeforeMount(async () => {
   await fetchUserData(+route.params.id);
 });
 
-onBeforeRouteUpdate((to) => {
-  fetchUserData(+to.params.id);
+onBeforeRouteUpdate(async (to) => {
+  await fetchUserData(+to.params.id);
 });
 
 provide('user', { user, isMe });

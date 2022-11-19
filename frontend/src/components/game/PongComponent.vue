@@ -6,13 +6,18 @@ import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
 import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
+import type { GameLogData } from '@/service/GameService';
+import { camelCase } from 'lodash';
 
 const props = defineProps<{
   gameId: number;
   priority: Priority;
   hostPlayer: User;
   otherPlayer: User;
+  gameDatas?: GameLogData[];
 }>();
+
+const emits = defineEmits(['finish']);
 
 const userStore = useUserStore();
 
@@ -87,7 +92,12 @@ const handleFocus = (): void => {
 
 let lastTime = 0;
 let elapsedTime = 0;
+let startTime = -1;
+let elapsedTime2 = 0;
+let currentGameDataIdx = -1;
 const update = (currentTime: number) => {
+  if (startTime === -1) startTime = currentTime;
+  elapsedTime2 = currentTime - startTime;
   if (lastTime !== 0) elapsedTime = currentTime - lastTime;
   if (leftPaddle === null || rightPaddle === null) return;
   const canvas = document.getElementById('game') as HTMLCanvasElement | null;
@@ -95,6 +105,39 @@ const update = (currentTime: number) => {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+  if (typeof props.gameDatas !== 'undefined') {
+    const oldIdx = currentGameDataIdx;
+    props.gameDatas.forEach((_gameData, idx) => {
+      if (elapsedTime2 >= _gameData.timestamp) currentGameDataIdx = idx;
+    });
+    if (currentGameDataIdx === props.gameDatas.length - 1) {
+      emits('finish');
+      return;
+    }
+    const gameData: GameLogData = props.gameDatas[currentGameDataIdx];
+    if (currentGameDataIdx !== oldIdx) {
+      console.log(currentGameDataIdx);
+      if (gameData.name === 'ball') ball?.setDir(gameData.ballDirection);
+      // ball?.setAll({
+      //   position: gameData.ballPosition,
+      //   direction: gameData.ballDirection,
+      // });
+      else if (gameData.name === 'opponent') {
+        leftPaddle?.setDir(gameData.paddleClientDirection, false);
+        rightPaddle?.setDir(gameData.paddleHostDirection, false);
+      }
+
+      if (
+        yourScore.value != gameData.score[0] ||
+        otherScore.value != gameData.score[1]
+      ) {
+        ball?.reset(0, 0, false);
+        ball?.setDir(gameData.ballDirection);
+      }
+      yourScore.value = gameData.score[0];
+      otherScore.value = gameData.score[1];
+    }
+  }
   ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
   leftPaddle?.draw(elapsedTime);
   rightPaddle?.draw(elapsedTime);
@@ -102,107 +145,109 @@ const update = (currentTime: number) => {
   if (isGameLoaded.value) window.requestAnimationFrame(update);
 };
 
-socket.on('gameData', (gameData) => {
-  if (gameData.name === 'opponent') {
-    if (props.priority === Priority.VIEWER) {
-      if (gameData.from === props.otherPlayer.id)
-        rightPaddle?.setDir(gameData.paddleDir, false);
-      if (gameData.from === props.hostPlayer.id)
-        leftPaddle?.setDir(gameData.paddleDir, false);
-    } else {
+if (props.priority !== Priority.REPLAYER) {
+  socket.on('gameData', (gameData) => {
+    if (gameData.name === 'opponent') {
+      if (props.priority === Priority.VIEWER) {
+        if (gameData.from === props.otherPlayer.id)
+          rightPaddle?.setDir(gameData.paddleDir, false);
+        if (gameData.from === props.hostPlayer.id)
+          leftPaddle?.setDir(gameData.paddleDir, false);
+      } else {
+        if (
+          (isHost.value && gameData.from === props.otherPlayer.id) ||
+          (!isHost.value && gameData.from === props.hostPlayer.id)
+        )
+          leftPaddle?.setDir(gameData.paddleDir, false);
+      }
+    }
+
+    if (gameData.name === 'ball' && gameData.from !== userStore.id) {
       if (
-        (isHost.value && gameData.from === props.otherPlayer.id) ||
-        (!isHost.value && gameData.from === props.hostPlayer.id)
-      )
-        leftPaddle?.setDir(gameData.paddleDir, false);
+        props.priority === Priority.VIEWER &&
+        gameData.from === props.otherPlayer.id
+      ) {
+        if (ball === null) return;
+        gameData.direction.x = -gameData.direction.x;
+        gameData.position.x =
+          1 - gameData.position.x - ball.getRelativeBallSize();
+        console.log(gameData.position);
+      }
+      ball?.setDir(gameData.direction);
+      ball?.setPos(gameData.position);
     }
-  }
 
-  if (gameData.name === 'ball' && gameData.from !== userStore.id) {
+    if (typeof gameData.score !== 'undefined') {
+      if (props.priority === Priority.HOST) {
+        otherScore.value = gameData.score[1];
+        yourScore.value = gameData.score[0];
+      } else {
+        otherScore.value = gameData.score[0];
+        yourScore.value = gameData.score[1];
+      }
+    }
+  });
+
+  socket.on('gameBlur', (cowardId: number) => {
+    ball?.setSpeed(0);
+    leftPaddle?.setDir(0, false);
+    rightPaddle?.setDir(0, false);
+    window.removeEventListener('keydown', handleKeyDown);
+    window.removeEventListener('keyup', handleKeyUp);
     if (
-      props.priority === Priority.VIEWER &&
-      gameData.from === props.otherPlayer.id
+      props.priority !== Priority.VIEWER &&
+      ((isHost.value && cowardId != props.hostPlayer.id) ||
+        (!isHost.value && cowardId != props.otherPlayer.id))
     ) {
-      if (ball === null) return;
-      gameData.direction.x = -gameData.direction.x;
-      gameData.position.x =
-        1 - gameData.position.x - ball.getRelativeBallSize();
-      console.log(gameData.position);
-    }
-    ball?.setDir(gameData.direction);
-    ball?.setPos(gameData.position);
-  }
-
-  if (typeof gameData.score !== 'undefined') {
-    if (props.priority === Priority.HOST) {
-      otherScore.value = gameData.score[1];
-      yourScore.value = gameData.score[0];
-    } else {
-      otherScore.value = gameData.score[0];
-      yourScore.value = gameData.score[1];
-    }
-  }
-});
-
-socket.on('gameBlur', (cowardId: number) => {
-  ball?.setSpeed(0);
-  leftPaddle?.setDir(0, false);
-  rightPaddle?.setDir(0, false);
-  window.removeEventListener('keydown', handleKeyDown);
-  window.removeEventListener('keyup', handleKeyUp);
-  if (
-    props.priority !== Priority.VIEWER &&
-    ((isHost.value && cowardId != props.hostPlayer.id) ||
-      (!isHost.value && cowardId != props.otherPlayer.id))
-  ) {
-    showClaimVictory.value = true;
-    const claimButton = document.getElementById(
-      'claimButton',
-    ) as HTMLButtonElement | null;
-    if (claimButton !== null) claimButton.disabled = true;
-    if (timeoutId > -1) {
-      clearTimeout(timeoutId);
-      timeoutId = -1;
-    }
-    timeoutId = setTimeout(() => {
+      showClaimVictory.value = true;
       const claimButton = document.getElementById(
         'claimButton',
       ) as HTMLButtonElement | null;
-      if (claimButton !== null) claimButton.disabled = false;
-    }, 10000);
-  }
-});
+      if (claimButton !== null) claimButton.disabled = true;
+      if (timeoutId > -1) {
+        clearTimeout(timeoutId);
+        timeoutId = -1;
+      }
+      timeoutId = setTimeout(() => {
+        const claimButton = document.getElementById(
+          'claimButton',
+        ) as HTMLButtonElement | null;
+        if (claimButton !== null) claimButton.disabled = false;
+      }, 10000);
+    }
+  });
 
-socket.on('gameFocus', () => {
-  showClaimVictory.value = false;
-  ball?.setSpeed();
-  if (props.priority !== Priority.VIEWER) {
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-  }
-});
+  socket.on('gameFocus', () => {
+    showClaimVictory.value = false;
+    ball?.setSpeed();
+    if (props.priority !== Priority.VIEWER) {
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
+    }
+  });
 
-socket.on('onStreamJoin', (bigGameData) => {
-  if (isHost.value) {
-    socket.emit('onStreamJoin', {
-      requesterId: bigGameData.requesterId,
-      gameId: props.gameId,
-      leftPaddle: leftPaddle?.getAll(),
-      rightPaddle: rightPaddle?.getAll(),
-      ball: ball?.getAll(),
-      scores:
-        props.priority === Priority.HOST
-          ? [yourScore.value, otherScore.value]
-          : [otherScore.value, yourScore.value],
-    });
-  } else if (props.priority === Priority.VIEWER) {
-    leftPaddle?.setAll(bigGameData.leftPaddle);
-    rightPaddle?.setAll(bigGameData.rightPaddle);
-    ball?.setAll(bigGameData.ball);
-    yourScore.value = bigGameData.scores[0];
-    otherScore.value = bigGameData.scores[1];
-  }
-});
+  socket.on('onStreamJoin', (bigGameData) => {
+    if (isHost.value) {
+      socket.emit('onStreamJoin', {
+        requesterId: bigGameData.requesterId,
+        gameId: props.gameId,
+        leftPaddle: leftPaddle?.getAll(),
+        rightPaddle: rightPaddle?.getAll(),
+        ball: ball?.getAll(),
+        scores:
+          props.priority === Priority.HOST
+            ? [yourScore.value, otherScore.value]
+            : [otherScore.value, yourScore.value],
+      });
+    } else if (props.priority === Priority.VIEWER) {
+      leftPaddle?.setAll(bigGameData.leftPaddle);
+      rightPaddle?.setAll(bigGameData.rightPaddle);
+      ball?.setAll(bigGameData.ball);
+      yourScore.value = bigGameData.scores[0];
+      otherScore.value = bigGameData.scores[1];
+    }
+  });
+}
 
 onMounted(async () => {
   await nextTick();
@@ -228,7 +273,10 @@ onMounted(async () => {
     rightPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
   };
 
-  if (props.priority !== Priority.VIEWER) {
+  if (
+    props.priority !== Priority.VIEWER &&
+    props.priority !== Priority.REPLAYER
+  ) {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
     window.addEventListener('blur', handleBlur);
@@ -409,7 +457,7 @@ onUnmounted(() => {
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  border-color: transparent;
+  border-color: tsparent;
   margin-bottom: 1%;
 }
 
