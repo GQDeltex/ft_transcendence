@@ -4,9 +4,10 @@ import TwoFAInputComponent from '@/components/globalUse/TwoFAInputComponent.vue'
 import { useUserStore } from '@/store/user';
 import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
 import { ref } from 'vue';
+import { languagesDropDownContent } from '@/plugin/i18n';
+import { languagesSelection } from '@/plugin/i18n';
 
 const userStore = useUserStore();
-const i18n = useI18n();
 const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 
 const login = () => {
@@ -14,42 +15,35 @@ const login = () => {
 };
 
 const langShowDropDown = ref(false);
-const langDropDownContent = ref<string[]>([
-  '🇬🇧 English',
-  '🇩🇪 Deutsch',
-  '🇪🇸 Español',
-  '🇫🇷 Français',
-  '🇮🇹 Italiano',
-  '🇷🇺 Русский',
-  '🇺🇦 Ураїнська',
-  '🇵🇱 Polska',
-  '🇹🇷 Türkçe',
-]);
 
 function dropDownClicked(selected: string) {
   langShowDropDown.value = false;
-  switch (selected) {
-    case '🇬🇧 English':
-      // console.log(useI18n().locale.value);
-      // useI18n().locale.value = 'en-US';
-    case langDropDownContent.value[1]:
-      return useI18n().locale.value = 'de-DE';
-    case langDropDownContent.value[2]:
-      return useI18n().locale.value = 'es-ES';
-    case langDropDownContent.value[3]:
-      return useI18n().locale.value = 'fr-FR';
-    case langDropDownContent.value[4]:
-      return useI18n().locale.value = 'it-IT';
-    case langDropDownContent.value[5]:
-      return useI18n().locale.value = 'ru-RU';
-    case langDropDownContent.value[6]:
-      return useI18n().locale.value = 'uk-UK';
-    case langDropDownContent.value[7]:
-      return useI18n().locale.value = 'pl-PL';
-    case langDropDownContent.value[8]:
-      return useI18n().locale.value = 'tr-TR';
-    default:
-  }
+  let index = ref<number>(languagesDropDownContent.indexOf(selected));
+  console.log('index: ' + index.value);
+  // console.log(languagesDropDownContent.indexOf(selected));
+  console.log('return value= ' + languagesSelection[index.value]);
+  // switch (selected) {
+  //   case '🇬🇧 English':
+  //     // console.log(useI18n().locale.value);
+  //     // useI18n().locale.value = 'en-US';
+  //   case langDropDownContent.value[1]:
+  //     return useI18n().locale.value = 'de-DE';
+  //   case langDropDownContent.value[2]:
+  //     return useI18n().locale.value = 'es-ES';
+  //   case langDropDownContent.value[3]:
+  //     return useI18n().locale.value = 'fr-FR';
+  //   case langDropDownContent.value[4]:
+  //     return useI18n().locale.value = 'it-IT';
+  //   case langDropDownContent.value[5]:
+  //     return useI18n().locale.value = 'ru-RU';
+  //   case langDropDownContent.value[6]:
+  //     return useI18n().locale.value = 'uk-UK';
+  //   case langDropDownContent.value[7]:
+  //     return useI18n().locale.value = 'pl-PL';
+  //   case langDropDownContent.value[8]:
+  //     return useI18n().locale.value = 'tr-TR';
+  //   default:
+  // }
 }
 </script>
 
@@ -68,7 +62,7 @@ function dropDownClicked(selected: string) {
         />
         <DropDownComponent
           v-if="langShowDropDown"
-          :items="langDropDownContent"
+          :items="languagesDropDownContent"
           width="12vw"
           height="12vw"
           @close="dropDownClicked"

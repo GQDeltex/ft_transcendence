@@ -44,3 +44,27 @@ export const i18n = createI18n({
   messages,
   numberFormats,
 });
+// let fruits: Array<string> = ['Apple', 'Orange', 'Banana'];
+export const languagesDropDownContent: Array<string> = [
+  '🇬🇧 English',
+  '🇩🇪 Deutsch',
+  '🇪🇸 Español',  
+  '🇫🇷 Français',
+  '🇮🇹 Italiano',
+  '🇷🇺 Русский',
+  '🇺🇦 Ураїнська',
+  '🇵🇱 Polska',
+  '🇹🇷 Türkçe',
+];
+
+export const languagesSelection: Array<string> = [
+  'en-US',
+  'de-DE',
+  'es-ES',
+  'fr-FR',
+  'it-IT',
+  'ru-RU',
+  'uk-UK',
+  'pl-PL',
+  'tr-TR',
+];
