@@ -8,6 +8,9 @@ import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { GameGateway } from './game.gateway';
 import { Socket } from 'socket.io';
 import { WsException } from '@nestjs/websockets';
+import { writeFile } from 'fs';
+import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GameService {
@@ -18,6 +21,7 @@ export class GameService {
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => GameGateway))
     private readonly gameGateway: GameGateway,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(player1: QueuedPlayer, player2: QueuedPlayer) {
@@ -291,5 +295,22 @@ export class GameService {
         scores,
       });
     }
+  }
+
+  async uploadGame(userId: number, gameId: number, fileBuffer: Buffer) {
+    const game: Game = await this.findOne(gameId);
+    if (game.state !== GameState.ENDED || game.replayUrl !== '') return;
+    writeFile(
+      join(__dirname, '../..', 'uploads', `game_${gameId}.webm`),
+      fileBuffer,
+      (err) => {
+        if (err) throw new WsException('Failed to save game');
+      },
+    );
+    game.replayUrl = `http://${this.configService.get(
+      'DOMAIN',
+    )}:8080/uploads/game_${gameId}.webm`;
+    game.isReplayHost = userId === game.player1Id;
+    await this.gameRepository.save(game);
   }
 }

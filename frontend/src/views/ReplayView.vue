@@ -31,14 +31,12 @@ onBeforeRouteUpdate(async (to) => {
   await fetchGameData(+to.params.id);
 });
 
-const onFinish = () => {
-  isLoaded.value = false;
-};
+const videoWidth = String(0.69 * window.innerWidth) + 'px';
 </script>
 
 <template>
   <div>
-    <PongComponent
+    <!-- <PongComponent
       v-if="isLoaded && game !== null"
       :game-id="gameId"
       :host-player="game.player1"
@@ -46,7 +44,15 @@ const onFinish = () => {
       :priority="3"
       :game-datas="game.logData"
       @finish="onFinish"
-    />
-    <EndScreenComponent v-else :game-id="gameId" />
+    /> -->
+    <video autoplay :src="game?.replayUrl" />
+    <!-- <EndScreenComponent v-else :game-id="gameId" /> -->
   </div>
 </template>
+
+<style scoped>
+video {
+  object-fit: cover;
+  width: v-bind(videoWidth);
+}
+</style>

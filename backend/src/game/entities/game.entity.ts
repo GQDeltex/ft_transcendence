@@ -90,4 +90,12 @@ export class Game {
 
   @Column({ type: 'timestamptz', default: new Date(0) })
   startTime: Date;
+
+  @Field()
+  @Column({ default: false })
+  isReplayHost: boolean;
+
+  @Field()
+  @Column({ default: '' })
+  replayUrl: string;
 }

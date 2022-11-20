@@ -20,6 +20,8 @@ export type Game = {
   score2: number;
   state: string;
   logData: GameLogData[];
+  isReplayHost: boolean;
+  replayUrl: string;
 };
 
 class GameService {
@@ -120,6 +122,8 @@ class GameService {
                       paddleClientDirection
                       score
                     }
+                    isReplayHost
+                    replayUrl
                 }
             }
             `,

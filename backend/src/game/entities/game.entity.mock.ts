@@ -15,4 +15,6 @@ export const mockGame: Game = {
   logData: [],
   totalPauseTime: 0,
   startTime: new Date(0),
+  isReplayHost: false,
+  replayUrl: '',
 };

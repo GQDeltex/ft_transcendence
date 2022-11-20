@@ -53,15 +53,18 @@ else if (props.priority === Priority.CLIENT)
   equipped = props.otherPlayer.equipped ?? [];
 else equipped = userStore.equipped ?? [];
 
+ballImage.crossOrigin = 'anonymous';
+mapImage.crossOrigin = 'anonymous';
+paddleImage.crossOrigin = 'anonymous';
 ballImage.src =
   equipped.find((item) => item.type === 'ball')?.picture ??
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+  'https://i.imgur.com/88DcIk0.png';
 mapImage.src =
   equipped.find((item) => item.type === 'map')?.picture ??
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png';
+  'https://i.imgur.com/e89MmmD.png';
 paddleImage.src =
   equipped.find((item) => item.type === 'paddle')?.picture ??
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+  'https://i.imgur.com/88DcIk0.png';
 
 const handleKeyUp = (e: KeyboardEvent): void => {
   if (e.repeat) return;
@@ -75,7 +78,7 @@ const handleKeyDown = (e: KeyboardEvent): void => {
 };
 
 const handleBlur = (): void => {
-  // if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameBlur', {
     gameId: props.gameId,
     time: new Date().getTime(),
@@ -188,6 +191,7 @@ if (props.priority !== Priority.REPLAYER) {
   });
 
   socket.on('gameBlur', (cowardId: number) => {
+    videoRecorder?.pause();
     ball?.setSpeed(0);
     leftPaddle?.setDir(0, false);
     rightPaddle?.setDir(0, false);
@@ -223,6 +227,7 @@ if (props.priority !== Priority.REPLAYER) {
       window.addEventListener('keydown', handleKeyDown);
       window.addEventListener('keyup', handleKeyUp);
     }
+    videoRecorder?.resume();
   });
 
   socket.on('onStreamJoin', (bigGameData) => {
@@ -248,6 +253,8 @@ if (props.priority !== Priority.REPLAYER) {
   });
 }
 
+const videoChunks: Blob[] = [];
+let videoRecorder: MediaRecorder | null = null;
 onMounted(async () => {
   await nextTick();
   const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -260,6 +267,26 @@ onMounted(async () => {
       gameId: props.gameId,
     });
   }
+
+  const videoStream = canvas.captureStream(144);
+  videoRecorder = new MediaRecorder(videoStream, {
+    mimeType: 'video/webm ',
+  });
+
+  videoRecorder.ondataavailable = (event) => {
+    if (event.data) videoChunks.push(event.data);
+  };
+
+  videoRecorder.onstop = () => {
+    const blob: Blob = new Blob(videoChunks, { type: 'video/webm' });
+    const file: File = new File([blob], `game_${props.gameId}.webm`, {
+      type: 'video/webm',
+    });
+    socket.emit('uploadGame', {
+      gameId: props.gameId,
+      file,
+    });
+  };
 
   window.onresize = () => {
     const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -282,11 +309,13 @@ onMounted(async () => {
     window.addEventListener('focus', handleFocus);
   }
 
+  videoRecorder.start();
   window.requestAnimationFrame(replayLoop);
   window.requestAnimationFrame(update);
 });
 
 onUnmounted(() => {
+  videoRecorder?.stop();
   isGameLoaded.value = false;
   socket.off('gameData');
   socket.off('gameBlur');
