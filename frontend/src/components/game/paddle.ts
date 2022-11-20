@@ -25,6 +25,7 @@ export class Paddle {
     if (toEmit)
       socket.emit('gameData', {
         name: 'opponent',
+        time: new Date().getTime(),
         gameId: this._gameId,
         paddleDir: direction,
       });

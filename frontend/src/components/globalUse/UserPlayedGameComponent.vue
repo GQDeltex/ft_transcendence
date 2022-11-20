@@ -1,28 +1,15 @@
 <script setup lang="ts">
+import type { Game } from '@/service/GameService';
 import ChildStreamComponent from '../stream/ChildStreamComponent.vue';
 defineProps<{
-  player1: string;
-  player2: string;
-  score1: number;
-  score2: number;
-  gameId: number;
+  game: Game;
 }>();
 </script>
 
 <template>
   <div>
-    <!--
-    <span class="username">gucalvi</span>
-    <span class="time">6h ago</span>
-    -->
     <span class="stream">
-      <ChildStreamComponent
-        :player1-name="player1"
-        :player2-name="player2"
-        :score1="score1"
-        :score2="score2"
-        :game-id="gameId"
-      />
+      <ChildStreamComponent :game="game" :is-replay="true" />
     </span>
   </div>
 </template>

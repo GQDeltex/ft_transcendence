@@ -40,6 +40,7 @@ export class GameService {
   async logGameData(
     userId: number,
     name: string,
+    time: number,
     gameId: number,
     ballDirection?: Vector,
     ballPosition?: Vector,
@@ -53,7 +54,7 @@ export class GameService {
       newGameData.timestamp = 0;
     } else {
       newGameData.timestamp =
-        new Date().getTime() - game.startTime.getTime() - game.totalPauseTime;
+        time - game.startTime.getTime() - game.totalPauseTime;
     }
     newGameData.name = name;
     newGameData.ballDirection =
@@ -160,7 +161,7 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async killGame(userId: number): Promise<number> {
+  async killGame(userId: number, time: number): Promise<number> {
     const games: Game[] = await this.findAll(
       [{ state: GameState.RUNNING }, { state: GameState.PAUSED }],
       userId,
@@ -170,8 +171,7 @@ export class GameService {
     if (game.state === GameState.PAUSED) {
       game.logData = game.logData.filter((gameData, idx) => {
         if (gameData.ballDirection.x === 0) {
-          game.totalPauseTime +=
-            new Date().getTime() - game.logData[idx].timestamp;
+          game.totalPauseTime += time - game.logData[idx].timestamp;
           return false;
         }
         return true;
@@ -192,7 +192,7 @@ export class GameService {
     const newGameData = new GameLogData();
     const lastLog: GameLogData = game.logData[game.logData.length - 1];
     newGameData.timestamp =
-      new Date().getTime() - game.startTime.getTime() - game.totalPauseTime;
+      time - game.startTime.getTime() - game.totalPauseTime;
     newGameData.score = [game.score1, game.score2];
     newGameData.name = 'kill';
     newGameData.ballDirection = lastLog.ballDirection;
@@ -204,15 +204,22 @@ export class GameService {
     return game.id;
   }
 
-  async pauseGame(client: Socket, gameId: number, cowardId: number) {
+  async pauseGame(
+    client: Socket,
+    gameId: number,
+    cowardId: number,
+    time: number,
+  ) {
     const game: Game = await this.findOne(gameId);
     if (game.state === GameState.ENDED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date();
     if (game.player2Id === cowardId) game.player2BlurTime = new Date();
     if (game.state !== GameState.PAUSED) {
       const newGameData = new GameLogData();
-      newGameData.timestamp = new Date().getTime();
+      newGameData.timestamp = time;
+      newGameData.name = 'pause';
       game.logData.push(newGameData);
+      console.log('on paused', newGameData);
     }
     game.state = GameState.PAUSED;
     await this.gameRepository.save(game);
@@ -220,7 +227,12 @@ export class GameService {
     client.emit('gameBlur', cowardId);
   }
 
-  async unpauseGame(client: Socket, gameId: number, cowardId: number) {
+  async unpauseGame(
+    client: Socket,
+    gameId: number,
+    cowardId: number,
+    time: number,
+  ) {
     const game: Game = await this.findOne(gameId);
     if (game.state !== GameState.PAUSED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date(0);
@@ -228,8 +240,9 @@ export class GameService {
     if (game.player1BlurTime.getTime() === game.player2BlurTime.getTime()) {
       game.logData = game.logData.filter((gameData, idx) => {
         if (gameData.ballDirection.x === 0) {
-          game.totalPauseTime +=
-            new Date().getTime() - game.logData[idx].timestamp;
+          game.totalPauseTime += time - game.logData[idx].timestamp;
+          console.log('to be filtered: ', gameData);
+          console.log(game.totalPauseTime);
           return false;
         }
         return true;
@@ -241,14 +254,14 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async claimVictory(client: Socket, gameId: number) {
+  async claimVictory(client: Socket, gameId: number, time: number) {
     const game: Game = await this.findOne(gameId);
     if (client.data.user.id == game.player1Id) {
-      if (new Date().getTime() - game.player2BlurTime.getTime() >= 10000)
-        await this.killGame(game.player2Id);
+      if (time - game.player2BlurTime.getTime() >= 10000)
+        await this.killGame(game.player2Id, time);
     } else {
-      if (new Date().getTime() - game.player1BlurTime.getTime() >= 10000)
-        await this.killGame(game.player1Id);
+      if (time - game.player1BlurTime.getTime() >= 10000)
+        await this.killGame(game.player1Id, time);
     }
     client.to(`&${gameId}`).emit('Game', { gameId: -1 });
     client.emit('Game', { gameId: -1 });

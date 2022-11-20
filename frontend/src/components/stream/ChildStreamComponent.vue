@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-const props = defineProps<{
-  player1Name: string;
-  player2Name: string;
-  score1: number;
-  score2: number;
-  gameId: number;
-}>();
-
-const hasScores = computed(() => {
-  if (typeof props.score1 === 'undefined') return false;
-  if (typeof props.score2 === 'undefined') return false;
-  return true;
-});
+import type { Game } from '@/service/GameService';
+withDefaults(
+  defineProps<{
+    game: Game;
+    isReplay?: boolean;
+  }>(),
+  { isReplay: false },
+);
 </script>
 
 <template>
-  <span class="playernames"> {{ player1Name }} vs {{ player2Name }}</span>
-  <router-link class="routerlink" :to="`/replay/${gameId}`">
+  <span class="playernames">
+    {{ game.player1.username }} vs {{ game.player2.username }}
+  </span>
+  <router-link
+    class="routerlink"
+    :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`"
+  >
     <div>
       <img class="thumbnail" src="@/assets/pong.png" />
-      <span v-if="hasScores" class="playernames">
-        {{ score1 }} : {{ score2 }}</span
-      >
+      <span class="playernames"> {{ game.score1 }} : {{ game.score2 }}</span>
     </div>
   </router-link>
 </template>

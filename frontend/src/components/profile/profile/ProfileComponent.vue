@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
-import { inject, nextTick, ref, watch } from 'vue';
+import { inject, nextTick, ref, watch, type Ref } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
 import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
@@ -9,7 +9,6 @@ import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
-import { cloneDeep } from 'lodash';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
@@ -17,14 +16,17 @@ const show = ref(false);
 const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
 const dropDownTitle = ref(false);
-let dropDownContent = ref<string[]>(cloneDeep(userStore.title));
+let dropDownContent = ref<string[]>([...userStore.title]);
 
 dropDownContent.value[0] = '--- no title ---';
 
-const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
-  user: null,
-  isMe: false,
-});
+const { user, isMe } = inject<{ user: Ref<User | null>; isMe: Ref<boolean> }>(
+  'user',
+  {
+    user: ref(null),
+    isMe: ref(false),
+  },
+);
 
 watch(checked, async (newValue, oldValue) => {
   if (newValue === oldValue) return;
@@ -52,23 +54,16 @@ const toggle = () => {
   dropDownTitle.value = !dropDownTitle.value;
 };
 
-const errorStore = useErrorStore();
-const leaders = ref<Partial<User>[]>([]);
-UserService.findLeaders()
-  .then((users) => (leaders.value = users))
-  .catch((error) => errorStore.setError(error.message));
-
-async function updateTitle(title: string) {
-  // console.log('new title selected! ', title);
+const updateTitle = async (title: string) => {
   if (title == '--- no title ---') title = '';
   dropDownTitle.value = false;
   try {
     userStore.title = (await UserService.changeTitle(title)).title;
   } catch (error) {
-    errorStore.setError((error as Error).message);
+    useErrorStore().setError((error as Error).message);
     return;
   }
-}
+};
 </script>
 
 <template>
@@ -141,8 +136,8 @@ async function updateTitle(title: string) {
 
     <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
 
-    <span v-if="isMe" class="twoFA"
-      >2 Factor Authentication
+    <span v-if="isMe" class="twoFA">
+      2 Factor Authentication
       <label class="switch">
         <input v-model="checked" type="checkbox" />
         <span class="slider round">

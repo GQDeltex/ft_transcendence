@@ -56,6 +56,7 @@ export class Ball {
       this._direction.y = Math.random() * 4 - 2;
       socket.emit('gameData', {
         name: 'ball',
+        time: new Date().getTime(),
         gameId: this._gameId,
         direction: {
           x: -this._direction.x,
@@ -166,6 +167,7 @@ export class Ball {
         this._direction.x * this._speed * this._canvas.width * elapsedTime * 2;
       socket.emit('gameData', {
         name: 'ball',
+        time: new Date().getTime(),
         gameId: this._gameId,
         direction: {
           x: 1,

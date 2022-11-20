@@ -89,15 +89,7 @@ socket.on('Game', async ({ gameId }) => {
   <div>
     <div v-if="routExist && !displayEnd">
       <h1 class="title">Stream Overview</h1>
-      <ChildStreamComponent
-        v-for="game in games"
-        :key="game.id"
-        :player1-name="game.player1.username"
-        :player2-name="game.player2.username"
-        :score1="game.score1"
-        :score2="game.score2"
-        :game-id="game.id"
-      />
+      <ChildStreamComponent v-for="game in games" :key="game.id" :game="game" />
     </div>
     <div v-if="!routExist && !displayEnd">
       <PongComponent

@@ -42,7 +42,10 @@ export class GameGateway implements OnGatewayDisconnect {
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     if (typeof client.data.user === 'undefined') return;
     await this.gameService.dequeuePlayer(client.data.user.id);
-    const gameId = await this.gameService.killGame(client.data.user.id);
+    const gameId = await this.gameService.killGame(
+      client.data.user.id,
+      new Date().getTime(),
+    );
     if (gameId === -1) return;
     this.server.in(`&${gameId}`).emit('Game', { gameId: -1 });
   }
@@ -52,8 +55,9 @@ export class GameGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody('gameId') gameId: number,
     @MessageBody('cowardId') cowardId: number,
+    @MessageBody('time') time: number,
   ) {
-    await this.gameService.pauseGame(client, gameId, cowardId);
+    await this.gameService.pauseGame(client, gameId, cowardId, time);
   }
 
   @SubscribeMessage('gameFocus')
@@ -61,22 +65,25 @@ export class GameGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody('gameId') gameId: number,
     @MessageBody('cowardId') cowardId: number,
+    @MessageBody('time') time: number,
   ) {
-    await this.gameService.unpauseGame(client, gameId, cowardId);
+    await this.gameService.unpauseGame(client, gameId, cowardId, time);
   }
 
   @SubscribeMessage('claimVictory')
   async claimVictory(
     @ConnectedSocket() client: Socket,
     @MessageBody('gameId') gameId: number,
+    @MessageBody('time') time: number,
   ) {
-    await this.gameService.claimVictory(client, gameId);
+    await this.gameService.claimVictory(client, gameId, time);
   }
 
   @SubscribeMessage('gameData')
   async handleMessage(
     @ConnectedSocket() client: Socket,
     @MessageBody('name') name: string,
+    @MessageBody('time') time: number,
     @MessageBody('gameId') gameId: number,
     @MessageBody('direction') direction?: { x: number; y: number },
     @MessageBody('position') position?: { x: number; y: number },
@@ -86,6 +93,7 @@ export class GameGateway implements OnGatewayDisconnect {
     await this.gameService.logGameData(
       client.data.user.id,
       name,
+      time,
       gameId,
       direction,
       position,
@@ -105,11 +113,12 @@ export class GameGateway implements OnGatewayDisconnect {
     }
 
     client.to(`&${gameId}`).emit('gameData', {
+      name,
+      time,
       direction,
       position,
       paddleDir,
       score,
-      name,
       from: client.data.user.id,
     });
   }
@@ -123,7 +132,10 @@ export class GameGateway implements OnGatewayDisconnect {
       await this.gameService.queuePlayer(client.data.user.id);
     } else if (event === 'LEAVE') {
       await this.gameService.dequeuePlayer(client.data.user.id);
-      const gameId = await this.gameService.killGame(client.data.user.id);
+      const gameId = await this.gameService.killGame(
+        client.data.user.id,
+        new Date().getTime(),
+      );
       if (gameId === -1) return;
       this.server.to(`&${gameId}`).emit('Game', {
         gameId: -1,

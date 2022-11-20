@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, ref, type Ref } from 'vue';
 import type { User } from '@/store/user';
 
-const { user } = inject<{ user: User | null }>('user', {
-  user: null,
+const { user } = inject<{ user: Ref<User | null> }>('user', {
+  user: ref(null),
 });
 
 const capitalize = (str: string) => {

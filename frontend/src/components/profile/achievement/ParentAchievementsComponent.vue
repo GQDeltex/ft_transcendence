@@ -1,48 +1,33 @@
 <script setup lang="ts">
 import ChildAchievementComponent from './ChildAchievementComponent.vue';
-import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
 import type { User } from '@/store/user';
-import { ref, inject, computed, onMounted } from 'vue';
-import { useErrorStore } from '@/store/error';
+import { ref, inject, type Ref, watch } from 'vue';
 
-const { user } = inject<{ user: User | null }>('user', {
-  user: null,
-});
-const games = ref<Game[]>([]);
+const { user, games } = inject<{ user: Ref<User | null>; games: Ref<Game[]> }>(
+  'user',
+  {
+    user: ref(null),
+    games: ref([]),
+  },
+);
 
-const errorStore = useErrorStore();
+const wonCount = ref(0);
+const lostCount = ref(0);
 
-const wonCount = computed(() => {
-  let counter = 0;
-  for (let game of games.value) {
+watch(games, () => {
+  games.value.forEach((game) => {
     if (
-      (game.player1.id === user?.id && game.score1 > game.score2) ||
-      (game.player2.id === user?.id && game.score2 > game.score1)
+      (game.player1.id === user.value?.id && game.score1 > game.score2) ||
+      (game.player2.id === user.value?.id && game.score2 > game.score1)
     )
-      counter++;
-  }
-  return counter;
-});
-
-const lostCount = computed(() => {
-  let count = 0;
-  for (let game of games.value) {
-    if (
-      (game.player1.id === user?.id && game.score1 < game.score2) ||
-      (game.player2.id === user?.id && game.score2 < game.score1)
+      wonCount.value++;
+    else if (
+      (game.player1.id === user.value?.id && game.score1 < game.score2) ||
+      (game.player2.id === user.value?.id && game.score2 < game.score1)
     )
-      count++;
-  }
-  return count;
-});
-
-onMounted(async () => {
-  try {
-    games.value = await GameService.findAll('ended', user?.id);
-  } catch (error) {
-    errorStore.setError((error as Error).message);
-  }
+      lostCount.value++;
+  });
 });
 </script>
 

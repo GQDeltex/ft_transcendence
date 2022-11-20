@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, provide, ref } from 'vue';
+import { onBeforeMount, provide, ref, type Ref } from 'vue';
 import type { User } from '@/store/user';
 import { useUserStore } from '@/store/user';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
@@ -9,6 +9,8 @@ import AboutMeComponent from '../components/profile/aboutMe/AboutMeComponent.vue
 import ParentAchievementsComponent from '../components/profile/achievement/ParentAchievementsComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
+import type { Game } from '@/service/GameService';
+import GameService from '@/service/GameService';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -17,6 +19,7 @@ const errorStore = useErrorStore();
 
 const user = ref<User | null>(null);
 const isMe = ref(false);
+const games: Ref<Game[]> = ref([]);
 
 const fetchUserData = async (id: number) => {
   try {
@@ -27,6 +30,7 @@ const fetchUserData = async (id: number) => {
     } else {
       user.value = await UserService.findOneById(id, true);
     }
+    games.value = await GameService.findAll('ended', user.value?.id);
   } catch (error) {
     errorStore.setError((error as Error).message);
     await router.push({ path: '/' });
@@ -41,7 +45,7 @@ onBeforeRouteUpdate(async (to) => {
   await fetchUserData(+to.params.id);
 });
 
-provide('user', { user, isMe });
+provide('user', { user, isMe, games });
 </script>
 
 <template>

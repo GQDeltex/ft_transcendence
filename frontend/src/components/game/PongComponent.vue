@@ -75,9 +75,10 @@ const handleKeyDown = (e: KeyboardEvent): void => {
 };
 
 const handleBlur = (): void => {
-  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  // if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameBlur', {
     gameId: props.gameId,
+    time: new Date().getTime(),
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
   });
 };
@@ -85,18 +86,14 @@ const handleBlur = (): void => {
 const handleFocus = (): void => {
   socket.emit('gameFocus', {
     gameId: props.gameId,
+    time: new Date().getTime(),
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
   });
 };
 
 let lastTime = 0;
 let elapsedTime = 0;
-let startTime = -1;
-let elapsedTime2 = 0;
-let currentGameDataIdx = -1;
 const update = (currentTime: number) => {
-  if (startTime === -1) startTime = currentTime;
-  elapsedTime2 = currentTime - startTime;
   if (lastTime !== 0) elapsedTime = currentTime - lastTime;
   if (leftPaddle === null || rightPaddle === null) return;
   const canvas = document.getElementById('game') as HTMLCanvasElement | null;
@@ -104,10 +101,23 @@ const update = (currentTime: number) => {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
-  if (typeof props.gameDatas !== 'undefined') {
+  ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
+  leftPaddle?.draw(elapsedTime);
+  rightPaddle?.draw(elapsedTime);
+  lastTime = currentTime;
+  if (isGameLoaded.value) window.requestAnimationFrame(update);
+};
+
+let currentGameDataIdx = -1;
+const replayLoop = async () => {
+  const startTime: number = new Date().getTime();
+  let elapsedReplayTime = 0;
+  while (typeof props.gameDatas !== 'undefined') {
+    if (leftPaddle === null || rightPaddle === null) continue;
+    elapsedReplayTime = new Date().getTime() - startTime;
     const oldIdx = currentGameDataIdx;
     props.gameDatas.forEach((_gameData, idx) => {
-      if (elapsedTime2 >= _gameData.timestamp) currentGameDataIdx = idx;
+      if (elapsedReplayTime >= _gameData.timestamp) currentGameDataIdx = idx;
     });
     if (currentGameDataIdx === props.gameDatas.length - 1) {
       emits('finish');
@@ -131,12 +141,8 @@ const update = (currentTime: number) => {
       yourScore.value = gameData.score[0];
       otherScore.value = gameData.score[1];
     }
+    await new Promise((r) => setTimeout(r, 10));
   }
-  ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
-  leftPaddle?.draw(elapsedTime);
-  rightPaddle?.draw(elapsedTime);
-  lastTime = currentTime;
-  if (isGameLoaded.value) window.requestAnimationFrame(update);
 };
 
 if (props.priority !== Priority.REPLAYER) {
@@ -276,6 +282,7 @@ onMounted(async () => {
     window.addEventListener('focus', handleFocus);
   }
 
+  window.requestAnimationFrame(replayLoop);
   window.requestAnimationFrame(update);
 });
 
