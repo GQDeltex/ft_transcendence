@@ -16,13 +16,13 @@ const hasScores = computed(() => {
 </script>
 
 <template>
+  <span class="playernames"> {{ player1Name }} vs {{ player2Name }}</span>
   <router-link class="routerlink" :to="`/replay/${gameId}`">
     <div>
       <img class="thumbnail" src="@/assets/pong.png" />
       <span v-if="hasScores" class="playernames">
         {{ score1 }} : {{ score2 }}</span
       >
-      <span class="playernames"> {{ player1Name }} vs {{ player2Name }}</span>
     </div>
   </router-link>
 </template>
@@ -41,8 +41,7 @@ div {
   justify-content: center;
   color: white;
   text-decoration: none;
-  font-size: 2vw;
-  margin-top: 1vw;
+  font-size: 3vw;
 }
 .thumbnail {
   display: block;
