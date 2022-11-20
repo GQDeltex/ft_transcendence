@@ -118,13 +118,9 @@ const update = (currentTime: number) => {
     if (currentGameDataIdx !== oldIdx) {
       console.log(currentGameDataIdx);
       if (gameData.name === 'ball') ball?.setDir(gameData.ballDirection);
-      // ball?.setAll({
-      //   position: gameData.ballPosition,
-      //   direction: gameData.ballDirection,
-      // });
       else if (gameData.name === 'opponent') {
-        leftPaddle?.setDir(gameData.paddleClientDirection, false);
-        rightPaddle?.setDir(gameData.paddleHostDirection, false);
+        rightPaddle?.setDir(gameData.paddleClientDirection, false);
+        leftPaddle?.setDir(gameData.paddleHostDirection, false);
       }
 
       if (

@@ -5,6 +5,7 @@ defineProps<{
   player2: string;
   score1: number;
   score2: number;
+  gameId: number;
 }>();
 </script>
 
@@ -20,6 +21,7 @@ defineProps<{
         :player2-name="player2"
         :score1="score1"
         :score2="score2"
+        :game-id="gameId"
       />
     </span>
   </div>

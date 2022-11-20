@@ -34,6 +34,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
         :player2="game.player2.username"
         :score1="game.score1"
         :score2="game.score2"
+        :game-id="game.id"
       />
     </div>
   </div>

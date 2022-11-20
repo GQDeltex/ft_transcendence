@@ -3,9 +3,9 @@ import { computed } from 'vue';
 const props = defineProps<{
   player1Name: string;
   player2Name: string;
-  score1?: number;
-  score2?: number;
-  gameId?: number;
+  score1: number;
+  score2: number;
+  gameId: number;
 }>();
 
 const hasScores = computed(() => {
@@ -16,7 +16,7 @@ const hasScores = computed(() => {
 </script>
 
 <template>
-  <router-link class="routerlink" :to="`/stream/${gameId}`">
+  <router-link class="routerlink" :to="`/replay/${gameId}`">
     <div>
       <img class="thumbnail" src="@/assets/pong.png" />
       <span v-if="hasScores" class="playernames">
