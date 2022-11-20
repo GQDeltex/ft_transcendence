@@ -48,7 +48,7 @@ export const i18n = createI18n({
 export const languagesDropDownContent: Array<string> = [
   '🇬🇧 English',
   '🇩🇪 Deutsch',
-  '🇪🇸 Español',  
+  '🇪🇸 Español',
   '🇫🇷 Français',
   '🇮🇹 Italiano',
   '🇷🇺 Русский',

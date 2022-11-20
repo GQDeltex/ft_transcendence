@@ -11,6 +11,9 @@ import { useErrorStore } from '@/store/error';
 import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
 import { cloneDeep } from 'lodash';
 import { useI18n } from 'vue-i18n';
+import { languagesDropDownContent } from '@/plugin/i18n';
+import { languagesSelection } from '@/plugin/i18n';
+import { i18n } from '@/plugin/i18n';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
@@ -72,27 +75,11 @@ async function updateTitle(title: string) {
 }
 
 const langShowDropDown = ref(false);
-const langDropDownContent = ref<string[]>([
-  '🇬🇧 English',
-  '🇩🇪 Deutsch',
-  '🇪🇸 Español',
-  '🇫🇷 Français',
-  '🇮🇹 Italiano',
-  '🇷🇺 Русский',
-  '🇺🇦 Ураїнська',
-  '🇵🇱 Polska',
-  '🇹🇷 Türkçe',
-]);
-
-async function dropDownClicked(selected: string) {
+function dropDownClicked(selected: string) {
   langShowDropDown.value = false;
-  // if (selected == dropDownContent.value[0]) {
-  //   await router.push({ path: `/profile/${userStore.id}` });
-  // }
-  // if (selected == dropDownContent.value[1]) {
-  //   await userStore.logout();
-  //   await router.push({ path: '/login' });
-  // }
+  let index = ref<number>(languagesDropDownContent.indexOf(selected));
+  i18n.global.locale.value = languagesSelection[index.value];
+  localStorage.setItem('language', i18n.global.locale.value);
 }
 </script>
 
@@ -181,7 +168,7 @@ async function dropDownClicked(selected: string) {
       />
       <DropDownComponent
         v-if="langShowDropDown"
-        :items="langDropDownContent"
+        :items="languagesDropDownContent"
         width="12vw"
         height="12vw"
         @close="dropDownClicked"
