@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import CategoryComponent from '../components/landingview/CategoryComponent.vue';
+import { computed } from 'vue';
 
-const dino = document.getElementById('dino');
-const cactus = document.getElementById('cactus');
+const dino = document.getElementById('dino') as HTMLElement;
+const cactus = document.getElementById('cactus') as HTMLElement;
+
+const handleKeyDown = (e: KeyboardEvent): void => {
+  console.log('jump here');
+  if (e.repeat) return;
+  if (e.code === 'ArrowUp') jump();
+};
+
+window.addEventListener('keydown', handleKeyDown);
 
 function jump() {
   if (dino.classList.value != 'jump') {
@@ -29,10 +38,6 @@ let isAlive = setInterval(function () {
     alert('Game Over!');
   }
 }, 10);
-
-document.addEventListener('keydown', function (event) {
-  jump();
-});
 </script>
 
 <template>
