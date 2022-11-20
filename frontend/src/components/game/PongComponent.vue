@@ -7,7 +7,6 @@ import GamePeopleComponent from './GamePeopleComponent.vue';
 import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
 import type { GameLogData } from '@/service/GameService';
-import { camelCase } from 'lodash';
 
 const props = defineProps<{
   gameId: number;
@@ -116,11 +115,10 @@ const update = (currentTime: number) => {
     }
     const gameData: GameLogData = props.gameDatas[currentGameDataIdx];
     if (currentGameDataIdx !== oldIdx) {
-      console.log(currentGameDataIdx);
       if (gameData.name === 'ball') ball?.setDir(gameData.ballDirection);
       else if (gameData.name === 'opponent') {
-        rightPaddle?.setDir(gameData.paddleClientDirection, false);
-        leftPaddle?.setDir(gameData.paddleHostDirection, false);
+        leftPaddle?.setDir(gameData.paddleClientDirection, false);
+        rightPaddle?.setDir(gameData.paddleHostDirection, false);
       }
 
       if (
@@ -167,7 +165,6 @@ if (props.priority !== Priority.REPLAYER) {
         gameData.direction.x = -gameData.direction.x;
         gameData.position.x =
           1 - gameData.position.x - ball.getRelativeBallSize();
-        console.log(gameData.position);
       }
       ball?.setDir(gameData.direction);
       ball?.setPos(gameData.position);

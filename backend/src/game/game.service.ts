@@ -68,7 +68,7 @@ export class GameService {
     newGameData.score = score ?? game.logData[game.logData.length - 1].score;
     newGameData.paddleHostDirection = 0;
     newGameData.paddleClientDirection = 0;
-    if (game.logData.length > 0 && userId === game.player1Id) {
+    if (game.logData.length > 0 && userId === game.player2Id) {
       newGameData.paddleHostDirection =
         paddleDirection ??
         game.logData[game.logData.length - 1].paddleHostDirection;
@@ -188,10 +188,18 @@ export class GameService {
       game.score2 = 0;
       game.player1.points += game.score1;
     }
+    //what do you mean you can't do multiple constructor overloads in typescript??
     const newGameData = new GameLogData();
+    const lastLog: GameLogData = game.logData[game.logData.length - 1];
     newGameData.timestamp =
       new Date().getTime() - game.startTime.getTime() - game.totalPauseTime;
     newGameData.score = [game.score1, game.score2];
+    newGameData.name = 'kill';
+    newGameData.ballDirection = lastLog.ballDirection;
+    newGameData.ballPosition = lastLog.ballPosition;
+    newGameData.paddleClientDirection = lastLog.paddleClientDirection;
+    newGameData.paddleHostDirection = lastLog.paddleHostDirection;
+    game.logData.push(newGameData);
     await this.gameRepository.save(game);
     return game.id;
   }
