@@ -1,4 +1,4 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -15,25 +15,10 @@ export enum GameState {
   PAUSED = 'paused',
 }
 
-@ObjectType()
-export class Vector {
-  constructor(_x = 0, _y = 0) {
-    this.x = _x;
-    this.y = _y;
-  }
-  @Field(() => Float) x = 0;
-  @Field(() => Float) y = 0;
-}
-
-@ObjectType()
-export class GameLogData {
-  @Field() timestamp: number;
-  @Field() name: string;
-  @Field(() => Vector) ballDirection: Vector = new Vector();
-  @Field(() => Vector) ballPosition: Vector = new Vector();
-  @Field(() => Float) paddleHostDirection = 0;
-  @Field(() => Float) paddleClientDirection = 0;
-  @Field(() => [Int]) score: number[] = [0, 0];
+export enum Priority {
+  HOST,
+  CLIENT,
+  GUEST,
 }
 
 @ObjectType()
@@ -80,16 +65,6 @@ export class Game {
     default: GameState.STARTING,
   })
   state: GameState;
-
-  @Field(() => [GameLogData], { nullable: 'items' })
-  @Column({ type: 'jsonb', default: [] })
-  logData: GameLogData[];
-
-  @Column({ type: 'integer', default: 0 })
-  totalPauseTime: number;
-
-  @Column({ type: 'timestamptz', default: new Date(0) })
-  startTime: Date;
 
   @Field()
   @Column({ default: false })

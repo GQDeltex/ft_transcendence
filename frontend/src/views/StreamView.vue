@@ -4,107 +4,89 @@ import PongComponent from '../components/game/PongComponent.vue';
 import EndScreenComponent from '../components/game/EndScreenComponent.vue';
 import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
-import { ref, computed, watch, onUnmounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onBeforeMount, type Ref, onBeforeUnmount } from 'vue';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { socket } from '@/service/socket';
-import type { User } from '@/store/user';
-import UserService from '@/service/UserService';
+import { useErrorStore } from '@/store/error';
+
+enum DisplayState {
+  OVERVIEW,
+  WATCHING,
+  ENDED,
+}
+
+const route = useRoute();
 
 const games = ref<Game[]>([]);
-const player1User = ref<User>({
-  id: 0,
-  campus: '',
-  coalition: '',
-  country: '',
-  firstname: '',
-  intra: '',
-  lastname: '',
-  points: 0,
-  username: '',
-  title: [''],
-  picture: '',
-  status: '',
-  equipped: [],
-});
-const player2User = ref<User>({
-  id: 0,
-  campus: '',
-  coalition: '',
-  country: '',
-  firstname: '',
-  intra: '',
-  lastname: '',
-  points: 0,
-  username: '',
-  title: [''],
-  picture: '',
-  status: '',
-  equipped: [],
-});
-const route = useRoute();
-const routExist = computed(() => typeof route.params.id === 'undefined');
-const displayEnd = ref(false);
-
-const gameId = ref(0);
-const loadedData = ref(false);
-
-onUnmounted(() => {
-  socket.emit('stream', { gameId: gameId.value, event: 'LEAVE' });
-});
-
-watch(
-  () => route.params,
-  () => {
-    if (typeof route.params.id === 'undefined') return;
-    gameId.value = +route.params.id;
-    socket.emit(
-      'stream',
-      { gameId: gameId.value, event: 'JOIN' },
-      async (data: { player1Id: number; player2Id: number }) => {
-        player1User.value = await UserService.findOneById(data.player1Id);
-        player2User.value = await UserService.findOneById(data.player2Id);
-        loadedData.value = true;
-      },
-    );
-  },
-);
-
-GameService.findAll('running').then(
-  (fetchGames: Game[]) => (games.value = fetchGames),
-);
-
-GameService.findAll('paused').then(
-  (fetchGames: Game[]) => (games.value = fetchGames),
-);
+const game: Ref<Game | null> = ref(null);
+const displayState = ref(DisplayState.OVERVIEW);
 
 socket.on('Game', async ({ gameId }) => {
-  if (gameId < 0) {
-    displayEnd.value = true;
-    socket.emit('stream', { gameId: gameId.value, event: 'LEAVE' });
+  if (gameId < 0 && game.value) {
+    displayState.value = DisplayState.ENDED;
+    socket.emit('stream', { gameId: game.value.id, event: 'LEAVE' });
   }
+});
+
+const joinGame = async (_gameId: number) => {
+  game.value = games.value.find((g) => g.id === _gameId) ?? null;
+  if (game.value) {
+    socket.emit('stream', { gameId: game.value.id, event: 'JOIN' });
+    displayState.value = DisplayState.WATCHING;
+  }
+};
+
+const fetchGames = async () => {
+  try {
+    games.value = [
+      ...(await GameService.findAll('running')),
+      ...(await GameService.findAll('paused')),
+    ];
+    displayState.value = DisplayState.OVERVIEW;
+  } catch (error) {
+    useErrorStore().setError((error as Error).message);
+  }
+};
+
+onBeforeMount(async () => {
+  if (typeof route.params.id === 'undefined') await fetchGames();
+  else await joinGame(+route.params.id);
+});
+
+onBeforeRouteUpdate(async (to) => {
+  if (game.value)
+    socket.emit('stream', { gameId: game.value.id, event: 'LEAVE' });
+  if (typeof to.params.id === 'undefined') await fetchGames();
+  else await joinGame(+to.params.id);
+});
+
+onBeforeUnmount(() => {
+  if (game.value)
+    socket.emit('stream', { gameId: game.value.id, event: 'LEAVE' });
 });
 </script>
 
 <template>
   <div>
-    <div v-if="routExist && !displayEnd">
+    <div v-if="displayState === DisplayState.OVERVIEW">
       <h1 class="title">Stream Overview</h1>
-      <ChildStreamComponent v-for="game in games" :key="game.id" :game="game" />
-    </div>
-    <div v-if="!routExist && !displayEnd">
-      <PongComponent
-        v-if="
-          loadedData &&
-          typeof player1User !== 'undefined' &&
-          typeof player2User !== 'undefined'
-        "
-        :game-id="gameId"
-        :host-player="player1User"
-        :other-player="player2User"
-        :priority="2"
+      <ChildStreamComponent
+        v-for="_game in games"
+        :key="_game.id"
+        :game="_game"
       />
     </div>
-    <EndScreenComponent v-if="displayEnd === true" :game-id="gameId" />
+    <div v-if="game">
+      <div v-if="displayState === DisplayState.WATCHING">
+        <PongComponent
+          :game-id="game.id"
+          :host-player="game.player1"
+          :other-player="game.player2"
+          :priority="2"
+        />
+      </div>
+      <EndScreenComponent v-else :game-id="game.id" />
+    </div>
   </div>
 </template>
 

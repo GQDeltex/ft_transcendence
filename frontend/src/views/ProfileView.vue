@@ -89,17 +89,6 @@ provide('user', { user, isMe, games });
   max-height: 30vh;
 }
 
-.button {
-  font-family: 'Mountains of Christmas', cursive;
-  text-decoration: none;
-  border-radius: 25px;
-  color: white;
-  background-color: #c00000;
-  cursor: pointer;
-  float: right;
-  font-size: 1vw;
-}
-
 .aboutMe {
   grid-row: 1 / 2;
   height: 20vh;

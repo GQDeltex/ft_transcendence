@@ -1,4 +1,4 @@
-import { Vector } from './element';
+import { Vector } from './ball';
 import { socket } from '@/service/socket';
 
 export class Paddle {
@@ -25,7 +25,6 @@ export class Paddle {
     if (toEmit)
       socket.emit('gameData', {
         name: 'opponent',
-        time: new Date().getTime(),
         gameId: this._gameId,
         paddleDir: direction,
       });

@@ -1,13 +1,15 @@
 import { socket } from '@/service/socket';
 import type { Ref } from 'vue';
-import { Vector } from './element';
 import type { Paddle } from './paddle';
 
 export enum Priority {
   HOST,
   CLIENT,
   VIEWER,
-  REPLAYER,
+}
+
+export class Vector {
+  constructor(public x: number, public y: number) {}
 }
 
 export class Ball {
@@ -56,7 +58,6 @@ export class Ball {
       this._direction.y = Math.random() * 4 - 2;
       socket.emit('gameData', {
         name: 'ball',
-        time: new Date().getTime(),
         gameId: this._gameId,
         direction: {
           x: -this._direction.x,
@@ -153,8 +154,7 @@ export class Ball {
 
     if (
       this.isPaddleCollision(yourPaddle) &&
-      this._priority !== Priority.VIEWER &&
-      this._priority !== Priority.REPLAYER
+      this._priority !== Priority.VIEWER
     ) {
       this._direction.x = -1;
       this._direction.y =
@@ -167,7 +167,6 @@ export class Ball {
         this._direction.x * this._speed * this._canvas.width * elapsedTime * 2;
       socket.emit('gameData', {
         name: 'ball',
-        time: new Date().getTime(),
         gameId: this._gameId,
         direction: {
           x: 1,
@@ -182,11 +181,7 @@ export class Ball {
       });
     }
 
-    if (
-      this.isLost() &&
-      this._priority !== Priority.VIEWER &&
-      this._priority !== Priority.REPLAYER
-    ) {
+    if (this.isLost() && this._priority !== Priority.VIEWER) {
       otherScore.value++;
       this.reset(yourScore.value, otherScore.value);
     }

@@ -13,7 +13,6 @@ const navRoutes: Array<RouteRecordRaw> = [
     name: 'home',
     component: LandingView,
   },
-  ,
   {
     path: '/leaderboard',
     name: 'LeaderboardView',

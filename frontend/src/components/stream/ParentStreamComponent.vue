@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChildStreamComponent from './ChildStreamComponent.vue';
+// import ChildStreamComponent from './ChildStreamComponent.vue';
 defineProps<{
   categoryName: string;
 }>();
@@ -7,14 +7,14 @@ defineProps<{
 
 <template>
   <h3>{{ categoryName }}</h3>
-  <div class="categories">
-    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
-    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
-    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
-    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
-    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
-    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />
-  </div>
+  <!--  <div class="categories">-->
+  <!--    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />-->
+  <!--    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />-->
+  <!--    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />-->
+  <!--    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />-->
+  <!--    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />-->
+  <!--    <ChildStreamComponent player1-name="hlehmann" player2-name="gucalvi" />-->
+  <!--  </div>-->
 </template>
 
 <style scoped>

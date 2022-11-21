@@ -13,6 +13,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { User } from '@/store/user';
 import type { _RouteLocationBase } from 'vue-router';
 import { useErrorStore } from '@/store/error';
+import { Priority } from '@/components/game/ball';
 
 const route = useRoute();
 const router = useRouter();
@@ -21,10 +22,15 @@ const errorStore = useErrorStore();
 
 const emits = defineEmits(['hide', 'show']);
 
-const displayState = ref('queue');
-const gameIdRef = ref(0);
-const playerPriorityRef = ref(1);
-const isHost = ref(false);
+enum DisplayState {
+  QUEUE = 0,
+  START = 1,
+  END = 2,
+}
+
+const displayState = ref(DisplayState.QUEUE);
+const gameId = ref(0);
+const playerPriority = ref(Priority.HOST);
 
 const hostPlayer = ref<User>({
   id: 0,
@@ -57,14 +63,6 @@ const otherPlayer = ref<User>({
   equipped: [],
 });
 
-function join_queue() {
-  socket.emit('queue', { event: 'JOIN' });
-}
-
-function leave_queue() {
-  socket.emit('queue', { event: 'LEAVE' });
-}
-
 async function getPlayerUsers(player1Id: number, player2Id: number) {
   try {
     hostPlayer.value = await UserService.findOneById(player1Id);
@@ -74,23 +72,27 @@ async function getPlayerUsers(player1Id: number, player2Id: number) {
   }
 }
 
-socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
-  if (gameId < 0) {
-    displayState.value = 'end';
-    return;
-  }
-  await getPlayerUsers(player1Id, player2Id);
-  await nextTick();
-  gameIdRef.value = gameId;
-  playerPriorityRef.value = priority;
-  displayState.value = 'start';
-  if (
-    (priority === 0 && userStore.id === player1Id.id) ||
-    (priority === 1 && userStore.id === player2Id.id)
-  )
-    isHost.value = true;
-  emits('hide');
-});
+socket.on(
+  'Game',
+  async (gamePayload: {
+    gameId: number;
+    player1Id: number;
+    player2Id: number;
+    priority: Priority;
+  }) => {
+    if (gamePayload.gameId < 0) {
+      displayState.value = DisplayState.END;
+      return;
+    }
+
+    await getPlayerUsers(gamePayload.player1Id, gamePayload.player2Id);
+    await nextTick();
+    gameId.value = gamePayload.gameId;
+    playerPriority.value = gamePayload.priority;
+    displayState.value = DisplayState.START;
+    emits('hide');
+  },
+);
 
 const checkGame = async (url: _RouteLocationBase) => {
   if (typeof url.query.inviterId === 'string') {
@@ -108,7 +110,7 @@ const checkGame = async (url: _RouteLocationBase) => {
     await nextTick();
     socket.emit('inviteReady', { gameId: +url.query.gameId });
   } else {
-    join_queue();
+    socket.emit('queue', { event: 'JOIN' });
   }
 };
 
@@ -117,21 +119,24 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  leave_queue();
+  socket.emit('queue', { event: 'LEAVE' });
   emits('show');
 });
 </script>
 
 <template>
-  <div v-if="displayState === 'queue'" class="parent">
+  <div v-if="displayState === DisplayState.QUEUE" class="parent">
     <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
     <div class="loader"></div>
   </div>
-  <EndScreenComponent v-else-if="displayState === 'end'" :game-id="gameIdRef" />
+  <EndScreenComponent
+    v-else-if="displayState === DisplayState.END"
+    :game-id="gameId"
+  />
   <PongComponent
     v-else
-    :game-id="gameIdRef"
-    :priority="playerPriorityRef"
+    :game-id="gameId"
+    :priority="playerPriority"
     :host-player="hostPlayer"
     :other-player="otherPlayer"
   />

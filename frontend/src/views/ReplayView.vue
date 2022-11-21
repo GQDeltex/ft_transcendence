@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import PongComponent from '../components/game/PongComponent.vue';
-import EndScreenComponent from '../components/game/EndScreenComponent.vue';
+import GamePeopleComponent from '@/components/game/GamePeopleComponent.vue';
+import EndScreenComponent from '@/components/game/EndScreenComponent.vue';
 import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { useErrorStore } from '@/store/error';
 
 const game = ref<Game | null>(null);
-
 const route = useRoute();
-const isLoaded = ref(false);
-const gameId = ref(0);
+const isEnded = ref(false);
+
+const videoWidth = String(0.69 * window.innerWidth) + 'px';
 
 const fetchGameData = async (id: number) => {
-  gameId.value = id;
   try {
     game.value = await GameService.findOne(id);
-    isLoaded.value = true;
   } catch (error) {
     useErrorStore().setError((error as Error).message);
   }
@@ -31,22 +29,37 @@ onBeforeRouteUpdate(async (to) => {
   await fetchGameData(+to.params.id);
 });
 
-const videoWidth = String(0.69 * window.innerWidth) + 'px';
+const onEnded = () => {
+  isEnded.value = true;
+};
+
+onMounted(async () => {
+  await nextTick();
+  window.onresize = () => {
+    const video = document.getElementById('video') as HTMLVideoElement;
+    video.style.width = String(0.69 * window.innerWidth) + 'px';
+  };
+});
 </script>
 
 <template>
-  <div>
-    <!-- <PongComponent
-      v-if="isLoaded && game !== null"
-      :game-id="gameId"
-      :host-player="game.player1"
-      :other-player="game.player2"
-      :priority="3"
-      :game-datas="game.logData"
-      @finish="onFinish"
-    /> -->
-    <video autoplay :src="game?.replayUrl" />
-    <!-- <EndScreenComponent v-else :game-id="gameId" /> -->
+  <div v-if="game">
+    <div v-if="game.isReplayHost && !isEnded" class="players">
+      <GamePeopleComponent :client="game.player2" class="player1" />
+      <GamePeopleComponent :client="game.player1" class="player2" />
+    </div>
+    <div v-else-if="!isEnded" class="players">
+      <GamePeopleComponent :client="game.player1" class="player1" />
+      <GamePeopleComponent :client="game.player2" class="player2" />
+    </div>
+    <video
+      v-if="!isEnded"
+      id="video"
+      autoplay
+      :src="game.replayUrl"
+      @ended="onEnded"
+    />
+    <EndScreenComponent v-else :game-id="game.id" />
   </div>
 </template>
 
@@ -54,5 +67,24 @@ const videoWidth = String(0.69 * window.innerWidth) + 'px';
 video {
   object-fit: cover;
   width: v-bind(videoWidth);
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.player1 {
+  grid-column: 1/2;
+  justify-content: center;
+  text-align: center;
+}
+
+.player2 {
+  grid-column: 2/3;
+  justify-content: center;
+  text-align: center;
+}
+
+.players {
+  display: grid;
 }
 </style>

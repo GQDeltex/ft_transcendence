@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { Game, GameLogData, GameState, Vector } from './entities/game.entity';
+import { Game, GameState, Priority } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { GameGateway } from './game.gateway';
 import { Socket } from 'socket.io';
@@ -33,61 +33,10 @@ export class GameService {
       player1: player1.user,
       player2Id: player2.playerId,
       player2: player2.user,
-      logData: [],
-      totalPauseTime: 0,
     });
     await this.dequeuePlayer(player1.playerId);
     await this.dequeuePlayer(player2.playerId);
     await this.startGame(game);
-  }
-
-  async logGameData(
-    userId: number,
-    name: string,
-    time: number,
-    gameId: number,
-    ballDirection?: Vector,
-    ballPosition?: Vector,
-    paddleDirection?: number,
-    score?: number[],
-  ) {
-    const game: Game = await this.findOne(gameId);
-    const newGameData: GameLogData = new GameLogData();
-    if (game.logData.length === 0) {
-      game.startTime = new Date();
-      newGameData.timestamp = 0;
-    } else {
-      newGameData.timestamp =
-        time - game.startTime.getTime() - game.totalPauseTime;
-    }
-    newGameData.name = name;
-    newGameData.ballDirection =
-      ballDirection ?? game.logData[game.logData.length - 1].ballDirection;
-    if (userId === game.player2Id)
-      newGameData.ballDirection = new Vector(
-        -newGameData.ballDirection.x,
-        newGameData.ballDirection.y,
-      );
-    newGameData.ballPosition =
-      ballPosition ?? game.logData[game.logData.length - 1].ballPosition;
-    newGameData.score = score ?? game.logData[game.logData.length - 1].score;
-    newGameData.paddleHostDirection = 0;
-    newGameData.paddleClientDirection = 0;
-    if (game.logData.length > 0 && userId === game.player2Id) {
-      newGameData.paddleHostDirection =
-        paddleDirection ??
-        game.logData[game.logData.length - 1].paddleHostDirection;
-      newGameData.paddleClientDirection =
-        game.logData[game.logData.length - 1].paddleClientDirection;
-    } else if (game.logData.length > 0) {
-      newGameData.paddleClientDirection =
-        paddleDirection ??
-        game.logData[game.logData.length - 1].paddleClientDirection;
-      newGameData.paddleHostDirection =
-        game.logData[game.logData.length - 1].paddleHostDirection;
-    }
-    game.logData.push(newGameData);
-    await this.gameRepository.save(game);
   }
 
   async startGame(game: Game) {
@@ -95,13 +44,13 @@ export class GameService {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: 0,
+      priority: Priority.HOST,
     });
     this.gameGateway.server.to(game.player2.socketId).emit('Game', {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: 1,
+      priority: Priority.CLIENT,
     });
     this.gameGateway.server
       .to(game.player1.socketId)
@@ -125,14 +74,14 @@ export class GameService {
     );
   }
 
-  findOne(id: number) {
-    return this.gameRepository.findOneOrFail({ where: { id: id } });
+  async findOne(id: number) {
+    return await this.gameRepository.findOneOrFail({ where: { id: id } });
   }
 
   async queuePlayer(id: number) {
     const user: User = await this.usersService.findOne(id);
     if (user.status === 'in game')
-      throw new WsException('finish what you started');
+      throw new WsException('Finish what you started');
     await this.queuedPlayerRepository.insert({
       playerId: id,
       user: user,
@@ -165,92 +114,44 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async killGame(userId: number, time: number): Promise<number> {
+  async killGame(userId: number): Promise<Game[]> {
     const games: Game[] = await this.findAll(
       [{ state: GameState.RUNNING }, { state: GameState.PAUSED }],
       userId,
     );
-    if (games.length <= 0) return -1;
-    const game: Game = games[0];
-    if (game.state === GameState.PAUSED) {
-      game.logData = game.logData.filter((gameData, idx) => {
-        if (gameData.ballDirection.x === 0) {
-          game.totalPauseTime += time - game.logData[idx].timestamp;
-          return false;
-        }
-        return true;
-      });
+    for (const game of games) {
+      game.state = GameState.ENDED;
+      game.player1.status = 'online';
+      game.player2.status = 'online';
+      if (game.player1.id === userId) {
+        game.score1 = 0;
+        game.player2.points += game.score2;
+      } else if (game.player2.id === userId) {
+        game.score2 = 0;
+        game.player1.points += game.score1;
+      }
+      await this.gameRepository.save(game);
     }
-    game.state = GameState.ENDED;
-    game.player1.status = 'online';
-    game.player2.status = 'online';
-    if (game.player1.id === userId) {
-      game.score1 = 0;
-      game.player2.points += game.score2;
-    }
-    if (game.player2.id === userId) {
-      game.score2 = 0;
-      game.player1.points += game.score1;
-    }
-    //what do you mean you can't do multiple constructor overloads in typescript??
-    const newGameData = new GameLogData();
-    const lastLog: GameLogData = game.logData[game.logData.length - 1];
-    newGameData.timestamp =
-      time - game.startTime.getTime() - game.totalPauseTime;
-    newGameData.score = [game.score1, game.score2];
-    newGameData.name = 'kill';
-    newGameData.ballDirection = lastLog.ballDirection;
-    newGameData.ballPosition = lastLog.ballPosition;
-    newGameData.paddleClientDirection = lastLog.paddleClientDirection;
-    newGameData.paddleHostDirection = lastLog.paddleHostDirection;
-    game.logData.push(newGameData);
-    await this.gameRepository.save(game);
-    return game.id;
+    return games;
   }
 
-  async pauseGame(
-    client: Socket,
-    gameId: number,
-    cowardId: number,
-    time: number,
-  ) {
+  async pauseGame(client: Socket, gameId: number, cowardId: number) {
     const game: Game = await this.findOne(gameId);
     if (game.state === GameState.ENDED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date();
     if (game.player2Id === cowardId) game.player2BlurTime = new Date();
-    if (game.state !== GameState.PAUSED) {
-      const newGameData = new GameLogData();
-      newGameData.timestamp = time;
-      newGameData.name = 'pause';
-      game.logData.push(newGameData);
-      console.log('on paused', newGameData);
-    }
     game.state = GameState.PAUSED;
     await this.gameRepository.save(game);
     client.to(`&${gameId}`).emit('gameBlur', cowardId);
     client.emit('gameBlur', cowardId);
   }
 
-  async unpauseGame(
-    client: Socket,
-    gameId: number,
-    cowardId: number,
-    time: number,
-  ) {
+  async unpauseGame(client: Socket, gameId: number, cowardId: number) {
     const game: Game = await this.findOne(gameId);
     if (game.state !== GameState.PAUSED) return;
     if (game.player1Id === cowardId) game.player1BlurTime = new Date(0);
     if (game.player2Id === cowardId) game.player2BlurTime = new Date(0);
     if (game.player1BlurTime.getTime() === game.player2BlurTime.getTime()) {
-      game.logData = game.logData.filter((gameData, idx) => {
-        if (gameData.ballDirection.x === 0) {
-          game.totalPauseTime += time - game.logData[idx].timestamp;
-          console.log('to be filtered: ', gameData);
-          console.log(game.totalPauseTime);
-          return false;
-        }
-        return true;
-      });
       game.state = GameState.RUNNING;
       client.to(`&${gameId}`).emit('gameFocus');
       client.emit('gameFocus');
@@ -258,14 +159,14 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async claimVictory(client: Socket, gameId: number, time: number) {
+  async claimVictory(client: Socket, gameId: number) {
     const game: Game = await this.findOne(gameId);
     if (client.data.user.id == game.player1Id) {
-      if (time - game.player2BlurTime.getTime() >= 10000)
-        await this.killGame(game.player2Id, time);
+      if (new Date().getTime() - game.player2BlurTime.getTime() >= 10000)
+        await this.killGame(game.player2Id);
     } else {
-      if (time - game.player1BlurTime.getTime() >= 10000)
-        await this.killGame(game.player1Id, time);
+      if (new Date().getTime() - game.player1BlurTime.getTime() >= 10000)
+        await this.killGame(game.player1Id);
     }
     client.to(`&${gameId}`).emit('Game', { gameId: -1 });
     client.emit('Game', { gameId: -1 });
@@ -293,6 +194,7 @@ export class GameService {
         rightPaddle,
         ball,
         scores,
+        state: game.state,
       });
     }
   }

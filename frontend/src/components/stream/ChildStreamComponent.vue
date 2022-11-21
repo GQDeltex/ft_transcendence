@@ -10,22 +10,19 @@ withDefaults(
 </script>
 
 <template>
-  <span class="playernames">
+  <span class="playerNames">
     {{ game.player1.username }} vs {{ game.player2.username }}
   </span>
-  <router-link
-    class="routerlink"
-    :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`"
-  >
+  <router-link :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`">
     <div>
-      <img class="thumbnail" src="@/assets/pong.png" />
-      <span class="playernames"> {{ game.score1 }} : {{ game.score2 }}</span>
+      <img class="thumbnail" alt="thumbnail" src="@/assets/pong.png" />
+      <span class="playerNames"> {{ game.score1 }} : {{ game.score2 }}</span>
     </div>
   </router-link>
 </template>
 
 <style scoped>
-.routerlink {
+router-link {
   text-decoration: none;
 }
 
@@ -33,13 +30,15 @@ div {
   display: grid;
   margin: auto;
 }
-.playernames {
+
+.playerNames {
   display: flex;
   justify-content: center;
   color: white;
   text-decoration: none;
   font-size: 3vw;
 }
+
 .thumbnail {
   display: block;
   margin-left: auto;
