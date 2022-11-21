@@ -51,18 +51,18 @@ onMounted(async () => {
     <span class="text">Achievements</span>
     <div class="achievements">
       <ChildAchievementComponent
-        header="Smol PongKing"
+        header="First Snow"
         text="First Login"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'hlehmann' && user.id !== 835543"
+        v-if="user.username === 'hlehmann' && user.id !== 83543"
         header="Fake News"
         text="You are not the President"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.id === 835543"
+        v-if="user.id === 83543"
         header="President"
         text="Welcome Mr. President"
         picture=""
@@ -74,13 +74,13 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'mamuller'"
+        v-if="user.id === 83547"
         header="Design"
         text="Buisness, Buisness, Buisness. Design, Design, Design"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'rkaufman'"
+		v-if="user.id === 98546"
         header="Not my department"
         text="I need a cubical, this is not my department"
         picture=""
@@ -92,13 +92,13 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'kmeixner'"
+        v-if="user.id === 85561"
         header="25 Hours"
         text="I can fix my IRC in one day"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'pstengl'"
+        v-if="user.id === 87222"
         header="Techlead"
         text="I dont know why Java does that"
         picture=""
@@ -110,7 +110,7 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'vheymans'"
+        v-if="user.id === 83581"
         header="TBA"
         text="TBA"
         picture=""
@@ -135,14 +135,14 @@ onMounted(async () => {
       />
       <ChildAchievementComponent
         v-if="
-          user.username === 'hlehmann' ||
-          user.username === 'mamuller' ||
-          user.username === 'rkaufman' ||
+          user.id === 83543 ||
+          user.id === 83547 ||
+          user.id === '98546' ||
           user.username === 'cthien-h' ||
           user.username === 'kmeixner' ||
-          user.username === 'pstengl' ||
+          user.id === 87222 ||
           user.username === 'cdahlhof' ||
-          user.username === 'vheymans' ||
+          user.id === 83581 ||
           user.username === 'dzivanov' ||
           user.username === 'ehosu'
         "
