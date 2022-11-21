@@ -69,8 +69,8 @@ export class Ball {
         },
         score:
           this._priority === Priority.HOST
-            ? [yourScore, otherScore]
-            : [otherScore, yourScore],
+            ? [otherScore, yourScore]
+            : [yourScore, otherScore],
       });
     }
   }

@@ -76,7 +76,7 @@ const handleKeyDown = (e: KeyboardEvent): void => {
 };
 
 const handleBlur = (): void => {
-  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  // if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameBlur', {
     gameId: props.gameId,
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
@@ -84,6 +84,7 @@ const handleBlur = (): void => {
 };
 
 const handleFocus = (): void => {
+  // if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameFocus', {
     gameId: props.gameId,
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
@@ -100,7 +101,15 @@ const update = (currentTime: number) => {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
-  ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
+  ctx.font = '4vw Silkscreen';
+  ctx.fillStyle = 'white';
+  ctx.textAlign = 'center';
+  ctx.fillText(
+    yourScore.value + ' ' + otherScore.value,
+    canvas.width / 2,
+    canvas.height / 9,
+  );
+  ball?.draw(elapsedTime, rightPaddle, otherScore, yourScore);
   leftPaddle?.draw(elapsedTime);
   rightPaddle?.draw(elapsedTime);
   lastTime = currentTime;
@@ -138,6 +147,7 @@ socket.on('gameData', (gameData) => {
   }
 
   if (typeof gameData.score !== 'undefined') {
+    console.log(gameData.score);
     if (props.priority === Priority.HOST) {
       otherScore.value = gameData.score[1];
       yourScore.value = gameData.score[0];
@@ -255,6 +265,7 @@ onMounted(async () => {
       const file: File = new File([blob], `game_${props.gameId}.webm`, {
         type: 'video/webm',
       });
+      console.log('uploading game data...');
       socket.emit('uploadGame', {
         gameId: props.gameId,
         file,
@@ -267,7 +278,12 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  videoRecorder?.stop();
+  console.log('Stopping vid recording');
+  if (props.priority === Priority.CLIENT) {
+    setTimeout(() => {
+      videoRecorder?.stop();
+    }, 1000);
+  } else videoRecorder?.stop();
   isGameLoaded.value = false;
   socket.off('gameData');
   socket.off('gameBlur');
@@ -296,10 +312,6 @@ onUnmounted(() => {
       :width="initialCanvasWidth"
       :height="initialCanvasHeight"
     />
-    <div class="score">
-      <div id="player">{{ otherScore }}</div>
-      <div id="remote">{{ yourScore }}</div>
-    </div>
     <div v-if="showClaimVictory" class="modal">
       <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
