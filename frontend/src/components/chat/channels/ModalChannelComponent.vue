@@ -47,14 +47,20 @@ onMounted(() => {
       <div class="modal-content">
         {{ useI18n().t('joincreatechannel')
         }}<span class="close" @click="closeCancel()">&times;</span>
-      <label>{{ useI18n().t('name') }}</label>
-      <input id="mytext" v-model="channelName" class="inputField" type="text" />
-      <label>{{ useI18n().t('password') }}</label>
-      <input v-model="password" class="inputField" type="password" />
-      <br />
-      <button class="ok" @click="closeOk()">
-        {{ useI18n().t('confirm') }}
-      </button>
+        <label>{{ useI18n().t('name') }}</label>
+        <input
+          id="mytext"
+          v-model="channelName"
+          class="inputField"
+          type="text"
+        />
+        <label>{{ useI18n().t('password') }}</label>
+        <input v-model="password" class="inputField" type="password" />
+        <br />
+        <button class="ok" @click="closeOk()">
+          {{ useI18n().t('confirm') }}
+        </button>
+      </div>
     </div>
   </div>
 </template>

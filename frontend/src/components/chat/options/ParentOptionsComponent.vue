@@ -161,25 +161,31 @@ function getChannelUserStatus(client: User) {
         </template>
       </div>
       <div class="buttonList">
-        <span class="headerText optionsHeader"> {{ useI18n().t('options') }} </span>
-          <button v-if="isOwner" class="button" @click="passModalActive = true">
-            {{ useI18n().t('changepassword') }}
-          </button>
-          <ModalUpdatePasswordComponent
-            v-if="passModalActive"
-            :current-channel="props.currentChannel"
-            @close="passModalActive = false"
-          />
-          <button v-if="props.currentChannel.name.startsWith('#')" class="button" @click="leave">
-            {{ useI18n().t('leavechat') }}
-          </button>
-          <button v-if="isOwner" class="button" @click="makePublic">
-            {{
-              props.currentChannel.private
-                ? useI18n().t('makepublic')
-                : useI18n().t('makeprivate')
-            }}
-          </button>
+        <span class="headerText optionsHeader">
+          {{ useI18n().t('options') }}
+        </span>
+        <button v-if="isOwner" class="button" @click="passModalActive = true">
+          {{ useI18n().t('changepassword') }}
+        </button>
+        <ModalUpdatePasswordComponent
+          v-if="passModalActive"
+          :current-channel="props.currentChannel"
+          @close="passModalActive = false"
+        />
+        <button
+          v-if="props.currentChannel.name.startsWith('#')"
+          class="button"
+          @click="leave"
+        >
+          {{ useI18n().t('leavechat') }}
+        </button>
+        <button v-if="isOwner" class="button" @click="makePublic">
+          {{
+            props.currentChannel.private
+              ? useI18n().t('makepublic')
+              : useI18n().t('makeprivate')
+          }}
+        </button>
       </div>
     </div>
   </div>

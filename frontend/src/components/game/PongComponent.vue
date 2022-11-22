@@ -6,7 +6,7 @@ import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
 import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
-
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   gameId: number;

@@ -46,8 +46,8 @@ onMounted(() => {
       <span class="modal-header">
         {{ useI18n().t('changeusername')
         }}<span class="close" @click="closeCancel()">&times;</span>
-      <label>{{ useI18n().t('newusername') }}</label>
       </span>
+      <label>{{ useI18n().t('newusername') }}</label>
       <input
         id="mytext"
         v-model="outputUsername"

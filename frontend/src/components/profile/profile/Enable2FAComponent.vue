@@ -28,7 +28,7 @@ function closeCancel() {
   <div class="modal">
     <div class="modal-content">
       <span class="modal-header">
-        2 Factor Authentication
+        {{ useI18n().t('twofa') }}
         <span class="close" @click="closeCancel">&times;</span>
       </span>
       <div class="qrCode">
@@ -37,7 +37,12 @@ function closeCancel() {
       <div class="input">
         <span>{{ useI18n().t('enter2fa') }}</span>
         <br />
-        <input v-model="code" class="inputField" type="text" @keyup.enter="submit" /><br />
+        <input
+          v-model="code"
+          class="inputField"
+          type="text"
+          @keyup.enter="submit"
+        /><br />
         <button class="ok" @click="submit">
           {{ useI18n().t('submit') }}
         </button>

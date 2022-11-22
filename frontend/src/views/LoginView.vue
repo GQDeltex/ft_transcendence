@@ -20,37 +20,33 @@ const langShowDropDown = ref(false);
 function dropDownClicked(selected: string) {
   langShowDropDown.value = false;
   let index = ref<number>(languagesDropDownContent.indexOf(selected));
-  // console.log('index: ' + index.value);
-  // console.log(languagesDropDownContent.indexOf(selected));
-  // console.log('return value= ' + languagesSelection[index.value]);
   i18n.global.locale.value = languagesSelection[index.value];
   localStorage.setItem('language', i18n.global.locale.value);
-  // console.log('stored= ' + localStorage.getItem('language'));
 }
 </script>
 
 <template>
   <div class="loginParent">
+    <div class="langSetup">
+      {{ useI18n().t('changelanguage') }}
+      <img
+        alt="pen"
+        class="pen"
+        title="Change picture"
+        src="@/assets/pen.png"
+        @click="langShowDropDown = !langShowDropDown"
+      />
+      <DropDownComponent
+        v-if="langShowDropDown"
+        :items="languagesDropDownContent"
+        width="12vw"
+        height="12vw"
+        @close="dropDownClicked"
+        @mouseleave="langShowDropDown = false"
+      />
+    </div>
     <div class="buttons">
       <img alt="page logo" class="logo" src="@/assets/xmas.png" />
-      <div class="langSetup">
-        {{ useI18n().t('changelanguage') }}
-        <img
-          alt="pen"
-          class="pen"
-          title="Change picture"
-          src="@/assets/pen.png"
-          @click="langShowDropDown = !langShowDropDown"
-        />
-        <DropDownComponent
-          v-if="langShowDropDown"
-          :items="languagesDropDownContent"
-          width="12vw"
-          height="12vw"
-          @close="dropDownClicked"
-          @mouseleave="langShowDropDown = false"
-        />
-      </div>
     </div>
     <div class="welcomeText">
       <span class="text"
@@ -139,6 +135,7 @@ button {
   font-weight: bolder;
   text-decoration: none;
   background: #c00000;
+  white-space: nowrap;
   /* text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
   transition: 0.3s; */
 }

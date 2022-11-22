@@ -41,13 +41,20 @@ onMounted(() => {
 
 <template>
   <div class="modal" @keyup.enter="closeOk()">
-    <div class="modal-header">
+    <div class="modal-content">
+      <span class="modal-header">
         {{ useI18n().t('changepassword')
         }}<span class="close" @click="closeCancel()">&times;</span>
+      </span>
       <label>{{ useI18n().t('channelname') }}</label>
-      <span>{{ props.currentChannel.name }}</span>
+      <label>{{ props.currentChannel.name }}</label>
       <label>{{ useI18n().t('password') }}</label>
-      <input id="inputBox" v-model="password" class="inputField" type="password" />
+      <input
+        id="inputBox"
+        v-model="password"
+        class="inputField"
+        type="password"
+      />
       <br />
       <button class="ok" @click="closeOk()">
         {{ useI18n().t('confirm') }}

@@ -29,10 +29,17 @@ function closeCancel() {
 <template>
   <div class="modal" @keyup.enter="uploadPicture">
     <div class="modal-content">
-        {{ useI18n().t('changeprofilepicture')
-        }}<span class="close" @click="closeCancel()">&times;</span>
+      {{ useI18n().t('changeprofilepicture')
+      }}<span class="close" @click="closeCancel()">&times;</span>
       <label>{{ useI18n().t('newpicture') }}</label>
-      <input id="picUpload" ref="file" class="fileSelect" name="picture" type="file" accept="image/*" />
+      <input
+        id="picUpload"
+        ref="file"
+        class="fileSelect"
+        name="picture"
+        type="file"
+        accept="image/*"
+      />
       <br />
       <button class="buttonLabel" @click="uploadPicture">
         {{ useI18n().t('uploadpicture') }}
