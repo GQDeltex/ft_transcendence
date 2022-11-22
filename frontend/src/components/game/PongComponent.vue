@@ -28,7 +28,7 @@ let ball: Ball | null = null;
 let leftPaddle: Paddle | null = null;
 let rightPaddle: Paddle | null = null;
 
-const initialCanvasWidth = 0.69 * window.innerWidth;
+const initialCanvasWidth = 0.569 * window.innerWidth;
 const initialCanvasHeight = (initialCanvasWidth * 9) / 16;
 
 const isHost = computed(() => {
@@ -76,7 +76,7 @@ const handleKeyDown = (e: KeyboardEvent): void => {
 };
 
 const handleBlur = (): void => {
-  // if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameBlur', {
     gameId: props.gameId,
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
@@ -84,7 +84,7 @@ const handleBlur = (): void => {
 };
 
 const handleFocus = (): void => {
-  // if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
+  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameFocus', {
     gameId: props.gameId,
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
@@ -120,9 +120,9 @@ socket.on('gameData', (gameData) => {
   if (gameData.name === 'opponent') {
     if (props.priority === Priority.VIEWER) {
       if (gameData.from === props.otherPlayer.id)
-        rightPaddle?.setDir(gameData.paddleDir, false);
-      if (gameData.from === props.hostPlayer.id)
         leftPaddle?.setDir(gameData.paddleDir, false);
+      if (gameData.from === props.hostPlayer.id)
+        rightPaddle?.setDir(gameData.paddleDir, false);
     } else {
       if (
         (isHost.value && gameData.from === props.otherPlayer.id) ||
@@ -135,7 +135,7 @@ socket.on('gameData', (gameData) => {
   if (gameData.name === 'ball' && gameData.from !== userStore.id) {
     if (
       props.priority === Priority.VIEWER &&
-      gameData.from === props.otherPlayer.id
+      gameData.from === props.hostPlayer.id
     ) {
       if (ball === null) return;
       gameData.direction.x = -gameData.direction.x;
@@ -147,12 +147,12 @@ socket.on('gameData', (gameData) => {
   }
 
   if (typeof gameData.score !== 'undefined') {
-    if (props.priority === Priority.HOST) {
-      otherScore.value = gameData.score[1];
-      yourScore.value = gameData.score[0];
-    } else {
+    if (props.priority === Priority.CLIENT) {
       otherScore.value = gameData.score[0];
       yourScore.value = gameData.score[1];
+    } else {
+      otherScore.value = gameData.score[1];
+      yourScore.value = gameData.score[0];
     }
   }
 });
@@ -198,19 +198,17 @@ socket.on('gameFocus', () => {
 });
 
 socket.on('onStreamJoin', (bigGameData) => {
-  if (props.priority !== Priority.VIEWER && !isHost.value) {
+  if (isHost.value) {
+    console.log('EMITTING');
     socket.emit('onStreamJoin', {
       requesterId: bigGameData.requesterId,
       gameId: props.gameId,
       leftPaddle: leftPaddle?.getAll(),
       rightPaddle: rightPaddle?.getAll(),
       ball: ball?.getAll(),
-      scores:
-        props.priority === Priority.HOST
-          ? [yourScore.value, otherScore.value]
-          : [otherScore.value, yourScore.value],
+      scores: [yourScore.value, otherScore.value],
     });
-  } else if (props.priority === Priority.VIEWER) {
+  } else {
     leftPaddle?.setAll(bigGameData.leftPaddle);
     rightPaddle?.setAll(bigGameData.rightPaddle);
     ball?.setAll(bigGameData.ball);
@@ -237,7 +235,7 @@ onMounted(async () => {
     const canvas = document.getElementById('game') as HTMLCanvasElement;
     const oldCanvasWidth: number = canvas.width;
     const oldCanvasHeight: number = canvas.height;
-    canvas.width = 0.69 * window.innerWidth;
+    canvas.width = 0.569 * window.innerWidth;
     canvas.height = (canvas.width * 9) / 16;
     ball?.resize(oldCanvasWidth, oldCanvasHeight);
     leftPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
@@ -293,7 +291,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
-    <div v-if="isHost" class="players">
+    <div v-if="isHost || priority === Priority.VIEWER" class="players">
       <GamePeopleComponent :client="props.otherPlayer" class="player1" />
       <GamePeopleComponent :client="props.hostPlayer" class="player2" />
     </div>
