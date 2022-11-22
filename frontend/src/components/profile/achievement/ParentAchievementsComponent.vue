@@ -58,61 +58,61 @@ onMounted(async () => {
       <ChildAchievementComponent
         v-if="user.username === 'hlehmann' && user.id !== 83543"
         header="Fake News"
-        text="You are not the President"
+        text="You are not the President!"
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 83543"
         header="President"
-        text="Welcome Mr. President"
+        text="Welcome Mr. President!"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'shazam'"
+        v-if="user.id === 108770"
         header="Baggette"
-        text="Hon hon hon I am ze french. Baggette baggette fromage"
+        text="Hon hon hon I am ze french. Baggette baggette fromage."
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 83547"
         header="Design"
-        text="Buisness, Buisness, Buisness. Design, Design, Design"
+        text="Buisness, Buisness, Buisness. Design, Design, Design."
         picture=""
       />
       <ChildAchievementComponent
 		v-if="user.id === 98546"
         header="Not my department"
-        text="I need a cubical, this is not my department"
+        text="I need a cubical, this is not my department."
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.username === 'cthien-h'"
         header="No need to test"
-        text="If I throw a rock at the computer, it'll also break the shop"
+        text="If I throw a rock at the computer, it'll also break the shop."
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 85561"
         header="25 Hours"
-        text="I can fix my IRC in one day"
+        text="I can fix my IRC in one day."
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 87222"
         header="Techlead"
-        text="I dont know why Java does that"
+        text="I dont know why Java does that."
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'cdahlhof'"
+        v-if="user.id === 83666"
         header="Hamster"
-        text="He said that he would be here 3 hours ago. Probably is sleeping"
+        text="He said that he would be here 3 hours ago. Probably is sleeping."
         picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 83581"
-        header="TBA"
-        text="TBA"
+        header="Mr. Cuisine"
+        text="I can make the most delicious ras(p)berry pi(e)."
         picture=""
       />
       <ChildAchievementComponent
@@ -130,18 +130,18 @@ onMounted(async () => {
       <ChildAchievementComponent
         v-if="user.username === 'backlog'"
         header="TBA"
-        text="THATS BACKLOG, WE'LL DO IT LATER"
+        text="THATS BACKLOG, WE'LL DO IT LATER!"
         picture=""
       />
       <ChildAchievementComponent
         v-if="
           user.id === 83543 ||
           user.id === 83547 ||
-          user.id === '98546' ||
+          user.id === 98546 ||
           user.username === 'cthien-h' ||
-          user.username === 'kmeixner' ||
+          user.id === 85561 ||
           user.id === 87222 ||
-          user.username === 'cdahlhof' ||
+          user.id === 83666 ||
           user.id === 83581 ||
           user.username === 'dzivanov' ||
           user.username === 'ehosu'
