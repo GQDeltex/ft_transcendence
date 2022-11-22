@@ -37,7 +37,9 @@ async function dropDownClicked(selected: string) {
     </router-link>
   </div>
   <div class="column2">
-    <span>{{ userStore.title[0] }}&nbsp;</span>
+    <span class="clickme" @click="showDropDown = !showDropDown"
+      >{{ userStore.title[0] }}&nbsp;</span
+    >
     <div class="userAndPicture">
       <div class="columncontent" @click="showDropDown = !showDropDown">
         {{ userStore.username }}
@@ -87,6 +89,9 @@ async function dropDownClicked(selected: string) {
 </template>
 
 <style scoped>
+.clickme {
+  cursor: pointer;
+}
 .item {
   position: relative;
 }
@@ -108,7 +113,7 @@ img {
 .column1 {
   grid-column: 1 / 2;
   justify-self: start;
-  font-size: 2vw;
+  font-size: 3vw;
 }
 .column2 {
   grid-column: 2 / 3;
@@ -117,14 +122,16 @@ img {
   /* flex-direction: column; */
   align-items: center;
   justify-self: flex-end;
-  font-size: 2vw;
+  font-size: 3vw;
   color: white;
+  font-weight: bold;
 }
 .columncontent {
   display: flex;
   align-items: center;
   text-decoration: none;
   color: white;
+  font-weight: bold;
 }
 .logo {
   margin-right: 5%;
@@ -142,7 +149,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  font-size: 2vw;
+  font-size: 3vw;
 }
 .router-link-active {
   color: white;
@@ -157,6 +164,7 @@ li a {
   text-align: center;
   padding: 1% 1%;
   text-decoration: none;
+  font-weight: bold;
 }
 li a:hover {
   background-color: #c00000;

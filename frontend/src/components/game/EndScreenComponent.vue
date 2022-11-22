@@ -69,9 +69,12 @@ onMounted(async () => {
     if (playerScore1.value > remoteScore2.value) {
       player.value.username = player1.value.username;
       player.value.picture = player1.value.picture;
-    } else {
+    } else if (playerScore1.value < remoteScore2.value) {
       player.value.username = player2.value.username;
       player.value.picture = player2.value.picture;
+    } else {
+      player.value.username = 'nobody';
+      player.value.picture = '';
     }
   }
 });
@@ -80,6 +83,7 @@ onMounted(async () => {
 <template>
   <div class="parent">
     <RoundPictureComponent
+      v-if="player.picture !== ''"
       class="picture"
       :picture="player.picture"
       size="15vw"
@@ -123,7 +127,10 @@ onMounted(async () => {
   color: white;
   overflow: hidden;
   background-color: #c00000;
-  padding: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   align-content: center;
   cursor: pointer;
   width: min-content;

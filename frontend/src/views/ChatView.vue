@@ -257,7 +257,7 @@ watch(currentChannel, (newChat) => {
 
 .leftSide {
   display: grid;
-  width: 15vw;
+  width: 20vw;
   height: inherit;
   grid-auto-rows: 1fr;
 }
@@ -276,10 +276,12 @@ watch(currentChannel, (newChat) => {
   max-height: 25vh;
 }
 .chatChatComp {
+  width: 50vw;
   grid-column: 2 / 3;
 }
 
 .optionsComp {
+  width: 20vw;
   grid-column: 3 / 4;
 }
 </style>

@@ -147,7 +147,6 @@ function dropDownClicked(selected: string) {
         v-show="modalChangePicture"
         @close="modalChangePicture = false"
       />
-      <br />
       <span class="campus">{{ user.campus }}, {{ user.country }}</span>
       <br />
       <span class="friends">{{
@@ -243,12 +242,12 @@ function dropDownClicked(selected: string) {
 
 .campus {
   color: white;
-  font-size: 1vw;
+  font-size: 1.2vw;
 }
 
 .friends {
   color: grey;
-  font-size: 1vw;
+  font-size: 1.2vw;
 }
 
 .twoFA {

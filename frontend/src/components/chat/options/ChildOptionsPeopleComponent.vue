@@ -95,7 +95,7 @@ const onProfile = async () => {
       <RoundPictureComponent
         class="picture"
         :picture="client.picture"
-        size="1.5vw"
+        size="2vw"
         :border-color="statusBorder"
       />
       <div class="infoBox">
@@ -111,28 +111,25 @@ const onProfile = async () => {
   </div>
 
   <div v-if="props.client.id !== userStore.id" v-show="toggle" class="popup">
-    <span>
-      <button class="button" @click="onProfile">
-        {{ useI18n().t('showprofile') }}
-      </button>
-    </span>
-    <span v-if="props.isOwner">
-      <button class="button" @click="emits('updateAdmin', props.client.id)">
-        {{
-          isClientAdmin ? useI18n().t('removeadmin') : useI18n().t('makeadmin')
-        }}
-      </button>
-    </span>
-    <span v-if="props.isAdmin || props.isOwner">
-      <button class="button" @click="emits('banUser', props.client.id)">
-        {{ useI18n().t('banuser') }}
-      </button>
-    </span>
-    <span v-if="props.isAdmin || props.isOwner">
-      <button class="button" @click="emits('muteUser', props.client.id)">
-        {{ useI18n().t('muteuser') }}
-      </button>
-    </span>
+
+    <button class="button" @click="onProfile">
+      {{ useI18n().t('showprofile') }}
+    </button>
+
+    <button v-if="props.isOwner" class="button" @click="emits('updateAdmin', props.client.id)">
+      {{
+        isClientAdmin ? useI18n().t('removeadmin') : useI18n().t('makeadmin')
+      }}
+    </button>
+
+    <button v-if="props.isAdmin || props.isOwner" class="button" @click="emits('banUser', props.client.id)">
+      {{ useI18n().t('banuser') }}
+    </button>
+
+    <button v-if="props.isAdmin || props.isOwner" class="button" @click="emits('muteUser', props.client.id)">
+      {{ useI18n().t('muteuser') }}
+    </button>
+
   </div>
 </template>
 
@@ -159,16 +156,17 @@ const onProfile = async () => {
   display: flex;
   flex-direction: column;
   padding-left: 5%;
+  cursor: pointer;
 }
 
 .username {
   color: white;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   font-stretch: expanded;
 }
 
 .status {
-  font-size: 0.6vw;
+  font-size: 1vw;
   color: grey;
 }
 
@@ -180,12 +178,13 @@ const onProfile = async () => {
 }
 
 .button {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  font-size: 0.5vw;
+  font-size: 1vw;
   border-color: transparent;
   margin-top: 3px;
 }

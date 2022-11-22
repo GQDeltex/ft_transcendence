@@ -54,7 +54,8 @@ const declineButton = async () => {
 }
 .infoBox {
   display: flex;
-  font-size: 0.8vw;
+  font-size: 1.5vw;
+  padding-bottom: 1%;
 }
 .sender {
   color: white;
@@ -71,23 +72,25 @@ const declineButton = async () => {
 }
 
 .acceptButton {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   border-color: transparent;
   margin-right: 1vw;
 }
 
 .declineButton {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: red;
   background-color: white;
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   border-color: transparent;
   margin-left: 1vw;
 }

@@ -100,11 +100,15 @@ function dropDownClicked(selected: string) {
 }
 
 .button {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 20px;
   color: white;
   background-color: #c00000;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   align-content: center;
   cursor: pointer;
   width: min-content;

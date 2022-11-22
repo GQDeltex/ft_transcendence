@@ -112,14 +112,14 @@ watch(
 .chatName {
   color: #c00000;
   padding: 1vw;
-  font-size: 1vw;
+  font-size: 2vw;
 }
 
 .messages {
   height: 100%;
   border-top: 1px solid gray;
   border-bottom: 1px solid grey;
-  font-size: 1vw;
+  font-size: 2vw;
   padding: 0.5vw;
   overflow-y: scroll;
   overflow-wrap: break-word;
@@ -133,7 +133,8 @@ watch(
 
 .text {
   flex-grow: 1;
-  font-size: 1vw;
+  font-size: 2vw;
+  font-family: 'Mountains of Christmas', cursive;
 }
 
 .sendButton {
@@ -142,7 +143,7 @@ watch(
   border-radius: 5px;
   color: white;
   background-color: #c00000;
-  font-size: 1vw;
+  font-size: 2vw;
   border-color: transparent;
   cursor: pointer;
 }

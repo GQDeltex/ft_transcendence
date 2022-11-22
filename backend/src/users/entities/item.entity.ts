@@ -46,7 +46,7 @@ const itemList: Item[] = [
     description: 'christmas map',
     price: 6.69,
     picture:
-      'https://cdn.discordapp.com/attachments/830093692449587304/1041441336815009933/frosty_bg_frame.png',
+      'https://cdn.discordapp.com/attachments/978342361841139783/1043294139854368768/Untitled_Artwork.png',
     metadata: 'blue',
   }),
 

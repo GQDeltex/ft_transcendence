@@ -27,7 +27,7 @@ const props = defineProps({
   border-radius: 0.3vw;
   color: white;
   padding: 0.05vw 0.1vw;
-  font-size: 0.3vw;
+  font-size: 0.65vw;
 }
 
 .pictureStyle {

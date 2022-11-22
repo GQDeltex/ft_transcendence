@@ -27,20 +27,18 @@ export class Element {
 }
 
 export class Vector {
-  public x: number;
-  public y: number;
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+  constructor(public x: number, public y: number) {
+    return this;
   }
 
   // keep the direction of a vector, but resize to length of 1
-  unit_vec() {
+  normalize() {
     const temp: number = Math.pow(
       Math.pow(this.x, 2) + Math.pow(this.y, 2),
       0.5,
     );
     this.x /= temp;
     this.y /= temp;
+    return this;
   }
 }

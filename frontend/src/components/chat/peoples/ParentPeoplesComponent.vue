@@ -91,7 +91,7 @@ function userInChatWith(input: User) {
 }
 
 .text {
-  font-size: 1vw;
+  font-size: 2vw;
   padding-bottom: 0.5vw;
   color: #c00000;
 }
@@ -102,9 +102,10 @@ function userInChatWith(input: User) {
 
 .subheader {
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.5vw;
   color: gray;
   font-weight: bold;
+  padding: 1%;
 }
 
 .people {

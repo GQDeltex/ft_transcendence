@@ -1,82 +1,92 @@
-import { Element, Vector } from './element';
-import { socket } from '../../service/socket';
+import { Vector } from './element';
+import { socket } from '@/service/socket';
 
-export class Paddle extends Element {
-  private _direction: Vector;
-  private _speed: number;
-  private _shape: Vector;
-  private _time = 0;
+export class Paddle {
+  private _position: Vector;
+  private _direction: number;
+  private readonly _speed: number = 0.00042;
+  private _ctx: CanvasRenderingContext2D;
 
   constructor(
-    padElement: HTMLElement | null,
-    field: null | DOMRect,
-    gameId: number,
+    private readonly _gameId: number,
+    private readonly _canvas: HTMLCanvasElement,
+    private _img: HTMLImageElement,
+    private readonly _isLeft: boolean = true,
   ) {
-    super(padElement, gameId);
-    this._direction = new Vector(0, 0);
-    this._speed = 10;
-    this._shape = new Vector(
-      field !== null
-        ? (super.getWidth() / Math.abs(field.right - field.left)) * 100
-        : 0,
-      field !== null
-        ? (super.getHeight() / Math.abs(field.bottom - field.top)) * 100
-        : 0,
-    );
+    this._position = new Vector(0, 0);
+    this._direction = 0;
+    this._ctx = this._canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.reset();
   }
 
-  // later functions depend on pixel values in screen
-  // when resizing the game window changes and is refreshed in this function
-  reeesize(pField: null | DOMRect, pPad: null | DOMRect) {
-    super.resize(pPad);
-    this._shape.x =
-      pField !== null ? (super.getWidth() / pField.width) * 100 : 0;
-    this._shape.y =
-      pField !== null ? (super.getHeight() / pField.height) * 100 : 0;
-  }
-
-  gety(): number {
-    if (this._htmlElem != null)
-      return parseFloat(
-        getComputedStyle(this._htmlElem).getPropertyValue('--y'),
-      );
-    else console.log('8 failure, no object assigned\n');
-    return 2147483647;
-  }
-  sety(value: number) {
-    if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--y', String(value));
-    else console.log('9 failure, no object assigned\n');
-  }
-
-  changeDir(dir: number, isOpponent = false, emitter: boolean) {
-    if (this._direction.y === dir) return;
-    this._direction.y = dir;
-    if (!isOpponent && emitter) {
+  setDir(direction: number, toEmit = true) {
+    if (this._direction === direction) return;
+    this._direction = direction;
+    if (toEmit)
       socket.emit('gameData', {
-        changeDir: dir,
         name: 'opponent',
         gameId: this._gameId,
+        paddleDir: direction,
       });
-    }
   }
 
-  step() {
-    let g: number =
-      parseFloat(String(this.gety())) +
-      parseFloat(String(this._speed * this._direction.y * 0.001));
-    if (g < 0 + this._shape.y / 2) g = this._shape.y / 2;
-    if (g > 100 - this._shape.y / 2) g = 100 - this._shape.y / 2;
-    this.sety(g);
+  reset() {
+    this._position.x = this._isLeft
+      ? this._canvas.width * 0.01
+      : this._canvas.width * 0.99 - this.getWidth();
+    this._position.y = this._canvas.height / 2 - this.getHeight() / 2;
+    this._direction = 0;
   }
 
-  // function to calc the next frame, babysteps for better movement
-  update(delta: number, time: number) {
-    this._time = time;
-    let i = 0;
-    while (i < delta) {
-      this.step();
-      i++;
-    }
+  resize(oldCanvasWidth: number, oldCanvasHeight: number) {
+    this._position.x *= this._canvas.width / oldCanvasWidth;
+    this._position.y *= this._canvas.height / oldCanvasHeight;
+  }
+
+  getWidth(): number {
+    return this._canvas.width * 0.0169;
+  }
+
+  getHeight(): number {
+    return this._canvas.width * 0.1069;
+  }
+
+  getPosX(): number {
+    return this._position.x;
+  }
+
+  getPosY(): number {
+    return this._position.y;
+  }
+
+  getAll() {
+    return {
+      positionY: this._position.y / this._canvas.width,
+      direction: this._direction,
+    };
+  }
+
+  setAll(data: { positionY: number; direction: number }) {
+    this._position.y = data.positionY * this._canvas.width;
+    this._direction = data.direction;
+  }
+
+  private step(elapsedTime: number) {
+    const newY =
+      this._position.y +
+      this._direction * this._speed * this._canvas.width * elapsedTime;
+    if (newY < 0 || newY + this.getHeight() > this._canvas.height) return;
+    this._position.y = newY;
+  }
+
+  draw(elapsedTime: number) {
+    this.step(elapsedTime);
+    this._ctx.drawImage(
+      this._img,
+      this._position.x,
+      this._position.y,
+      this.getWidth(),
+      this.getHeight(),
+    );
   }
 }

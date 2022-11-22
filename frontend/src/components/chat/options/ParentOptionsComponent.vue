@@ -161,9 +161,8 @@ function getChannelUserStatus(client: User) {
         </template>
       </div>
       <div class="buttonList">
-        <span class="headerText"> {{ useI18n().t('options') }} </span>
-        <span v-if="isOwner">
-          <button class="button" @click="passModalActive = true">
+        <span class="headerText optionsHeader"> {{ useI18n().t('options') }} </span>
+          <button v-if="isOwner" class="button" @click="passModalActive = true">
             {{ useI18n().t('changepassword') }}
           </button>
           <ModalUpdatePasswordComponent
@@ -171,21 +170,16 @@ function getChannelUserStatus(client: User) {
             :current-channel="props.currentChannel"
             @close="passModalActive = false"
           />
-        </span>
-        <span v-if="props.currentChannel.name.startsWith('#')">
-          <button class="button" @click="leave">
+          <button v-if="props.currentChannel.name.startsWith('#')" class="button" @click="leave">
             {{ useI18n().t('leavechat') }}
           </button>
-        </span>
-        <span v-if="isOwner">
-          <button class="button" @click="makePublic">
+          <button v-if="isOwner" class="button" @click="makePublic">
             {{
               props.currentChannel.private
                 ? useI18n().t('makepublic')
                 : useI18n().t('makeprivate')
             }}
           </button>
-        </span>
       </div>
     </div>
   </div>
@@ -202,8 +196,12 @@ function getChannelUserStatus(client: User) {
 }
 
 .headerText {
-  font-size: 1vw;
+  font-size: 2vw;
   color: #c00000;
+}
+
+.optionsHeader {
+  margin-top: 1vh;
 }
 
 .list {
@@ -213,7 +211,7 @@ function getChannelUserStatus(client: User) {
 
 .subheader {
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.5vw;
   color: grey;
   font-weight: bold;
   margin-top: 5px;
@@ -229,12 +227,13 @@ function getChannelUserStatus(client: User) {
 }
 
 .button {
+  font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   border-color: transparent;
   margin-top: 5px;
 }

@@ -1,197 +1,200 @@
 import { socket } from '@/service/socket';
-import { Element, Vector } from './element';
+import type { Ref } from 'vue';
+import { Vector } from './element';
+import type { Paddle } from './paddle';
 
-export class Ball extends Element {
-  // width and height in % of window
-  public _shape: Vector;
-  // private _direction: Vector; get-set- soon™
-  public _direction: Vector;
-  private _stdspeed = 30;
+export enum Priority {
+  HOST,
+  CLIENT,
+  VIEWER,
+}
+
+export class Ball {
+  private _direction: Vector;
+  private _position: Vector;
   private _speed: number;
-  private _priority: number;
-  private invinc = 0;
-  private maxinvinc: number;
+  private readonly _defaultSpeed = 0.00032;
+  private readonly _relativeBallSize = 0.0369;
+  private _ctx: CanvasRenderingContext2D;
+
   constructor(
-    ballElem: HTMLElement | null,
-    field: null | DOMRect,
-    gameId: number,
-    priority: number,
-    emitter: boolean,
+    private readonly _gameId: number,
+    private readonly _canvas: HTMLCanvasElement,
+    private _img: HTMLImageElement,
+    private readonly _priority: Priority,
   ) {
-    super(ballElem, gameId);
-    this._priority = priority;
+    this._ctx = this._canvas.getContext('2d') as CanvasRenderingContext2D;
+    this._speed = this._defaultSpeed;
     this._direction = new Vector(0, 0);
-    this._speed = this._stdspeed;
-    this.maxinvinc = this._speed * 10;
-    this._shape = new Vector(
-      field !== null
-        ? (super.getWidth() / Math.abs(field.right - field.left)) * 100
-        : 0,
-      field !== null
-        ? (super.getHeight() / Math.abs(field.bottom - field.top)) * 100
-        : 0,
-    );
-    this.reset([0, 0], emitter);
+    this._position = new Vector(0, 0);
+    this.reset(0, 0, this._priority === Priority.HOST);
   }
 
-  // later functions depend on pixel values in screen
-  // when resizing the game window changes and is refreshed in this function
-  reeesize(pField: null | DOMRect, pBall: null | DOMRect) {
-    super.resize(pBall);
-    this._shape.x =
-      pField !== null
-        ? (super.getWidth() / Math.abs(pField.right - pField.left)) * 100
-        : 0;
-    this._shape.y =
-      pField !== null
-        ? (super.getHeight() / Math.abs(pField.bottom - pField.top)) * 100
-        : 0;
+  /**
+   * Get ball size based on canvas width
+   */
+  getBallSize() {
+    return this._relativeBallSize * this._canvas.width;
   }
 
-  reset(score: number[], emitter: boolean) {
-    this.set_pos_x(50);
-    this.set_pos_y(50);
+  getRelativeBallSize() {
+    return this._relativeBallSize;
+  }
+
+  /**
+   * Reset the ball to the center of the screen and give it a random direction
+   * Emit the new game data to the server if player is the host
+   */
+  reset(yourScore: number, otherScore: number, toEmit = true) {
+    this._position.x = this._canvas.width / 2 - this.getBallSize() / 2;
+    this._position.y = this._canvas.height / 2 - this.getBallSize() / 2;
     this._direction.x = Math.random() > 0.5 ? 1 : -1;
     this._direction.y = Math.random() * 4 - 2;
-    if (this._priority === 0 && emitter) {
+
+    if (toEmit)
       socket.emit('gameData', {
-        changeDir: [
-          -this._direction.x,
-          this._direction.y,
-          this.get_pos_x(),
-          this.get_pos_y(),
-        ],
-        score: score,
         name: 'ball',
         gameId: this._gameId,
+        direction: {
+          x: -this._direction.x,
+          y: this._direction.y,
+        },
+        position: {
+          x: this._position.x / this._canvas.width,
+          y: this._position.y / this._canvas.width,
+        },
+        score:
+          this._priority === Priority.HOST
+            ? [yourScore, otherScore]
+            : [otherScore, yourScore],
       });
-    }
-    this.invinc = this.maxinvinc;
   }
 
-  changeDir(dir: number[]) {
-    if (!(typeof dir[2] === 'undefined' || typeof dir[3] === 'undefined')) {
-      this.set_pos_x(dir[2]);
-      this.set_pos_y(dir[3]);
-    }
-    this._direction.x = dir[0];
-    this._direction.y = dir[1];
+  getAll() {
+    const relativePos = new Vector(
+      this._position.x / this._canvas.width,
+      this._position.y / this._canvas.width,
+    );
+    return {
+      position: relativePos,
+      direction: this._direction,
+    };
   }
 
-  get_dir_x(): number {
-    return this._direction.x;
-  }
-  get_dir_y(): number {
-    return this._direction.y;
-  }
-  set_dir_x(n: number) {
-    this._direction.x = n;
-  }
-  set_dir_y(n: number) {
-    this._direction.y = n;
-  }
-  get_pos_x(): number {
-    if (this._htmlElem != null)
-      return parseFloat(
-        getComputedStyle(this._htmlElem).getPropertyValue('--x'),
-      );
-    else console.log('4 failiure, no object assigned\n');
-    return 2147483647;
-  }
-  set_pos_x(value: number) {
-    if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--x', String(value));
-    else console.log('5 failiure, no object assigned\n');
-  }
-  get_pos_y(): number {
-    if (this._htmlElem != null)
-      return parseFloat(
-        getComputedStyle(this._htmlElem).getPropertyValue('--y'),
-      );
-    else console.log('6 failiure, no object assigned\n');
-    return 2147483647;
-  }
-  set_pos_y(value: number) {
-    if (this._htmlElem != null)
-      this._htmlElem.style.setProperty('--y', String(value));
-    else console.log('7 failiure, no object assigned\n');
+  setAll(data: { position: Vector; direction: Vector }) {
+    this._position.x = data.position.x * this._canvas.width;
+    this._position.y = data.position.y * this._canvas.width;
+    this._direction = data.direction;
   }
 
-  set_speed(value: number = this._stdspeed) {
+  /**
+   * Set the ball position
+   * @param relativeNewPos relative position to the canvas
+   */
+  setPos(relativeNewPos: Vector) {
+    const newVector = new Vector(0, 0);
+    newVector.x = relativeNewPos.x * this._canvas.width;
+    newVector.y = relativeNewPos.y * this._canvas.width;
+    this._position = newVector;
+  }
+
+  setDir(newDir: Vector) {
+    this._direction = newDir;
+  }
+
+  resize(oldCanvasWidth: number, oldCanvasHeight: number) {
+    this._position.x *= this._canvas.width / oldCanvasWidth;
+    this._position.y *= this._canvas.height / oldCanvasHeight;
+  }
+
+  setSpeed(value: number = this._defaultSpeed) {
     this._speed = value;
   }
 
-  step(paddleOp: null | DOMRect, emitter: boolean) {
-    //move step
-    this.set_pos_x(
-      parseFloat(String(this.get_pos_x())) +
-        parseFloat(String(this._speed * this._direction.x * 0.001)),
+  private isTopBottomCollision(): boolean {
+    return (
+      this._position.y <= 0 ||
+      this._position.y + this.getBallSize() >= this._canvas.height
     );
-    this.set_pos_y(
-      parseFloat(String(this.get_pos_y())) +
-        parseFloat(String(this._speed * this._direction.y * 0.001)),
-    );
-    // vertical reflection
-    if (
-      this.get_pos_y() >= 100 - this._shape.y / 2 ||
-      this.get_pos_y() <= 0 + this._shape.y / 2
-    ) {
-      this._direction.y *= -1;
-      this.set_pos_y(
-        parseFloat(String(this.get_pos_y())) +
-          parseFloat(String(this._speed * this._direction.y * 0.002)),
-      );
-    }
-    // paddle collision
-    const rect: DOMRect | null = super.getRect();
-    if (rect === null) return;
-    if (emitter && this.invinc <= 0 && this.isCollision(paddleOp, rect)) {
-      this.invinc = this.maxinvinc;
-      this._direction.x = -1;
-      this.set_pos_x(
-        parseFloat(String(this.get_pos_x())) +
-          parseFloat(String(this._speed * this._direction.x * 0.002)),
-      );
-      if (this._direction.x < 0) {
-        socket.emit('gameData', {
-          changeDir: [
-            -this._direction.x,
-            this._direction.y,
-            100 - this.get_pos_x(),
-            this.get_pos_y(),
-          ],
-          name: 'ball',
-          gameId: this._gameId,
-        });
-      }
-    }
-    this.invinc--;
   }
 
-  isCollision(padBox: null | DOMRect, ballBox: null | DOMRect): boolean {
-    if (padBox === null || ballBox === null) return false;
+  private isPaddleCollision(checkPaddle: Paddle): boolean {
+    return (
+      this._position.x + this.getBallSize() >= checkPaddle.getPosX() &&
+      this._position.y + this.getBallSize() >= checkPaddle.getPosY() &&
+      this._position.y <= checkPaddle.getPosY() + checkPaddle.getHeight()
+    );
+  }
+
+  private isLost(): boolean {
+    return this._position.x + this.getBallSize() >= this._canvas.width;
+  }
+
+  private step(
+    elapsedTime: number,
+    yourPaddle: Paddle,
+    yourScore: Ref<number>,
+    otherScore: Ref<number>,
+  ) {
+    this._position.y +=
+      this._direction.y * this._speed * this._canvas.width * elapsedTime;
+    this._position.x +=
+      this._direction.x * this._speed * this._canvas.width * elapsedTime;
+
+    if (this.isTopBottomCollision()) {
+      this._direction.y *= -1;
+      this._position.y +=
+        this._direction.y * this._speed * this._canvas.width * elapsedTime * 2;
+    }
+
     if (
-      padBox.left <= ballBox.right &&
-      padBox.right >= ballBox.left &&
-      padBox.top <= ballBox.bottom &&
-      padBox.bottom >= ballBox.top
+      this.isPaddleCollision(yourPaddle) &&
+      this._priority !== Priority.VIEWER
     ) {
+      this._direction.x = -1;
       this._direction.y =
-        3 *
-        (((ballBox.top + (ballBox.bottom - ballBox.top) / 2 - padBox.top) /
-          (padBox.bottom - padBox.top)) *
+        2 *
+        (((this._position.y + this.getBallSize() / 2 - yourPaddle.getPosY()) /
+          yourPaddle.getHeight()) *
           2 -
           1);
-      return true;
+      this._position.x +=
+        this._direction.x * this._speed * this._canvas.width * elapsedTime * 2;
+      socket.emit('gameData', {
+        name: 'ball',
+        gameId: this._gameId,
+        direction: {
+          x: 1,
+          y: this._direction.y,
+        },
+        position: {
+          x:
+            (this._canvas.width - this._position.x - this.getBallSize()) /
+            this._canvas.width,
+          y: this._position.y / this._canvas.width,
+        },
+      });
     }
-    return false;
+
+    if (this.isLost() && this._priority !== Priority.VIEWER) {
+      otherScore.value++;
+      this.reset(yourScore.value, otherScore.value);
+    }
   }
 
-  public update(delta: number, paddleOp: null | DOMRect, emitter: boolean) {
-    let i = 0;
-    while (i < delta) {
-      this.step(paddleOp, emitter);
-      i++;
-    }
+  draw(
+    elapsedTime: number,
+    yourPaddle: Paddle,
+    yourScore: Ref<number>,
+    otherScore: Ref<number>,
+  ) {
+    this.step(elapsedTime, yourPaddle, yourScore, otherScore);
+    this._ctx.drawImage(
+      this._img,
+      this._position.x,
+      this._position.y,
+      this.getBallSize(),
+      this.getBallSize(),
+    );
   }
 }

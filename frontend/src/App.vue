@@ -97,7 +97,7 @@ window.addEventListener('resize', () => {
 
 // Generate some snow flakes.
 const flakes: SnowFlake[] = [];
-const numOfFlakes = randomInt(300, 600);
+const numOfFlakes = randomInt(100, 300);
 for (let i = 0; i < numOfFlakes; i++) {
   flakes.push({
     x: randomInt(0, canvas.width),
@@ -155,13 +155,14 @@ window.requestAnimationFrame(draw);
     :text="error"
     :callback="errorStore.delError"
   />
-  <RouterView @hide="hide = true" @unhide="hide = false" />
+  <RouterView @hide="hide = true" @show="hide = false" />
 </template>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 body {
+  font-size: 2.3vw;
   font-family: 'Mountains of Christmas', cursive;
   padding: 0;
   margin: 0;

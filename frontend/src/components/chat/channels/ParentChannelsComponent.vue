@@ -80,7 +80,7 @@ function userInChannel(input: Channel) {
 }
 .text {
   display: flex;
-  font-size: 1vw;
+  font-size: 2vw;
   padding-bottom: 0.5vw;
   color: #c00000;
   justify-content: space-between;
@@ -101,7 +101,7 @@ button {
   color: white;
   background-color: #c00000;
   cursor: pointer;
-  font-size: 0.8vw;
+  font-size: 1.2vw;
   border-color: transparent;
 }
 </style>

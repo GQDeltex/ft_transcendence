@@ -10,7 +10,7 @@ import {
   useUserStore,
 } from '@/store/user';
 import { useRoute, useRouter } from 'vue-router';
-import type { Item } from '@/store/user';
+import type { User } from '@/store/user';
 import type { _RouteLocationBase } from 'vue-router';
 import { useErrorStore } from '@/store/error';
 import { useI18n } from 'vue-i18n';
@@ -20,28 +20,43 @@ const router = useRouter();
 const userStore = useUserStore();
 const errorStore = useErrorStore();
 
-const emits = defineEmits(['hide', 'unhide']);
+const emits = defineEmits(['hide', 'show']);
 
 const displayState = ref('queue');
 const gameIdRef = ref(0);
 const playerPriorityRef = ref(1);
+const isHost = ref(false);
 
-const player1User = ref<{
-  id: number;
-  username: string;
-  title: string[];
-  picture: string;
-  status?: string | undefined;
-  equipped?: Item[];
-}>({ id: 0, username: '', title: [''], picture: '', status: '', equipped: [] });
-const player2User = ref<{
-  id: number;
-  username: string;
-  title: string[];
-  picture: string;
-  status?: string | undefined;
-  equipped?: Item[];
-}>({ id: 0, username: '', title: [''], picture: '', status: '', equipped: [] });
+const hostPlayer = ref<User>({
+  id: 0,
+  campus: '',
+  coalition: '',
+  country: '',
+  firstname: '',
+  intra: '',
+  lastname: '',
+  points: 0,
+  username: '',
+  title: [''],
+  picture: '',
+  status: '',
+  equipped: [],
+});
+const otherPlayer = ref<User>({
+  campus: '',
+  coalition: '',
+  country: '',
+  firstname: '',
+  intra: '',
+  lastname: '',
+  points: 0,
+  id: 0,
+  username: '',
+  title: [''],
+  picture: '',
+  status: '',
+  equipped: [],
+});
 
 function join_queue() {
   socket.emit('queue', { event: 'JOIN' });
@@ -53,25 +68,28 @@ function leave_queue() {
 
 async function getPlayerUsers(player1Id: number, player2Id: number) {
   try {
-    player1User.value = await UserService.findOneById(player1Id);
-    player2User.value = await UserService.findOneById(player2Id);
+    hostPlayer.value = await UserService.findOneById(player1Id);
+    otherPlayer.value = await UserService.findOneById(player2Id);
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
 }
 
-// playerIDs to check validity of messages for streaming implementation later™
 socket.on('Game', async ({ gameId, player1Id, player2Id, priority }) => {
   if (gameId < 0) {
     displayState.value = 'end';
     return;
   }
-  // console.log('ich will ein spiel mit dir spiel');
   await getPlayerUsers(player1Id, player2Id);
   await nextTick();
   gameIdRef.value = gameId;
   playerPriorityRef.value = priority;
   displayState.value = 'start';
+  if (
+    (priority === 0 && userStore.id === player1Id.id) ||
+    (priority === 1 && userStore.id === player2Id.id)
+  )
+    isHost.value = true;
   emits('hide');
 });
 
@@ -101,7 +119,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   leave_queue();
-  emits('unhide');
+  emits('show');
 });
 </script>
 
@@ -117,8 +135,8 @@ onUnmounted(() => {
     v-else
     :game-id="gameIdRef"
     :priority="playerPriorityRef"
-    :player1-i-d="player1User"
-    :player2-i-d="player2User"
+    :host-player="hostPlayer"
+    :other-player="otherPlayer"
   />
 </template>
 
