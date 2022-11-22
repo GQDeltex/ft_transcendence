@@ -80,7 +80,7 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-		v-if="user.id === 98546"
+        v-if="user.id === 98546"
         header="Not my department"
         text="I need a cubical, this is not my department."
         picture=""
