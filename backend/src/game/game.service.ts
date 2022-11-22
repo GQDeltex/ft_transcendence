@@ -200,8 +200,9 @@ export class GameService {
   }
 
   async uploadGame(userId: number, gameId: number, fileBuffer: Buffer) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const game: Game = await this.findOne(gameId);
-    if (game.state !== GameState.ENDED || game.replayUrl !== '') return;
+    if (game.replayUrl !== '') return;
     writeFile(
       join(__dirname, '../..', 'uploads', `game_${gameId}.webm`),
       fileBuffer,

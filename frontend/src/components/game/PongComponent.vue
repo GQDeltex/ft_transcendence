@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { socket } from '@/service/socket';
 import { Ball, Priority } from './ball';
 import { Paddle } from './paddle';
@@ -105,11 +105,11 @@ const update = (currentTime: number) => {
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
   ctx.fillText(
-    yourScore.value + ' ' + otherScore.value,
+    otherScore.value + ' ' + yourScore.value,
     canvas.width / 2,
     canvas.height / 9,
   );
-  ball?.draw(elapsedTime, rightPaddle, otherScore, yourScore);
+  ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
   leftPaddle?.draw(elapsedTime);
   rightPaddle?.draw(elapsedTime);
   lastTime = currentTime;
@@ -147,7 +147,6 @@ socket.on('gameData', (gameData) => {
   }
 
   if (typeof gameData.score !== 'undefined') {
-    console.log(gameData.score);
     if (props.priority === Priority.HOST) {
       otherScore.value = gameData.score[1];
       yourScore.value = gameData.score[0];
@@ -199,7 +198,7 @@ socket.on('gameFocus', () => {
 });
 
 socket.on('onStreamJoin', (bigGameData) => {
-  if (isHost.value) {
+  if (props.priority !== Priority.VIEWER && !isHost.value) {
     socket.emit('onStreamJoin', {
       requesterId: bigGameData.requesterId,
       gameId: props.gameId,
@@ -277,13 +276,8 @@ onMounted(async () => {
   window.requestAnimationFrame(update);
 });
 
-onUnmounted(() => {
-  console.log('Stopping vid recording');
-  if (props.priority === Priority.CLIENT) {
-    setTimeout(() => {
-      videoRecorder?.stop();
-    }, 1000);
-  } else videoRecorder?.stop();
+onBeforeUnmount(() => {
+  videoRecorder?.stop();
   isGameLoaded.value = false;
   socket.off('gameData');
   socket.off('gameBlur');
@@ -293,6 +287,7 @@ onUnmounted(() => {
   window.removeEventListener('keyup', handleKeyUp);
   window.removeEventListener('blur', handleBlur);
   window.removeEventListener('focus', handleFocus);
+  window.onresize = null;
 });
 </script>
 
@@ -328,20 +323,6 @@ onUnmounted(() => {
   margin-right: auto;
   display: block;
   z-index: 69;
-}
-
-.score {
-  position: relative;
-  top: 1em;
-  right: calc(100% / -2);
-  transform: translate(-50%, -825%);
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 4vw;
-  font-family: 'Silkscreen', cursive;
-  color: white;
-  z-index: 1;
 }
 
 .score > * {

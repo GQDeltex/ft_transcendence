@@ -16,7 +16,7 @@ export class Ball {
   private _direction: Vector;
   private _position: Vector;
   private _speed: number;
-  private readonly _defaultSpeed = 0.00032;
+  private readonly _defaultSpeed = 0.0032;
   private readonly _relativeBallSize = 0.0369;
   private _ctx: CanvasRenderingContext2D;
 
@@ -69,8 +69,8 @@ export class Ball {
         },
         score:
           this._priority === Priority.HOST
-            ? [otherScore, yourScore]
-            : [yourScore, otherScore],
+            ? [yourScore, otherScore]
+            : [otherScore, yourScore],
       });
     }
   }
