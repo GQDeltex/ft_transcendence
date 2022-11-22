@@ -81,7 +81,7 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 98546"
+        v-if="user.id === 98546"
         :header="useI18n().t('notmydepartment')"
         :text="useI18n().t('ineedcubical')"
         picture=""
@@ -93,19 +93,19 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 85561"
+        v-if="user.id === 85561"
         :header="useI18n().t('hours25')"
         :text="useI18n().t('fixirconeday')"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 87222"
+        v-if="user.id === 87222"
         :header="useI18n().t('techlead')"
         :text="useI18n().t('idontknow')"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 83666"
+        v-if="user.id === 83666"
         :header="useI18n().t('hamster')"
         :text="useI18n().t('propablysleeping')"
         picture=""
@@ -114,6 +114,7 @@ onMounted(async () => {
         v-if="user.username === 'vheymans'"
         :header="useI18n().t('java')"
         :text="useI18n().t('javaisland')"
+        picture=""
       />
       <ChildAchievementComponent
         v-if="user.id === 83581"
