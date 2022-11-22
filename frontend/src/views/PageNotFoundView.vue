@@ -159,7 +159,7 @@ h1 {
 }
 
 .scaleit {
-  font-size: 1vw;
+  font-size: 1vh;
 }
 
 marquee {

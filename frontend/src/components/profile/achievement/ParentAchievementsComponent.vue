@@ -69,19 +69,19 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'shazam'"
+        v-if="user.id === 108770"
         :header="useI18n().t('baguette')"
         :text="useI18n().t('notbaguette')"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'mamuller'"
+        v-if="user.id === 83547"
         :header="useI18n().t('desgin')"
         :text="useI18n().t('business')"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'rkaufman'"
+        v-if="user.username === 98546"
         :header="useI18n().t('notmydepartment')"
         :text="useI18n().t('ineedcubical')"
         picture=""
@@ -93,19 +93,19 @@ onMounted(async () => {
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'kmeixner'"
+        v-if="user.username === 85561"
         :header="useI18n().t('hours25')"
         :text="useI18n().t('fixirconeday')"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'pstengl'"
+        v-if="user.username === 87222"
         :header="useI18n().t('techlead')"
         :text="useI18n().t('idontknow')"
         picture=""
       />
       <ChildAchievementComponent
-        v-if="user.username === 'cdahlhof'"
+        v-if="user.username === 83666"
         :header="useI18n().t('hamster')"
         :text="useI18n().t('propablysleeping')"
         picture=""
@@ -114,6 +114,11 @@ onMounted(async () => {
         v-if="user.username === 'vheymans'"
         :header="useI18n().t('java')"
         :text="useI18n().t('javaisland')"
+      />
+      <ChildAchievementComponent
+        v-if="user.id === 83581"
+        header="Mr. Cuisine"
+        text="I can make the most delicious ras(p)berry pi(e)."
         picture=""
       />
       <ChildAchievementComponent
@@ -136,14 +141,14 @@ onMounted(async () => {
       />
       <ChildAchievementComponent
         v-if="
-          user.username === 'hlehmann' ||
-          user.username === 'mamuller' ||
-          user.username === 'rkaufman' ||
+          user.id === 83543 ||
+          user.id === 83547 ||
+          user.id === 98546 ||
           user.username === 'cthien-h' ||
-          user.username === 'kmeixner' ||
-          user.username === 'pstengl' ||
-          user.username === 'cdahlhof' ||
-          user.username === 'vheymans' ||
+          user.id === 85561 ||
+          user.id === 87222 ||
+          user.id === 83666 ||
+          user.id === 83581 ||
           user.username === 'dzivanov' ||
           user.username === 'ehosu'
         "

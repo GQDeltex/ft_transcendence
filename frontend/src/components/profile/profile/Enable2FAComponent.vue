@@ -138,7 +138,7 @@ function closeCancel() {
 .ok {
   font-family: 'Mountains of Christmas', cursive;
   cursor: pointer;
-  width: 60%;
+  width: 50%;
   border-radius: 5px;
   color: white;
   background-color: #c00000;
@@ -174,7 +174,7 @@ input[type='file']::file-selector-button {
   padding-right: 2%;
   border-radius: 5px;
   height: 10%;
-  width: 60%;
+  width: 50%;
   color: #c00000;
   background-color: white;
   cursor: pointer;
@@ -184,7 +184,7 @@ input[type='file']::file-selector-button {
 .inputField {
   font-family: 'Mountains of Christmas', cursive;
   color: black;
-  width: 60%;
+  width: 50%;
   border-radius: 5px;
   border-color: transparent;
 }
