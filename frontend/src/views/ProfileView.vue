@@ -49,13 +49,15 @@ provide('user', { user, isMe, games });
 </script>
 
 <template>
-  <div v-if="user" class="profileViewParent">
-    <ProfileComponent class="profile" />
-    <div class="lowerPart">
-      <ParentHistoryComponent class="history" />
-      <div class="aboutParent">
-        <AboutMeComponent class="aboutMe" />
-        <ParentAchievementsComponent class="achievement" />
+  <div class="profileViewGrandparent">
+    <div v-if="user" class="profileViewParent">
+      <ProfileComponent class="profile" />
+      <div class="lowerPart">
+        <ParentHistoryComponent class="history" />
+        <div class="aboutParent">
+          <AboutMeComponent class="aboutMe" />
+          <ParentAchievementsComponent class="achievement" />
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +74,9 @@ provide('user', { user, isMe, games });
   width: 90%;
   height: 70vh;
 }
-
+.profileViewGrandparent {
+  overflow-y: scroll;
+}
 .lowerPart {
   display: grid;
   max-height: 50vh;

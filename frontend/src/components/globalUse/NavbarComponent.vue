@@ -28,7 +28,7 @@ async function dropDownClicked(selected: string) {
 <template>
   <div class="column1">
     <router-link to="/" class="columncontent">
-      <img alt="page logo" class="logo" src="@/assets/xmas.png" height="50" />
+      <img alt="page logo" class="logo" src="@/assets/xmas.png" />
       <span>christmasballs</span>
     </router-link>
   </div>
@@ -41,7 +41,7 @@ async function dropDownClicked(selected: string) {
         {{ userStore.username }}
         <RoundPictureComponent
           :picture="userStore.picture"
-          size="50px"
+          size="3.5vw"
           border-color="transparent"
           class="profilePicture"
         />
@@ -121,7 +121,7 @@ img {
 }
 .logo {
   margin-right: 5%;
-  height: 50px;
+  height: 3vw;
   border-radius: 20%;
 }
 

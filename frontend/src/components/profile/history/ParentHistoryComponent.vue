@@ -33,7 +33,7 @@ const sortGames = (games: Game[]) => {
 
 .scroll {
   overflow-y: scroll;
-  max-height: 96%;
+  max-height: 90%;
 }
 .frame {
   border: 1px solid gray;
