@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n';
 
 <template>
   <CategoryComponent :category="useI18n().t('category') + ' I'" />
-  <CategoryComponent :category="useI18n().t('category') + ' II'" />
 </template>
 
 <style scoped></style>

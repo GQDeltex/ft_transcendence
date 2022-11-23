@@ -1,27 +1,16 @@
 <script setup lang="ts">
 import UserPlayedGameComponent from '../../globalUse/UserPlayedGameComponent.vue';
-import GameService from '@/service/GameService';
 import type { Game } from '@/service/GameService';
-import type { User } from '@/store/user';
-import type { Ref } from 'vue';
-import { ref, inject, watchEffect } from 'vue';
-import { cloneDeep } from 'lodash';
+import { ref, inject, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-const user = inject<{ user: Ref<User>; isMe: Ref<boolean> }>('user');
-const games = ref<Game[]>([]);
-const sortedGames = ref<Game[]>([]);
+const { games } = inject<{ games: Ref<Game[]> }>('user', {
+  games: ref([]),
+});
 
-if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
-  watchEffect(async () => {
-    GameService.findAll('ended', user.user.value.id).then(
-      (gamesreturn: Game[]) => (games.value = gamesreturn),
-    );
-    sortedGames.value = cloneDeep(games.value);
-    sortedGames.value.sort((a, b) => b.id - a.id);
-    // console.log(sortedGames.value);
-  });
-}
+const sortGames = (games: Game[]) => {
+  return [...games].sort((a, b) => b.id - a.id);
+};
 </script>
 
 <template>
@@ -29,12 +18,10 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
     <div class="title">{{ useI18n().t('history') }}</div>
     <div class="scroll">
       <UserPlayedGameComponent
-        v-for="game in sortedGames"
+        v-for="game in sortGames(games)"
         :key="game.id"
-        :player1="game.player1.username"
-        :player2="game.player2.username"
-        :score1="game.score1"
-        :score2="game.score2"
+        :game="game"
+        size="56.9vw"
       />
     </div>
   </div>
@@ -48,7 +35,7 @@ if (typeof user !== 'undefined' && typeof user.user !== 'undefined') {
 
 .scroll {
   overflow-y: scroll;
-  max-height: 96%;
+  max-height: 90%;
 }
 .frame {
   border: 1px solid gray;

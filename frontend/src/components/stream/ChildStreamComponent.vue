@@ -1,56 +1,56 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-const props = defineProps<{
-  player1Name: string;
-  player2Name: string;
-  score1?: number;
-  score2?: number;
-  gameId?: number;
-}>();
-
-const hasScores = computed(() => {
-  if (typeof props.score1 === 'undefined') return false;
-  if (typeof props.score2 === 'undefined') return false;
-  return true;
-});
+import type { Game } from '@/service/GameService';
+withDefaults(
+  defineProps<{
+    game: Game;
+    isReplay?: boolean;
+    size: string;
+  }>(),
+  { isReplay: false },
+);
 </script>
 
 <template>
-  <router-link class="routerlink" :to="`/stream/${gameId}`">
-    <div>
-      <img class="thumbnail" src="@/assets/pong.png" />
-      <span v-if="hasScores" class="playernames">
-        {{ score1 }} : {{ score2 }}</span
-      >
-      <span class="playernames"> {{ player1Name }} vs {{ player2Name }}</span>
-    </div>
-  </router-link>
+  <div class="stream">
+    <span class="playerNames">
+      {{ game.player1.username }} vs {{ game.player2.username }}
+    </span>
+    <router-link :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`">
+      <div class="gameElement">
+        <img class="thumbnail" alt="thumbnail" src="@/assets/pong.png" />
+        <span class="playerNames"> {{ game.score1 }} : {{ game.score2 }}</span>
+      </div>
+    </router-link>
+  </div>
 </template>
 
 <style scoped>
-.routerlink {
+router-link {
   text-decoration: none;
 }
 
-div {
+.gameElement {
   display: grid;
   margin: auto;
 }
-.playernames {
+
+.playerNames {
   display: flex;
   justify-content: center;
   color: white;
   text-decoration: none;
-  font-size: 2vw;
-  margin-top: 1vw;
+  font-size: v-bind(size) - 0.5vw;
 }
+
 .thumbnail {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  /* width: 22vw; */
   max-width: 60%;
-  /* height: 15vh; */
   max-height: 100%;
+}
+
+.stream {
+  width: v-bind(size);
 }
 </style>

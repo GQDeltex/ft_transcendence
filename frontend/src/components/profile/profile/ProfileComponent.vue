@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
-import { inject, nextTick, ref, watch } from 'vue';
+import { inject, nextTick, ref, watch, type Ref } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
 import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
@@ -9,7 +9,6 @@ import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
-import { cloneDeep } from 'lodash';
 import { useI18n } from 'vue-i18n';
 import { languagesDropDownContent } from '@/plugin/i18n';
 import { languagesSelection } from '@/plugin/i18n';
@@ -21,14 +20,17 @@ const show = ref(false);
 const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
 const dropDownTitle = ref(false);
-let dropDownContent = ref<string[]>(cloneDeep(userStore.title));
+let dropDownContent = ref<string[]>([...userStore.title]);
 
 dropDownContent.value[0] = useI18n().t('notitleselection');
 
-const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
-  user: null,
-  isMe: false,
-});
+const { user, isMe } = inject<{ user: Ref<User | null>; isMe: Ref<boolean> }>(
+  'user',
+  {
+    user: ref(null),
+    isMe: ref(false),
+  },
+);
 
 watch(checked, async (newValue, oldValue) => {
   if (newValue === oldValue) return;
@@ -56,23 +58,16 @@ const toggle = () => {
   dropDownTitle.value = !dropDownTitle.value;
 };
 
-const errorStore = useErrorStore();
-const leaders = ref<Partial<User>[]>([]);
-UserService.findLeaders()
-  .then((users) => (leaders.value = users))
-  .catch((error) => errorStore.setError(error.message));
-
-async function updateTitle(title: string) {
-  // console.log('new title selected! ', title);
+const updateTitle = async (title: string) => {
   if (title == dropDownContent.value[0]) title = '';
   dropDownTitle.value = false;
   try {
     userStore.title = (await UserService.changeTitle(title)).title;
   } catch (error) {
-    errorStore.setError((error as Error).message);
+    useErrorStore().setError((error as Error).message);
     return;
   }
-}
+};
 
 const langShowDropDown = ref(false);
 function dropDownClicked(selected: string) {
@@ -124,8 +119,8 @@ function dropDownClicked(selected: string) {
       <div class="username">
         <span>
           {{ user.username }}
-          <span v-if="user.rank && user.rank > 0"
-            >({{ useI18n().t('rank') }} {{ user.rank }})
+          <span v-if="user.rank && user.rank > 0">
+            ({{ useI18n().t('rank') }} {{ user.rank }})
           </span>
         </span>
         <img
@@ -149,9 +144,9 @@ function dropDownClicked(selected: string) {
       />
       <span class="campus">{{ user.campus }}, {{ user.country }}</span>
       <br />
-      <span class="friends">{{
-        useI18n().t('friends', user.friends ? user.friends.length : 0)
-      }}</span>
+      <span class="friends">
+        {{ useI18n().t('friends', user.friends ? user.friends.length : 0) }}
+      </span>
     </div>
 
     <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
@@ -175,8 +170,8 @@ function dropDownClicked(selected: string) {
       />
     </div>
 
-    <span v-if="isMe" class="twoFA"
-      >{{ useI18n().t('twofa') }}
+    <span v-if="isMe" class="twoFA">
+      {{ useI18n().t('twofa') }}
       <label class="switch">
         <input v-model="checked" type="checkbox" />
         <span class="slider round">

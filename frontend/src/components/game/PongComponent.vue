@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { socket } from '@/service/socket';
 import { Ball, Priority } from './ball';
 import { Paddle } from './paddle';
@@ -22,12 +22,14 @@ const otherScore = ref(0);
 const isGameLoaded = ref(true);
 const showClaimVictory = ref(false);
 let timeoutId = -1;
+const videoChunks: Blob[] = [];
+let videoRecorder: MediaRecorder | null = null;
 
 let ball: Ball | null = null;
 let leftPaddle: Paddle | null = null;
 let rightPaddle: Paddle | null = null;
 
-const initialCanvasWidth = 0.69 * window.innerWidth;
+const initialCanvasWidth = 0.569 * window.innerWidth;
 const initialCanvasHeight = (initialCanvasWidth * 9) / 16;
 
 const isHost = computed(() => {
@@ -50,15 +52,18 @@ else if (props.priority === Priority.CLIENT)
   equipped = props.otherPlayer.equipped ?? [];
 else equipped = userStore.equipped ?? [];
 
+ballImage.crossOrigin = 'anonymous';
+mapImage.crossOrigin = 'anonymous';
+paddleImage.crossOrigin = 'anonymous';
 ballImage.src =
   equipped.find((item) => item.type === 'ball')?.picture ??
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+  'https://i.imgur.com/88DcIk0.png';
 mapImage.src =
   equipped.find((item) => item.type === 'map')?.picture ??
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036127796323430540/OGPong.png';
+  'https://i.imgur.com/e89MmmD.png';
 paddleImage.src =
   equipped.find((item) => item.type === 'paddle')?.picture ??
-  'https://cdn.discordapp.com/attachments/841569913466650625/1036830183673565194/BG_white.png';
+  'https://i.imgur.com/88DcIk0.png';
 
 const handleKeyUp = (e: KeyboardEvent): void => {
   if (e.repeat) return;
@@ -80,6 +85,7 @@ const handleBlur = (): void => {
 };
 
 const handleFocus = (): void => {
+  if (props.hostPlayer.id === 42069 || props.otherPlayer.id == 42069) return;
   socket.emit('gameFocus', {
     gameId: props.gameId,
     cowardId: isHost.value ? props.hostPlayer.id : props.otherPlayer.id,
@@ -96,6 +102,14 @@ const update = (currentTime: number) => {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+  ctx.font = '4vw Silkscreen';
+  ctx.fillStyle = 'white';
+  ctx.textAlign = 'center';
+  ctx.fillText(
+    otherScore.value + ' ' + yourScore.value,
+    canvas.width / 2,
+    canvas.height / 9,
+  );
   ball?.draw(elapsedTime, rightPaddle, yourScore, otherScore);
   leftPaddle?.draw(elapsedTime);
   rightPaddle?.draw(elapsedTime);
@@ -107,9 +121,9 @@ socket.on('gameData', (gameData) => {
   if (gameData.name === 'opponent') {
     if (props.priority === Priority.VIEWER) {
       if (gameData.from === props.otherPlayer.id)
-        rightPaddle?.setDir(gameData.paddleDir, false);
-      if (gameData.from === props.hostPlayer.id)
         leftPaddle?.setDir(gameData.paddleDir, false);
+      if (gameData.from === props.hostPlayer.id)
+        rightPaddle?.setDir(gameData.paddleDir, false);
     } else {
       if (
         (isHost.value && gameData.from === props.otherPlayer.id) ||
@@ -122,30 +136,30 @@ socket.on('gameData', (gameData) => {
   if (gameData.name === 'ball' && gameData.from !== userStore.id) {
     if (
       props.priority === Priority.VIEWER &&
-      gameData.from === props.otherPlayer.id
+      gameData.from === props.hostPlayer.id
     ) {
       if (ball === null) return;
       gameData.direction.x = -gameData.direction.x;
       gameData.position.x =
         1 - gameData.position.x - ball.getRelativeBallSize();
-      console.log(gameData.position);
     }
     ball?.setDir(gameData.direction);
     ball?.setPos(gameData.position);
   }
 
   if (typeof gameData.score !== 'undefined') {
-    if (props.priority === Priority.HOST) {
-      otherScore.value = gameData.score[1];
-      yourScore.value = gameData.score[0];
-    } else {
+    if (props.priority === Priority.CLIENT) {
       otherScore.value = gameData.score[0];
       yourScore.value = gameData.score[1];
+    } else {
+      otherScore.value = gameData.score[1];
+      yourScore.value = gameData.score[0];
     }
   }
 });
 
 socket.on('gameBlur', (cowardId: number) => {
+  videoRecorder?.pause();
   ball?.setSpeed(0);
   leftPaddle?.setDir(0, false);
   rightPaddle?.setDir(0, false);
@@ -181,27 +195,27 @@ socket.on('gameFocus', () => {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
   }
+  videoRecorder?.resume();
 });
 
 socket.on('onStreamJoin', (bigGameData) => {
   if (isHost.value) {
+    console.log('EMITTING');
     socket.emit('onStreamJoin', {
       requesterId: bigGameData.requesterId,
       gameId: props.gameId,
       leftPaddle: leftPaddle?.getAll(),
       rightPaddle: rightPaddle?.getAll(),
       ball: ball?.getAll(),
-      scores:
-        props.priority === Priority.HOST
-          ? [yourScore.value, otherScore.value]
-          : [otherScore.value, yourScore.value],
+      scores: [yourScore.value, otherScore.value],
     });
-  } else if (props.priority === Priority.VIEWER) {
+  } else {
     leftPaddle?.setAll(bigGameData.leftPaddle);
     rightPaddle?.setAll(bigGameData.rightPaddle);
     ball?.setAll(bigGameData.ball);
     yourScore.value = bigGameData.scores[0];
     otherScore.value = bigGameData.scores[1];
+    if (bigGameData.state === 'paused') ball?.setSpeed(0);
   }
 });
 
@@ -222,7 +236,7 @@ onMounted(async () => {
     const canvas = document.getElementById('game') as HTMLCanvasElement;
     const oldCanvasWidth: number = canvas.width;
     const oldCanvasHeight: number = canvas.height;
-    canvas.width = 0.69 * window.innerWidth;
+    canvas.width = 0.569 * window.innerWidth;
     canvas.height = (canvas.width * 9) / 16;
     ball?.resize(oldCanvasWidth, oldCanvasHeight);
     leftPaddle?.resize(oldCanvasWidth, oldCanvasHeight);
@@ -234,12 +248,35 @@ onMounted(async () => {
     window.addEventListener('keyup', handleKeyUp);
     window.addEventListener('blur', handleBlur);
     window.addEventListener('focus', handleFocus);
+
+    const videoStream = canvas.captureStream();
+    videoRecorder = new MediaRecorder(videoStream, {
+      mimeType: 'video/webm',
+    });
+
+    videoRecorder.ondataavailable = (event) => {
+      if (event.data) videoChunks.push(event.data);
+    };
+
+    videoRecorder.onstop = () => {
+      const blob: Blob = new Blob(videoChunks, { type: 'video/webm' });
+      const file: File = new File([blob], `game_${props.gameId}.webm`, {
+        type: 'video/webm',
+      });
+      console.log('uploading game data...');
+      socket.emit('uploadGame', {
+        gameId: props.gameId,
+        file,
+      });
+    };
   }
 
+  videoRecorder?.start(100);
   window.requestAnimationFrame(update);
 });
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
+  videoRecorder?.stop();
   isGameLoaded.value = false;
   socket.off('gameData');
   socket.off('gameBlur');
@@ -249,34 +286,19 @@ onUnmounted(() => {
   window.removeEventListener('keyup', handleKeyUp);
   window.removeEventListener('blur', handleBlur);
   window.removeEventListener('focus', handleFocus);
+  window.onresize = null;
 });
 </script>
 
 <template>
   <div>
-    <div v-if="isHost" class="players">
-      <GamePeopleComponent
-        :key="props.otherPlayer.id"
-        :client="props.otherPlayer"
-        class="player1"
-      />
-      <GamePeopleComponent
-        :key="props.hostPlayer.id"
-        :client="props.hostPlayer"
-        class="player2"
-      />
+    <div v-if="isHost || priority === Priority.VIEWER" class="players">
+      <GamePeopleComponent :client="props.otherPlayer" class="player1" />
+      <GamePeopleComponent :client="props.hostPlayer" class="player2" />
     </div>
     <div v-else class="players">
-      <GamePeopleComponent
-        :key="props.hostPlayer.id"
-        :client="props.hostPlayer"
-        class="player1"
-      />
-      <GamePeopleComponent
-        :key="props.otherPlayer.id"
-        :client="props.otherPlayer"
-        class="player2"
-      />
+      <GamePeopleComponent :client="props.hostPlayer" class="player1" />
+      <GamePeopleComponent :client="props.otherPlayer" class="player2" />
     </div>
     <canvas
       id="game"
@@ -284,10 +306,6 @@ onUnmounted(() => {
       :width="initialCanvasWidth"
       :height="initialCanvasHeight"
     />
-    <div class="score">
-      <div id="player">{{ otherScore }}</div>
-      <div id="remote">{{ yourScore }}</div>
-    </div>
     <div v-if="showClaimVictory" class="modal">
       <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
@@ -304,20 +322,6 @@ onUnmounted(() => {
   margin-right: auto;
   display: block;
   z-index: 69;
-}
-
-.score {
-  position: relative;
-  top: 1em;
-  right: calc(100% / -2);
-  transform: translate(-50%, -825%);
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 4vw;
-  font-family: 'Silkscreen', cursive;
-  color: white;
-  z-index: 1;
 }
 
 .score > * {
@@ -392,8 +396,8 @@ onUnmounted(() => {
   .modal-content {
     width: 100%;
     padding-left: 30%;
-    top: 0vw;
-    left: 0vw;
+    top: 0;
+    left: 0;
   }
 }
 
@@ -409,7 +413,6 @@ onUnmounted(() => {
   border-radius: 5px;
   color: white;
   background-color: #c00000;
-  cursor: pointer;
   border-color: transparent;
   margin-bottom: 1%;
 }
@@ -421,14 +424,12 @@ onUnmounted(() => {
   border-radius: 5px;
   color: #c00000;
   background-color: white;
-  cursor: pointer;
   border-color: transparent;
   margin-bottom: 1%;
 }
 
 /* Add Animation */
-.modal-content,
-#caption {
+.modal-content {
   -webkit-animation-name: zoom;
   -webkit-animation-duration: 0.6s;
   animation-name: zoom;

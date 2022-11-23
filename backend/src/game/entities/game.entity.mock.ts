@@ -12,4 +12,6 @@ export const mockGame: Game = {
   state: GameState.STARTING,
   player1BlurTime: new Date(0),
   player2BlurTime: new Date(0),
+  isReplayHost: false,
+  replayUrl: '',
 };

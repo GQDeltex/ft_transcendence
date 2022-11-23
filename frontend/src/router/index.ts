@@ -13,7 +13,6 @@ const navRoutes: Array<RouteRecordRaw> = [
     name: 'home',
     component: LandingView,
   },
-  ,
   {
     path: '/leaderboard',
     name: 'LeaderboardView',
@@ -55,6 +54,11 @@ const navRoutes: Array<RouteRecordRaw> = [
         component: () => import('../views/PongView.vue'),
       },
     ],
+  },
+  {
+    path: '/replay/:id',
+    name: 'ReplayView',
+    component: () => import('../views/ReplayView.vue'),
   },
   {
     path: '/:catchAll(.*)*',

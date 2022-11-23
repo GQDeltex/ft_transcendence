@@ -72,6 +72,8 @@ type Game {
   score1: Int!
   score2: Int!
   state: String!
+  isReplayHost: Boolean!
+  replayUrl: String!
 }
 
 type Query {

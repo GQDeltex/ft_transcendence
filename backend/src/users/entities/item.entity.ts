@@ -45,8 +45,8 @@ const itemList: Item[] = [
     name: 'Christmas map',
     description: 'christmas map',
     price: 6.69,
-    picture:
-      'https://cdn.discordapp.com/attachments/978342361841139783/1043294139854368768/Untitled_Artwork.png',
+    picture: 'https://i.imgur.com/o1TpdO0.png',
+    // 'https://cdn.discordapp.com/attachments/978342361841139783/1043294139854368768/Untitled_Artwork.png',
     metadata: 'blue',
   }),
 
@@ -56,8 +56,8 @@ const itemList: Item[] = [
     name: 'Red map',
     description: 'Red map',
     price: 6.69,
-    picture:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+    picture: 'https://i.imgur.com/xVqYbXH.png',
+    // 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
     metadata: 'red',
   }),
   new Item({
@@ -66,8 +66,8 @@ const itemList: Item[] = [
     name: 'Yellow map',
     description: 'Yellow map',
     price: 6.69,
-    picture:
-      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+    picture: 'https://i.imgur.com/zsPTuL4.jpg',
+    // 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
     metadata: 'yellow',
   }),
   // new Item({
@@ -86,8 +86,8 @@ const itemList: Item[] = [
     name: 'Blue ball',
     description: 'Blue ball',
     price: 6.69,
-    picture:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
+    picture: 'https://i.imgur.com/WGkTf8b.png',
+    // 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Solid_blue.svg/800px-Solid_blue.svg.png',
     metadata: 'blue',
   }),
   //   new Item({
@@ -106,8 +106,8 @@ const itemList: Item[] = [
     name: 'Christmas ball',
     description: 'christmas ball',
     price: 6.69,
-    picture:
-      'https://cdn.discordapp.com/attachments/830093692449587304/1041674533041602560/christmas_ball.png',
+    picture: 'https://i.imgur.com/8L86Mlm.png',
+    // 'https://cdn.discordapp.com/attachments/830093692449587304/1041674533041602560/christmas_ball.png',
     metadata: 'red',
   }),
   new Item({
@@ -116,8 +116,7 @@ const itemList: Item[] = [
     name: 'Yellow ball',
     description: 'Yellow ball',
     price: 6.69,
-    picture:
-      'https://upload.wikimedia.org/wikipedia/commons/d/d0/Color-yellow.JPG',
+    picture: 'https://i.imgur.com/zsPTuL4.jpg',
     metadata: 'yellow',
   }),
   // new Item({
@@ -136,8 +135,8 @@ const itemList: Item[] = [
     name: 'Sugar Cane',
     description: 'Sugar Cane',
     price: 6.69,
-    picture:
-      'https://cdn.discordapp.com/attachments/830093692449587304/1041680391121141790/paddle.png',
+    picture: 'https://i.imgur.com/1unvvK9.png',
+    // 'https://cdn.discordapp.com/attachments/830093692449587304/1041680391121141790/paddle.png',
     metadata: 'christmas',
   }),
 ];

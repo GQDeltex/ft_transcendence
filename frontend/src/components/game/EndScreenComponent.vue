@@ -1,81 +1,59 @@
 <script setup lang="ts">
-import GameService from '@/service/GameService';
-import { onMounted, ref } from 'vue';
+import GameService, { type Game } from '@/service/GameService';
+import { computed, onBeforeMount, type Ref, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
-import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import { useI18n } from 'vue-i18n';
-
-const errorStore = useErrorStore();
 
 const props = defineProps<{
   gameId: number;
 }>();
 
-const status = 'online';
+const game: Ref<Game | null> = ref(null);
 
-const playerScore1 = ref(0);
-const remoteScore2 = ref(0);
-const player1 = ref({
-  id: 0,
-  username: '',
-  picture: '',
-  status: '',
-});
-const player2 = ref({
-  id: 0,
-  username: '',
-  picture: '',
+const statusBorder = (status: string) => {
+  switch (status) {
+    case 'online':
+      return 'lime';
+    default:
+      return 'grey';
+  }
+};
+
+const winnerName = computed((): string => {
+  if (!game.value) return '';
+  if (game.value.score1 > game.value.score2) return game.value.player1.username;
+  else if (game.value.score1 < game.value.score2)
+    return game.value.player2.username;
+  return 'nobody'; // TODO: translate this
 });
 
-const player = ref({
-  id: 0,
-  username: '',
-  picture: '',
-  status: '',
+const winnerPicture = computed((): string => {
+  if (!game.value) return '';
+  if (game.value.score1 > game.value.score2) return game.value.player1.picture;
+  else if (game.value.score1 < game.value.score2)
+    return game.value.player2.picture;
+  return '';
+});
+
+const winnerStatusColor = computed((): string => {
+  if (!game.value) return 'grey';
+  if (game.value.score1 > game.value.score2)
+    return statusBorder(game.value.player1.status ?? 'offline');
+  else if (game.value.score1 < game.value.score2)
+    return statusBorder(game.value.player2.status ?? 'offline');
+  return 'grey';
 });
 
 async function homepage() {
   window.location.href = '/';
 }
 
-onMounted(async () => {
-  if (props.gameId === 0) return;
-  await GameService.findOne(props.gameId)
-    .then((game) => {
-      playerScore1.value = game.score1;
-      remoteScore2.value = game.score2;
-      player1.value.id = game.player1.id;
-      player2.value.id = game.player2.id;
-      player1.value.username = game.player1.username;
-      player2.value.username = game.player2.username;
-    })
-    .catch((error) => errorStore.setError(error.message));
-
-  await UserService.findOneById(player1.value.id)
-    .then((user) => {
-      player1.value.picture = user.picture;
-    })
-    .catch((error) => errorStore.setError(error.message));
-
-  await UserService.findOneById(player2.value.id)
-    .then((user) => {
-      player2.value.picture = user.picture;
-      username();
-    })
-    .catch((error) => errorStore.setError(error.message));
-
-  function username() {
-    if (playerScore1.value > remoteScore2.value) {
-      player.value.username = player1.value.username;
-      player.value.picture = player1.value.picture;
-    } else if (playerScore1.value < remoteScore2.value) {
-      player.value.username = player2.value.username;
-      player.value.picture = player2.value.picture;
-    } else {
-      player.value.username = 'nobody';
-      player.value.picture = '';
-    }
+onBeforeMount(async () => {
+  try {
+    game.value = await GameService.findOne(props.gameId);
+  } catch (error) {
+    useErrorStore().setError((error as Error).message);
   }
 });
 </script>
@@ -83,14 +61,14 @@ onMounted(async () => {
 <template>
   <div class="parent">
     <RoundPictureComponent
-      v-if="player.picture !== ''"
+      v-if="winnerPicture !== ''"
       class="picture"
-      :picture="player.picture"
+      :picture="winnerPicture"
       size="15vw"
-      :border-color="status"
+      :border-color="winnerStatusColor"
     />
-    <p class="saving">{{ player.username }} {{ useI18n().t('wins') }}!</p>
-    <div class="btns">
+    <p class="saving">{{ winnerName }} {{ useI18n().t('wins') }}!</p>
+    <div class="button1">
       <button class="home-page flex-btn" @click="homepage">
         {{ useI18n().t('home') }}
       </button>
@@ -103,6 +81,7 @@ onMounted(async () => {
   color: white;
   font-size: 2vw;
 }
+
 .parent {
   height: 80vh;
   display: flex;
@@ -112,7 +91,7 @@ onMounted(async () => {
   margin-top: 5vh;
 }
 
-.btns {
+.button1 {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -127,10 +106,7 @@ onMounted(async () => {
   color: white;
   overflow: hidden;
   background-color: #c00000;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 10px 20px;
   align-content: center;
   cursor: pointer;
   width: min-content;
@@ -138,13 +114,5 @@ onMounted(async () => {
   border: none;
   font-size: 2vw;
   font-weight: bolder;
-  text-decoration: none;
-  /* text-decoration: none;
-  border-radius: 5px;
-  color: white;
-  background-color: #c00000;
-  font-size: 3vw;
-  border-color: transparent;
-  cursor: pointer; */
 }
 </style>

@@ -1,4 +1,4 @@
-import { Vector } from './element';
+import { Vector } from './ball';
 import { socket } from '@/service/socket';
 
 export class Paddle {
