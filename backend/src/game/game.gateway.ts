@@ -87,7 +87,7 @@ export class GameGateway implements OnGatewayDisconnect {
     @MessageBody('score') score?: number[],
   ) {
     if (typeof score !== 'undefined') {
-      if (score[0] >= 2 || score[1] >= 2) {
+      if (score[0] >= 10 || score[1] >= 10) {
         await this.gameService.endGame(gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });

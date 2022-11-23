@@ -30,6 +30,7 @@ clean: stop
 
 volume:
 	docker volume rm $(FOLDER_NAME)_db_data
+	rm -rf ./backend/uploads
 
 fclean: clean
 	-@osascript -e "set Volume 4"
