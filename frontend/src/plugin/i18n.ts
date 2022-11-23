@@ -9,6 +9,7 @@ import { fr, NF_fr } from './fr.translation';
 import { uk, NF_uk } from './uk.translation';
 import { pl, NF_pl } from './pl.translation';
 import { tr, NF_tr } from './tr.translation';
+import { NF_ro, ro } from './ro.translation';
 
 const messages = {
   'en-US': en,
@@ -20,6 +21,7 @@ const messages = {
   'uk-UK': uk,
   'pl-PL': pl,
   'tr-TR': tr,
+  'ro-RO': ro,
 };
 
 const numberFormats = {
@@ -32,6 +34,7 @@ const numberFormats = {
   'uk-UK': NF_uk,
   'pl-PL': NF_pl,
   'tr-TR': NF_tr,
+  'ro-RO': NF_ro,
 } as { [key: string]: DefineNumberFormat };
 
 export const i18n = createI18n({
@@ -55,6 +58,7 @@ export const languagesDropDownContent: Array<string> = [
   '🇺🇦 Ураїнська',
   '🇵🇱 Polska',
   '🇹🇷 Türkçe',
+  '🇷🇴 Românesc',
 ];
 
 export const languagesSelection: Array<string> = [
@@ -67,4 +71,5 @@ export const languagesSelection: Array<string> = [
   'uk-UK',
   'pl-PL',
   'tr-TR',
+  'ro-RO',
 ];
