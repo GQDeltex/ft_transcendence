@@ -146,9 +146,7 @@ export class PrcGateway implements OnGatewayDisconnect {
       recClient = sockets[0];
     } else {
       if (!sender.isInChannel(to.name))
-        throw new WsException(
-          'Recipient not found ###DEBUG Sender not on channel',
-        );
+        throw new WsException('Recipient not found Sender not on channel');
       const sendChannelUser: ChannelUser =
         await this.channelUserService.findChannelUserInChannel(
           sender.id,
@@ -175,7 +173,6 @@ export class PrcGateway implements OnGatewayDisconnect {
     @MessageBody('channel') channelInput: CreateChannelInput,
   ) {
     if (typeof user == 'undefined') throw new WsException('Not connected');
-    console.log(`Join attempt from ${user.id} for ${channelInput.name}`); //DEBUG
     const sender: User = await this.usersService.findOne(user.id);
     const channel = await this.channelService.join(channelInput, sender);
     client.join(channel.name);
@@ -190,7 +187,6 @@ export class PrcGateway implements OnGatewayDisconnect {
     this.channelService
       .findMessagesForRecipient(channel.name)
       .forEach((message) => client.emit('prc', message));
-    console.log(`Join success from ${user.id} for ${channelInput.name}`); // DEBUG
     return {
       id: channel.id,
       name: channel.name,
