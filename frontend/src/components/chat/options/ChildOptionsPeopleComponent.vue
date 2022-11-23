@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import type { User } from '@/store/user';
 import { useUserStore } from '@/store/user';
 import type { Channel } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 
 const emits = defineEmits(['chat', 'updateAdmin', 'banUser', 'muteUser']);
 
@@ -54,6 +55,30 @@ const statusBorder = computed(() => {
   }
 });
 
+const channelUserRankStatusText = computed(() => {
+  switch (props.channelUserRank) {
+    case 'in chat':
+      return useI18n().t('inchat');
+    case 'Owner':
+      return useI18n().t('owner');
+    case 'Admin':
+      return useI18n().t('admin');
+    default:
+      return '';
+  }
+});
+
+const channelUserStatusText = computed(() => {
+  switch (props.channelUserStatus) {
+    case 'muted':
+      return useI18n().t('muted');
+    case 'banned':
+      return useI18n().t('banned');
+    default:
+      return '';
+  }
+});
+
 const toggle = ref(false);
 
 const onProfile = async () => {
@@ -78,7 +103,7 @@ const onProfile = async () => {
           >{{ client.title[0] }} {{ client.username }}</span
         >
         <span :style="statusStyle" class="status">
-          {{ props.channelUserRank }} {{ props.channelUserStatus }}</span
+          {{ channelUserRankStatusText }} {{ channelUserStatusText }}</span
         >
       </div>
     </div>
@@ -86,14 +111,18 @@ const onProfile = async () => {
   </div>
 
   <div v-if="props.client.id !== userStore.id" v-show="toggle" class="popup">
-    <button class="button" @click="onProfile">Show profile</button>
+    <button class="button" @click="onProfile">
+      {{ useI18n().t('showprofile') }}
+    </button>
 
     <button
       v-if="props.isOwner"
       class="button"
       @click="emits('updateAdmin', props.client.id)"
     >
-      {{ isClientAdmin ? 'Remove' : 'Make' }} admin
+      {{
+        isClientAdmin ? useI18n().t('removeadmin') : useI18n().t('makeadmin')
+      }}
     </button>
 
     <button
@@ -101,7 +130,7 @@ const onProfile = async () => {
       class="button"
       @click="emits('banUser', props.client.id)"
     >
-      Ban user
+      {{ useI18n().t('banuser') }}
     </button>
 
     <button
@@ -109,7 +138,7 @@ const onProfile = async () => {
       class="button"
       @click="emits('muteUser', props.client.id)"
     >
-      Mute user
+      {{ useI18n().t('muteuser') }}
     </button>
   </div>
 </template>

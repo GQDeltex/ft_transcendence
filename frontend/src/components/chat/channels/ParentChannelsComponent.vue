@@ -3,6 +3,7 @@ import ChildChannelComponent from './ChildChannelComponent.vue';
 import ModalChannelComponent from './ModalChannelComponent.vue';
 import type { Channel } from '@/store/message';
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 const emits = defineEmits(['update', 'join']);
 
 const props = defineProps<{
@@ -44,9 +45,9 @@ function userInChannel(input: Channel) {
 <template>
   <div class="channelsParent">
     <span class="text"
-      >Channels
+      >{{ useI18n().t('channels') }}
       <button class="button" @click="joinNewChannel">
-        Join / Create channel
+        {{ useI18n().t('joincreatechannel') }}
       </button>
       <ModalChannelComponent
         v-if="modalActive"

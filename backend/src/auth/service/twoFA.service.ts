@@ -15,7 +15,11 @@ export class TwoFAService {
 
     const secret = authenticator.generateSecret();
 
-    const otpauthUrl = authenticator.keyuri(userEmail, 'Pongking', secret);
+    const otpauthUrl = authenticator.keyuri(
+      userEmail,
+      'Christmasballs',
+      secret,
+    );
     await this.usersService.update2FASecret(userId, secret);
 
     return {

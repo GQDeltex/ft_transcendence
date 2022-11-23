@@ -3,6 +3,7 @@ import GameService, { type Game } from '@/service/GameService';
 import { computed, onBeforeMount, type Ref, ref } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   gameId: number;
@@ -24,7 +25,7 @@ const winnerName = computed((): string => {
   if (game.value.score1 > game.value.score2) return game.value.player1.username;
   else if (game.value.score1 < game.value.score2)
     return game.value.player2.username;
-  return 'nobody';
+  return 'nobody'; // TODO: translate this
 });
 
 const winnerPicture = computed((): string => {
@@ -66,9 +67,11 @@ onBeforeMount(async () => {
       size="15vw"
       :border-color="winnerStatusColor"
     />
-    <p class="saving">{{ winnerName }} wins!</p>
-    <div class="button">
-      <button class="home-page flex-btn" @click="homepage">Home</button>
+    <p class="saving">{{ winnerName }} {{ useI18n().t('wins') }}!</p>
+    <div class="button1">
+      <button class="home-page flex-btn" @click="homepage">
+        {{ useI18n().t('home') }}
+      </button>
     </div>
   </div>
 </template>
@@ -88,7 +91,7 @@ onBeforeMount(async () => {
   margin-top: 5vh;
 }
 
-.button {
+.button1 {
   display: flex;
   justify-content: space-evenly;
   align-items: center;

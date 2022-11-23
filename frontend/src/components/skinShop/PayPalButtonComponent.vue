@@ -9,6 +9,7 @@ import type {
 import { useErrorStore } from '@/store/error';
 import { useUserStore } from '@/store/user';
 import type { Item } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   item: Item;
@@ -84,12 +85,16 @@ const updateEquip = async () => {
 <template>
   <div v-show="!owned" :id="paypalButtonId" class="paypal-button"></div>
   <button v-show="owned" class="button" @click="updateEquip">
-    {{ userStore.isItemEquipped(item.id) ? 'Unequip' : 'Equip' }}
+    {{
+      userStore.isItemEquipped(item.id)
+        ? useI18n().t('unequip')
+        : useI18n().t('equip')
+    }}
   </button>
 </template>
 
 <style scoped>
-button {
+.button {
   font-family: 'Mountains of Christmas', cursive;
   text-decoration: none;
   border-radius: 5px;

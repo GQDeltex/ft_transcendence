@@ -8,6 +8,7 @@ import { ref, onBeforeMount, type Ref, onBeforeUnmount } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { socket } from '@/service/socket';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 
 enum DisplayState {
   OVERVIEW,
@@ -69,7 +70,7 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <div v-if="displayState === DisplayState.OVERVIEW">
-      <h1 class="title">Stream Overview</h1>
+      <h1 class="title">{{ useI18n().t('streamoverview') }}</h1>
       <ChildStreamComponent
         v-for="_game in games"
         :key="_game.id"

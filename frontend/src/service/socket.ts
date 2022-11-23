@@ -5,7 +5,6 @@ export const socket: Socket = io(`http://${import.meta.env.VITE_DOMAIN}:8080`, {
   autoConnect: false,
   withCredentials: true,
   transports: ['websocket'],
-  maxHttpBufferSize: 1e8,
 });
 
 socket.on('connect', function () {

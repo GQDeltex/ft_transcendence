@@ -9,6 +9,7 @@ import ModalComponent from './components/globalUse/ModalComponent.vue';
 import NavbarComponent from './components/globalUse/NavbarComponent.vue';
 import { useMessagesStore } from './store/message';
 import { useRouter } from 'vue-router';
+import { i18n } from '@/plugin/i18n';
 
 const router = useRouter();
 const messagesStore = useMessagesStore();
@@ -18,6 +19,8 @@ const errorStore = useErrorStore();
 const { getErrors: errors } = storeToRefs(errorStore);
 
 const hide = ref(false);
+let tmp = localStorage.getItem('language');
+if (tmp != null) i18n.global.locale.value = tmp;
 
 if (isLoggedIn.value && !socket.connected) socket.connect();
 

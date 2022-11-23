@@ -2,6 +2,7 @@
 import UserPlayedGameComponent from '../../globalUse/UserPlayedGameComponent.vue';
 import type { Game } from '@/service/GameService';
 import { ref, inject, type Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const { games } = inject<{ games: Ref<Game[]> }>('user', {
   games: ref([]),
@@ -14,7 +15,7 @@ const sortGames = (games: Game[]) => {
 
 <template>
   <div class="frame">
-    <div class="title">History</div>
+    <div class="title">{{ useI18n().t('history') }}</div>
     <div class="scroll">
       <UserPlayedGameComponent
         v-for="game in sortGames(games)"

@@ -13,6 +13,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { User } from '@/store/user';
 import type { _RouteLocationBase } from 'vue-router';
 import { useErrorStore } from '@/store/error';
+import { useI18n } from 'vue-i18n';
 import { Priority } from '@/components/game/ball';
 
 const route = useRoute();
@@ -126,7 +127,9 @@ onUnmounted(() => {
 
 <template>
   <div v-if="displayState === DisplayState.QUEUE" class="parent">
-    <p class="saving">In Queue<span>.</span><span>.</span><span>.</span></p>
+    <p class="saving">
+      {{ useI18n().t('inqueue') }}<span>.</span><span>.</span><span>.</span>
+    </p>
     <div class="loader"></div>
   </div>
   <EndScreenComponent
