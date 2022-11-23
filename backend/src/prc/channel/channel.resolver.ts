@@ -13,6 +13,7 @@ import { JwtAuthGuard } from '../../auth/guard/jwt.guard';
 import { ChannelService } from './channel.service';
 import {
   CreateChannelInput,
+  KickChannelUserInput,
   LeaveChannelInput,
   ToggleChannelPpInput,
 } from './channel.input';
@@ -55,6 +56,18 @@ export class ChannelResolver {
     @CurrentUser() user: User,
   ): Promise<Channel | null> {
     return await this.channelService.leave(leaveChannelInput.name, user);
+  }
+
+  @Mutation(() => Channel)
+  async kickChannelUser(
+    @Args() kickChannelUserInput: KickChannelUserInput,
+    @CurrentJwtPayload() jwtPayload: JwtPayload,
+  ): Promise<Channel> {
+    return await this.channelService.kickChannelUser(
+      jwtPayload.id,
+      kickChannelUserInput.channelName,
+      kickChannelUserInput.userId,
+    );
   }
 
   @Mutation(() => Channel)

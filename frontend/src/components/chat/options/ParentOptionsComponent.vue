@@ -12,7 +12,13 @@ import type { Channel } from '@/store/message';
 import { useI18n } from 'vue-i18n';
 
 const passModalActive = ref(false);
-const emits = defineEmits(['leave', 'updatePublic', 'chat', 'updateAdmin']);
+const emits = defineEmits([
+  'leave',
+  'updatePublic',
+  'chat',
+  'updateAdmin',
+  'updateKickUser',
+]);
 const errorStore = useErrorStore();
 const userStore = useUserStore();
 
@@ -54,6 +60,18 @@ async function banUser(userId: number) {
 async function muteUser(userId: number) {
   try {
     await ChannelUserService.muteUser(props.currentChannel.name, userId);
+  } catch (error) {
+    errorStore.setError((error as Error).message);
+  }
+}
+
+async function kickUser(userId: number) {
+  try {
+    const updatedChannel: Channel = await ChannelUserService.kickUser(
+      props.currentChannel.name,
+      userId,
+    );
+    emits('updateKickUser', updatedChannel);
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
@@ -157,6 +175,7 @@ function getChannelUserStatus(client: User) {
             @update-admin="updateAdmin"
             @ban-user="banUser"
             @mute-user="muteUser"
+            @kick-user="kickUser"
           />
         </template>
       </div>

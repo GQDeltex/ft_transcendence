@@ -7,7 +7,13 @@ import { useUserStore } from '@/store/user';
 import type { Channel } from '@/store/message';
 import { useI18n } from 'vue-i18n';
 
-const emits = defineEmits(['chat', 'updateAdmin', 'banUser', 'muteUser']);
+const emits = defineEmits([
+  'chat',
+  'updateAdmin',
+  'banUser',
+  'muteUser',
+  'kickUser',
+]);
 
 const props = defineProps<{
   client: User;
@@ -139,6 +145,14 @@ const onProfile = async () => {
       @click="emits('muteUser', props.client.id)"
     >
       {{ useI18n().t('muteuser') }}
+    </button>
+
+    <button
+      v-if="props.isAdmin || props.isOwner"
+      class="button"
+      @click="emits('kickUser', props.client.id)"
+    >
+      Kick user
     </button>
   </div>
 </template>

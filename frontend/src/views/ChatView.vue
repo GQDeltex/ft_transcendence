@@ -240,6 +240,7 @@ watch(currentChannel, (newChat) => {
       @update-public="onUpdatePublic"
       @update-admin="onUpdateAdmin"
       @chat="UpdateChat"
+      @update-kick-user="onUpdatePublic"
     />
   </div>
 </template>

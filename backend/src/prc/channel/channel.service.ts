@@ -232,4 +232,38 @@ export class ChannelService {
       throw new EntityNotFoundError(Channel, { name: channelName });
     return await this.findOne(channelName);
   }
+
+  async kickChannelUser(
+    userId: number,
+    channelName: string,
+    toBeKickId: number,
+  ) {
+    if (userId === toBeKickId) throw new UserInputError("Can't kick yourself");
+    const channel: Channel = await this.findOne(channelName);
+
+    const channelUser: ChannelUser | undefined = channel.userList.find(
+      (_channelUser) => _channelUser.user_id === userId,
+    );
+    if (typeof channelUser === 'undefined')
+      throw new UserInputError("Can't kick a user in a channel you're not in");
+
+    const toBeKickUser: ChannelUser | undefined = channel.userList.find(
+      (_channelUser) => _channelUser.user_id === toBeKickId,
+    );
+    if (typeof toBeKickUser === 'undefined')
+      throw new UserInputError("Can't kick a user that doesn't exist");
+
+    if (
+      !channelUser.admin ||
+      toBeKickUser.owner ||
+      (toBeKickUser.admin && !channelUser.owner)
+    )
+      throw new UserInputError("You don't have permission to kick user");
+
+    if (toBeKickUser.ban || toBeKickUser.mute)
+      throw new UserInputError("You can't kick muted or banned user");
+
+    await this.channelUserRepository.delete({ id: toBeKickUser.id });
+    return await this.findOne(channelName);
+  }
 }
