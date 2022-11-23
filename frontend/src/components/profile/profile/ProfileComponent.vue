@@ -309,10 +309,12 @@ input:checked + .slider:before {
 
 .slider.round {
   border-radius: 25vw;
+  white-space: nowrap;
 }
 
 .slider.round:before {
   border-radius: 50%;
+  white-space: nowrap;
 }
 
 .pen {
