@@ -106,7 +106,6 @@ export class ChannelService {
     try {
       channel = await this.findOne(createChannelInput.name);
     } catch (Error) {
-      //console.log(createChannelInput.name + ' created'); DEBUG
       channel = await this.findOne(await this.create(createChannelInput));
       brandNew = true;
     }

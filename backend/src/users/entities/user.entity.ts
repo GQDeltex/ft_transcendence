@@ -51,7 +51,7 @@ export class User {
   default_picture: string;
 
   @Field()
-  @Column({ default: 'Fluvius' })
+  @Column({ default: 'Elytra' })
   coalition: string;
 
   @Field()
