@@ -146,9 +146,7 @@ export class PrcGateway implements OnGatewayDisconnect {
       recClient = sockets[0];
     } else {
       if (!sender.isInChannel(to.name))
-        throw new WsException(
-          'Recipient not found Sender not on channel',
-        );
+        throw new WsException('Recipient not found Sender not on channel');
       const sendChannelUser: ChannelUser =
         await this.channelUserService.findChannelUserInChannel(
           sender.id,
