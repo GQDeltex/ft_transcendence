@@ -88,6 +88,8 @@ export const pl = {
   people: 'Ludzie',
   //  friends: '0 Friends | 1 Friend | {n} Friends',
   friends: '0 Przyjaciele | 1 Przyjaciel | {n} Przyjaciół',
+  //  friends: '0 Friends | 1 Friend | {n} Friends',
+  friend: 'Przyjaciele',
   //  blocked: 'Blocked',
   blocked: 'Zablokowany',
   //  declinegamerequest: 'Decline Game Request',

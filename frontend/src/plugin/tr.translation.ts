@@ -87,6 +87,8 @@ export const tr = {
   people: 'İnsanlar',
   //  friends: '0 Friends | 1 Friend | {n} Friends',
   friends: '0 Arkadaşlar | 1 Arkadaş | {n} Arkadaşlar',
+  //  friends: '0 Friends | 1 Friend | {n} Friends',
+  friend: 'Arkadaşlar',
   //  blocked: 'Blocked',
   blocked: 'Engellendi',
   //  declinegamerequest: 'Decline Game Request',

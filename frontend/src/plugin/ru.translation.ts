@@ -87,6 +87,8 @@ export const ru = {
   people: 'Люди',
   //  friends: '0 Friends | 1 Friend | {n} Friends',
   friends: '0 Друзей | 1 Друг | {n} Друзей',
+  //  friends: '0 Friends | 1 Friend | {n} Friends',
+  friend: 'Друзей',
   //  blocked: 'Blocked',
   blocked: 'Заблокировано',
   //  declinegamerequest: 'Decline Game Request',

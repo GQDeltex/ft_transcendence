@@ -43,6 +43,7 @@ export const en = {
   muteuser: 'Mute User',
   people: 'People',
   friends: '0 Friends | 1 Friend | {n} Friends',
+  friend: 'Friends',
   blocked: 'Blocked',
   declinegamerequest: 'Decline Game Request',
   declinefriendrequest: 'Decline Friend Request',
