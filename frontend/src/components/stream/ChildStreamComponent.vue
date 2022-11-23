@@ -4,21 +4,24 @@ withDefaults(
   defineProps<{
     game: Game;
     isReplay?: boolean;
+    size: string;
   }>(),
   { isReplay: false },
 );
 </script>
 
 <template>
-  <span class="playerNames">
-    {{ game.player1.username }} vs {{ game.player2.username }}
-  </span>
-  <router-link :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`">
-    <div>
-      <img class="thumbnail" alt="thumbnail" src="@/assets/pong.png" />
-      <span class="playerNames"> {{ game.score1 }} : {{ game.score2 }}</span>
-    </div>
-  </router-link>
+  <div class="stream">
+    <span class="playerNames">
+      {{ game.player1.username }} vs {{ game.player2.username }}
+    </span>
+    <router-link :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`">
+      <div class="gameElement">
+        <img class="thumbnail" alt="thumbnail" src="@/assets/pong.png" />
+        <span class="playerNames"> {{ game.score1 }} : {{ game.score2 }}</span>
+      </div>
+    </router-link>
+  </div>
 </template>
 
 <style scoped>
@@ -26,7 +29,7 @@ router-link {
   text-decoration: none;
 }
 
-div {
+.gameElement {
   display: grid;
   margin: auto;
 }
@@ -36,16 +39,18 @@ div {
   justify-content: center;
   color: white;
   text-decoration: none;
-  font-size: 3vw;
+  font-size: v-bind(size) - 0.5vw;
 }
 
 .thumbnail {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  /* width: 22vw; */
   max-width: 60%;
-  /* height: 15vh; */
   max-height: 100%;
+}
+
+.stream {
+  width: v-bind(size);
 }
 </style>

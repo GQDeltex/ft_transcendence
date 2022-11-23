@@ -75,6 +75,7 @@ onBeforeUnmount(() => {
         v-for="_game in games"
         :key="_game.id"
         :game="_game"
+        size="56.9vw"
       />
     </div>
     <div v-if="game">

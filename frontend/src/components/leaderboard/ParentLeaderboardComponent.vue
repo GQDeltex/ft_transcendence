@@ -51,6 +51,7 @@ h3 {
   padding: 5px;
   color: white;
 }
+
 .categories {
   display: flex;
   justify-content: space-evenly;

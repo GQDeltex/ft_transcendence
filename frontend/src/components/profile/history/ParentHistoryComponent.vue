@@ -21,6 +21,7 @@ const sortGames = (games: Game[]) => {
         v-for="game in sortGames(games)"
         :key="game.id"
         :game="game"
+        size="56.9vw"
       />
     </div>
   </div>

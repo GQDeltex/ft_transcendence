@@ -3,13 +3,14 @@ import type { Game } from '@/service/GameService';
 import ChildStreamComponent from '../stream/ChildStreamComponent.vue';
 defineProps<{
   game: Game;
+  size: string;
 }>();
 </script>
 
 <template>
   <div>
     <span class="stream">
-      <ChildStreamComponent :game="game" :is-replay="true" />
+      <ChildStreamComponent :game="game" :is-replay="true" :size="size" />
     </span>
   </div>
 </template>
