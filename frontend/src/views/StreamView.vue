@@ -9,6 +9,7 @@ import { useRoute } from 'vue-router';
 import { socket } from '@/service/socket';
 import type { User } from '@/store/user';
 import UserService from '@/service/UserService';
+import { useI18n } from 'vue-i18n';
 
 const games = ref<Game[]>([]);
 const player1User = ref<User>({
@@ -88,7 +89,7 @@ socket.on('Game', async ({ gameId }) => {
 <template>
   <div>
     <div v-if="routExist && !displayEnd">
-      <h1 class="title">Stream Overview</h1>
+      <h1 class="title">{{ useI18n().t('streamoverview') }}</h1>
       <ChildStreamComponent
         v-for="game in games"
         :key="game.id"

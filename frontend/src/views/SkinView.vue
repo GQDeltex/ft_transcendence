@@ -19,9 +19,9 @@ onMounted(async () => {
 
 <template>
   <!-- <div class="header">
-    <button class="button">Profile Pictures</button>
-    <button class="button button-wide">Maps</button>
-    <button class="button">Sounds</button>
+    <button class="button">{{ useI18n().t('profilepictures') }}</button>
+    <button class="button button-wide">{{ useI18n().t('maps') }}</button>
+    <button class="button">{{ useI18n().t('sounds') }}</button>
   </div> -->
   <template v-for="item in items" :key="item.id">
     <SkinShopComponent :item="item" />

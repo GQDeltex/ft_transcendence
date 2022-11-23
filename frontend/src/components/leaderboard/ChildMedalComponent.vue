@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
 import type { User } from '@/store/user';
 
@@ -23,7 +24,13 @@ defineProps<{
         <span class="playername">{{ medalPlayer.username }}</span>
       </div>
     </router-link>
-    <span class="sub">{{ medalPlayer.points }} Points</span>
+    <span class="sub">{{
+      useI18n().t(
+        'points',
+        { n: useI18n().n(medalPlayer.points || 0, 'shortnumber') },
+        2,
+      )
+    }}</span>
   </div>
 </template>
 

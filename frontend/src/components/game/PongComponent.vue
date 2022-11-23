@@ -6,6 +6,7 @@ import { Paddle } from './paddle';
 import GamePeopleComponent from './GamePeopleComponent.vue';
 import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   gameId: number;
@@ -290,7 +291,7 @@ onUnmounted(() => {
     <div v-if="showClaimVictory" class="modal">
       <div class="modal-content">
         <button id="claimButton" class="ok" disabled @click="onClaimVictory">
-          Claim victory
+          {{ useI18n().t('claimvictory') }}
         </button>
       </div>
     </div>

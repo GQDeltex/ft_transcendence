@@ -3,22 +3,26 @@ import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import RoundPictureComponent from './RoundPictureComponent.vue';
 import { useMessagesStore } from '@/store/message';
+import { useI18n } from 'vue-i18n';
 import DropDownComponent from './DropDownComponent.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const messagesStore = useMessagesStore();
-const dropDownContent = ref<string[]>(['Profile', 'Logout']);
+let dropDownContent = ref<string[]>([
+  useI18n().t('profile'),
+  useI18n().t('logoutbutton'),
+]);
 const showDropDown = ref(false);
 const router = useRouter();
 
 async function dropDownClicked(selected: string) {
   showDropDown.value = false;
-  if (selected == 'Profile') {
+  if (selected == dropDownContent.value[0]) {
     await router.push({ path: `/profile/${userStore.id}` });
   }
-  if (selected == 'Logout') {
+  if (selected == dropDownContent.value[1]) {
     await userStore.logout();
     await router.push({ path: '/login' });
   }
@@ -29,7 +33,7 @@ async function dropDownClicked(selected: string) {
   <div class="column1">
     <router-link to="/" class="columncontent">
       <img alt="page logo" class="logo" src="@/assets/xmas.png" height="50" />
-      <span>christmasballs</span>
+      <span>{{ useI18n().t('gamename') }}</span>
     </router-link>
   </div>
   <div class="column2">
@@ -57,10 +61,20 @@ async function dropDownClicked(selected: string) {
     </div>
   </div>
   <nav>
-    <li><RouterLink to="/leaderboard">Leaderboard</RouterLink></li>
-    <li><RouterLink to="/play">Play Now</RouterLink></li>
-    <li><RouterLink to="/skin">Skin Selection</RouterLink></li>
-    <li><RouterLink to="/stream">Stream</RouterLink></li>
+    <li>
+      <RouterLink to="/leaderboard">{{
+        useI18n().t('leaderboard')
+      }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="/play">{{ useI18n().t('playnow') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="/skin">{{ useI18n().t('skinselection') }}</RouterLink>
+    </li>
+    <li>
+      <RouterLink to="/stream">{{ useI18n().t('stream') }}</RouterLink>
+    </li>
     <li>
       <div class="item">
         <span
@@ -68,7 +82,7 @@ async function dropDownClicked(selected: string) {
           class="notify-badge"
           >NEW</span
         >
-        <RouterLink to="/chat">Chat</RouterLink>
+        <RouterLink to="/chat">{{ useI18n().t('chat') }}</RouterLink>
       </div>
     </li>
   </nav>
@@ -100,6 +114,7 @@ img {
   grid-column: 1 / 2;
   justify-self: start;
   font-size: 3vw;
+  white-space: nowrap;
 }
 .column2 {
   grid-column: 2 / 3;
