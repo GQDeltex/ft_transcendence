@@ -27,6 +27,8 @@ import { GameService } from './game.service';
     methods: ['GET', 'POST'],
     credentials: true,
   },
+  maxHttpBufferSize: 5e6, // 5MiB
+  pingTimeout: 60000,
 })
 @UseGuards(WsJwt2FAAuthGuard)
 @UseFilters(CustomPrcExceptionFilter)
@@ -42,9 +44,10 @@ export class GameGateway implements OnGatewayDisconnect {
   async handleDisconnect(@ConnectedSocket() client: Socket) {
     if (typeof client.data.user === 'undefined') return;
     await this.gameService.dequeuePlayer(client.data.user.id);
-    const gameId = await this.gameService.killGame(client.data.user.id);
-    if (gameId === -1) return;
-    this.server.in(`&${gameId}`).emit('Game', { gameId: -1 });
+    const games: Game[] = await this.gameService.killGame(client.data.user.id);
+    games.forEach((game) => {
+      this.server.to(`&${game.id}`).emit('Game', { gameId: -1 });
+    });
   }
 
   @SubscribeMessage('gameBlur')
@@ -76,7 +79,7 @@ export class GameGateway implements OnGatewayDisconnect {
   @SubscribeMessage('gameData')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody('name') name: number,
+    @MessageBody('name') name: string,
     @MessageBody('gameId') gameId: number,
     @MessageBody('direction') direction?: { x: number; y: number },
     @MessageBody('position') position?: { x: number; y: number },
@@ -85,21 +88,21 @@ export class GameGateway implements OnGatewayDisconnect {
   ) {
     if (typeof score !== 'undefined') {
       if (score[0] >= 10 || score[1] >= 10) {
-        await this.gameService.endGame(client.data.user.id, gameId, score);
+        await this.gameService.endGame(gameId, score);
         client.to(`&${gameId}`).emit('Game', { gameId: -1 });
         client.emit('Game', { gameId: -1 });
         return;
       } else {
-        await this.gameService.saveScore(client.data.user.id, gameId, score);
+        await this.gameService.saveScore(gameId, score);
       }
     }
 
     client.to(`&${gameId}`).emit('gameData', {
+      name,
       direction,
       position,
       paddleDir,
       score,
-      name,
       from: client.data.user.id,
     });
   }
@@ -113,10 +116,13 @@ export class GameGateway implements OnGatewayDisconnect {
       await this.gameService.queuePlayer(client.data.user.id);
     } else if (event === 'LEAVE') {
       await this.gameService.dequeuePlayer(client.data.user.id);
-      const gameId = await this.gameService.killGame(client.data.user.id);
-      if (gameId === -1) return;
-      this.server.to(`&${gameId}`).emit('Game', {
-        gameId: -1,
+      const games: Game[] = await this.gameService.killGame(
+        client.data.user.id,
+      );
+      games.forEach((game) => {
+        this.server.to(`&${game.id}`).emit('Game', {
+          gameId: -1,
+        });
       });
     }
   }
@@ -164,5 +170,14 @@ export class GameGateway implements OnGatewayDisconnect {
       ball,
       scores,
     );
+  }
+
+  @SubscribeMessage('uploadGame')
+  async handleUploadGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('gameId') gameId: number,
+    @MessageBody('file') fileBuffer: Buffer,
+  ) {
+    await this.gameService.uploadGame(client.data.user.id, gameId, fileBuffer);
   }
 }

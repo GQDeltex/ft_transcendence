@@ -4,6 +4,8 @@ import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
 import type { Channel } from '@/store/message';
+import { useI18n } from 'vue-i18n';
+
 const emits = defineEmits(['chat']);
 
 const props = defineProps<{
@@ -27,10 +29,10 @@ function userInChatWith(input: User) {
 
 <template>
   <div class="friendsPeopleParent">
-    <span class="text">People</span>
+    <span class="text">{{ useI18n().t('people') }}</span>
     <div class="scroll">
       <div class="subheader" @click="friendToggle = !friendToggle">
-        Friends ▾
+        {{ useI18n().t('friends') }} ▾
       </div>
       <div v-show="friendToggle" class="people">
         <template v-for="client in clients" :key="client.id">
@@ -46,7 +48,7 @@ function userInChatWith(input: User) {
         </template>
       </div>
       <div class="subheader" @click="peopleToggle = !peopleToggle">
-        People ▾
+        {{ useI18n().t('people') }} ▾
       </div>
       <div v-show="peopleToggle" class="people">
         <template v-for="client in clients" :key="client.id">
@@ -62,7 +64,9 @@ function userInChatWith(input: User) {
           />
         </template>
       </div>
-      <div class="subheader" @click="blockToggle = !blockToggle">Blocked ▾</div>
+      <div class="subheader" @click="blockToggle = !blockToggle">
+        {{ useI18n().t('blocked') }} ▾
+      </div>
       <div v-show="blockToggle" class="people">
         <template v-for="client in clients" :key="client.id">
           <ChildPeopleComponent

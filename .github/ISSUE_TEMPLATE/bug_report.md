@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve PongKing
+about: Create a report to help us improve Christmasballs
 title: ''
 labels: bug
 assignees: ''

@@ -15,6 +15,12 @@ export enum GameState {
   PAUSED = 'paused',
 }
 
+export enum Priority {
+  HOST,
+  CLIENT,
+  GUEST,
+}
+
 @ObjectType()
 @Entity()
 export class Game {
@@ -59,4 +65,12 @@ export class Game {
     default: GameState.STARTING,
   })
   state: GameState;
+
+  @Field()
+  @Column({ default: false })
+  isReplayHost: boolean;
+
+  @Field()
+  @Column({ default: '' })
+  replayUrl: string;
 }

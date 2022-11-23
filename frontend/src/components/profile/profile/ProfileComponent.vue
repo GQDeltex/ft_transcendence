@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import type { User } from '@/store/user';
-import { inject, nextTick, ref, watch } from 'vue';
+import { inject, nextTick, ref, watch, type Ref } from 'vue';
 import Enable2FAComponent from './Enable2FAComponent.vue';
 import ModalChangeUsernameComponent from './ModalChangeUsernameComponent.vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
@@ -9,7 +9,10 @@ import ModalChangePictureComponent from './ModalChangePictureComponent.vue';
 import UserService from '@/service/UserService';
 import { useErrorStore } from '@/store/error';
 import DropDownComponent from '@/components/globalUse/DropDownComponent.vue';
-import { cloneDeep } from 'lodash';
+import { useI18n } from 'vue-i18n';
+import { languagesDropDownContent } from '@/plugin/i18n';
+import { languagesSelection } from '@/plugin/i18n';
+import { i18n } from '@/plugin/i18n';
 
 const userStore = useUserStore();
 const checked = ref(userStore.twoFAEnable);
@@ -17,14 +20,17 @@ const show = ref(false);
 const modalChangeUsername = ref(false);
 const modalChangePicture = ref(false);
 const dropDownTitle = ref(false);
-let dropDownContent = ref<string[]>(cloneDeep(userStore.title));
+let dropDownContent = ref<string[]>([...userStore.title]);
 
-dropDownContent.value[0] = '--- no title ---';
+dropDownContent.value[0] = useI18n().t('notitleselection');
 
-const { user, isMe } = inject<{ user: User | null; isMe: boolean }>('user', {
-  user: null,
-  isMe: false,
-});
+const { user, isMe } = inject<{ user: Ref<User | null>; isMe: Ref<boolean> }>(
+  'user',
+  {
+    user: ref(null),
+    isMe: ref(false),
+  },
+);
 
 watch(checked, async (newValue, oldValue) => {
   if (newValue === oldValue) return;
@@ -52,22 +58,23 @@ const toggle = () => {
   dropDownTitle.value = !dropDownTitle.value;
 };
 
-const errorStore = useErrorStore();
-const leaders = ref<Partial<User>[]>([]);
-UserService.findLeaders()
-  .then((users) => (leaders.value = users))
-  .catch((error) => errorStore.setError(error.message));
-
-async function updateTitle(title: string) {
-  // console.log('new title selected! ', title);
-  if (title == '--- no title ---') title = '';
+const updateTitle = async (title: string) => {
+  if (title == dropDownContent.value[0]) title = '';
   dropDownTitle.value = false;
   try {
     userStore.title = (await UserService.changeTitle(title)).title;
   } catch (error) {
-    errorStore.setError((error as Error).message);
+    useErrorStore().setError((error as Error).message);
     return;
   }
+};
+
+const langShowDropDown = ref(false);
+function dropDownClicked(selected: string) {
+  langShowDropDown.value = false;
+  let index = ref<number>(languagesDropDownContent.indexOf(selected));
+  i18n.global.locale.value = languagesSelection[index.value];
+  localStorage.setItem('language', i18n.global.locale.value);
 }
 </script>
 
@@ -112,7 +119,9 @@ async function updateTitle(title: string) {
       <div class="username">
         <span>
           {{ user.username }}
-          <span v-if="user.rank && user.rank > 0">(Rank {{ user.rank }}) </span>
+          <span v-if="user.rank && user.rank > 0">
+            ({{ useI18n().t('rank') }} {{ user.rank }})
+          </span>
         </span>
         <img
           v-if="isMe"
@@ -133,21 +142,41 @@ async function updateTitle(title: string) {
         v-show="modalChangePicture"
         @close="modalChangePicture = false"
       />
-
-      <span class="campus">Wolfsburg, Germany</span>
+      <span class="campus">{{ user.campus }}, {{ user.country }}</span>
       <br />
-      <span class="friends">{{ userStore.friends.length }} Friends</span>
+      <span class="friends">
+        {{ useI18n().t('friends', user.friends ? user.friends.length : 0) }}
+      </span>
     </div>
 
     <img class="banner" alt="banner" src="@/assets/christmas_banner.png" />
 
-    <span v-if="isMe" class="twoFA"
-      >2 Factor Authentication
+    <div v-if="isMe" class="langSetup" @mouseleave="langShowDropDown = false">
+      {{ useI18n().t('changelanguage') }}
+      <img
+        alt="pen"
+        class="pen"
+        title="Change picture"
+        src="@/assets/pen.png"
+        @click="langShowDropDown = !langShowDropDown"
+      />
+      <DropDownComponent
+        v-if="langShowDropDown"
+        :items="languagesDropDownContent"
+        width="12vw"
+        height="12vw"
+        @close="dropDownClicked"
+        @mouseleave="langShowDropDown = false"
+      />
+    </div>
+
+    <span v-if="isMe" class="twoFA">
+      {{ useI18n().t('twofa') }}
       <label class="switch">
         <input v-model="checked" type="checkbox" />
         <span class="slider round">
-          <p v-if="checked" class="onSwitch">on</p>
-          <p v-else class="offSwitch">off</p>
+          <p v-if="checked" class="onSwitch">{{ useI18n().t('on') }}</p>
+          <p v-else class="offSwitch">{{ useI18n().t('off') }}</p>
         </span>
       </label>
       <Enable2FAComponent v-if="show" @close="onClose" />
@@ -275,15 +304,25 @@ input:checked + .slider:before {
 
 .slider.round {
   border-radius: 25vw;
+  white-space: nowrap;
 }
 
 .slider.round:before {
   border-radius: 50%;
+  white-space: nowrap;
 }
 
 .pen {
   height: 1.5vw;
   width: 1.5vw;
   cursor: pointer;
+}
+
+.langSetup {
+  margin: 1vw;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1vw;
 }
 </style>

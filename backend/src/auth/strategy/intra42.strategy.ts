@@ -32,7 +32,7 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
       firstname: profile.name.givenName,
       lastname: profile.name.familyName,
       username: profile.username,
-      picture: profile._json.image_url,
+      picture: profile._json.image.link,
       campus: profile._json.campus[0].name,
       country: profile._json.campus[0].country,
       coalition: 'Fluvius',

@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import RoundPictureComponent from '@/components/globalUse/RoundPictureComponent.vue';
+import type { User } from '@/store/user';
 
 const props = defineProps<{
-  client: {
-    id: number;
-    username: string;
-    title: string[];
-    picture: string;
-    status?: string | undefined;
-  };
+  client: User;
 }>();
 
 const statusBorder = computed(() => {
@@ -32,7 +27,6 @@ const statusBorder = computed(() => {
     />
     <div class="infoBox">
       <span class="username">{{ client.title[0] }} {{ client.username }}</span>
-      <!-- <span :style="statusStyle" class="status">{{ client.status }}</span> -->
     </div>
   </div>
 </template>
@@ -54,10 +48,5 @@ const statusBorder = computed(() => {
   color: white;
   font-size: 1.8vw;
   font-stretch: expanded;
-}
-
-.status {
-  font-size: 1.6vw;
-  color: lime;
 }
 </style>

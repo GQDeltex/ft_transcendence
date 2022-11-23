@@ -1,12 +1,15 @@
 import { socket } from '@/service/socket';
 import type { Ref } from 'vue';
-import { Vector } from './element';
 import type { Paddle } from './paddle';
 
 export enum Priority {
   HOST,
   CLIENT,
   VIEWER,
+}
+
+export class Vector {
+  constructor(public x: number, public y: number) {}
 }
 
 export class Ball {
@@ -48,10 +51,11 @@ export class Ball {
   reset(yourScore: number, otherScore: number, toEmit = true) {
     this._position.x = this._canvas.width / 2 - this.getBallSize() / 2;
     this._position.y = this._canvas.height / 2 - this.getBallSize() / 2;
-    this._direction.x = Math.random() > 0.5 ? 1 : -1;
-    this._direction.y = Math.random() * 4 - 2;
+    this._direction = new Vector(0, 0);
 
-    if (toEmit)
+    if (toEmit) {
+      this._direction.x = Math.random() > 0.5 ? 1 : -1;
+      this._direction.y = Math.random() * 4 - 2;
       socket.emit('gameData', {
         name: 'ball',
         gameId: this._gameId,
@@ -68,6 +72,7 @@ export class Ball {
             ? [yourScore, otherScore]
             : [otherScore, yourScore],
       });
+    }
   }
 
   getAll() {
@@ -84,7 +89,7 @@ export class Ball {
   setAll(data: { position: Vector; direction: Vector }) {
     this._position.x = data.position.x * this._canvas.width;
     this._position.y = data.position.y * this._canvas.width;
-    this._direction = data.direction;
+    this._direction = new Vector(data.direction.x, data.direction.y);
   }
 
   /**
@@ -99,7 +104,7 @@ export class Ball {
   }
 
   setDir(newDir: Vector) {
-    this._direction = newDir;
+    this._direction = new Vector(newDir.x, newDir.y);
   }
 
   resize(oldCanvasWidth: number, oldCanvasHeight: number) {

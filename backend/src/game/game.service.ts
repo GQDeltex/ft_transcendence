@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { Game, GameState } from './entities/game.entity';
+import { Game, GameState, Priority } from './entities/game.entity';
 import { QueuedPlayer } from './entities/queuedplayer.entity';
 import { GameGateway } from './game.gateway';
 import { Socket } from 'socket.io';
 import { WsException } from '@nestjs/websockets';
+import { writeFile } from 'fs';
+import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GameService {
@@ -18,6 +21,7 @@ export class GameService {
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => GameGateway))
     private readonly gameGateway: GameGateway,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(player1: QueuedPlayer, player2: QueuedPlayer) {
@@ -40,13 +44,13 @@ export class GameService {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: 0,
+      priority: Priority.HOST,
     });
     this.gameGateway.server.to(game.player2.socketId).emit('Game', {
       gameId: game.id,
       player1Id: game.player1.id,
       player2Id: game.player2.id,
-      priority: 1,
+      priority: Priority.CLIENT,
     });
     this.gameGateway.server
       .to(game.player1.socketId)
@@ -70,14 +74,14 @@ export class GameService {
     );
   }
 
-  findOne(id: number) {
-    return this.gameRepository.findOneOrFail({ where: { id: id } });
+  async findOne(id: number) {
+    return await this.gameRepository.findOneOrFail({ where: { id: id } });
   }
 
   async queuePlayer(id: number) {
     const user: User = await this.usersService.findOne(id);
     if (user.status === 'in game')
-      throw new WsException('finish what you started');
+      throw new WsException('Finish what you started');
     await this.queuedPlayerRepository.insert({
       playerId: id,
       user: user,
@@ -90,7 +94,7 @@ export class GameService {
     });
   }
 
-  async saveScore(userId: number, gameId: number, score: number[]) {
+  async saveScore(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
     if (game.state == GameState.ENDED) return;
     game.score1 = score[0];
@@ -98,7 +102,7 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async endGame(userId: number, gameId: number, score: number[]) {
+  async endGame(gameId: number, score: number[]) {
     const game: Game = await this.findOne(gameId);
     game.score1 = score[0];
     game.score2 = score[1];
@@ -110,26 +114,25 @@ export class GameService {
     await this.gameRepository.save(game);
   }
 
-  async killGame(userId: number): Promise<number> {
+  async killGame(userId: number): Promise<Game[]> {
     const games: Game[] = await this.findAll(
       [{ state: GameState.RUNNING }, { state: GameState.PAUSED }],
       userId,
     );
-    if (games.length <= 0) return -1;
-    const game: Game = games[0];
-    game.state = GameState.ENDED;
-    game.player1.status = 'online';
-    game.player2.status = 'online';
-    if (game.player1.id === userId) {
-      game.score1 = 0;
-      game.player2.points += game.score2;
+    for (const game of games) {
+      game.state = GameState.ENDED;
+      game.player1.status = 'online';
+      game.player2.status = 'online';
+      if (game.player1.id === userId) {
+        game.score1 = 0;
+        game.player2.points += game.score2;
+      } else if (game.player2.id === userId) {
+        game.score2 = 0;
+        game.player1.points += game.score1;
+      }
+      await this.gameRepository.save(game);
     }
-    if (game.player2.id === userId) {
-      game.score2 = 0;
-      game.player1.points += game.score1;
-    }
-    await this.gameRepository.save(game);
-    return game.id;
+    return games;
   }
 
   async pauseGame(client: Socket, gameId: number, cowardId: number) {
@@ -191,7 +194,26 @@ export class GameService {
         rightPaddle,
         ball,
         scores,
+        state: game.state,
       });
     }
+  }
+
+  async uploadGame(userId: number, gameId: number, fileBuffer: Buffer) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const game: Game = await this.findOne(gameId);
+    if (game.replayUrl !== '') return;
+    writeFile(
+      join(__dirname, '../..', 'uploads', `game_${gameId}.webm`),
+      fileBuffer,
+      (err) => {
+        if (err) throw new WsException('Failed to save game');
+      },
+    );
+    game.replayUrl = `http://${this.configService.get(
+      'DOMAIN',
+    )}:8080/uploads/game_${gameId}.webm`;
+    game.isReplayHost = userId === game.player1Id;
+    await this.gameRepository.save(game);
   }
 }

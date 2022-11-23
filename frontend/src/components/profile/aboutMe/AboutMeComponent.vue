@@ -1,34 +1,51 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, ref, type Ref, computed } from 'vue';
 import type { User } from '@/store/user';
+import { useI18n } from 'vue-i18n';
 
-const { user } = inject<{ user: User | null }>('user', {
-  user: null,
+const { user } = inject<{ user: Ref<User | null> }>('user', {
+  user: ref(null),
 });
 
 const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+const statusText = computed(() => {
+  switch (user.value?.status) {
+    case 'online':
+      return useI18n().t('online');
+    case 'in game':
+      return useI18n().t('ingame');
+    default:
+      return useI18n().t('offline');
+  }
+});
 </script>
 
 <template>
   <div v-if="user" class="about">
-    <span style="font-size: 2vw" class="headtext">
-      About
-      <span style="float: right">{{ capitalize(user.status ?? '') }}</span>
+    <span style="font-size: 2vw" class="headerText">
+      {{ useI18n().t('about') }}
+      <span style="float: right">{{ capitalize(statusText ?? '') }}</span>
     </span>
     <div class="infoBox">
-      User name: <span class="info">{{ user.username }}</span>
+      {{ useI18n().t('username') }}:
+      <span class="info">{{ user.username }}</span>
       <br />
-      First name: <span class="info">{{ user.firstname }}</span>
+      {{ useI18n().t('firstname') }}:
+      <span class="info">{{ user.firstname }}</span>
       <br />
-      Last name: <span class="info">{{ user.lastname }}</span>
+      {{ useI18n().t('lastname') }}:
+      <span class="info">{{ user.lastname }}</span>
       <br />
-      Intra login: <span class="info">{{ user.intra }}</span>
+      {{ useI18n().t('intralogin') }}:
+      <span class="info">{{ user.intra }}</span>
       <br />
-      Coalition: <span class="info">{{ user.coalition }}</span>
+      {{ useI18n().t('coalition') }}:
+      <span class="info">{{ user.coalition }}</span>
       <br />
-      Last Login:
+      {{ useI18n().t('lastlogin') }}:
       <span class="info">
         {{
           new Date(user.lastLoggedIn ?? 0).toLocaleTimeString() +
@@ -37,31 +54,27 @@ const capitalize = (str: string) => {
         }}
       </span>
       <br />
-      Campus: <span class="info">{{ user.campus }}, {{ user.country }}</span>
+      {{ useI18n().t('campus') }}:
+      <span class="info">{{ user.campus }}, {{ user.country }}</span>
     </div>
   </div>
 </template>
 
 <style scoped>
-.headtext {
+.headerText {
   color: #c00000;
 }
+
 .about {
   padding: 1vw;
   border: 1px solid grey;
   display: flex;
   flex-direction: column;
-  /* max-height: inherit; */
-  /* max-height: 20vh; */
-  /* height: 1fr; */
-  /* min-height: 20vh; */
 }
 
 .infoBox {
   font-size: 1.5vw;
   color: grey;
-  /* max-height: inherit; */
-  /* max-height: 1fr; */
   overflow-y: scroll;
 }
 

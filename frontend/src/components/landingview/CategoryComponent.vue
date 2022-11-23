@@ -1,27 +1,38 @@
 <script setup lang="ts">
+import UserPlayedGameComponent from '../../components/globalUse/UserPlayedGameComponent.vue';
+import type { Game } from '@/service/GameService';
+import { onBeforeMount, type Ref, ref } from 'vue';
+import { useErrorStore } from '@/store/error';
+import GameService from '@/service/GameService';
+
 defineProps<{
   category: string;
 }>();
+
+const games: Ref<Game[]> = ref([]);
+
+const sortGames = (games: Game[]) => {
+  return [...games].sort((a, b) => b.id - a.id);
+};
+
+onBeforeMount(async () => {
+  try {
+    games.value = await GameService.findAll('ended');
+  } catch (error) {
+    useErrorStore().setError((error as Error).message);
+  }
+});
 </script>
 
 <template>
   <h3>{{ category }}</h3>
-  <div>
-    <router-link to="/test">
-      <img src="@/assets/pong.png" width="200" height="100" />
-    </router-link>
-    <router-link to="/test">
-      <img src="@/assets/pong.png" width="200" height="100" />
-    </router-link>
-    <router-link to="/test">
-      <img src="@/assets/pong.png" width="200" height="100" />
-    </router-link>
-    <router-link to="/test">
-      <img src="@/assets/pong.png" width="200" height="100" />
-    </router-link>
-    <router-link to="/test">
-      <img src="@/assets/pong.png" width="200" height="100" />
-    </router-link>
+  <div class="components">
+    <UserPlayedGameComponent
+      v-for="game in sortGames(games).slice(0, 5)"
+      :key="game.id"
+      :game="game"
+      size="16.9vw"
+    />
   </div>
 </template>
 
@@ -30,10 +41,11 @@ h3 {
   color: white;
 }
 
-div {
+.components {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  flex-direction: row;
   gap: 10px;
 }
 </style>
