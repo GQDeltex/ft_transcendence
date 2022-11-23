@@ -35,7 +35,7 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
       picture: profile._json.image.link,
       campus: profile._json.campus[0].name,
       country: profile._json.campus[0].country,
-      coalition: 'Fluvius',
+      coalition: 'Elytra',
       twoFAEnable: false,
       title: this.clean_42_title(
         profile._json.titles,

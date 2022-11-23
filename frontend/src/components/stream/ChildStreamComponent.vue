@@ -18,9 +18,9 @@ withDefaults(
     <router-link :to="`/${isReplay ? 'replay' : 'stream'}/${game.id}`">
       <div class="gameElement">
         <img class="thumbnail" alt="thumbnail" src="@/assets/pong.png" />
-        <span class="playerNames"> {{ game.score1 }} : {{ game.score2 }}</span>
       </div>
     </router-link>
+    <span class="playerNames"> {{ game.score1 }} : {{ game.score2 }}</span>
   </div>
 </template>
 

@@ -10,12 +10,8 @@ let channelName: Ref<string> = ref('');
 let admin: Ref<string> = ref('');
 
 async function closeOk() {
-  // console.log(
-  //   'channelName= ' + channelName.value + ' admin= ' + admin.value, //DEBUG
-  // );
   try {
     await ChannelUserService.updateAdmin(channelName.value, +admin.value);
-    // console.log(channelName.value + ' admin is now ' + admin.value); //DEBUG
   } catch (error) {
     errorStore.setError((error as Error).message);
   }
