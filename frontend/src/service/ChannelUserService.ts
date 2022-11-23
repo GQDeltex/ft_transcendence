@@ -68,5 +68,32 @@ class ChannelUserService {
       throw new Error('Not able to mute User');
     return updatedChannelUser;
   }
+
+  async kickUser(channelName: string, userId: number) {
+    const { kickChannelUser } = await graphQLService.mutation(
+      `
+      mutation kickChannelUser( $channelName: String!, $userId: Int! ) {
+        kickChannelUser( channelName: $channelName, userId: $userId ) {
+          id
+          name
+          private
+          userList {
+            id
+            user_id
+            channel_name
+            admin
+            owner
+            ban
+            mute
+				  }
+        }
+      }
+      `,
+      { channelName, userId },
+    );
+    if (typeof kickChannelUser === 'undefined')
+      throw new Error('Empty channel users data');
+    return kickChannelUser;
+  }
 }
 export default new ChannelUserService();

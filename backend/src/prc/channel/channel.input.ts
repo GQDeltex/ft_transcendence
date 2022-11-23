@@ -1,4 +1,4 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { IsAscii, IsNotEmpty, Length, Matches } from 'class-validator';
 
 @ArgsType()
@@ -23,6 +23,20 @@ export class LeaveChannelInput {
   @Length(2, 42)
   @Matches('^[#][a-zA-Z0-9\\_\\-\\.]+$')
   name: string;
+}
+
+@ArgsType()
+export class KickChannelUserInput {
+  @Field()
+  @IsNotEmpty()
+  @IsAscii()
+  @Length(2, 42)
+  @Matches('^[#][a-zA-Z0-9\\_\\-\\.]+$')
+  channelName: string;
+
+  @Field(() => Int)
+  @IsNotEmpty()
+  userId: number;
 }
 
 @ArgsType()
