@@ -87,6 +87,8 @@ export const ro = {
   people: 'Oameni',
   //  friends: '0 Friends | 1 Friend | {n} Friends',
   friends: '0 Prieteni | 1 Prieten | {n} Prieteni',
+  //  friends: '0 Friends | 1 Friend | {n} Friends',
+  friend: 'Prieteni',
   //  blocked: 'Blocked',
   blocked: 'Blocat',
   //  declinegamerequest: 'Decline Game Request',

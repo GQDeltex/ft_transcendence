@@ -87,6 +87,8 @@ export const uk = {
   people: 'Люди',
   //  friends: '0 Friends | 1 Friend | {n} Friends',
   friends: '0 Друзів | 1 Друг | {n} Друзів',
+  //  friends: '0 Friends | 1 Friend | {n} Friends',
+  friend: 'Друзів',
   //  blocked: 'Blocked',
   blocked: 'Заблоковано',
   //  declinegamerequest: 'Decline Game Request',

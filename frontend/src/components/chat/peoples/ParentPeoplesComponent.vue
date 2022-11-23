@@ -32,7 +32,7 @@ function userInChatWith(input: User) {
     <span class="text">{{ useI18n().t('people') }}</span>
     <div class="scroll">
       <div class="subheader" @click="friendToggle = !friendToggle">
-        {{ useI18n().t('friends') }} ▾
+        {{ useI18n().t('friend') }} ▾
       </div>
       <div v-show="friendToggle" class="people">
         <template v-for="client in clients" :key="client.id">

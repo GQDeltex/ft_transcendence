@@ -43,6 +43,7 @@ export const de = {
   muteuser: 'Benutzer stummschalten',
   people: 'Benutzer',
   friends: '0 Freunde | 1 Freund | {n} Freunde',
+  friend: 'Freunde',
   blocked: 'Blockiert',
   block: 'Blockieren',
   unblock: 'Freigeben',

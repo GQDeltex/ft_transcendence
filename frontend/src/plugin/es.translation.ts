@@ -87,6 +87,8 @@ export const es = {
   people: 'Gente',
   //  friends: '0 Friends | 1 Friend | {n} Friends',
   friends: '0 Amigos | 1 Amigo | {n} Amigos',
+  //  friend: 'Friend',
+  friend: 'Amigos',
   //  blocked: 'Blocked',
   blocked: 'Bloqueado',
   //  declinegamerequest: 'Decline Game Request',
