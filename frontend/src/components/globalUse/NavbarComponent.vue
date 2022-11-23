@@ -114,6 +114,7 @@ img {
   grid-column: 1 / 2;
   justify-self: start;
   font-size: 3vw;
+  white-space: nowrap;
 }
 .column2 {
   grid-column: 2 / 3;
