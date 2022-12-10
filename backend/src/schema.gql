@@ -34,7 +34,6 @@ type User {
   campus: String!
   country: String!
   points: Int!
-  inventory: [Int!]!
   lastLoggedIn: Timestamp!
   twoFAEnable: Boolean!
   channelList: [ChannelUser!]
@@ -48,6 +47,7 @@ type User {
   blocks: [Int]!
   blockedBy: [Int]!
   equipped: [Item]!
+  inventory: [Int]!
 }
 
 """
