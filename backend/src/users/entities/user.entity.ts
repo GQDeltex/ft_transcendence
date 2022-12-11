@@ -14,7 +14,11 @@ import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-use
 @ObjectType()
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({ type: 'int' })
+  // @PrimaryGeneratedColumn({ type: 'int' })
+  @PrimaryGeneratedColumn('identity', {
+    name: 'id',
+    generatedIdentity: 'BY DEFAULT',
+  })
   @Field(() => Int)
   id: number;
 

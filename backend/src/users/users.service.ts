@@ -58,7 +58,10 @@ export class UsersService {
       if (existingUsers.length === 0) return Promise.reject(error);
       let highestNumber = 0;
       for (const existingUser of existingUsers) {
-        if (existingUser.intraId === createUserInput.intraId)
+        if (
+          existingUser.intraId !== null &&
+          existingUser.intraId === createUserInput.intraId
+        )
           return Promise.reject(error);
         const rx = /^(\D*)([0-9]*)$/;
         const rxParts = rx.exec(existingUser.username);
