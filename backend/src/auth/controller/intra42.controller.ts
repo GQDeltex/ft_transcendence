@@ -34,28 +34,28 @@ export class Intra42Controller {
   @Get('callback')
   @UseGuards(Intra42OAuthGuard)
   async callback(@Req() req: any, @Res({ passthrough: true }) res: Response) {
-    if (typeof req.user == 'undefined')
+    if (typeof req.user == 'undefined' || req.user.intraId === null)
       throw new BadRequestException("Can't find user from 42 intra");
 
     let user: User | CreateUserInput = req.user;
     try {
-      user = await this.usersService.findOne(+user.id);
+      user = await this.usersService.findOne(user.username);
+      if (user.intraId === null)
+        throw new EntityNotFoundError(User, { id: (user as User).id });
     } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        if (req.user.backdoor) user.coalition = 'Elytra';
-        else
-          user.coalition = await this.fetchCoalition(
-            +user.id,
-            req.user.accessToken,
-          );
-        await this.usersService.create(user);
-      } else {
-        throw error;
-      }
+      if (!(error instanceof EntityNotFoundError)) throw error;
+      user = req.user;
+      if (req.user.backdoor) user.coalition = 'Fluvius';
+      else
+        user.coalition = await this.fetchCoalition(
+          +req.user.intraId,
+          req.user.accessToken,
+        );
+      user = await this.usersService.create(user);
     }
 
     const jwt_token = this.jwtService.sign({
-      id: user.id,
+      id: (user as User).id,
       email: user.email,
       isAuthenticated: !user.twoFAEnable,
     } as JwtPayload);

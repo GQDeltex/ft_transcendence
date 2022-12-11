@@ -43,7 +43,7 @@ export class UsersService {
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
   ) {}
 
-  async create(createUserInput: CreateUserInput): Promise<void> {
+  async create(createUserInput: CreateUserInput): Promise<User> {
     createUserInput.default_picture = createUserInput.picture;
     try {
       await this.userRepository.insert(createUserInput);
@@ -55,10 +55,11 @@ export class UsersService {
         // And the data is coming from Intra... So... It should be fine... I guess?
         where: { username: Like(`${createUserInput.username}%`) },
       });
-      if (existingUsers.length == 0) return Promise.reject(error);
+      if (existingUsers.length === 0) return Promise.reject(error);
       let highestNumber = 0;
       for (const existingUser of existingUsers) {
-        if (existingUser.id == createUserInput.id) return Promise.reject(error);
+        if (existingUser.intraId === createUserInput.intraId)
+          return Promise.reject(error);
         const rx = /^(\D*)([0-9]*)$/;
         const rxParts = rx.exec(existingUser.username);
         if (rxParts == null) continue;
@@ -68,10 +69,10 @@ export class UsersService {
           highestNumber = Number(rxParts[2]);
         }
       }
-      if (highestNumber == 0) createUserInput.username += '1';
+      if (highestNumber === 0) createUserInput.username += '1';
       await this.userRepository.insert(createUserInput);
     }
-    return Promise.resolve();
+    return this.findOne(createUserInput.username);
   }
 
   findUserChannelList(identifier: number | string): Promise<User> {

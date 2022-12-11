@@ -145,9 +145,17 @@ export const useUserStore = defineStore('user', {
     },
   },
   actions: {
-    async login(code: string, bypassId?: string): Promise<void> {
+    async login(
+      code: string,
+      isGoogle: boolean,
+      bypassId?: string,
+    ): Promise<void> {
       try {
-        const { require2FAVerify } = await UserService.fetchJwt(code, bypassId);
+        const { require2FAVerify } = await UserService.fetchJwt(
+          code,
+          isGoogle,
+          bypassId,
+        );
         this.require2FAVerify = require2FAVerify;
         if (require2FAVerify && !this.isLoggedIn) return;
         await this.fetchSelfData();

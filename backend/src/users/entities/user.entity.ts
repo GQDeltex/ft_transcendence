@@ -6,7 +6,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
 import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-user.entity';
@@ -14,17 +14,21 @@ import { ChannelUser } from '../../prc/channel/channel-user/entities/channel-use
 @ObjectType()
 @Entity()
 export class User {
-  @PrimaryColumn({ type: 'int', unique: true })
+  @PrimaryGeneratedColumn({ type: 'int' })
   @Field(() => Int)
   id: number;
+
+  @Field(() => Int)
+  @Column({ type: 'int', unique: true, nullable: true })
+  intraId: number | null;
 
   @Field()
   @Column()
   email: string;
 
-  @Field()
-  @Column()
-  intra: string;
+  @Field(() => String, { nullable: true })
+  @Column({ type: String, nullable: true })
+  intra: string | null;
 
   @Field()
   @Column()

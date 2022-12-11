@@ -89,6 +89,7 @@ router.beforeResolve(async (to) => {
     // Remove bypass for production
     await userStore.login(
       to.query['code'] as string,
+      typeof to.query.scope !== 'undefined',
       to.query['id'] as string | undefined,
     );
     delete to.query.code;

@@ -9,10 +9,13 @@ import { languagesDropDownContent } from '@/plugin/i18n';
 import { languagesSelection } from '@/plugin/i18n';
 
 const userStore = useUserStore();
-const uri = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
 
-const login = () => {
-  location.href = uri;
+const login42 = () => {
+  location.href = `http://${import.meta.env.VITE_DOMAIN}:8080/42intra/login`;
+};
+
+const loginGoogle = () => {
+  location.href = `http://${import.meta.env.VITE_DOMAIN}:8080/google/login`;
 };
 
 const langShowDropDown = ref(false);
@@ -59,8 +62,12 @@ function dropDownClicked(selected: string) {
       v-if="!userStore.isLoggedIn && !userStore.require2FAVerify"
       class="buttons"
     >
-      <button class="button" @click="login">
-        {{ useI18n().t('loginbutton') }}
+      <button class="button" @click="login42">
+        42 {{ useI18n().t('loginbutton') }}
+      </button>
+      <br />
+      <button class="button" @click="loginGoogle">
+        Google {{ useI18n().t('loginbutton') }}
       </button>
     </div>
     <TwoFAInputComponent
@@ -101,10 +108,7 @@ function dropDownClicked(selected: string) {
   border-radius: 20px;
   color: white;
   background-color: #c00000;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 10px 20px;
   align-content: center;
   cursor: pointer;
   width: min-content;
