@@ -23,8 +23,9 @@ type ChannelUser {
 
 type User {
   id: Int!
+  intraId: Int!
   email: String!
-  intra: String!
+  intra: String
   firstname: String!
   lastname: String!
   username: String!

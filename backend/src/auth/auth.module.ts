@@ -8,6 +8,8 @@ import { UsersModule } from '../users/users.module';
 import { TwoFAController } from './controller/twoFA.controller';
 import { TwoFAService } from './service/twoFA.service';
 import { HttpModule } from '@nestjs/axios';
+import { GoogleController } from './controller/google.controller';
+import { GoogleStrategy } from './strategy/google.strategy';
 
 @Module({
   imports: [
@@ -25,7 +27,13 @@ import { HttpModule } from '@nestjs/axios';
     }),
     UsersModule,
   ],
-  providers: [JwtStrategy, Intra42Strategy, ConfigService, TwoFAService],
-  controllers: [Intra42Controller, TwoFAController],
+  providers: [
+    JwtStrategy,
+    Intra42Strategy,
+    ConfigService,
+    TwoFAService,
+    GoogleStrategy,
+  ],
+  controllers: [Intra42Controller, TwoFAController, GoogleController],
 })
 export class AuthModule {}

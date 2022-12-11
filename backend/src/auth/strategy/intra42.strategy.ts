@@ -26,7 +26,7 @@ export class Intra42Strategy extends PassportStrategy(Strategy, 'intra42') {
     done: VerifyCallBack,
   ): Promise<void> {
     const user: CreateUserInput = {
-      id: +profile.id,
+      intraId: +profile.id,
       email: profile.emails[0].value,
       intra: profile.username,
       firstname: profile.name.givenName,

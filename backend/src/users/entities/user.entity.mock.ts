@@ -4,6 +4,7 @@ export const createMockUser = (options: Partial<User> = {}): User => {
   const user = new User();
   user.id = 12345;
   user.email = 'test@example.com';
+  user.intraId = null;
   user.intra = 'logName';
   user.firstname = 'test';
   user.lastname = 'person';

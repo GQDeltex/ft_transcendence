@@ -11,12 +11,17 @@ import type {
 import type { QueryOptions } from '@apollo/client/core/watchQueryOptions';
 
 class UserService {
-  async fetchJwt(code: string, bypassId?: string) {
+  async fetchJwt(code: string, isGoogle: boolean, bypassId?: string) {
     return axios
-      .get(`http://${import.meta.env.VITE_DOMAIN}:8080/42intra/callback`, {
-        params: { code, id: bypassId },
-        withCredentials: true,
-      })
+      .get(
+        `http://${import.meta.env.VITE_DOMAIN}:8080/${
+          isGoogle ? 'google' : '42intra'
+        }/callback`,
+        {
+          params: { code, id: bypassId },
+          withCredentials: true,
+        },
+      )
       .then((res) => {
         if (typeof res.data.isAuthenticated === 'undefined')
           throw new Error('Empty user authentication.');
