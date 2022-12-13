@@ -7,6 +7,8 @@ import GamePeopleComponent from './GamePeopleComponent.vue';
 import type { Item, User } from '@/store/user';
 import { useUserStore } from '@/store/user';
 import { useI18n } from 'vue-i18n';
+import GameService from '@/service/GameService';
+import { useErrorStore } from '@/store/error';
 
 const props = defineProps<{
   gameId: number;
@@ -264,10 +266,14 @@ onMounted(async () => {
         type: 'video/webm',
       });
       console.log('uploading game data...');
-      socket.emit('uploadGame', {
-        gameId: props.gameId,
-        file,
-      });
+      GameService.uploadGame(file, props.gameId)
+        .then((res) => {
+          console.log('uploaded game data');
+          console.log(res);
+        })
+        .catch((error) => {
+          useErrorStore().setError((error as Error).message);
+        });
     };
   }
 

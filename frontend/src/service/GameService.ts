@@ -1,5 +1,6 @@
 import type { User } from '@/store/user';
 import graphQLService from './GraphQLService';
+import axios from 'axios';
 
 export type Game = {
   id: number;
@@ -144,6 +145,29 @@ class GameService {
     );
     if (typeof game === 'undefined') throw new Error('Empty game data');
     return game;
+  }
+
+  async uploadGame(file: File, gameId: number): Promise<string> {
+    const formData = new FormData();
+    formData.append('game', file);
+    return axios
+      .post(
+        `http://${import.meta.env.VITE_DOMAIN}:8080/game/upload`,
+        formData,
+        {
+          withCredentials: true,
+          params: { gameId },
+        },
+      )
+      .then((res) => {
+        if (typeof res.data.url === 'undefined')
+          throw new Error('Empty game url.');
+        return res.data.url;
+      })
+      .catch((error) => {
+        if (typeof error.response === 'undefined') throw error;
+        throw new Error(error.response.data.message);
+      });
   }
 }
 
