@@ -22,12 +22,16 @@ import itemList, { Item } from './entities/item.entity';
 import { UpdateUserEquippedItemsInput } from './dto/update-equipped-items.input';
 import { UpdateGameRequestInput } from './dto/update-gamerequest.input';
 import { CurrentUser } from './decorator/current-user.decorator';
+import { ConfigService } from '@nestjs/config';
 
 @UseFilters(new AllExceptionFilter())
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard, TwoFAGuard)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Query(() => [User], { name: 'users' })
   findAll() {
@@ -196,5 +200,15 @@ export class UsersResolver {
   @ResolveField(() => [Item], { nullable: 'items' })
   async equipped(@Parent() user: User): Promise<Item[]> {
     return itemList.filter((item) => user.equipped.includes(item.id));
+  }
+
+  @ResolveField(() => [Int], { nullable: 'items' })
+  async inventory(@Parent() user: User): Promise<number[]> {
+    const isPaypalEnable = +(
+      this.configService.get<number>('PAYPAL_ENABLE') ?? 0
+    );
+    if (typeof isPaypalEnable === 'undefined' || isPaypalEnable === 0)
+      return itemList.map((item) => item.id);
+    return user.inventory;
   }
 }

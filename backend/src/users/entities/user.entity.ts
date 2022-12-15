@@ -51,7 +51,7 @@ export class User {
   default_picture: string;
 
   @Field()
-  @Column({ default: 'Elytra' })
+  @Column({ default: 'Fluvius' })
   coalition: string;
 
   @Field()
@@ -66,7 +66,6 @@ export class User {
   @Column({ type: 'integer', default: 0 })
   points: number;
 
-  @Field(() => [Int])
   @Column({ type: 'integer', array: true, default: [] })
   inventory: number[];
 

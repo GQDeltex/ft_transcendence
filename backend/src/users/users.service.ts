@@ -409,8 +409,11 @@ export class UsersService {
 
   async updateEquippedItems(id: number, input: UpdateUserEquippedItemsInput) {
     const user: User = await this.findOne(id);
+    const isPaypalEnable = +(
+      this.configService.get<number>('PAYPAL_ENABLE') ?? 0
+    );
     if (input.method == AllowedUpdateEquippedItemsMethod.EQUIP) {
-      if (!user.inventory.includes(input.itemId))
+      if (isPaypalEnable === 1 && !user.inventory.includes(input.itemId))
         throw new UserInputError('You do not have this item');
       if (user.equipped.includes(input.itemId))
         throw new UserInputError('You already have this item equipped');
