@@ -171,13 +171,4 @@ export class GameGateway implements OnGatewayDisconnect {
       scores,
     );
   }
-
-  @SubscribeMessage('uploadGame')
-  async handleUploadGame(
-    @ConnectedSocket() client: Socket,
-    @MessageBody('gameId') gameId: number,
-    @MessageBody('file') fileBuffer: Buffer,
-  ) {
-    await this.gameService.uploadGame(client.data.user.id, gameId, fileBuffer);
-  }
 }
